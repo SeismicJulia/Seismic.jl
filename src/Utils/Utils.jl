@@ -1,0 +1,40 @@
+export SegyToSeis,
+       SeisToSegy,
+       Header,
+       SeisRead,
+       SeisReadHeaders,
+       SeisWrite,
+       SeisProcess,
+       SeisWindow,
+       SeisSort,
+       SeisGeometry,
+       SeisHeaderInfo,
+       SeisBin,
+       SeisPatch,
+       SeisUnPatch,
+       SeisPatchProcess,
+       SeisCopy,
+       SeisRemove,
+       CalculateSampling,
+       ApplySampling,
+       InnerProduct
+include("SegyToSeis.jl")
+include("SeisToSegy.jl")
+include("Header.jl")
+include("SeisRead.jl")
+include("SeisReadHeaders.jl")
+include("SeisWrite.jl")
+include("SeisProcess.jl")
+include("SeisWindow.jl")
+include("SeisSort.jl")
+include("SeisGeometry.jl")
+include("SeisHeaderInfo.jl")
+include("SeisBin.jl")
+include("SeisPatch.jl")
+include("SeisUnPatch.jl")
+include("SeisPatchProcess.jl")
+include("SeisCopy.jl")
+include("SeisRemove.jl")
+include("CalculateSampling.jl")
+include("ApplySampling.jl")
+include("InnerProduct.jl")
