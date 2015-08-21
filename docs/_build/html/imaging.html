@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -9,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; Seismic.jl 0.0.1 documentation</title>
+  <title>Imaging &mdash; Seismic.jl 0.0.1 documentation</title>
   
 
   
@@ -31,7 +30,9 @@
   
 
   
-    <link rel="top" title="Seismic.jl 0.0.1 documentation" href="index.html"/> 
+    <link rel="top" title="Seismic.jl 0.0.1 documentation" href="index.html"/>
+        <link rel="next" title="Plotting" href="plotting.html"/>
+        <link rel="prev" title="Processing" href="processing.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -70,7 +71,7 @@
         
           
           
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="processing.html">Processing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="processing.html#fft-op">fft_op</a></li>
 <li class="toctree-l2"><a class="reference internal" href="processing.html#seispocs">SeisPOCS</a></li>
@@ -86,10 +87,10 @@
 <li class="toctree-l2"><a class="reference internal" href="processing.html#seispwd">SeisPWD</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="imaging.html">Imaging</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="imaging.html#computeangles">ComputeAngles</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imaging.html#shotprofilewem">ShotProfileWEM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imaging.html#shotprofilelswem">ShotProfileLSWEM</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Imaging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#computeangles">ComputeAngles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shotprofilewem">ShotProfileWEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#shotprofilelswem">ShotProfileLSWEM</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="plotting.html">Plotting</a><ul>
@@ -162,9 +163,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>Imaging</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+            <a href="_sources/imaging.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -173,16 +176,35 @@
 </div>
           <div role="main" class="document">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="imaging">
+<h1>Imaging<a class="headerlink" href="#imaging" title="Permalink to this headline">¶</a></h1>
+<p>Imaging programs are used to map energy in seismic data to the point of reflection within the subsurface. Their parameters are given by a Dictionary (param = Dict()).</p>
+<div class="section" id="computeangles">
+<h2>ComputeAngles<a class="headerlink" href="#computeangles" title="Permalink to this headline">¶</a></h2>
+<p>Computation of subsurface source side incidence angles with respect to vertical at all subsurface points for common shot gathers. These angles can be used by ShotProfileWEM to bin migrated shot gathers into angle gathers. A user supplied reflector normal field allows for angles to be corrected to be with reference to reflector normal (see SeisPWD for reflector normal computation).</p>
+</div>
+<div class="section" id="shotprofilewem">
+<h2>ShotProfileWEM<a class="headerlink" href="#shotprofilewem" title="Permalink to this headline">¶</a></h2>
+<p>Shot profile wave equation migration or demigration of 3D acoustic data using an isotropic velocity model. Migrated shot gathers can be binned into 3D angle gathers (angx, angy) by bilinear interpolation into angle bins, where angles for each shot gather are user supplied (see ComputeAngles for angle compuation).</p>
+</div>
+<div class="section" id="shotprofilelswem">
+<h2>ShotProfileLSWEM<a class="headerlink" href="#shotprofilelswem" title="Permalink to this headline">¶</a></h2>
+<p>Least squares migration using ShotProfileWEM as a linear operator.</p>
+</div>
 </div>
 
 
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plotting.html" class="btn btn-neutral float-right" title="Plotting" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="processing.html" class="btn btn-neutral" title="Processing" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

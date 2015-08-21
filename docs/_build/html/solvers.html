@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -9,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; Seismic.jl 0.0.1 documentation</title>
+  <title>Solvers &mdash; Seismic.jl 0.0.1 documentation</title>
   
 
   
@@ -31,7 +30,9 @@
   
 
   
-    <link rel="top" title="Seismic.jl 0.0.1 documentation" href="index.html"/> 
+    <link rel="top" title="Seismic.jl 0.0.1 documentation" href="index.html"/>
+        <link rel="next" title="Utilities" href="utils.html"/>
+        <link rel="prev" title="Modelling" href="modelling.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -70,7 +71,7 @@
         
           
           
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="processing.html">Processing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="processing.html#fft-op">fft_op</a></li>
 <li class="toctree-l2"><a class="reference internal" href="processing.html#seispocs">SeisPOCS</a></li>
@@ -102,11 +103,11 @@
 <li class="toctree-l2"><a class="reference internal" href="modelling.html#seislinearevents">SeisLinearEvents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="solvers.html">Solvers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="solvers.html#conjugategradients">ConjugateGradients</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvers.html#dottest">DotTest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvers.html#dottest3c">DotTest3C</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solvers.html#cgstep">CGStep</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Solvers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#conjugategradients">ConjugateGradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dottest">DotTest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dottest3c">DotTest3C</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cgstep">CGStep</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a><ul>
@@ -162,9 +163,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>Solvers</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+            <a href="_sources/solvers.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -173,16 +176,64 @@
 </div>
           <div role="main" class="document">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="solvers">
+<h1>Solvers<a class="headerlink" href="#solvers" title="Permalink to this headline">¶</a></h1>
+<p>Solvers are used to invert for a model given data. Their parameters are given by a Dictionary (param = Dict()).</p>
+<div class="section" id="conjugategradients">
+<h2>ConjugateGradients<a class="headerlink" href="#conjugategradients" title="Permalink to this headline">¶</a></h2>
+<p>Non-quadratic regularization with CG-LS. The inner CG routine is taken from Algorithm 2 from Scales, 1987. Make sure linear operator passes the dot product. This program can has two methods: it can act on data and a model stored in memory (for small-scale problems such as multidimensional interpolation of a small blocks of data), or on data and model stored on disk (for large-scale problems such as Least squares migration). For preconditioning, a vector of functions (linear operators) can be passed to the code provided each program follows the structure:</p>
+<blockquote>
+<div><p>function mylinearoperator(m,param)</p>
+<blockquote>
+<div><p>(param[&#8220;adj&#8221;] == false)</p>
+<p>return d</p>
+</div></blockquote>
+<p>end</p>
+</div></blockquote>
+<p>and</p>
+<blockquote>
+<div><p>function mylinearoperator(d,param)</p>
+<blockquote>
+<div><p>(param[&#8220;adj&#8221;] == true)</p>
+<p>return m</p>
+</div></blockquote>
+<p>end</p>
+</div></blockquote>
+<p>(the above functionality can be written into one code).</p>
+<p>or</p>
+<blockquote>
+<div><p>function mylinearoperator(m::ASCIIString,d::ASCIIString,param)</p>
+<p>... do disk operations for param[&#8220;adj&#8221;] == false or (param[&#8220;adj&#8221;] == true.</p>
+<p>end</p>
+</div></blockquote>
+<p>where param=Dict() uses the field &#8220;adj&#8221;=&gt;true or &#8220;adj&#8221;=&gt;false, and all other parameters needed by the operator are written into the param dictionary.</p>
+</div>
+<div class="section" id="dottest">
+<h2>DotTest<a class="headerlink" href="#dottest" title="Permalink to this headline">¶</a></h2>
+<p>Dot product test for a linear operator you wish to use in ConjugateGradients. This will ensure that your code using param[&#8220;adj&#8221;]=&gt;true and param[&#8220;adj&#8221;]=false is behaving as a true forward adjoint pair which is a necessary condition for ConjugateGradients to converge.</p>
+</div>
+<div class="section" id="dottest3c">
+<h2>DotTest3C<a class="headerlink" href="#dottest3c" title="Permalink to this headline">¶</a></h2>
+<p>Dot product test for 3 component data.</p>
+</div>
+<div class="section" id="cgstep">
+<h2>CGStep<a class="headerlink" href="#cgstep" title="Permalink to this headline">¶</a></h2>
+<p>Simple arithmetic used in updating array in ConjugateGradients.</p>
+</div>
 </div>
 
 
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utilities" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modelling.html" class="btn btn-neutral" title="Modelling" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

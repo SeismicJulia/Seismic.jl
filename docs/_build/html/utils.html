@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -9,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; Seismic.jl 0.0.1 documentation</title>
+  <title>Utilities &mdash; Seismic.jl 0.0.1 documentation</title>
   
 
   
@@ -31,7 +30,9 @@
   
 
   
-    <link rel="top" title="Seismic.jl 0.0.1 documentation" href="index.html"/> 
+    <link rel="top" title="Seismic.jl 0.0.1 documentation" href="index.html"/>
+        <link rel="next" title="API" href="api.html"/>
+        <link rel="prev" title="Solvers" href="solvers.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -70,7 +71,7 @@
         
           
           
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="processing.html">Processing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="processing.html#fft-op">fft_op</a></li>
 <li class="toctree-l2"><a class="reference internal" href="processing.html#seispocs">SeisPOCS</a></li>
@@ -109,27 +110,27 @@
 <li class="toctree-l2"><a class="reference internal" href="solvers.html#cgstep">CGStep</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">Utilities</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#segytoseis">SegyToSeis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seistosegy">SeisToSegy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#header">Header</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seisread">SeisRead</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seisreadheaders">SeisReadHeaders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seiswrite">SeisWrite</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seisprocess">SeisProcess</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seiswindow">SeisWindow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seissort">SeisSort</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seisgeometry">SeisGeometry</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seisheaderinfo">SeisHeaderInfo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seisbin">SeisBin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seispatch">SeisPatch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seisunpatch">SeisUnPatch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seispatchprocess">SeisPatchProcess</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seiscopy">SeisCopy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#seisremove">SeisRemove</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#calculatesampling">CalculateSampling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#applysampling">ApplySampling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="utils.html#innerproduct">InnerProduct</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#segytoseis">SegyToSeis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seistosegy">SeisToSegy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#header">Header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seisread">SeisRead</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seisreadheaders">SeisReadHeaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seiswrite">SeisWrite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seisprocess">SeisProcess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seiswindow">SeisWindow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seissort">SeisSort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seisgeometry">SeisGeometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seisheaderinfo">SeisHeaderInfo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seisbin">SeisBin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seispatch">SeisPatch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seisunpatch">SeisUnPatch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seispatchprocess">SeisPatchProcess</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seiscopy">SeisCopy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#seisremove">SeisRemove</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculatesampling">CalculateSampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#applysampling">ApplySampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#innerproduct">InnerProduct</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
@@ -162,9 +163,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>Utilities</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+            <a href="_sources/utils.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -173,16 +176,83 @@
 </div>
           <div role="main" class="document">
             
-
-<h1 id="index">Index</h1>
-
-<div class="genindex-jumpbox">
- 
+  <div class="section" id="utilities">
+<h1>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h1>
+<p>Util programs are used for I/O of seismic data and handling sometimes large quanities of data. Their parameters are given by a Dictionary (param = Dict()).</p>
+<div class="section" id="segytoseis">
+<h2>SegyToSeis<a class="headerlink" href="#segytoseis" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seistosegy">
+<h2>SeisToSegy<a class="headerlink" href="#seistosegy" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="header">
+<h2>Header<a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seisread">
+<h2>SeisRead<a class="headerlink" href="#seisread" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seisreadheaders">
+<h2>SeisReadHeaders<a class="headerlink" href="#seisreadheaders" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seiswrite">
+<h2>SeisWrite<a class="headerlink" href="#seiswrite" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seisprocess">
+<h2>SeisProcess<a class="headerlink" href="#seisprocess" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seiswindow">
+<h2>SeisWindow<a class="headerlink" href="#seiswindow" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seissort">
+<h2>SeisSort<a class="headerlink" href="#seissort" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seisgeometry">
+<h2>SeisGeometry<a class="headerlink" href="#seisgeometry" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seisheaderinfo">
+<h2>SeisHeaderInfo<a class="headerlink" href="#seisheaderinfo" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seisbin">
+<h2>SeisBin<a class="headerlink" href="#seisbin" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seispatch">
+<h2>SeisPatch<a class="headerlink" href="#seispatch" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seisunpatch">
+<h2>SeisUnPatch<a class="headerlink" href="#seisunpatch" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seispatchprocess">
+<h2>SeisPatchProcess<a class="headerlink" href="#seispatchprocess" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seiscopy">
+<h2>SeisCopy<a class="headerlink" href="#seiscopy" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="seisremove">
+<h2>SeisRemove<a class="headerlink" href="#seisremove" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="calculatesampling">
+<h2>CalculateSampling<a class="headerlink" href="#calculatesampling" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="applysampling">
+<h2>ApplySampling<a class="headerlink" href="#applysampling" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="innerproduct">
+<h2>InnerProduct<a class="headerlink" href="#innerproduct" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
 
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="solvers.html" class="btn btn-neutral" title="Solvers" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

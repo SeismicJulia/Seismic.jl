@@ -13,9 +13,15 @@ Guide
 
 .. toctree::
    :maxdepth: 2
-    
-   license
 
+   processing
+   imaging
+   plotting
+   modelling
+   solvers
+   utils
+   api
+   license
 
 Indices and tables
 ==================
