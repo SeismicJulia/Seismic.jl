@@ -13,7 +13,7 @@ This module provides tools to read, write, process, and plot 3D reflection
 seismic data.
 
 ## Basic usage
-Once you have installed all of the dependencies you can type `using Seismic` to start using
+Once you have installed the package you can type `using Seismic` to start using
 the functions. For example
 
 ```
