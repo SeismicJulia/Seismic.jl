@@ -7,6 +7,8 @@
 
 # Seismic.jl
 
+[![Build Status](https://travis-ci.org/SeismicJulia/Seismic.jl.svg?branch=master)](https://travis-ci.org/SeismicJulia/Seismic.jl)
+
 This module provides tools to read, write, process, and plot 3D reflection 
 seismic data.
 
