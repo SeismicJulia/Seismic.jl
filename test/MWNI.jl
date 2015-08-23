@@ -1,4 +1,5 @@
 using Seismic
+using Base.Test
 
 param = ["nt"=>500,"nx1"=>500,
 "tau1"=>[0.4 1.0],"tau2"=>[0. 0.],"tau3"=>[0. 0.],"tau4"=>[0. 0.],
