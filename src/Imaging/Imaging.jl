@@ -1,6 +1,6 @@
 export ShotProfileWEM,
        ShotProfileLSWEM,
-       ComputeAngles,
+       ComputeAngles
 include("ShotProfileWEM.jl")
 include("ShotProfileLSWEM.jl")
 include("ComputeAngles.jl")
