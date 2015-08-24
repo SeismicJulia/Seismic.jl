@@ -16,20 +16,20 @@ function CalculateSampling(in::ASCIIString,wd::ASCIIString)
     itrace = 1
     status = false
     while status == false
-    	d,h,status = SeisRead(in,"some",["tracenum"],itrace,10000)
+    	d,h,status = SeisRead(in,"some",["tracenum"],itrace,1000)
 	wd1 = d;
 	#println("itrace="size(d))
 	#println(size(wd))
 	for ix = 1 : size(d,2)
 		a = sum(d[:,ix].*d[:,ix])
     		if (a < 0.00001) 
-    			wd1[itrace,:] = 0.
+    			wd1[:,ix] = 0.
     		else
-    			wd1[itrace,:] = 1.
+    			wd1[:,ix] = 1.
 		end	
 	end	
 	SeisWrite(wd,wd1,h,itrace)
-	itrace += 10000
+	itrace += 1000
     end
 end
 

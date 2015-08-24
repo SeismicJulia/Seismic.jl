@@ -111,7 +111,7 @@ void wem(float **d, float **m, float **wav,
 
 	sigma = 0.;
 	for (it=0;it<nt;it++) if (sigma < fabsf(wav[0][it])) sigma = fabsf(wav[0][it]);
-	sigma /= (float) ntfft;
+	sigma /= (float) nw;
 
 	nthread = omp_thread_count();
 
@@ -235,7 +235,7 @@ void extrap1f(float **m,complex **d_g_wx, complex **d_s_wx, float sigma,
 			z = oz + dz*iz;
 			if (z >= sz){
 				ssop(d_xs,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,v,po,pd,p1,p2,true,pade_flag,true,verbose);
-				for (ix=0;ix<nmx*nmy;ix++) smig[ix][iz] = d_xs[ix];
+				for (ix=0;ix<nmx*nmy;ix++) smig[ix][iz] = d_xs[ix]/cabsf((d_xs[ix]*conjf(d_xs[ix])) + 0.00001*sigma);
 			}
 			else{
 				for (ix=0;ix<nmx*nmy;ix++) smig[ix][iz] = 0.;
@@ -377,9 +377,9 @@ void pade(complex *d,
 		for (imx=0;imx<nmx;imx++){ 
 			X[imx] = d[imx*nmy + imy];
 			m = v[imx*nmy + imy][iz]*po[iz];
-			ko = w*po[iz];
-			if (src) aX[imx] =-(v[imx*nmy + imy][iz]*v[imx*nmy + imy][iz]/(w2*w2))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
-			else     aX[imx] = (v[imx*nmy + imy][iz]*v[imx*nmy + imy][iz]/(w2*w2))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
+			ko = w2*po[iz];
+			if (src) aX[imx] =-(1/(ko*ko))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
+			else     aX[imx] = (1/(ko*ko))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
 		}
 		fdop(X,nmx,dmx,aX,adj);
 		for (imx=0;imx<nmx;imx++){
@@ -396,9 +396,9 @@ void pade(complex *d,
 		for (imy=0;imy<nmy;imy++){ 
 			Y[imy] = d[imx*nmy + imy];
 			m = v[imx*nmy + imy][iz]*po[iz];
-			ko = w*po[iz];
-			if (src) aY[imy] =-(v[imx*nmy + imy][iz]*v[imx*nmy + imy][iz]/(w2*w2))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
-			else     aY[imy] = (v[imx*nmy + imy][iz]*v[imx*nmy + imy][iz]/(w2*w2))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
+			ko = w2*po[iz];
+			if (src) aY[imy] =-(1/(ko*ko))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
+			else     aY[imy] = (1/(ko*ko))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
 		}
 		fdop(Y,nmy,dmy,aY,adj);
 		for (imy=0;imy<nmy;imy++){

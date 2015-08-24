@@ -1,56 +1,48 @@
 function smooth_structure(d,h,param)
-	
-	Nsmooth = get(param,"Nsmooth",3)
-	Nrepeat = get(param,"Nrepeat",1)
+
+	Nsmooth2 = get(param,"Nsmooth2",3)
+	dz = 1
+	dx = 1
 	dip_field = get(param,"dip","dip")
-	dip,h,s = SeisRead
-	min_iang = h[1].iang
-	max_iang = h[end].iang
-	min_iaz = h[1].iaz
-	max_iaz = h[end].iaz
-	nang = max_iang - min_iang + 1
-	naz = max_iaz - min_iaz + 1
+	dip,h_dip,s = SeisRead(dip_field)
+	dip2 = atan(abs(dip))
+
+	nx = size(d,2)
 	nz = convert(Int64,h[1].n1)
-	a = vec(zeros(nang,1))
-	d = reshape(d,nz,nang,naz)	
+	WL = Nsmooth2*dx/2
+	d2 = copy(d)	
 	for iz = 1 : nz
-		for iaz = 1 : naz
-			for iang = 1 : nang
-				a[iang] = d[iz,iang,iaz]
+		for ix = 1 : nx
+			a = vec(zeros(Nsmooth2,1))
+			#println("dip2=",dip2[iz,ix]*180/pi)
+			ixo = ix - convert(Int32,floor(WL*cos(dip2[iz,ix])/dx))
+			dip[iz,ix] > 0 ? izo = iz - convert(Int32,floor(WL*sin(dip2[iz,ix])/dz)) : izo = iz + convert(Int32,floor(WL*sin(dip2[iz,ix])/dz))
+			for iw = 1 : Nsmooth2
+				ixw = ixo + convert(Int32,floor(iw*dx*cos(dip2[iz,ix])/dx))
+				dip[iz,ix] > 0 ? izw = izo + convert(Int32,floor(iw*dx*sin(dip2[iz,ix])/dz)) : izw = izo - convert(Int32,floor(iw*dx*sin(dip2[iz,ix])/dz))
+				if (izw > 0 && izw < nz && ixw > 0 && ixw < nx)
+					a[iw] = d[izw,ixw]
+				end
 			end
-			for irepeat = 1 : Nrepeat
-				a = mean_filter(a,nang,Nsmooth)
-			end
-			for iang = 1 : nang
-				d[iz,iang,iaz] = a[iang]
-			end
+			d2[iz,ix] = sum(a[:])/Nsmooth2
 		end
 	end
-	
-	return d[1:nz,:],h;
+
+	return d2[1:nz,:],h;
 end
 
-function mean_filter(a,nx,nxw)
-
-	b = vec(zeros(nx,1))
-	for ix = 1 : nx
-		sum  = 0.
-		nsum = 0.
-		for ixw = 1 : nxw
-			index1 = ix - floor(nxw/2) - 1 + ixw
-			if (index1>0 && index1<nx)
-				sum += a[index1]
-				nsum += 1.
-			end
-		end
-    	b[ix] = sum/nsum
-    end
-	return b
-end
-
-function SmoothStructure(in,out,param)
-	SeisProcess(in,"tmp_smoothstruct",[smooth_structure],param,"gather",["iang","iaz"])
-	SeisSort("tmp_smoothstruct",out,["imx","imy","iang","iaz"],false);	
-	rm(join(["tmp_smoothstruct" ".seisd"]))
-	rm(join(["tmp_smoothstruct" ".seish"]))
+function SmoothStructure(m::ASCIIString,d::ASCIIString,param=Dict())
+        if (param["adj"]==false)
+		SeisSort(m,"tmp_smoothstruct1",["iang","imx"],false);
+		SeisProcess("tmp_smoothstruct1","tmp_smoothstruct2",[smooth_structure],param,"gather",["iang"])
+		SeisSort("tmp_smoothstruct2",d,["imx","iang"],false);	
+	else
+		SeisSort(d,"tmp_smoothstruct1",["iang","imx"],false);
+		SeisProcess("tmp_smoothstruct1","tmp_smoothstruct2",[smooth_structure],param,"gather",["iang"])
+		SeisSort("tmp_smoothstruct2",m,["imx","iang"],false);	
+	end
+	rm(join(["tmp_smoothstruct1" ".seisd"]))
+	rm(join(["tmp_smoothstruct1" ".seish"]))
+	rm(join(["tmp_smoothstruct2" ".seisd"]))
+	rm(join(["tmp_smoothstruct2" ".seish"]))
 end

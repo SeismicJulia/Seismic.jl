@@ -10,11 +10,11 @@ function CGStep(m1::ASCIIString,m2::ASCIIString,a,b)
 	status = false
 	tmp_filename = join(["tmp_CGStep_",string(int(rand()*100000))])
 	while status == false
-		ma,h,status = SeisRead(m1,"some",["tracenum"],itrace,10000)
-		mb,h,status = SeisRead(m2,"some",["tracenum"],itrace,10000)
+		ma,h,status = SeisRead(m1,"some",["tracenum"],itrace,1000)
+		mb,h,status = SeisRead(m2,"some",["tracenum"],itrace,1000)
 		m = a*ma + b*mb
 		SeisWrite(tmp_filename,m,h,itrace)
-		itrace += 10000
+		itrace += 1000
 	end
 	SeisCopy(tmp_filename,m1)
 	SeisRemove(tmp_filename)
@@ -28,11 +28,11 @@ function CGMult(m::ASCIIString,m1::ASCIIString,m2::ASCIIString,a,b)
 	status = false
 	tmp_filename = join(["tmp_CGMult_",string(int(rand()*100000))])
 	while status == false
-		ma,h,status = SeisRead(m1,"some",["tracenum"],itrace,10000)
-		mb,h,status = SeisRead(m2,"some",["tracenum"],itrace,10000)
+		ma,h,status = SeisRead(m1,"some",["tracenum"],itrace,1000)
+		mb,h,status = SeisRead(m2,"some",["tracenum"],itrace,1000)
 		mc = a*ma.*mb + b
 		SeisWrite(tmp_filename,mc,h,itrace)
-		itrace += 10000
+		itrace += 1000
 	end
 	SeisCopy(tmp_filename,m)
 	SeisRemove(tmp_filename)
@@ -46,10 +46,10 @@ function CGSparseNorm(P::ASCIIString,m::ASCIIString)
 	itrace = 1
 	status = false
 	while status == false
-		ma,h,status = SeisRead(m,"some",["tracenum"],itrace,10000)
+		ma,h,status = SeisRead(m,"some",["tracenum"],itrace,1000)
 		ma = abs(ma)/maxval
 		SeisWrite(P,abs(ma)/maxval,h,itrace)
-		itrace += 10000
+		itrace += 1000
 	end
 	
 end
@@ -60,11 +60,11 @@ function SeisMaximum(m::ASCIIString)
 	status = false
 	itrace = 1
 	while status == false
-		ma,hm,status = SeisRead(m,"some",["tracenum"],itrace,10000)
+		ma,hm,status = SeisRead(m,"some",["tracenum"],itrace,1000)
 		if (maximum(abs(ma[:])) > maxval) 
 			maxval = maximum(abs(ma[:]))
 		end
-		itrace += 10000
+		itrace += 1000
 	end
 	return maxval
 end

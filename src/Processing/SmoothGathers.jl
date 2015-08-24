@@ -46,7 +46,11 @@ function mean_filter(a,nx,nxw)
 	return b
 end
 
-function SmoothGathers(in,out,param)
-	SeisProcess(in,out,[smooth_angles],param,"gather",["imx","imy"])
+function SmoothGathers(m::ASCIIString,d::ASCIIString,param=Dict())
+	if (param["adj"]==false)
+		SeisProcess(m,d,[smooth_angles],param,"gather",["imx","imy"])
+	else
+		SeisProcess(d,m,[smooth_angles],param,"gather",["imx","imy"])
+	end
 end
 
