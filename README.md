@@ -17,7 +17,7 @@ Once you have installed the package you can type `using Seismic` to start using
 the functions. For example
 
 ```
-using Seismic,SeismicPlotting
+using PyPlot,Seismic
 
 param = ["nt"=>500,"nx1"=>500,
 	 "tau1"=>[0.4 1.0],"tau2"=>[0. 0.],"tau3"=>[0. 0.],"tau4"=>[0. 0.],
