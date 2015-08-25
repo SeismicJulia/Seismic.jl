@@ -1,4 +1,3 @@
-@pyimport matplotlib.lines as lines
 @doc """
 Plot 2D data.
 """ ->
