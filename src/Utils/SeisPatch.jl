@@ -1,9 +1,9 @@
 include("Header.jl")
 
-function SeisPatch(in,out,param)
+function SeisPatch(in,out,param=Dict())
 
-    style = get(param,"style","sxsygxgy")
-    if (style == "sxsygxgy")
+	style = get(param,"style","sxsygxgy")
+	if (style == "sxsygxgy")
 		key = ["t","isx","isy","igx","igy"]
 		min_ix1 = get(param,"min_isx",0)
 		max_ix1 = get(param,"max_isx",0)
@@ -81,15 +81,15 @@ function SeisPatch(in,out,param)
 	nx3 = max_ix3 - min_ix3 + 1
 	nx4 = max_ix4 - min_ix4 + 1
 
-    stream = open(join([in ".seish"]))
-    seek(stream, header_count["n1"])
-    nt = read(stream,Int32)
-    seek(stream, header_count["d1"])
-    dt = read(stream,Float32)
-    seek(stream, header_count["o1"])
-    ot = read(stream,Float32)
-    
-    close(stream)
+	stream = open(join([in ".seish"]))
+	seek(stream, header_count["n1"])
+	nt = read(stream,Int32)
+	seek(stream, header_count["d1"])
+	dt = read(stream,Float32)
+	seek(stream, header_count["o1"])
+	ot = read(stream,Float32)
+
+	close(stream)
 	it_WL = get(param,"it_WL",nt)
 	it_WO = get(param,"it_WO",0)
 	ix1_WL = get(param,"ix1_WL",nx1)
@@ -109,76 +109,63 @@ function SeisPatch(in,out,param)
 	ix4_NW = int(floor(nx4/(ix4_WL-ix4_WO)))
 
 
-        if (ot + dt*(it_NW-1)*(it_WL-it_WO) + dt*it_WL < tmax)
+	if (ot + dt*(it_NW-1)*(it_WL-it_WO) + dt*it_WL < tmax)
 		it_NW += 1
 	end
-        if (min_ix1 + (ix1_NW-1)*(ix1_WL-ix1_WO) + ix1_WL < max_ix1)
+	if (min_ix1 + (ix1_NW-1)*(ix1_WL-ix1_WO) + ix1_WL < max_ix1)
 		ix1_NW += 1
 	end
-        if (min_ix2 + (ix2_NW-1)*(ix2_WL-ix2_WO) + ix2_WL < max_ix2)
+	if (min_ix2 + (ix2_NW-1)*(ix2_WL-ix2_WO) + ix2_WL < max_ix2)
 		ix2_NW += 1
 	end
-        if (min_ix3 + (ix3_NW-1)*(ix3_WL-ix3_WO) + ix3_WL < max_ix3)
+	if (min_ix3 + (ix3_NW-1)*(ix3_WL-ix3_WO) + ix3_WL < max_ix3)
 		ix3_NW += 1
 	end
-        if (min_ix4 + (ix4_NW-1)*(ix4_WL-ix4_WO) + ix4_WL < max_ix4)
+	if (min_ix4 + (ix4_NW-1)*(ix4_WL-ix4_WO) + ix4_WL < max_ix4)
 		ix4_NW += 1
 	end
 
 	NW=it_NW*ix1_NW*ix2_NW*ix3_NW*ix4_NW
-
-	#println("it_NW=",it_NW)
-	#println("ix1_NW=",ix1_NW)
-	#println("ix2_NW=",ix2_NW)
-	#println("ix3_NW=",ix3_NW)
-	#println("ix4_NW=",ix4_NW)
-    
-    list = Any[]
+	list = Any[]
 	for it_W = 1 : it_NW
 		mint = ot + dt*(it_W-1)*(it_WL-it_WO)
-        maxt = mint + dt*it_WL
-        if (maxt >= tmax)
-        	maxt = tmax
-        end
-        for ix1_W = 1 : ix1_NW
+		maxt = mint + dt*it_WL
+		if (maxt >= tmax)
+			maxt = tmax
+		end
+		for ix1_W = 1 : ix1_NW
 			minx1 = min_ix1 + (ix1_W-1)*(ix1_WL-ix1_WO)
-        	maxx1 = minx1 + ix1_WL
-        	if (maxx1 >= max_ix1)
-        		maxx1 =  max_ix1
-        	end
-        	for ix2_W = 1 : ix2_NW
+			maxx1 = minx1 + ix1_WL
+			if (maxx1 >= max_ix1)
+				maxx1 =  max_ix1
+			end
+			for ix2_W = 1 : ix2_NW
 				minx2 = min_ix2 + (ix2_W-1)*(ix2_WL-ix2_WO)
-        		maxx2 = minx2 + ix2_WL
-        		if (maxx2 >= max_ix2)
-        			maxx2 = max_ix2
-        		end
-        		for ix3_W = 1 : ix3_NW
+				maxx2 = minx2 + ix2_WL
+				if (maxx2 >= max_ix2)
+					maxx2 = max_ix2
+				end
+				for ix3_W = 1 : ix3_NW
 					minx3 = min_ix3 + (ix3_W-1)*(ix3_WL-ix3_WO)
-        			maxx3 = minx3 + ix3_WL
-        			if (maxx3 >= max_ix3)
-        				maxx3 = max_ix3
-        			end
-        			for ix4_W = 1 : ix4_NW
+					maxx3 = minx3 + ix3_WL
+					if (maxx3 >= max_ix3)
+						maxx3 = max_ix3
+					end
+					for ix4_W = 1 : ix4_NW
 						minx4 = min_ix4 + (ix4_W-1)*(ix4_WL-ix4_WO)
-        				maxx4 = minx4 + ix4_WL
-        				if (maxx4 >= max_ix4)
-        					maxx4 = max_ix4
-        				end
-        				patch_name = join([out "_" it_W "_" ix1_W "_" ix2_W "_" ix3_W "_" ix4_W])
-        				minval=[mint minx1 minx2 minx3 minx4]
-        				maxval=[maxt maxx1 maxx2 maxx3 maxx4]
-        				#println("key=",key)
-        				#println("minval=",minval)
-        				#println("maxval=",maxval)
-        				#@printf("          %s      %s      %s      %s      %s\n",key[1],key[2],key[3],key[4],key[5])
-        				#@printf("%11.2f   %6d   %6d   %6d   %6d\n",minval[1],minval[2],minval[3],minval[4],minval[5])
-        				#@printf("%11.2f   %6d   %6d   %6d   %6d\n",maxval[1],maxval[2],maxval[3],maxval[4],maxval[5])
-        				SeisWindow(in,patch_name,key,minval,maxval)
-        				list = push!(list,patch_name)
-        			end
-        		end
-        	end
-        end
-    end
-    return list        
+						maxx4 = minx4 + ix4_WL
+						if (maxx4 >= max_ix4)
+							maxx4 = max_ix4
+						end
+						patch_name = join([out "_" it_W "_" ix1_W "_" ix2_W "_" ix3_W "_" ix4_W])
+						minval=[mint minx1 minx2 minx3 minx4]
+						maxval=[maxt maxx1 maxx2 maxx3 maxx4]
+						SeisWindow(in,patch_name,["key"=>key,"minval"=>minval,"maxval"=>maxval])
+						list = push!(list,patch_name)
+					end
+				end
+			end
+		end
+	end
+	return list        
 end

@@ -5,7 +5,7 @@ function SeisDecimate(in,h,param)
 	nt = size(in,1)
 	nx = size(in,2)
 	out = copy(in)
-	
+
 	if (mode=="random") # decimate data randomly
 		perc = get(param,"perc",50)
 		mask = rand(1,size(in,2)*size(in,3)*size(in,4)*size(in,5));
@@ -36,7 +36,7 @@ function SeisDecimate(in,h,param)
 		inc2 = get(param,"inc2",1)
 		inc3 = get(param,"inc3",1)
 		inc4 = get(param,"inc4",1)
-		
+
 		min_ix1 = getfield(h[1],symbol(key[2]))
 		min_ix2 = getfield(h[1],symbol(key[3]))
 		min_ix3 = getfield(h[1],symbol(key[4]))
@@ -55,8 +55,8 @@ function SeisDecimate(in,h,param)
 				out[:,ix] = 0		
 			end
 		end
-		
+
 	end
-	
-    return out,h
+
+	return out,h
 end

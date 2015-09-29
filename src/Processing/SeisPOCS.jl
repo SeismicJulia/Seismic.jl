@@ -13,7 +13,7 @@ function SeisPOCS(in,h,param)
 	Niter = get(param,"Niter",100)
 	alpha = get(param,"alpha",1)
 	perci = 0.999999;
-  	percf = 0.0;
+	percf = 0.0;
 	nt = size(in,1)
 	nx = size(in,2)
 	ot = h[1].o1
@@ -63,39 +63,40 @@ function SeisPOCS(in,h,param)
 	nx3 > 1 ? nk3 = padx*nextpow2(nx3) : nk3 = 1
 	nx4 > 1 ? nk4 = padx*nextpow2(nx4) : nk4 = 1
 	nk = nk1*nk2*nk3*nk4
-	
-	d = pad5d(d,nf,nk1,nk2,nk3,nk4)
 	# generate sampling operator from the padded data
-	T = squeeze(sum(d.^2,1),1);
-	T[find(T .<  1e-5)] = 0
-	T[find(T .>= 1e-5)] = 1
-	
-	if (sum(T[:])/length(T[:]) > 0.05)
+	T,h_tmp = CalculateSampling(d)
+	T = T[1,:,:,:,:]
+	if (sum(T[:])/length(T[:]) < 0.05)
+		println(sum(T[:])/length(T[:]))
+		return in,h
+	else
+		T = pad5d(T,1,nk1,nk2,nk3,nk4)
+		T = squeeze(T[1,:,:,:,:],1)
+		param["wd"] = T
+		d = pad5d(d,nf,nk1,nk2,nk3,nk4)
 		D = fft(d,1)
 		for iw=1:iw_max
-        	x = squeeze(D[iw,:,:,:,:],1)
-        	y = copy(x)
-        	for iter = 1 : Niter
-        		Y = fft(y)
-        		amp = sort(vec(abs(Y[:])))
-        		perc = perci + (iter-1)*((percf-perci)/Niter);
-        		cutoff = amp[int(floor(perc*nk)+1)];
-        		Y[find(abs(Y) .< cutoff)] = 0
-        		y = ifft(Y)
-        		y = alpha*x + (1-alpha*T).*y
-        	end
-        	D[iw,:,:,:,:] = y
-    	end
-    	# symmetries
-    	for iw=nw+1:nf
+			x = squeeze(D[iw,:,:,:,:],1)
+			y = copy(x)
+			for iter = 1 : Niter
+				Y = fft(y)
+				amp = sort(vec(abs(Y[:])))
+				perc = perci + (iter-1)*((percf-perci)/Niter);
+				cutoff = amp[int(floor(perc*nk)+1)];
+				Y[find(abs(Y) .< cutoff)] = 0
+				y = ifft(Y)
+				y = alpha*x + (1-alpha*T).*y
+			end
+			D[iw,:,:,:,:] = y
+		end
+		# symmetries
+		for iw=nw+1:nf
 			D[iw,:,:,:,:] = conj(D[nf-iw+2,:,:,:,:])
-    	end 
+		end 
 		d = ifft(D,1)
+		d = real(d[1:nt,1:nx1,1:nx2,1:nx3,1:nx4])
+		out = reshape(d,nt,nx1*nx2*nx3*nx4)
+		return out,h
 	end
-	d = real(d[1:nt,1:nx1,1:nx2,1:nx3,1:nx4])
-	
-	out = reshape(d,nt,nx1*nx2*nx3*nx4)
-
-    return out,h
 end
 

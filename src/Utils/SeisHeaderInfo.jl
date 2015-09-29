@@ -1,48 +1,62 @@
 include("Header.jl")
 
-function SeisHeaderInfo(in)
-#
-#   print Seis header information
-#
+function SeisHeaderInfo(in,param=Dict())
+	#
+	#   print Seis header information
+	#
 
-    key = ["tracenum","o1","n1","d1","sx","sy","gx","gy","mx","my","hx","hy","h","az","ang","isx","isy","igx","igy","imx","imy","ihx","ihy","ih","iaz","iang","selev","gelev","sstat","gstat","trid"]
+	ntrace = get(param,"ntrace",100000)
+	key = names(Header)
+	nhead = length(key)
+	filename = join([in ".seish"])
+	stream = open(filename)
+	NX = GetNumTraces(in)
+	h = GrabHeader(stream,1)
+	println("Displaying information for ", filename," (",NX," traces):")
+	min_h = zeros(Float32,length(key))
+	max_h = zeros(Float32,length(key))
+	mean_h = zeros(Float32,length(key))
 
-    filename = join([in ".seish"])
-    stream = open(filename)
-    nhead = 27
-    nx = int(filesize(stream)/124)
-    h = GrabHeader(stream,1)
-    println("Displaying information for ", filename," (",nx," traces):")
-    min_h = vec(zeros(Float32,length(key)))
-    max_h = vec(zeros(Float32,length(key)))
-    mean_h = vec(zeros(Float32,length(key)))
-    for ikey=1:length(key)
-    	min_h[ikey] = getfield(h,symbol(key[ikey]))
-    	max_h[ikey] = getfield(h,symbol(key[ikey]))
-    	mean_h[ikey] += getfield(h,symbol(key[ikey]))
-    end
-    for j=2:nx
-    	#println("j=",j," nx=",nx)
-    	h = GrabHeader(stream,j)
-        for ikey=1:length(key)
-        	key_val = getfield(h,symbol(key[ikey]))
-            if (key_val < min_h[ikey])
-        		min_h[ikey] = key_val
-            end
-            if (key_val > max_h[ikey])
-        		max_h[ikey] = key_val
-            end
-            mean_h[ikey] += key_val
-        end
-    end
-    for ikey=1:length(key)
-    	mean_h[ikey] /= nx
-    end
-    close(stream)
-    println("       Key          Minimum          Maximum             Mean");    
-    println("=============================================================")
-    for ikey=1:length(key)
-		@printf("%10s      %11.3f      %11.3f      %11.3f\n",key[ikey],min_h[ikey],max_h[ikey],mean_h[ikey])
-    end
-    
+	for ikey=1:length(key)
+		min_h[ikey] = convert(Float32,getfield(h,key[ikey]))
+		max_h[ikey] = convert(Float32,getfield(h,key[ikey]))
+		mean_h[ikey] += convert(Float32,getfield(h,key[ikey]))
+	end
+
+	itrace = 2
+	while itrace <= NX
+		nx = NX - itrace + 1
+		ntrace = nx > ntrace ? ntrace : nx
+		position = 4*nhead*(itrace-1)
+		seek(stream,position)
+		h1 = read(stream,Header32Bits,nhead*ntrace)
+		h1 = reshape(h1,nhead,int(ntrace))
+		for ikey = 1 : length(key)
+			keytype = eval(parse("typeof(Seismic.InitSeisHeader().$(string(key[ikey])))"))
+			h2 = reinterpret(keytype,vec(h1[ikey,:]))
+			a = minimum(h2)
+			b = maximum(h2)
+			c = mean(h2)
+			if (a < min_h[ikey])
+				min_h[ikey] = a
+			end
+			if (b > max_h[ikey])
+				max_h[ikey] = b
+			end
+			mean_h[ikey] += c*ntrace
+		end
+		itrace += ntrace
+	end
+
+	for ikey=1:length(key)
+		mean_h[ikey] /= NX
+	end
+	close(stream)
+	println("       Key          Minimum          Maximum             Mean");    
+	println("=============================================================")
+	for ikey=1:length(key)
+		@printf("%10s      %11.3f      %11.3f      %11.3f\n",string(key[ikey]),min_h[ikey],max_h[ikey],mean_h[ikey])
+	end
+
 end
+

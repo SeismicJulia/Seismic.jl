@@ -1,159 +1,184 @@
-function ConjugateGradients(d,param=Dict())
-	# Non-quadratic regularization with CG-LS. The inner CG routine is taken from
-	# Algorithm 2 from Scales, 1987. Make sure linear operator passes the dot product.
+function ConjugateGradients(m0,d,param::Dict{Any,Any})
+	# Conjugate Gradients following Algorithm 2 from Scales, 1987. 
+	# The user provides an array of linear operators. Ensure linear operator(s) pass the dot product.
 
-	Niter_external = get(param,"Niter_external",1)
-	Niter_internal = get(param,"Niter_internal",15)
-	wd = get(param,"wd",ones(Float64,size(d))) # data weights
-	operators = get(param,"operators",[fft_op])
-	misfit = Array(Float64,1)
-	global m
-	for iter_external = 1 : Niter_external
-		if (iter_external > 1)
-			Pv = v.*P.*wm
-			r = forward_op(Pv,operators,param)
-			r = r.*wd
-			r = d - r
-		else
-			r = copy(d)
-		end	
-		g = adjoint_op(r,operators,param)
-		if (iter_external == 1)
-			wm = get(param,"wm",ones(Float64,size(g))) # model weights
-		end
-		g = g.*wm
-		if (iter_external == 1)
-			m = g
-			v = g
-			P = m*0. + 1.
-		else
-			g = g.*P
-		end
-		s = copy(g)
+	Niter = get(param,"Niter",10)
+	mu = get(param,"mu",0.)
+	mu = sqrt(mu)
+	operators = get(param,"operators",[])
+	param_op = copy(param)
+	cost = Float64[]
+
+	m = copy(m0)
+	r = forward_op(m0,operators,param_op)
+	r = d - r
+	rr = 0. - mu*m0;
+	push!(cost,InnerProduct(r[:],r[:]) + InnerProduct(rr[:],rr[:]))
+	g = adjoint_op(r,operators,param_op)
+	g = g + mu.*rr
+	s = copy(g)
+	gamma_old = InnerProduct(g[:],g[:])
+	for iter = 1 : Niter
+		t = forward_op(s,operators,param_op)
+		tt = mu.*s
+		delta = InnerProduct(t[:],t[:]) + InnerProduct(tt[:],tt[:])
+		alpha = gamma_old/(delta + 1.e-20)
+		m = m + alpha*s
+		r = r - alpha*t
+		rr = rr - alpha*tt
+		push!(cost,InnerProduct(r[:],r[:]) + InnerProduct(rr[:],rr[:]))
+		g = adjoint_op(r,operators,param_op)
+		g = g + mu*rr
 		gamma = InnerProduct(g[:],g[:])
+		beta = gamma/(gamma_old + 1.e-20)
 		gamma_old = copy(gamma)
-		for iter_internal = 1 : Niter_internal
-			Ps = s.*P
-			ss = forward_op(Ps,operators,param)
-			ss = ss.*wd
-			delta = InnerProduct(ss[:],ss[:])
-			alpha = gamma/(delta + 1e-20)
-			v = CGStep(v,s,1.,alpha)
-			r = CGStep(r,ss,1.,-alpha)
-			push!(misfit,InnerProduct(r[:],r[:]))
-			r = r.*wd
-			g = adjoint_op(r,operators,param)
-			g = g.*P.*wm
-			gamma = InnerProduct(g[:],g[:])
-			beta = gamma/(gamma_old + 1e-20)
-			gamma_old = copy(gamma)
-			s = CGStep(s,g,beta,1)
-		end
-		if (Niter_external > 1)
-			m = v.*P;
-			P = abs(m./maximum(abs(m)))
-		else
-			m = v;	
-		end
+		s = beta*s + g
 	end
 
-	return m, misfit
+	return m, cost
 end
 
-function ConjugateGradients(m::ASCIIString,d::ASCIIString,misfit::ASCIIString,param=Dict())
-	# Non-quadratic regularization with CG-LS. The inner CG routine is taken from
-	# Algorithm 2 from Scales, 1987. Make sure linear operator passes the dot product.
+function ConjugateGradients(m::ASCIIString,m0::ASCIIString,d::ASCIIString,cost_file::ASCIIString,param::Dict{Any,Any})
+	# Conjugate Gradients following Algorithm 2 from Scales, 1987. 
+	# The user provides an array of linear operators. Ensure linear operator(s) pass the dot product.
 
-	Niter_external = get(param,"Niter_external",1)
-	Niter_internal = get(param,"Niter_internal",15)
-	wd = get(param,"wd","tmp_cg_wd") # data weights
-	operators = get(param,"operators",[fft_op])
-
-	P = join(["tmp_CG_P_",string(int(rand()*100000))])
-	v = join(["tmp_CG_v_",string(int(rand()*100000))])
+	Niter = get(param,"Niter",10)
+	mu = get(param,"mu",0.)
+	mu = sqrt(mu)
+	operators = get(param,"operators",[])
+	param_op = copy(param)
+	cost = Float64[]
 	g = join(["tmp_CG_g_",string(int(rand()*100000))])
 	s = join(["tmp_CG_s_",string(int(rand()*100000))])
-	ss = join(["tmp_CG_ss_",string(int(rand()*100000))])
+	rr = join(["tmp_CG_rr_",string(int(rand()*100000))])
+	tt = join(["tmp_CG_tt_",string(int(rand()*100000))])
 	r = join(["tmp_CG_r_",string(int(rand()*100000))])
-	Pv = join(["tmp_CG_Pv_",string(int(rand()*100000))])
-	Ps = join(["tmp_CG_Ps_",string(int(rand()*100000))])
-
-	SeisCopy(d,r)
-	fp = open(misfit,"w")
+	t = join(["tmp_CG_t_",string(int(rand()*100000))])
+	SeisCopy(m0,m)
+	forward_op(m0,r,operators,param_op)
+	CGStep(r,d,{"a"=>-1.,"b"=>1.})
+	SeisCopy(m0,rr)	
+	CGStep(rr,m0,{"a"=>0.,"b"=>-mu})
+	push!(cost,InnerProduct(r,r) + InnerProduct(rr,rr))
+	fp = open(cost_file,"w")
 	write(fp,join(["began execution at: ",strftime(time()),"\n"]))
-	write(fp,join([string(InnerProduct(r,r)),"\n"]))
+	write(fp,join([string(cost[1]),"\n"]))
 	close(fp)
-
-	for iter_external = 1 : Niter_external
-		if (iter_external > 1)
-			CGMult(Pv,P,v,1.,0.)
-			CGMult(Pv,Pv,wm,1.,0.)
-			forward_op(Pv,r,operators,param)
-			CGMult(r,r,wd,1.,0)
-			CGStep(r,d,-1.,1.)
-		else
-			SeisCopy(d,r)
-		end	
-		adjoint_op(g,r,operators,param)
-		if (iter_external == 1)
-			SeisCopy(g,m)
-			SeisCopy(g,v)
-			if (!haskey(param,"wm"))
-				wm = join(["tmp_CG_wm_",string(int(rand()*100000))])
-				CGMult(wm,g,m,0.,1.)
-			end
-		else
-			CGMult(g,g,wm,1.,0.)
-		end
-		if (iter_external == 1)
-			CGMult(m,m,wm,1.,0.)
-			CGMult(v,v,wm,1.,0.)
-			CGMult(P,g,m,0.,1.)
-		else
-			CGMult(g,g,P,1.,0.)    
-		end
-		SeisCopy(g,s)
+	adjoint_op(g,r,operators,param_op)
+	CGStep(g,rr,{"a"=>1.,"b"=>mu})
+	SeisCopy(g,s)
+	# initialize tt with zeros
+	SeisCopy(s,tt)
+	CGStep(tt,s,{"a"=>0.,"b"=>0.})
+	gamma_old = InnerProduct(g,g)
+	for iter = 1 : Niter	
+		forward_op(s,t,operators,param_op)
+		CGStep(tt,s,{"a"=>0.,"b"=>mu})
+		delta = InnerProduct(t,t) + InnerProduct(tt,tt)
+		alpha = gamma_old/(delta + 1.e-20)
+		CGStep(m,s,{"a"=>1.,"b"=>alpha})
+		CGStep(r,t,{"a"=>1.,"b"=>-alpha})
+		CGStep(rr,tt,{"a"=>1.,"b"=>-alpha})
+		push!(cost,InnerProduct(r,r) + InnerProduct(rr,rr))
+		fp = open(cost_file,"a")
+		write(fp,join([string(cost[iter+1]),"\n"]))
+		close(fp)
+		adjoint_op(g,r,operators,param_op)
+		CGStep(g,rr,{"a"=>1.,"b"=>mu})
 		gamma = InnerProduct(g,g)
+		beta = gamma/(gamma_old + 1.e-20)
 		gamma_old = copy(gamma)
-		for iter_internal = 1 : Niter_internal
-			CGMult(Ps,s,P,1.,0.)
-			forward_op(Ps,ss,operators,param)
-			CGMult(ss,ss,wd,1.,0.)
-			delta = InnerProduct(ss,ss)
-			alpha = gamma/(delta + 1e-20)
-			CGStep(v,s,1.,alpha)
-			CGStep(r,ss,1.,-alpha)
-			fp = open(misfit,"a")
-			write(fp,join([string(InnerProduct(r,r)),"\n"]))
-			close(fp)
-			adjoint_op(g,r,operators,param)
-			CGMult(g,g,wm,1.,0.) 
-			CGMult(g,g,P,1.,0.) 
-			gamma = InnerProduct(g,g)
-			beta = gamma/(gamma_old + 1e-20)
-			gamma_old = copy(gamma)
-			CGStep(s,g,beta,1.)
-		end
-		if (Niter_external > 1)
-			CGMult(m,v,P,1.,0.)
-			CGSparseNorm(P,m)
-		else
-			SeisCopy(v,m)		
-		end
+		CGStep(s,g,{"a"=>beta,"b"=>1.})
 	end
-	fp = open(misfit,"a")
-	write(fp,join(["finished execution at: ",strftime(time()),"\n"]))
+	SeisRemove(g);
+	SeisRemove(s);
+	SeisRemove(rr);
+	SeisRemove(tt)
+	SeisRemove(r);
+	SeisRemove(t);
+
+end
+
+function ConjugateGradients(m::Array{ASCIIString,1},m0::Array{ASCIIString,1},d::Array{ASCIIString,1},cost_file::ASCIIString,param::Dict{Any,Any})
+	# Conjugate Gradients following Algorithm 2 from Scales, 1987. 
+	# The user provides an array of linear operators. Ensure linear operator(s) pass the dot product.
+
+	Niter = get(param,"Niter",10)
+	mu = get(param,"mu",[0. 0. 0.])
+	mu = sqrt(mu)
+	operators = get(param,"operators",[])
+	param_op = copy(param)
+	cost = Float64[]
+	rand_string = string(int(rand()*100000))
+	g = [join(["tmp_CG_g1_",rand_string]);join(["tmp_CG_g2_",rand_string]);join(["tmp_CG_g3_",rand_string])]
+	s = [join(["tmp_CG_s1_",rand_string]);join(["tmp_CG_s2_",rand_string]);join(["tmp_CG_s3_",rand_string])]
+	rr = [join(["tmp_CG_rr1_",rand_string]);join(["tmp_CG_rr2_",rand_string]);join(["tmp_CG_rr3_",rand_string])]
+	tt = [join(["tmp_CG_tt1_",rand_string]);join(["tmp_CG_tt2_",rand_string]);join(["tmp_CG_tt3_",rand_string])]
+	r = [join(["tmp_CG_r1_",rand_string]);join(["tmp_CG_r2_",rand_string]);join(["tmp_CG_r3_",rand_string])]
+	t = [join(["tmp_CG_t1_",rand_string]);join(["tmp_CG_t2_",rand_string]);join(["tmp_CG_t3_",rand_string])]
+	SeisCopy(m0,m)
+	forward_op(m0,r,operators,param_op)
+	CGStep(r,d,{"a"=>[-1.;-1.;-1.],"b"=>[1.;1.;1.]});
+	SeisCopy(m0,rr);	
+	CGStep(rr,m0,{"a"=>[0.;0.;0.],"b"=>-mu})
+	push!(cost,InnerProduct(r,r) + InnerProduct(rr,rr))
+	fp = open(cost_file,"w")
+	write(fp,join(["began execution at: ",strftime(time()),"\n"]))
+	write(fp,join([string(cost[1]),"\n"]))
 	close(fp)
+	adjoint_op(g,r,operators,param_op)
+	CGStep(g,rr,{"a"=>[1.;1.;1.],"b"=>mu})
+	SeisCopy(g,s)
+	# initialize tt with zeros
+	SeisCopy(s,tt)
+	CGStep(tt,s,{"a"=>[0.;0.;0.],"b"=>[0.;0.;0.]});
+	gamma_old = InnerProduct(g,g)
+	for iter = 1 : Niter	
+		forward_op(s,t,operators,param_op)
+		CGStep(tt,s,{"a"=>[0.;0.;0.],"b"=>mu});
+		delta = InnerProduct(t,t) + InnerProduct(tt,tt)
+		alpha = gamma_old/(delta + 1.e-20)
+		CGStep(m,s,{"a"=>[1.;1.;1.],"b"=>[alpha;alpha;alpha]})
+		CGStep(r,t,{"a"=>[1.;1.;1.],"b"=>-[alpha;alpha;alpha]})
+		CGStep(rr,tt,{"a"=>[1.;1.;1.],"b"=>-[alpha;alpha;alpha]})
+		push!(cost,InnerProduct(r,r) + InnerProduct(rr,rr))
+		fp = open(cost_file,"a")
+		write(fp,join([string(cost[iter+1]),"\n"]))
+		close(fp)
+		adjoint_op(g,r,operators,param_op)
+		CGStep(g,rr,{"a"=>[1.;1.;1.],"b"=>mu})
+		gamma = InnerProduct(g,g)
+		beta = gamma/(gamma_old + 1.e-20)
+
+		println("gamma=",gamma)
+		println("gamma_old=",gamma_old)
+		println("alpha=",alpha)
+		println("beta=",beta)
+		println("delta=",delta)
+
+		gamma_old = copy(gamma)
+		CGStep(s,g,{"a"=>[beta;beta;beta],"b"=>[1.;1.;1.]})
+	end
+	SeisRemove(g);
+	SeisRemove(s);
+	SeisRemove(rr);
+	SeisRemove(tt);
+	SeisRemove(r);
+	SeisRemove(t);
 
 end
 
 function forward_op(m,operators,param)
 	param["adj"] = false
 	d = [];
-	for iop = 1 : 1 : length(operators)
-		op = operators[iop]
-		d = op(m,param)
-		m = copy(d)
+	if length(operators) > 0
+		for iop = length(operators) : -1 : 1
+			op = operators[iop]
+			d = op(m,param)
+			m = copy(d)
+		end
+	else
+		d = copy(m)
 	end
 	return d
 end
@@ -161,10 +186,14 @@ end
 function adjoint_op(d,operators,param)
 	param["adj"] = true
 	m = [];
-	for iop = length(operators) : -1 : 1
-		op = operators[iop]
-		m = op(d,param)
-		d = copy(m)
+	if length(operators) > 0
+		for iop = 1 : 1 : length(operators)
+			op = operators[iop]
+			m = op(d,param)
+			d = copy(m)
+		end
+	else
+		m = copy(d)
 	end
 	return m
 end
@@ -174,7 +203,7 @@ function forward_op(m::ASCIIString,d::ASCIIString,operators,param)
 	tmp_filename_m = join(["tmp_CGFWD_m_",string(int(rand()*100000))])
 	tmp_filename_d = join(["tmp_CGFWD_d_",string(int(rand()*100000))])
 	SeisCopy(m,tmp_filename_m)
-	for iop = 1 : 1 : length(operators)
+	for iop = length(operators) : -1 : 1
 		op = operators[iop]
 		op(tmp_filename_m,tmp_filename_d,param)
 		SeisCopy(tmp_filename_d,tmp_filename_m)
@@ -189,7 +218,7 @@ function adjoint_op(m::ASCIIString,d::ASCIIString,operators,param)
 	tmp_filename_m = join(["tmp_CGADJ_m_",string(int(rand()*100000))])
 	tmp_filename_d = join(["tmp_CGADJ_d_",string(int(rand()*100000))])
 	SeisCopy(d,tmp_filename_d)
-	for iop = length(operators) : -1 : 1
+	for iop = 1 : 1 : length(operators)
 		op = operators[iop]
 		op(tmp_filename_m,tmp_filename_d,param)
 		SeisCopy(tmp_filename_m,tmp_filename_d)
@@ -199,3 +228,48 @@ function adjoint_op(m::ASCIIString,d::ASCIIString,operators,param)
 	SeisRemove(tmp_filename_d)
 end
 
+function forward_op(m::Array{ASCIIString,1},d::Array{ASCIIString,1},operators,param)
+	param["adj"] = false
+	rand_string = string(int(rand()*100000))
+	tmp_m = [join(["tmp_CGADJ_m1_",rand_string]);join(["tmp_CGADJ_m2_",rand_string]);join(["tmp_CGADJ_m3_",rand_string])]
+	tmp_d = [join(["tmp_CGADJ_d1_",rand_string]);join(["tmp_CGADJ_d2_",rand_string]);join(["tmp_CGADJ_d3_",rand_string])]
+	SeisCopy(m,tmp_m)
+	for iop = length(operators) : -1 : 1
+		op = operators[iop]
+		if (length(methods(op,(Array,Array,Dict{Any,Any}))) > 0)
+			op(tmp_m,tmp_d,param)
+			SeisCopy(tmp_d,tmp_m)
+		else
+			for j = 1 : length(m)
+				op(tmp_m[j],tmp_d[j],param)
+			end	
+			SeisCopy(tmp_d,tmp_m)
+		end
+	end	
+	SeisCopy(tmp_d,d)
+	SeisRemove(tmp_m)
+	SeisRemove(tmp_d)
+end
+
+function adjoint_op(m::Array{ASCIIString,1},d::Array{ASCIIString,1},operators,param)
+	param["adj"] = true
+	rand_string = string(int(rand()*100000))
+	tmp_m = [join(["tmp_CGADJ_m1_",rand_string]);join(["tmp_CGADJ_m2_",rand_string]);join(["tmp_CGADJ_m3_",rand_string])]
+	tmp_d = [join(["tmp_CGADJ_d1_",rand_string]);join(["tmp_CGADJ_d2_",rand_string]);join(["tmp_CGADJ_d3_",rand_string])]
+	SeisCopy(d,tmp_d)
+	for iop = 1 : 1 : length(operators)
+		op = operators[iop]
+		if (length(methods(op,(Array,Array,Dict{Any,Any}))) > 0)
+			op(tmp_m,tmp_d,param)
+			SeisCopy(tmp_m,tmp_d)
+		else
+			for j = 1 : length(m)
+				op(tmp_m[j],tmp_d[j],param)
+			end	
+			SeisCopy(tmp_m,tmp_d)
+		end
+	end
+	SeisCopy(tmp_m,m)
+	SeisRemove(tmp_m)
+	SeisRemove(tmp_d)
+end

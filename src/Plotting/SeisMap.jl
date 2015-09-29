@@ -1,9 +1,6 @@
-@doc """
-       Mapping of seismic data headers. hello.
-       """ ->
-    function SeisMap(headers,param)
+function SeisMap(headers,param)
 
-    style = get(param,"style","sxsygxgy") # type of map
+	style = get(param,"style","sxsygxgy") # type of map
 	fignum = get(param,"fignum",1)
 	cmap = get(param,"cmap","RdGy") # color map for fold plot
 	aspect = get(param,"aspect","auto")
@@ -23,7 +20,7 @@
 	hbox = get(param,"hbox",8)
 	name = get(param,"name","NULL")
 	interpolation = get(param,"interpolation","none")
-	
+
 	fig = plt.figure(num=fignum, figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
 	if (style == "sxsygxgy")
 		ntrace = length(headers)
@@ -40,18 +37,18 @@
 		plot(gx,gy,linestyle="None",marker="^",markersize=5,color="b");
 		plot(sx,sy,linestyle="None",marker="*",markersize=8,color="r");
 		#plt.axis([ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy])
-    else
-    	println("no other plotting style defined yet")
+	else
+		println("no other plotting style defined yet")
 	end
 	plt.title(title)
 	plt.xlabel(join([xlabel " " xunits]))
 	plt.ylabel(join([ylabel " " yunits]))
-		
+
 	if (name == "NULL")
-	  plt.show()
+		plt.show()
 	else  
-      plt.savefig(name,dpi=dpi)
-      plt.close()
-    end
-	
+		plt.savefig(name,dpi=dpi)
+		plt.close()
+	end
+
 end

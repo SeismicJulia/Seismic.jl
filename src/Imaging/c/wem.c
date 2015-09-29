@@ -8,6 +8,7 @@ void wem(float **d, float **m, float **wav,
 		int nz, float oz, float dz, float gz, float sz,
 		float **vel, float fmin, float fmax,
 		int padt, int padx,
+		float damping,
 		bool adj, bool pade_flag, bool verbose)
 /*< wave equation depth migration operator. Can specify different velocities for src and rec side wavefields. >*/
 {
@@ -41,7 +42,6 @@ void wem(float **d, float **m, float **wav,
 	}
 	else{
 		for (ix=0;ix<nmx*nmy;ix++) for (it=0;it<nt;it++) d[ix][it] = 0.;
-		for (ix=0;ix<nmx*nmy;ix++) for (iz=0;iz<nz;iz++) m[ix][iz] /= (float) nmx*nmy*nz;
 	}
 	ntfft = (int) 2*truncf(padt*((float) nt)/2);
 	nw = (int) truncf(ntfft/2)+1;
@@ -111,7 +111,8 @@ void wem(float **d, float **m, float **wav,
 
 	sigma = 0.;
 	for (it=0;it<nt;it++) if (sigma < fabsf(wav[0][it])) sigma = fabsf(wav[0][it]);
-	sigma /= (float) nw;
+	sigma *= sqrtf(damping)/sqrtf((float) ntfft);
+	sigma *= sigma;
 
 	nthread = omp_thread_count();
 
@@ -162,9 +163,6 @@ void wem(float **d, float **m, float **wav,
 		}
 	}
 
-	if (adj){
-		for (ix=0;ix<nmx*nmy;ix++) for (iz=0;iz<nz;iz++) m[ix][iz] /= (float) nmx*nmy*nz;
-	}
 	free1int(n); 
 	fftwf_free(a);
 	fftwf_free(b);  
@@ -221,7 +219,7 @@ void extrap1f(float **m,complex **d_g_wx, complex **d_s_wx, float sigma,
 				ssop(d_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,v,po,pd,p1,p2,true,pade_flag,false,verbose);
 				for (imx=0;imx<nmx;imx++){ 
 					for (imy=0;imy<nmy;imy++){
-						m[imx*nmy*nthread + imy*nthread + ithread][iz] += factor*crealf(d_xg[imx*nmy + imy]*conjf(d_xs[imx*nmy + imy]))/cabsf((d_xs[imx*nmy + imy]*conjf(d_xs[imx*nmy + imy])) + 0.00001*sigma);
+						m[imx*nmy*nthread + imy*nthread + ithread][iz] += factor*crealf(d_xg[imx*nmy + imy]*conjf(d_xs[imx*nmy + imy]))/cabsf((d_xs[imx*nmy + imy]*conjf(d_xs[imx*nmy + imy])) + sigma);
 					}
 				}
 			}
@@ -235,7 +233,7 @@ void extrap1f(float **m,complex **d_g_wx, complex **d_s_wx, float sigma,
 			z = oz + dz*iz;
 			if (z >= sz){
 				ssop(d_xs,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,v,po,pd,p1,p2,true,pade_flag,true,verbose);
-				for (ix=0;ix<nmx*nmy;ix++) smig[ix][iz] = d_xs[ix]/cabsf((d_xs[ix]*conjf(d_xs[ix])) + 0.00001*sigma);
+				for (ix=0;ix<nmx*nmy;ix++) smig[ix][iz] = d_xs[ix]/cabsf((d_xs[ix]*conjf(d_xs[ix])) + sigma);
 			}
 			else{
 				for (ix=0;ix<nmx*nmy;ix++) smig[ix][iz] = 0.;
@@ -754,7 +752,7 @@ void ssop_source(complex *d_x,
 	d_k = alloc1complex(nkx*nky);
 
 
-	//boundary_condition(d_x,nmx,lmx,nmy,lmy);    
+	boundary_condition(d_x,nmx,lmx,nmy,lmy);    
 	if (pade_flag) pade(d_x,nmx,omx,dmx,nmy,omy,dmy,dz,w,iz,v,po,pd,false,true,verbose);
 	for(imx=0; imx<nkx;imx++){ 
 		for(imy=0; imy<nky;imy++){ 

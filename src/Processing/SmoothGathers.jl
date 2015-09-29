@@ -1,5 +1,18 @@
+function SmoothGathers(m::ASCIIString,d::ASCIIString,param=Dict())
+
+	adj = get(param,"adj",false)
+	param["f"] = [smooth_angles]
+	param["group"] = "gather"
+	param["key"] = ["imx" "imy"]
+	if (adj==false)
+		SeisProcess(m,d,param)
+	else
+		SeisProcess(d,m,param)
+	end
+end
+
 function smooth_angles(d,h,param)
-	
+
 	Nsmooth = get(param,"Nsmooth",3)
 	Nrepeat = get(param,"Nrepeat",1)
 	min_iang = h[1].iang
@@ -24,7 +37,7 @@ function smooth_angles(d,h,param)
 			end
 		end
 	end
-	
+
 	return d[1:nz,:],h;
 end
 
@@ -41,16 +54,8 @@ function mean_filter(a,nx,nxw)
 				nsum += 1.
 			end
 		end
-    	b[ix] = sum/nsum
-    end
-	return b
-end
-
-function SmoothGathers(m::ASCIIString,d::ASCIIString,param=Dict())
-	if (param["adj"]==false)
-		SeisProcess(m,d,[smooth_angles],param,"gather",["imx","imy"])
-	else
-		SeisProcess(d,m,[smooth_angles],param,"gather",["imx","imy"])
+		b[ix] = sum/nsum
 	end
+	return b
 end
 

@@ -1,28 +1,32 @@
 export SegyToSeis,
-       SeisToSegy,
-       Header,
-       SeisRead,
-       SeisReadHeaders,
-       SeisWrite,
-       SeisProcess,
-       SeisWindow,
-       SeisSort,
-       SeisGeometry,
-       SeisHeaderInfo,
-       SeisBin,
-       SeisPatch,
-       SeisUnPatch,
-       SeisPatchProcess,
-       SeisCopy,
-       SeisRemove,
-       CalculateSampling,
-       ApplySampling,
-       InnerProduct
+SeisToSegy,
+Header,
+SeisRead,
+SeisWrite,
+SeisProcess,
+SeisWindow,
+SeisSort,
+SeisGeometry,
+SeisHeaderInfo,
+SeisBin,
+SeisPatch,
+SeisUnPatch,
+SeisPatchProcess,
+SeisCopy,
+SeisRemove,
+CalculateSampling,
+InnerProduct,
+SeisTorque,
+SeisReadHeaders,
+SeisWriteHeaders,
+SeisProcessHeaders,
+SeisWindowHeaders,
+ApplyModelWeights,
+ApplyDataWeights
 include("SegyToSeis.jl")
 include("SeisToSegy.jl")
 include("Header.jl")
 include("SeisRead.jl")
-include("SeisReadHeaders.jl")
 include("SeisWrite.jl")
 include("SeisProcess.jl")
 include("SeisWindow.jl")
@@ -36,5 +40,11 @@ include("SeisPatchProcess.jl")
 include("SeisCopy.jl")
 include("SeisRemove.jl")
 include("CalculateSampling.jl")
-include("ApplySampling.jl")
 include("InnerProduct.jl")
+include("SeisTorque.jl")
+include("SeisReadHeaders.jl")
+include("SeisWriteHeaders.jl")
+include("SeisProcessHeaders.jl")
+include("SeisWindowHeaders.jl")
+include("ApplyModelWeights.jl")
+include("ApplyDataWeights.jl")

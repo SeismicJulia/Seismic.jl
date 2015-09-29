@@ -22,10 +22,12 @@ int main (int argc, char *argv[])
 	float **d,**m,**vel,**vel_aperture,**wav,sx,sy,sz,gz;
 	float ox,dx,oy,dy,oz,dz,ot,dt,fmin,fmax,xmin,xmax,ymin,ymax;
 	float ohx,dhx,ohy,dhy;
+	float damping;
 	int nhx,nhy,ntraces;
 	int padt,padx;
 	bool adj,pade_flag,verbose;
 	if (!par_read_bool(argc,argv,"adj",&adj)) adj = true;
+	if (!par_read_float(argc,argv,"damping",&damping)) damping = 1000.;
 	if (!par_read_bool(argc,argv,"verbose",&verbose)) verbose = false;
 	if (!par_read_bool(argc,argv,"pade_flag",&pade_flag)) pade_flag= false; // flag for Pade Fourier correction
 	if (!par_read_string(argc,argv,"d", d_name)) { docs (); exit (1); }
@@ -134,6 +136,7 @@ int main (int argc, char *argv[])
 			vel_aperture,
 			fmin,fmax,
 			padt,padx,
+			damping,
 			adj,
 			pade_flag,
 			verbose);

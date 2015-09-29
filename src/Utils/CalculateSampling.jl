@@ -1,35 +1,27 @@
-function CalculateSampling(in)
+function CalculateSampling(in,h=[],param=Dict())
 
-    itrace = 1
-    wd = zeros(Float32,size(in))
-    for itrace = 1 : size(in,2)
-    	a = sum(in[:,itrace].*in[:,itrace])
-    	if (a > 0.00001) 
-    		wd[:,itrace] = 1.
-    	end
-    end
-	return wd;
+	cutoff = get(param,"cutoff",1e-10)
+	itrace = 1
+	wd = zeros(Float32,size(in))
+	for itrace = 1 : size(in[:,:],2)
+		a = sum(in[:,itrace].*in[:,itrace])
+		if (a > cutoff) 
+			wd[:,itrace] = 1.
+		end
+	end
+	return wd,h;
 end
 
-function CalculateSampling(in::ASCIIString,wd::ASCIIString)
-# calculate sampling operator (1's for live traces, 0's for missing traces)
-    itrace = 1
-    status = false
-    while status == false
-    	d,h,status = SeisRead(in,"some",["tracenum"],itrace,1000)
-	wd1 = d;
-	#println("itrace="size(d))
-	#println(size(wd))
-	for ix = 1 : size(d,2)
-		a = sum(d[:,ix].*d[:,ix])
-    		if (a < 0.00001) 
-    			wd1[:,ix] = 0.
-    		else
-    			wd1[:,ix] = 1.
-		end	
-	end	
-	SeisWrite(wd,wd1,h,itrace)
-	itrace += 1000
-    end
+function CalculateSampling(in::ASCIIString,wd::ASCIIString,param=Dict())
+	# calculate sampling operator (1's for live traces, 0's for missing traces)
+	
+	ntrace = get(param,"ntrace",100000)
+	cutoff = get(param,"cutoff",1e-10)
+	param["f"] = [CalculateSampling]
+	param["group"] = "some"
+	param["ntrace"] = ntrace
+	param["cutoff"] = cutoff
+	SeisProcess(in,wd,param)		
+		
 end
 

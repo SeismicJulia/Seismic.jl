@@ -1,36 +1,36 @@
 include("Header.jl")
 
 type fileHeader
-  jobid  :: Int32
-  linnum :: Int32
-  renum  :: Int32
-  ntrpe  :: Int16
-  natrpe :: Int16
-  dt     :: Int16
-  dtfr   :: Int16
-  ns     :: Int16
-  nsfr   :: Int16
-  fmtc   :: Int16
-  expf   :: Int16
-  trsc   :: Int16
-  vsumc  :: Int16
-  sfs    :: Int16
-  sfe    :: Int16
-  slen   :: Int16
-  styp   :: Int16
-  tnumsc :: Int16
-  stalens:: Int16
-  stalene:: Int16
-  tyta   :: Int16
-  corr   :: Int16
-  rgc    :: Int16
-  arm    :: Int16
-  unit   :: Int16
-  pol    :: Int16
-  vpol   :: Int16
-  fvn    :: Int16
-  fltf   :: Int16
-  netfh  :: Int16
+	jobid  :: Int32
+	linnum :: Int32
+	renum  :: Int32
+	ntrpe  :: Int16
+	natrpe :: Int16
+	dt     :: Int16
+	dtfr   :: Int16
+	ns     :: Int16
+	nsfr   :: Int16
+	fmtc   :: Int16
+	expf   :: Int16
+	trsc   :: Int16
+	vsumc  :: Int16
+	sfs    :: Int16
+	sfe    :: Int16
+	slen   :: Int16
+	styp   :: Int16
+	tnumsc :: Int16
+	stalens:: Int16
+	stalene:: Int16
+	tyta   :: Int16
+	corr   :: Int16
+	rgc    :: Int16
+	arm    :: Int16
+	unit   :: Int16
+	pol    :: Int16
+	vpol   :: Int16
+	fvn    :: Int16
+	fltf   :: Int16
+	netfh  :: Int16
 end
 
 fileHeader_count = Dict{String, Int32}()
@@ -66,86 +66,86 @@ fileHeader_count["fltf"   ] = 3502
 fileHeader_count["netfh"  ] = 3504
 
 function InitFileHeader()
-  fh = fileHeader(0,0,0,0,0,0,0,0,0,0,
-	                0,0,0,0,0,0,0,0,0,0,
-	                0,0,0,0,0,0,0,0,0,0,)
+	fh = fileHeader(0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,)
 	return fh
 end
 
 function GrabFileHeader(stream)
 
-    position = fileHeader_count["jobid"]
-    seek(stream,position)
-    fh = InitFileHeader()
-    fh.jobid   = read(stream,typeof(fh.jobid))
-    fh.linnum  = read(stream,typeof(fh.linnum))
-    fh.renum   = read(stream,typeof(fh.renum))
-    fh.ntrpe   = read(stream,typeof(fh.ntrpe))
-    fh.natrpe  = read(stream,typeof(fh.natrpe))
-    fh.dt      = read(stream,typeof(fh.dt))
-    fh.dtfr    = read(stream,typeof(fh.dtfr))
-    fh.ns      = read(stream,typeof(fh.ns))
-    fh.nsfr    = read(stream,typeof(fh.nsfr))
-    fh.fmtc    = read(stream,typeof(fh.fmtc))
-    fh.expf    = read(stream,typeof(fh.expf))
-    fh.trsc    = read(stream,typeof(fh.trsc))
-    fh.vsumc   = read(stream,typeof(fh.vsumc))
-    fh.sfs     = read(stream,typeof(fh.sfs))
-    fh.sfe     = read(stream,typeof(fh.sfe))
-    fh.slen    = read(stream,typeof(fh.slen))
-    fh.styp    = read(stream,typeof(fh.styp))
-    fh.tnumsc  = read(stream,typeof(fh.tnumsc))
-    fh.stalens = read(stream,typeof(fh.stalens))
-    fh.stalene = read(stream,typeof(fh.stalene))
-    fh.tyta    = read(stream,typeof(fh.tyta))
-    fh.corr    = read(stream,typeof(fh.corr))
-    fh.rgc     = read(stream,typeof(fh.rgc))
-    fh.arm     = read(stream,typeof(fh.arm))
-    fh.unit    = read(stream,typeof(fh.unit))
-    fh.pol     = read(stream,typeof(fh.pol))
-    fh.vpol    = read(stream,typeof(fh.vpol))
-    fh.fvn     = read(stream,typeof(fh.fvn))
-    fh.fltf    = read(stream,typeof(fh.fltf))
-    fh.netfh   = read(stream,typeof(fh.netfh))
+	position = fileHeader_count["jobid"]
+	seek(stream,position)
+	fh = InitFileHeader()
+	fh.jobid   = read(stream,typeof(fh.jobid))
+	fh.linnum  = read(stream,typeof(fh.linnum))
+	fh.renum   = read(stream,typeof(fh.renum))
+	fh.ntrpe   = read(stream,typeof(fh.ntrpe))
+	fh.natrpe  = read(stream,typeof(fh.natrpe))
+	fh.dt      = read(stream,typeof(fh.dt))
+	fh.dtfr    = read(stream,typeof(fh.dtfr))
+	fh.ns      = read(stream,typeof(fh.ns))
+	fh.nsfr    = read(stream,typeof(fh.nsfr))
+	fh.fmtc    = read(stream,typeof(fh.fmtc))
+	fh.expf    = read(stream,typeof(fh.expf))
+	fh.trsc    = read(stream,typeof(fh.trsc))
+	fh.vsumc   = read(stream,typeof(fh.vsumc))
+	fh.sfs     = read(stream,typeof(fh.sfs))
+	fh.sfe     = read(stream,typeof(fh.sfe))
+	fh.slen    = read(stream,typeof(fh.slen))
+	fh.styp    = read(stream,typeof(fh.styp))
+	fh.tnumsc  = read(stream,typeof(fh.tnumsc))
+	fh.stalens = read(stream,typeof(fh.stalens))
+	fh.stalene = read(stream,typeof(fh.stalene))
+	fh.tyta    = read(stream,typeof(fh.tyta))
+	fh.corr    = read(stream,typeof(fh.corr))
+	fh.rgc     = read(stream,typeof(fh.rgc))
+	fh.arm     = read(stream,typeof(fh.arm))
+	fh.unit    = read(stream,typeof(fh.unit))
+	fh.pol     = read(stream,typeof(fh.pol))
+	fh.vpol    = read(stream,typeof(fh.vpol))
+	fh.fvn     = read(stream,typeof(fh.fvn))
+	fh.fltf    = read(stream,typeof(fh.fltf))
+	fh.netfh   = read(stream,typeof(fh.netfh))
 
-    return fh
+	return fh
 end
 
 
 
 function PutFileHeader(stream,fh)
-    position = 3600
-    seek(stream,position)
-    write(stream,fh.jobid)
-    write(stream,fh.linnum)
-    write(stream,fh.renum)
-    write(stream,fh.ntrpe)
-    write(stream,fh.natrpe)
-    write(stream,fh.dt)
-    write(stream,fh.dtfr)
-    write(stream,fh.ns)
-    write(stream,fh.nsfr)
-    write(stream,fh.fmtc)
-    write(stream,fh.expf)
-    write(stream,fh.trsc)
-    write(stream,fh.vsumc)
-    write(stream,fh.sfs)
-    write(stream,fh.sfe)
-    write(stream,fh.slen)
-    write(stream,fh.styp)
-    write(stream,fh.tnumsc)
-    write(stream,fh.stalens)
-    write(stream,fh.stalene)
-    write(stream,fh.tyta)
-    write(stream,fh.corr)
-    write(stream,fh.rgc)
-    write(stream,fh.arm)
-    write(stream,fh.unit)
-    write(stream,fh.pol)
-    write(stream,fh.vpol)
-    write(stream,fh.fvn)
-    write(stream,fh.fltf)
-    write(stream,fh.netfh)
+	position = 3600
+	seek(stream,position)
+	write(stream,fh.jobid)
+	write(stream,fh.linnum)
+	write(stream,fh.renum)
+	write(stream,fh.ntrpe)
+	write(stream,fh.natrpe)
+	write(stream,fh.dt)
+	write(stream,fh.dtfr)
+	write(stream,fh.ns)
+	write(stream,fh.nsfr)
+	write(stream,fh.fmtc)
+	write(stream,fh.expf)
+	write(stream,fh.trsc)
+	write(stream,fh.vsumc)
+	write(stream,fh.sfs)
+	write(stream,fh.sfe)
+	write(stream,fh.slen)
+	write(stream,fh.styp)
+	write(stream,fh.tnumsc)
+	write(stream,fh.stalens)
+	write(stream,fh.stalene)
+	write(stream,fh.tyta)
+	write(stream,fh.corr)
+	write(stream,fh.rgc)
+	write(stream,fh.arm)
+	write(stream,fh.unit)
+	write(stream,fh.pol)
+	write(stream,fh.vpol)
+	write(stream,fh.fvn)
+	write(stream,fh.fltf)
+	write(stream,fh.netfh)
 
 end
 
@@ -153,86 +153,86 @@ end
 
 
 type SegyHeader
-    tracl::Int32
-    tracr::Int32
-    fldr::Int32
-    tracf::Int32
-    ep::Int32
-    cdp::Int32
-    cdpt::Int32
-    trid::Int16
-    nva::Int16
-    nhs::Int16
-    duse::Int16
-    offset::Int32
-    gelev::Int32
-    selev::Int32
-    sdepth::Int32
-    gdel::Int32
-    sdel::Int32
-    swdep::Int32
-    gwdep::Int32
-    scalel::Int16
-    scalco::Int16
-    sx::Int32
-    sy::Int32
-    gx::Int32
-    gy::Int32
-    counit::Int16
-    wevel::Int16
-    swevel::Int16
-    sut::Int16
-    gut::Int16
-    sstat::Int16
-    gstat::Int16
-    tstat::Int16
-    laga::Int16
-    lagb::Int16
-    delrt::Int16
-    muts::Int16
-    mute::Int16
-    ns::Int16
-    dt::Int16
-    gain::Int16
-    igc::Int16
-    igi::Int16
-    corr::Int16
-    sfs::Int16
-    sfe::Int16
-    slen::Int16
-    styp::Int16
-    stas::Int16
-    stae::Int16
-    tatyp::Int16
-    afilf::Int16
-    afils::Int16
-    nofilf::Int16
-    nofils::Int16
-    lcf::Int16
-    hcf::Int16
-    lcs::Int16
-    hcs::Int16
-    year::Int16
-    day::Int16
-    hour::Int16
-    minute::Int16
-    sec::Int16
-    timbas::Int16
-    trwf::Int16
-    grnors::Int16
-    grnofr::Int16
-    grnlof::Int16
-    gaps::Int16
-    otrav::Int16
-    d1::Float32
-    f1::Float32
-    d2::Float32
-    f2::Float32
-    ungpow::Float32
-    unscale::Float32
-    ntr::Int32
-    mark::Int16
-    unass::Int16
+	tracl::Int32
+	tracr::Int32
+	fldr::Int32
+	tracf::Int32
+	ep::Int32
+	cdp::Int32
+	cdpt::Int32
+	trid::Int16
+	nva::Int16
+	nhs::Int16
+	duse::Int16
+	offset::Int32
+	gelev::Int32
+	selev::Int32
+	sdepth::Int32
+	gdel::Int32
+	sdel::Int32
+	swdep::Int32
+	gwdep::Int32
+	scalel::Int16
+	scalco::Int16
+	sx::Int32
+	sy::Int32
+	gx::Int32
+	gy::Int32
+	counit::Int16
+	wevel::Int16
+	swevel::Int16
+	sut::Int16
+	gut::Int16
+	sstat::Int16
+	gstat::Int16
+	tstat::Int16
+	laga::Int16
+	lagb::Int16
+	delrt::Int16
+	muts::Int16
+	mute::Int16
+	ns::Int16
+	dt::Int16
+	gain::Int16
+	igc::Int16
+	igi::Int16
+	corr::Int16
+	sfs::Int16
+	sfe::Int16
+	slen::Int16
+	styp::Int16
+	stas::Int16
+	stae::Int16
+	tatyp::Int16
+	afilf::Int16
+	afils::Int16
+	nofilf::Int16
+	nofils::Int16
+	lcf::Int16
+	hcf::Int16
+	lcs::Int16
+	hcs::Int16
+	year::Int16
+	day::Int16
+	hour::Int16
+	minute::Int16
+	sec::Int16
+	timbas::Int16
+	trwf::Int16
+	grnors::Int16
+	grnofr::Int16
+	grnlof::Int16
+	gaps::Int16
+	otrav::Int16
+	d1::Float32
+	f1::Float32
+	d2::Float32
+	f2::Float32
+	ungpow::Float32
+	unscale::Float32
+	ntr::Int32
+	mark::Int16
+	unass::Int16
 end
 
 segy_count = Dict{String,Int32}()
@@ -319,271 +319,271 @@ segy_count["unass"]  = 210
 segy_count["trace"]  = 240
 
 function InitSegyHeader()
-  h = SegyHeader(0,0,0,0,0,0,0,0,0,0,
-	               0,0,0,0,0,0,0,0,0,0,
-	               0,0,0,0,0,0,0,0,0,0,
-	               0,0,0,0,0,0,0,0,0,0,
-	               0,0,0,0,0,0,0,0,0,0,
-	               0,0,0,0,0,0,0,0,0,0,
-	               0,0,0,0,0,0,0,0,0,0,
-	               0,0,0,0,0,0,0,0,0,0)
+	h = SegyHeader(0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0,
+	0,0,0,0,0,0,0,0,0,0)
 	return h
 end
 
 function GrabSegyHeader(stream,swap_bytes,nt,file_header_size,j)
-    position = file_header_size + (240+nt*4)*(j-1)
-    seek(stream,position)
-    h = InitSegyHeader()
-    if (swap_bytes == false)
-    h.tracl  = read(stream,typeof(h.tracl))
-    h.tracr  = read(stream,typeof(h.tracr))
-    h.fldr   = read(stream,typeof(h.fldr))
-    h.tracf  = read(stream,typeof(h.tracf))
-    h.ep     = read(stream,typeof(h.ep))
-    h.cdp    = read(stream,typeof(h.cdp))
-    h.cdpt   = read(stream,typeof(h.cdpt))
-    h.trid   = read(stream,typeof(h.trid))
-    h.nva    = read(stream,typeof(h.nva))
-    h.nhs    = read(stream,typeof(h.nhs))
-    h.duse   = read(stream,typeof(h.duse))
-    h.offset = read(stream,typeof(h.offset))
-    h.gelev  = read(stream,typeof(h.gelev))
-    h.selev  = read(stream,typeof(h.selev))
-    h.sdepth = read(stream,typeof(h.sdepth))
-    h.gdel   = read(stream,typeof(h.gdel))
-    h.sdel   = read(stream,typeof(h.sdel))
-    h.swdep  = read(stream,typeof(h.swdep))
-    h.gwdep  = read(stream,typeof(h.gwdep))
-    h.scalel = read(stream,typeof(h.scalel))
-    h.scalco = read(stream,typeof(h.scalco))
-    h.sx     = read(stream,typeof(h.sx))
-    h.sy     = read(stream,typeof(h.sy))
-    h.gx     = read(stream,typeof(h.gx))
-    h.gy     = read(stream,typeof(h.gy))
-    h.counit = read(stream,typeof(h.counit))
-    h.wevel  = read(stream,typeof(h.wevel))
-    h.swevel = read(stream,typeof(h.swevel))
-    h.sut    = read(stream,typeof(h.sut))
-    h.gut    = read(stream,typeof(h.gut))
-    h.sstat  = read(stream,typeof(h.sstat))
-    h.gstat  = read(stream,typeof(h.gstat))
-    h.tstat  = read(stream,typeof(h.tstat))
-    h.laga   = read(stream,typeof(h.laga))
-    h.lagb   = read(stream,typeof(h.lagb))
-    h.delrt  = read(stream,typeof(h.delrt))
-    h.muts   = read(stream,typeof(h.muts))
-    h.mute   = read(stream,typeof(h.mute))
-    h.ns     = read(stream,typeof(h.ns))
-    h.dt     = read(stream,typeof(h.dt))
-    h.gain   = read(stream,typeof(h.gain))
-    h.igc    = read(stream,typeof(h.igc))
-    h.igi    = read(stream,typeof(h.igi))
-    h.corr   = read(stream,typeof(h.corr))
-    h.sfs    = read(stream,typeof(h.sfs))
-    h.sfe    = read(stream,typeof(h.sfe))
-    h.slen   = read(stream,typeof(h.slen))
-    h.styp   = read(stream,typeof(h.styp))
-    h.stas   = read(stream,typeof(h.stas))
-    h.stae   = read(stream,typeof(h.stae))
-    h.tatyp  = read(stream,typeof(h.tatyp))
-    h.afilf  = read(stream,typeof(h.afilf))
-    h.afils  = read(stream,typeof(h.afils))
-    h.nofilf = read(stream,typeof(h.nofilf))
-    h.nofils = read(stream,typeof(h.nofils))
-    h.lcf    = read(stream,typeof(h.lcf))
-    h.hcf    = read(stream,typeof(h.hcf))
-    h.lcs    = read(stream,typeof(h.lcs))
-    h.hcs    = read(stream,typeof(h.hcs))
-    h.year   = read(stream,typeof(h.year))
-    h.day    = read(stream,typeof(h.day))
-    h.hour   = read(stream,typeof(h.hour))
-    h.minute = read(stream,typeof(h.minute))
-    h.sec    = read(stream,typeof(h.sec))
-    h.timbas = read(stream,typeof(h.timbas))
-    h.trwf   = read(stream,typeof(h.trwf))
-    h.grnors = read(stream,typeof(h.grnors))
-    h.grnofr = read(stream,typeof(h.grnofr))
-    h.grnlof = read(stream,typeof(h.grnlof))
-    h.gaps   = read(stream,typeof(h.gaps))
-    h.otrav  = read(stream,typeof(h.otrav))
-    h.d1     = read(stream,typeof(h.d1))
-    h.f1     = read(stream,typeof(h.f1))
-    h.d2     = read(stream,typeof(h.d2))
-    h.f2     = read(stream,typeof(h.f2))
-    h.ungpow = read(stream,typeof(h.ungpow))
-    h.unscale= read(stream,typeof(h.unscale))
-    h.ntr    = read(stream,typeof(h.ntr))
-    h.mark   = read(stream,typeof(h.mark))
-    h.unass  = read(stream,typeof(h.unass))
-    else
-    h.tracl  = bswap(read(stream,typeof(h.tracl)))
-    h.tracr  = bswap(read(stream,typeof(h.tracr)))
-    h.fldr   = bswap(read(stream,typeof(h.fldr)))
-    h.tracf  = bswap(read(stream,typeof(h.tracf)))
-    h.ep     = bswap(read(stream,typeof(h.ep)))
-    h.cdp    = bswap(read(stream,typeof(h.cdp)))
-    h.cdpt   = bswap(read(stream,typeof(h.cdpt)))
-    h.trid   = bswap(read(stream,typeof(h.trid)))
-    h.nva    = bswap(read(stream,typeof(h.nva)))
-    h.nhs    = bswap(read(stream,typeof(h.nhs)))
-    h.duse   = bswap(read(stream,typeof(h.duse)))
-    h.offset = bswap(read(stream,typeof(h.offset)))
-    h.gelev  = bswap(read(stream,typeof(h.gelev)))
-    h.selev  = bswap(read(stream,typeof(h.selev)))
-    h.sdepth = bswap(read(stream,typeof(h.sdepth)))
-    h.gdel   = bswap(read(stream,typeof(h.gdel)))
-    h.sdel   = bswap(read(stream,typeof(h.sdel)))
-    h.swdep  = bswap(read(stream,typeof(h.swdep)))
-    h.gwdep  = bswap(read(stream,typeof(h.gwdep)))
-    h.scalel = bswap(read(stream,typeof(h.scalel)))
-    h.scalco = bswap(read(stream,typeof(h.scalco)))
-    h.sx     = bswap(read(stream,typeof(h.sx)))
-    h.sy     = bswap(read(stream,typeof(h.sy)))
-    h.gx     = bswap(read(stream,typeof(h.gx)))
-    h.gy     = bswap(read(stream,typeof(h.gy)))
-    h.counit = bswap(read(stream,typeof(h.counit)))
-    h.wevel  = bswap(read(stream,typeof(h.wevel)))
-    h.swevel = bswap(read(stream,typeof(h.swevel)))
-    h.sut    = bswap(read(stream,typeof(h.sut)))
-    h.gut    = bswap(read(stream,typeof(h.gut)))
-    h.sstat  = bswap(read(stream,typeof(h.sstat)))
-    h.gstat  = bswap(read(stream,typeof(h.gstat)))
-    h.tstat  = bswap(read(stream,typeof(h.tstat)))
-    h.laga   = bswap(read(stream,typeof(h.laga)))
-    h.lagb   = bswap(read(stream,typeof(h.lagb)))
-    h.delrt  = bswap(read(stream,typeof(h.delrt)))
-    h.muts   = bswap(read(stream,typeof(h.muts)))
-    h.mute   = bswap(read(stream,typeof(h.mute)))
-    h.ns     = bswap(read(stream,typeof(h.ns)))
-    h.dt     = bswap(read(stream,typeof(h.dt)))
-    h.gain   = bswap(read(stream,typeof(h.gain)))
-    h.igc    = bswap(read(stream,typeof(h.igc)))
-    h.igi    = bswap(read(stream,typeof(h.igi)))
-    h.corr   = bswap(read(stream,typeof(h.corr)))
-    h.sfs    = bswap(read(stream,typeof(h.sfs)))
-    h.sfe    = bswap(read(stream,typeof(h.sfe)))
-    h.slen   = bswap(read(stream,typeof(h.slen)))
-    h.styp   = bswap(read(stream,typeof(h.styp)))
-    h.stas   = bswap(read(stream,typeof(h.stas)))
-    h.stae   = bswap(read(stream,typeof(h.stae)))
-    h.tatyp  = bswap(read(stream,typeof(h.tatyp)))
-    h.afilf  = bswap(read(stream,typeof(h.afilf)))
-    h.afils  = bswap(read(stream,typeof(h.afils)))
-    h.nofilf = bswap(read(stream,typeof(h.nofilf)))
-    h.nofils = bswap(read(stream,typeof(h.nofils)))
-    h.lcf    = bswap(read(stream,typeof(h.lcf)))
-    h.hcf    = bswap(read(stream,typeof(h.hcf)))
-    h.lcs    = bswap(read(stream,typeof(h.lcs)))
-    h.hcs    = bswap(read(stream,typeof(h.hcs)))
-    h.year   = bswap(read(stream,typeof(h.year)))
-    h.day    = bswap(read(stream,typeof(h.day)))
-    h.hour   = bswap(read(stream,typeof(h.hour)))
-    h.minute = bswap(read(stream,typeof(h.minute)))
-    h.sec    = bswap(read(stream,typeof(h.sec)))
-    h.timbas = bswap(read(stream,typeof(h.timbas)))
-    h.trwf   = bswap(read(stream,typeof(h.trwf)))
-    h.grnors = bswap(read(stream,typeof(h.grnors)))
-    h.grnofr = bswap(read(stream,typeof(h.grnofr)))
-    h.grnlof = bswap(read(stream,typeof(h.grnlof)))
-    h.gaps   = bswap(read(stream,typeof(h.gaps)))
-    h.otrav  = bswap(read(stream,typeof(h.otrav)))
-    h.d1     = bswap(read(stream,typeof(h.d1)))
-    h.f1     = bswap(read(stream,typeof(h.f1)))
-    h.d2     = bswap(read(stream,typeof(h.d2)))
-    h.f2     = bswap(read(stream,typeof(h.f2)))
-    h.ungpow = bswap(read(stream,typeof(h.ungpow)))
-    h.unscale= bswap(read(stream,typeof(h.unscale)))
-    h.ntr    = bswap(read(stream,typeof(h.ntr)))
-    h.mark   = bswap(read(stream,typeof(h.mark)))
-    h.unass  = bswap(read(stream,typeof(h.unass)))
-    end
+	position = file_header_size + (240+nt*4)*(j-1)
+	seek(stream,position)
+	h = InitSegyHeader()
+	if (swap_bytes == false)
+		h.tracl  = read(stream,typeof(h.tracl))
+		h.tracr  = read(stream,typeof(h.tracr))
+		h.fldr   = read(stream,typeof(h.fldr))
+		h.tracf  = read(stream,typeof(h.tracf))
+		h.ep     = read(stream,typeof(h.ep))
+		h.cdp    = read(stream,typeof(h.cdp))
+		h.cdpt   = read(stream,typeof(h.cdpt))
+		h.trid   = read(stream,typeof(h.trid))
+		h.nva    = read(stream,typeof(h.nva))
+		h.nhs    = read(stream,typeof(h.nhs))
+		h.duse   = read(stream,typeof(h.duse))
+		h.offset = read(stream,typeof(h.offset))
+		h.gelev  = read(stream,typeof(h.gelev))
+		h.selev  = read(stream,typeof(h.selev))
+		h.sdepth = read(stream,typeof(h.sdepth))
+		h.gdel   = read(stream,typeof(h.gdel))
+		h.sdel   = read(stream,typeof(h.sdel))
+		h.swdep  = read(stream,typeof(h.swdep))
+		h.gwdep  = read(stream,typeof(h.gwdep))
+		h.scalel = read(stream,typeof(h.scalel))
+		h.scalco = read(stream,typeof(h.scalco))
+		h.sx     = read(stream,typeof(h.sx))
+		h.sy     = read(stream,typeof(h.sy))
+		h.gx     = read(stream,typeof(h.gx))
+		h.gy     = read(stream,typeof(h.gy))
+		h.counit = read(stream,typeof(h.counit))
+		h.wevel  = read(stream,typeof(h.wevel))
+		h.swevel = read(stream,typeof(h.swevel))
+		h.sut    = read(stream,typeof(h.sut))
+		h.gut    = read(stream,typeof(h.gut))
+		h.sstat  = read(stream,typeof(h.sstat))
+		h.gstat  = read(stream,typeof(h.gstat))
+		h.tstat  = read(stream,typeof(h.tstat))
+		h.laga   = read(stream,typeof(h.laga))
+		h.lagb   = read(stream,typeof(h.lagb))
+		h.delrt  = read(stream,typeof(h.delrt))
+		h.muts   = read(stream,typeof(h.muts))
+		h.mute   = read(stream,typeof(h.mute))
+		h.ns     = read(stream,typeof(h.ns))
+		h.dt     = read(stream,typeof(h.dt))
+		h.gain   = read(stream,typeof(h.gain))
+		h.igc    = read(stream,typeof(h.igc))
+		h.igi    = read(stream,typeof(h.igi))
+		h.corr   = read(stream,typeof(h.corr))
+		h.sfs    = read(stream,typeof(h.sfs))
+		h.sfe    = read(stream,typeof(h.sfe))
+		h.slen   = read(stream,typeof(h.slen))
+		h.styp   = read(stream,typeof(h.styp))
+		h.stas   = read(stream,typeof(h.stas))
+		h.stae   = read(stream,typeof(h.stae))
+		h.tatyp  = read(stream,typeof(h.tatyp))
+		h.afilf  = read(stream,typeof(h.afilf))
+		h.afils  = read(stream,typeof(h.afils))
+		h.nofilf = read(stream,typeof(h.nofilf))
+		h.nofils = read(stream,typeof(h.nofils))
+		h.lcf    = read(stream,typeof(h.lcf))
+		h.hcf    = read(stream,typeof(h.hcf))
+		h.lcs    = read(stream,typeof(h.lcs))
+		h.hcs    = read(stream,typeof(h.hcs))
+		h.year   = read(stream,typeof(h.year))
+		h.day    = read(stream,typeof(h.day))
+		h.hour   = read(stream,typeof(h.hour))
+		h.minute = read(stream,typeof(h.minute))
+		h.sec    = read(stream,typeof(h.sec))
+		h.timbas = read(stream,typeof(h.timbas))
+		h.trwf   = read(stream,typeof(h.trwf))
+		h.grnors = read(stream,typeof(h.grnors))
+		h.grnofr = read(stream,typeof(h.grnofr))
+		h.grnlof = read(stream,typeof(h.grnlof))
+		h.gaps   = read(stream,typeof(h.gaps))
+		h.otrav  = read(stream,typeof(h.otrav))
+		h.d1     = read(stream,typeof(h.d1))
+		h.f1     = read(stream,typeof(h.f1))
+		h.d2     = read(stream,typeof(h.d2))
+		h.f2     = read(stream,typeof(h.f2))
+		h.ungpow = read(stream,typeof(h.ungpow))
+		h.unscale= read(stream,typeof(h.unscale))
+		h.ntr    = read(stream,typeof(h.ntr))
+		h.mark   = read(stream,typeof(h.mark))
+		h.unass  = read(stream,typeof(h.unass))
+	else
+		h.tracl  = bswap(read(stream,typeof(h.tracl)))
+		h.tracr  = bswap(read(stream,typeof(h.tracr)))
+		h.fldr   = bswap(read(stream,typeof(h.fldr)))
+		h.tracf  = bswap(read(stream,typeof(h.tracf)))
+		h.ep     = bswap(read(stream,typeof(h.ep)))
+		h.cdp    = bswap(read(stream,typeof(h.cdp)))
+		h.cdpt   = bswap(read(stream,typeof(h.cdpt)))
+		h.trid   = bswap(read(stream,typeof(h.trid)))
+		h.nva    = bswap(read(stream,typeof(h.nva)))
+		h.nhs    = bswap(read(stream,typeof(h.nhs)))
+		h.duse   = bswap(read(stream,typeof(h.duse)))
+		h.offset = bswap(read(stream,typeof(h.offset)))
+		h.gelev  = bswap(read(stream,typeof(h.gelev)))
+		h.selev  = bswap(read(stream,typeof(h.selev)))
+		h.sdepth = bswap(read(stream,typeof(h.sdepth)))
+		h.gdel   = bswap(read(stream,typeof(h.gdel)))
+		h.sdel   = bswap(read(stream,typeof(h.sdel)))
+		h.swdep  = bswap(read(stream,typeof(h.swdep)))
+		h.gwdep  = bswap(read(stream,typeof(h.gwdep)))
+		h.scalel = bswap(read(stream,typeof(h.scalel)))
+		h.scalco = bswap(read(stream,typeof(h.scalco)))
+		h.sx     = bswap(read(stream,typeof(h.sx)))
+		h.sy     = bswap(read(stream,typeof(h.sy)))
+		h.gx     = bswap(read(stream,typeof(h.gx)))
+		h.gy     = bswap(read(stream,typeof(h.gy)))
+		h.counit = bswap(read(stream,typeof(h.counit)))
+		h.wevel  = bswap(read(stream,typeof(h.wevel)))
+		h.swevel = bswap(read(stream,typeof(h.swevel)))
+		h.sut    = bswap(read(stream,typeof(h.sut)))
+		h.gut    = bswap(read(stream,typeof(h.gut)))
+		h.sstat  = bswap(read(stream,typeof(h.sstat)))
+		h.gstat  = bswap(read(stream,typeof(h.gstat)))
+		h.tstat  = bswap(read(stream,typeof(h.tstat)))
+		h.laga   = bswap(read(stream,typeof(h.laga)))
+		h.lagb   = bswap(read(stream,typeof(h.lagb)))
+		h.delrt  = bswap(read(stream,typeof(h.delrt)))
+		h.muts   = bswap(read(stream,typeof(h.muts)))
+		h.mute   = bswap(read(stream,typeof(h.mute)))
+		h.ns     = bswap(read(stream,typeof(h.ns)))
+		h.dt     = bswap(read(stream,typeof(h.dt)))
+		h.gain   = bswap(read(stream,typeof(h.gain)))
+		h.igc    = bswap(read(stream,typeof(h.igc)))
+		h.igi    = bswap(read(stream,typeof(h.igi)))
+		h.corr   = bswap(read(stream,typeof(h.corr)))
+		h.sfs    = bswap(read(stream,typeof(h.sfs)))
+		h.sfe    = bswap(read(stream,typeof(h.sfe)))
+		h.slen   = bswap(read(stream,typeof(h.slen)))
+		h.styp   = bswap(read(stream,typeof(h.styp)))
+		h.stas   = bswap(read(stream,typeof(h.stas)))
+		h.stae   = bswap(read(stream,typeof(h.stae)))
+		h.tatyp  = bswap(read(stream,typeof(h.tatyp)))
+		h.afilf  = bswap(read(stream,typeof(h.afilf)))
+		h.afils  = bswap(read(stream,typeof(h.afils)))
+		h.nofilf = bswap(read(stream,typeof(h.nofilf)))
+		h.nofils = bswap(read(stream,typeof(h.nofils)))
+		h.lcf    = bswap(read(stream,typeof(h.lcf)))
+		h.hcf    = bswap(read(stream,typeof(h.hcf)))
+		h.lcs    = bswap(read(stream,typeof(h.lcs)))
+		h.hcs    = bswap(read(stream,typeof(h.hcs)))
+		h.year   = bswap(read(stream,typeof(h.year)))
+		h.day    = bswap(read(stream,typeof(h.day)))
+		h.hour   = bswap(read(stream,typeof(h.hour)))
+		h.minute = bswap(read(stream,typeof(h.minute)))
+		h.sec    = bswap(read(stream,typeof(h.sec)))
+		h.timbas = bswap(read(stream,typeof(h.timbas)))
+		h.trwf   = bswap(read(stream,typeof(h.trwf)))
+		h.grnors = bswap(read(stream,typeof(h.grnors)))
+		h.grnofr = bswap(read(stream,typeof(h.grnofr)))
+		h.grnlof = bswap(read(stream,typeof(h.grnlof)))
+		h.gaps   = bswap(read(stream,typeof(h.gaps)))
+		h.otrav  = bswap(read(stream,typeof(h.otrav)))
+		h.d1     = bswap(read(stream,typeof(h.d1)))
+		h.f1     = bswap(read(stream,typeof(h.f1)))
+		h.d2     = bswap(read(stream,typeof(h.d2)))
+		h.f2     = bswap(read(stream,typeof(h.f2)))
+		h.ungpow = bswap(read(stream,typeof(h.ungpow)))
+		h.unscale= bswap(read(stream,typeof(h.unscale)))
+		h.ntr    = bswap(read(stream,typeof(h.ntr)))
+		h.mark   = bswap(read(stream,typeof(h.mark)))
+		h.unass  = bswap(read(stream,typeof(h.unass)))
+	end
 
-    return h
+	return h
 end
 
 function PutSegyHeader(stream,h,nt,file_header_size,j)
-    position = file_header_size + (240+nt*4)*(j-1)
-    seek(stream,position)
-    write(stream,h.tracl)
-    write(stream,h.tracr)
-    write(stream,h.fldr)
-    write(stream,h.tracf)
-    write(stream,h.ep)
-    write(stream,h.cdp)
-    write(stream,h.cdpt)
-    write(stream,h.trid)
-    write(stream,h.nva)
-    write(stream,h.nhs)
-    write(stream,h.duse)
-    write(stream,h.offset)
-    write(stream,h.gelev)
-    write(stream,h.selev)
-    write(stream,h.sdepth)
-    write(stream,h.gdel)
-    write(stream,h.sdel)
-    write(stream,h.swdep)
-    write(stream,h.gwdep)
-    write(stream,h.scalel)
-    write(stream,h.scalco)
-    write(stream,h.sx)
-    write(stream,h.sy)
-    write(stream,h.gx)
-    write(stream,h.gy)
-    write(stream,h.counit)
-    write(stream,h.wevel)
-    write(stream,h.swevel)
-    write(stream,h.sut)
-    write(stream,h.gut)
-    write(stream,h.sstat)
-    write(stream,h.gstat)
-    write(stream,h.tstat)
-    write(stream,h.laga)
-    write(stream,h.lagb)
-    write(stream,h.delrt)
-    write(stream,h.muts)
-    write(stream,h.mute)
-    write(stream,h.ns)
-    write(stream,h.dt)
-    write(stream,h.gain)
-    write(stream,h.igc)
-    write(stream,h.igi)
-    write(stream,h.corr)
-    write(stream,h.sfs)
-    write(stream,h.sfe)
-    write(stream,h.slen)
-    write(stream,h.styp)
-    write(stream,h.stas)
-    write(stream,h.stae)
-    write(stream,h.tatyp)
-    write(stream,h.afilf)
-    write(stream,h.afils)
-    write(stream,h.nofilf)
-    write(stream,h.nofils)
-    write(stream,h.lcf)
-    write(stream,h.hcf)
-    write(stream,h.lcs)
-    write(stream,h.hcs)
-    write(stream,h.year)
-    write(stream,h.day)
-    write(stream,h.hour)
-    write(stream,h.minute)
-    write(stream,h.sec)
-    write(stream,h.timbas)
-    write(stream,h.trwf)
-    write(stream,h.grnors)
-    write(stream,h.grnofr)
-    write(stream,h.grnlof)
-    write(stream,h.gaps)
-    write(stream,h.otrav)
-    write(stream,h.d1)
-    write(stream,h.f1)
-    write(stream,h.d2)
-    write(stream,h.f2)
-    write(stream,h.ungpow)
-    write(stream,h.unscale)
-    write(stream,h.ntr)
-    write(stream,h.mark)
-    write(stream,h.unass)
+	position = file_header_size + (240+nt*4)*(j-1)
+	seek(stream,position)
+	write(stream,h.tracl)
+	write(stream,h.tracr)
+	write(stream,h.fldr)
+	write(stream,h.tracf)
+	write(stream,h.ep)
+	write(stream,h.cdp)
+	write(stream,h.cdpt)
+	write(stream,h.trid)
+	write(stream,h.nva)
+	write(stream,h.nhs)
+	write(stream,h.duse)
+	write(stream,h.offset)
+	write(stream,h.gelev)
+	write(stream,h.selev)
+	write(stream,h.sdepth)
+	write(stream,h.gdel)
+	write(stream,h.sdel)
+	write(stream,h.swdep)
+	write(stream,h.gwdep)
+	write(stream,h.scalel)
+	write(stream,h.scalco)
+	write(stream,h.sx)
+	write(stream,h.sy)
+	write(stream,h.gx)
+	write(stream,h.gy)
+	write(stream,h.counit)
+	write(stream,h.wevel)
+	write(stream,h.swevel)
+	write(stream,h.sut)
+	write(stream,h.gut)
+	write(stream,h.sstat)
+	write(stream,h.gstat)
+	write(stream,h.tstat)
+	write(stream,h.laga)
+	write(stream,h.lagb)
+	write(stream,h.delrt)
+	write(stream,h.muts)
+	write(stream,h.mute)
+	write(stream,h.ns)
+	write(stream,h.dt)
+	write(stream,h.gain)
+	write(stream,h.igc)
+	write(stream,h.igi)
+	write(stream,h.corr)
+	write(stream,h.sfs)
+	write(stream,h.sfe)
+	write(stream,h.slen)
+	write(stream,h.styp)
+	write(stream,h.stas)
+	write(stream,h.stae)
+	write(stream,h.tatyp)
+	write(stream,h.afilf)
+	write(stream,h.afils)
+	write(stream,h.nofilf)
+	write(stream,h.nofils)
+	write(stream,h.lcf)
+	write(stream,h.hcf)
+	write(stream,h.lcs)
+	write(stream,h.hcs)
+	write(stream,h.year)
+	write(stream,h.day)
+	write(stream,h.hour)
+	write(stream,h.minute)
+	write(stream,h.sec)
+	write(stream,h.timbas)
+	write(stream,h.trwf)
+	write(stream,h.grnors)
+	write(stream,h.grnofr)
+	write(stream,h.grnlof)
+	write(stream,h.gaps)
+	write(stream,h.otrav)
+	write(stream,h.d1)
+	write(stream,h.f1)
+	write(stream,h.d2)
+	write(stream,h.f2)
+	write(stream,h.ungpow)
+	write(stream,h.unscale)
+	write(stream,h.ntr)
+	write(stream,h.mark)
+	write(stream,h.unass)
 end
 
 function MapHeaders(h_in,j,map_type)
@@ -594,41 +594,37 @@ function MapHeaders(h_in,j,map_type)
 		h_out.o1 = convert(typeof(h_out.o1),0)
 		h_out.n1 = convert(typeof(h_out.n1),h_in[1].ns)
 		h_out.d1 = convert(typeof(h_out.d1),h_in[1].dt/1000000)
-		h_out.sx = convert(typeof(h_out.sx),h_in[1].sx)*10^convert(Float32,h_in[1].scalco)
-		h_out.sy = convert(typeof(h_out.sy),h_in[1].sy)*10^convert(Float32,h_in[1].scalco)
-		h_out.gx = convert(typeof(h_out.gx),h_in[1].gx)*10^convert(Float32,h_in[1].scalco)
-		h_out.gy = convert(typeof(h_out.gy),h_in[1].gy)*10^convert(Float32,h_in[1].scalco)
+		h_out.sx = h_in[1].scalco >= 0 ? convert(typeof(h_out.sx),h_in[1].sx)*10^convert(Float32,h_in[1].scalco) : convert(typeof(h_out.sx),h_in[1].sx)/(10^abs(convert(Float32,h_in[1].scalco)))
+		h_out.sy = h_in[1].scalco >= 0 ? convert(typeof(h_out.sy),h_in[1].sy)*10^convert(Float32,h_in[1].scalco) : convert(typeof(h_out.sx),h_in[1].sy)/(10^abs(convert(Float32,h_in[1].scalco)))
+		h_out.gx = h_in[1].scalco >= 0 ? convert(typeof(h_out.gx),h_in[1].gx)*10^convert(Float32,h_in[1].scalco) : convert(typeof(h_out.gx),h_in[1].gx)/(10^abs(convert(Float32,h_in[1].scalco)))
+		h_out.gy = h_in[1].scalco >= 0 ? convert(typeof(h_out.gy),h_in[1].gy)*10^convert(Float32,h_in[1].scalco) : convert(typeof(h_out.gy),h_in[1].gy)/(10^abs(convert(Float32,h_in[1].scalco)))
 		h_out.h = convert(typeof(h_out.h),h_in[1].offset)
 		h_out.isx = convert(typeof(h_out.isx),h_in[1].ep)
 		h_out.imx = convert(typeof(h_out.imx),h_in[1].cdp)
-		h_out.selev = convert(typeof(h_out.selev),h_in[1].selev)*10^convert(Float32,h_in[1].scalel)
-		h_out.gelev = convert(typeof(h_out.gelev),h_in[1].gelev)*10^convert(Float32,h_in[1].scalel)
+		h_out.selev = h_in[1].scalel >= 0 ? convert(typeof(h_out.selev),h_in[1].selev)*(10^convert(Float32,h_in[1].scalel)) : convert(typeof(h_out.selev),h_in[1].selev)/(10^abs(convert(Float32,h_in[1].scalel)))
+		h_out.gelev = h_in[1].scalel >= 0 ? convert(typeof(h_out.gelev),h_in[1].gelev)*(10^convert(Float32,h_in[1].scalel)) : convert(typeof(h_out.gelev),h_in[1].gelev)/(10^abs(convert(Float32,h_in[1].scalel)))
 		h_out.trid = convert(typeof(h_out.trid),h_in[1].trid)
 	else
 		h_out = InitSegyHeader()
 		h_out.tracl = convert(typeof(h_out.tracl),j)
 		h_out.tracr = convert(typeof(h_out.tracr),j)
-		h_out.scalel = convert(typeof(h_out.scalel),-3.)
-		h_out.scalco = convert(typeof(h_out.scalco),-3.)
+		h_out.scalel = convert(typeof(h_out.scalel),-3)
+		h_out.scalco = convert(typeof(h_out.scalco),-3)
 		h_out.counit = convert(typeof(h_out.counit),1)
 		h_out.gain = convert(typeof(h_out.gain),1)
 		h_out.corr = convert(typeof(h_out.corr),1)
 		h_out.ns = convert(typeof(h_out.ns),int(h_in[1].n1))
 		h_out.dt = convert(typeof(h_out.dt),int(h_in[1].d1*1000000))
-		h_out.sx = convert(typeof(h_out.sx),int(h_in[1].sx))
-		h_out.sy = convert(typeof(h_out.sy),int(h_in[1].sy))
-		h_out.gx = convert(typeof(h_out.gx),int(h_in[1].gx))
-		h_out.gy = convert(typeof(h_out.gy),int(h_in[1].gy))
+		h_out.sx = convert(typeof(h_out.sx),int(h_in[1].sx)*1000)
+		h_out.sy = convert(typeof(h_out.sy),int(h_in[1].sy)*1000)
+		h_out.gx = convert(typeof(h_out.gx),int(h_in[1].gx)*1000)
+		h_out.gy = convert(typeof(h_out.gy),int(h_in[1].gy)*1000)
 		h_out.offset = convert(typeof(h_out.offset),int(h_in[1].h))
 		h_out.ep = convert(typeof(h_out.ep),int(h_in[1].isx))
 		h_out.cdp = convert(typeof(h_out.cdp),int(h_in[1].imx))
 		h_out.selev = convert(typeof(h_out.selev),int(h_in[1].selev*1000))
 		h_out.gelev = convert(typeof(h_out.gelev),int(h_in[1].gelev*1000))
 		h_out.trid = convert(typeof(h_out.trid),h_in[1].trid)
-		h_out.sx = convert(typeof(h_out.sx),int(h_in[1].sx*1000))
-		h_out.sy = convert(typeof(h_out.sy),int(h_in[1].sy*1000))
-		h_out.gx = convert(typeof(h_out.gx),int(h_in[1].gx*1000))
-		h_out.gy = convert(typeof(h_out.gy),int(h_in[1].gy*1000))
 	end
 
 	return h_out
@@ -639,36 +635,35 @@ import Base.convert
 bitstype 32 IBMFloat32
 
 ieeeOfPieces(fr, exp, sgn) = reinterpret(Float32, uint32(fr >>> 9 | exp << 23 | sgn))
-# credit to http://www.palladiumconsulting.com/2014/09/little-performance-explorations-julia/
 
 import Base.convert
 
 function convert(::Type{Float32}, ibm::IBMFloat32)
-  local fr = ntoh(reinterpret(Uint32, ibm))
-  local sgn = fr & 0x8000000 # save sign
-  fr <<= 1 # shift sign out
-  local exp= fr >>> 25 # save exponent
-  fr <<= 7 # shift exponent out
-  if fr == 0 # short-circuit for zero
-    ieeeOfPieces(0, 0, sgn)
-  else
-    # adjust exponent from base 16 offset 64 radix point before first digit to base 2 offset 127 radix point after first digit
-    # (exp - 64) * 4 + 127 - 1 
-    exp = (exp - 64) * 4 + 127 - 1
-    while (fr < 0x80000000) != 0 # (re)normalize, 3 times max for normalized input
-      exp -= 1
-      fr <<= 1
-    end
+	local fr = ntoh(reinterpret(Uint32, ibm))
+	local sgn = fr & 0x8000000 # save sign
+	fr <<= 1 # shift sign out
+	local exp= fr >>> 25 # save exponent
+	fr <<= 7 # shift exponent out
+	if fr == 0 # short-circuit for zero
+		ieeeOfPieces(0, 0, sgn)
+	else
+		# adjust exponent from base 16 offset 64 radix point before first digit to base 2 offset 127 radix point after first digit
+		# (exp - 64) * 4 + 127 - 1 
+		exp = (exp - 64) * 4 + 127 - 1
+		while (fr < 0x80000000) != 0 # (re)normalize, 3 times max for normalized input
+			exp -= 1
+			fr <<= 1
+		end
 
-    if exp <= 0
-      # complete underflow, return properly signed zero
-      # OR partial underflow, return denormalized number
-      fr = exp < -24 ? 0 : (fr >>> -exp)
-      ieeeOfPieces(fr, 0, sgn)
-    elseif exp >= 255 then # overflow - return infinity
-      ieeeOfPieces(0, 255, sgn)
-    else # just a plain old number - remove the assumed high bit
-      ieeeOfPieces(fr << 1, exp, sgn)
-    end
-  end  
+		if exp <= 0
+			# complete underflow, return properly signed zero
+			# OR partial underflow, return denormalized number
+			fr = exp < -24 ? 0 : (fr >>> -exp)
+			ieeeOfPieces(fr, 0, sgn)
+		elseif exp >= 255 then # overflow - return infinity
+			ieeeOfPieces(0, 255, sgn)
+		else # just a plain old number - remove the assumed high bit
+			ieeeOfPieces(fr << 1, exp, sgn)
+		end
+	end  
 end

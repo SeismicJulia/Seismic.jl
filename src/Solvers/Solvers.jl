@@ -1,8 +1,8 @@
 export ConjugateGradients,
-	   DotTest,
-	   DotTest3C,
-	   CGStep
+IRLS,
+DotTest,
+CGStep
 include("ConjugateGradients.jl")
+include("IRLS.jl")
 include("DotTest.jl")
-include("DotTest3C.jl")
 include("CGStep.jl")

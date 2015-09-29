@@ -1,6 +1,3 @@
-@doc """
-Plot FK amplitude spectrum.
-""" ->
 function SeisPlotFKSpectrum(in,param=Dict())
 
 	canvas = get(param, "canvas", "NULL") # called by GUI, or REPL

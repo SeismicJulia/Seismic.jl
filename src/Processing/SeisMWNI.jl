@@ -1,15 +1,9 @@
-function pad5d(a,N1,N2,N3,N4,N5)
-	n1,n2,n3,n4,n5 = size(a)
-	b = zeros(N1,N2,N3,N4,N5)
-	b[1:n1,1:n2,1:n3,1:n4,1:n5] = a
-	return b
-end
-
-function SeisMWNI(in,h,param=Dict())
+function SeisMWNI(in,h::Array{Header,1},param::Dict{Any,Any})
 
 	style = get(param,"style","sxsygxgy")
 	padt = get(param,"padt",2)
-	padx = get(param,"padx",1)
+	padx = get(param,"padx",2)
+	param["operators"] = [ApplyDataWeights fft_op ApplyModelWeights ]
 	nt = size(in,1)
 	nx = size(in,2)
 	ot = h[1].o1
@@ -59,34 +53,45 @@ function SeisMWNI(in,h,param=Dict())
 	nx3 > 1 ? nk3 = padx*nextpow2(nx3) : nk3 = 1
 	nx4 > 1 ? nk4 = padx*nextpow2(nx4) : nk4 = 1
 	nk = nk1*nk2*nk3*nk4
-	
-	d = pad5d(d,nf,nk1,nk2,nk3,nk4)
 	# generate sampling operator from the padded data
-	T = CalculateSampling(d)
-	T = squeeze(T[1,:,:,:,:],1)
-
-	param["operators"] = [fft_op]
-	param["wd"] = T
-	if (sum(T[:])/length(T[:]) > 0.05)
+	T,h_tmp = CalculateSampling(d)
+	T = T[1,:,:,:,:]
+	if (sum(T[:])/length(T[:]) < 0.05)
+		println(sum(T[:])/length(T[:]))
+		return in,h
+	else
+		T = pad5d(T,1,nk1,nk2,nk3,nk4)
+		T = squeeze(T[1,:,:,:,:],1)
+		param["wd"] = T
+		d = pad5d(d,nf,nk1,nk2,nk3,nk4)
 		D = fft(d,1)
 		for iw=1:iw_max
-        	x = squeeze(D[iw,:,:,:,:],1)
-        	y = copy(x)
-        	param["adj"] = true
-        	Y = fft_op(y,param)
-        	Y,misfit = ConjugateGradients(x,param)
-        	param["adj"] = false
-        	y = fft_op(Y,param)
-        	D[iw,:,:,:,:] = y
-    	end
-    	# symmetries
-    	for iw=nw+1:nf
+			#println(iw,"/",iw_max)
+			x = squeeze(D[iw,:,:,:,:],1)
+			y = copy(x)
+			param["adj"] = true
+			Y = fft_op(y,param)
+			#param["wm"] = 1.
+			Y,misfit = IRLS(Y.*0,x,param)
+			param["adj"] = false
+			y = fft_op(Y,param)
+			D[iw,:,:,:,:] = y
+		end
+		# symmetries
+		for iw=nw+1:nf
 			D[iw,:,:,:,:] = conj(D[nf-iw+2,:,:,:,:])
-    	end 
+		end 
 		d = ifft(D,1)
+		d = real(d[1:nt,1:nx1,1:nx2,1:nx3,1:nx4])
+		out = reshape(d,nt,nx1*nx2*nx3*nx4)
+		return out,h
 	end
-	d = real(d[1:nt,1:nx1,1:nx2,1:nx3,1:nx4])
-	out = reshape(d,nt,nx1*nx2*nx3*nx4)
-
-    return out,h
 end
+
+function pad5d(a,N1,N2,N3,N4,N5)
+	n1,n2,n3,n4,n5 = size(a)
+	b = zeros(N1,N2,N3,N4,N5)
+	b[1:n1,1:n2,1:n3,1:n4,1:n5] = a
+	return b
+end
+

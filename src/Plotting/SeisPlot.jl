@@ -1,9 +1,5 @@
-@doc """
-Plot 2D data.
-""" ->
 function SeisPlot(in,param=Dict())
 
-	canvas = get(param, "canvas", "NULL") # called by GUI, or REPL
 	style = get(param,"style","color") # color or wiggles
 	wiggle_fill_color = get(param,"wiggle_fill_color","k") # fill color for wiggles
 	wiggle_line_color = get(param,"wiggle_line_color","k") # line color for wiggles
@@ -24,30 +20,21 @@ function SeisPlot(in,param=Dict())
 	oy = get(param,"oy",0)
 	dy = get(param,"dy",1)
 	dpi = get(param,"dpi",100)
-	wbox = get(param,"wbox",4)
-	hbox = get(param,"hbox",4)
+	wbox = get(param,"wbox",6)
+	hbox = get(param,"hbox",6)
 	name = get(param,"name","NULL")
 	interpolation = get(param,"interpolation","none")
 
-	if (canvas == "NULL")
-		plt.ion()
-		if (!haskey(param,"fignum"))
-			fig = plt.figure(figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
-		else
-			fig = plt.figure(num=get(param,"fignum",1), figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
-		end
+	plt.ion()
+	if (!haskey(param,"fignum"))
+		fig = plt.figure(figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
 	else
-		fig = canvas[:get_figure]()
+		fig = plt.figure(num=get(param,"fignum",1), figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
 	end
 
 	# runs if we want a colour plot, imshow() draws desired plot with given parameters
 	if (style != "wiggles")
-		# when called by the GUI as opposed to the REPL
-		if (canvas != "NULL")
-			canvas[:imshow](in,cmap=cmap,vmin=vmin,vmax=vmax,extent=[ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy],aspect=aspect)
-		else
-			plt.imshow(in,cmap=cmap,vmin=vmin,vmax=vmax,extent=[ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy],aspect=aspect)
-		end
+			im = plt.imshow(in,cmap=cmap,vmin=vmin,vmax=vmax,extent=[ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy],aspect=aspect)
 	end
 
 	# runs when we want a wiggle plot
@@ -78,48 +65,21 @@ function SeisPlot(in,param=Dict())
 			# helps with filling
 			sp = (s+abs(s))/2
 
-			# when called by the GUI
-			if (canvas != "NULL")
-				# draws the wiggle line of current trace, adds it to the plot
-				wigline = lines.Line2D(s*alpha + x[k], y, color=wiggle_line_color)
-				canvas[:add_line](wigline)
-				# draws the vertical line through the current trace, adds it to the plot
-				for i = 1:1:size(in,1)
-					push!(x_vert, k)
-					push!(y_vert, i)
-				end
-				vline = lines.Line2D(x_vert, y_vert, color=wiggle_line_color)
-				canvas[:add_line](vline)
-			else
-				# all of the above work is done by plot() when called by pyplot in the REPL
-				plt.plot( s*alpha + x[k],y,wiggle_line_color)
-			end
+			im = plt.plot( s*alpha + x[k],y,wiggle_line_color)
 
 			# unless overlay is called, the wiggle plot is filled
 			if (style != "overlay") 
-				if (canvas != "NULL")
-					# fills between positive data and the vertical line of the trace
-					canvas[:fill_between](sp*alpha + x[k],y_vert, color=wiggle_fill_color)
-				else
-					# same as above, for the REPL
-					plt.fill(sp*alpha + x[k],y,wiggle_fill_color)
-				end
+				plt.fill(sp*alpha + x[k],y,wiggle_fill_color)
 			end
 		end
 
 		# set the visual parameters, axis markers, etc
-		if (canvas != "NULL")
-			canvas[:axis]([ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy])
-		else
-			plt.axis([ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy])
-		end
+		plt.axis([ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy])
 	end
 
-	if (canvas == "NULL")
-		plt.title(title)
-		plt.xlabel(join([xlabel " " xunits]))
-		plt.ylabel(join([ylabel " " yunits]))
-	end
+	plt.title(title)
+	plt.xlabel(join([xlabel " " xunits]))
+	plt.ylabel(join([ylabel " " yunits]))
 
 	if (name == "NULL")
 		plt.show()
@@ -127,4 +87,6 @@ function SeisPlot(in,param=Dict())
 		plt.savefig(name,dpi=dpi)
 		plt.close()
 	end
+	return im
+	
 end

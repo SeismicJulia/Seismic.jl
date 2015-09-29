@@ -1,6 +1,3 @@
-@doc """
-Plot amplitude spectrum.
-""" ->
 function SeisPlotAmplitudeSpectrum(in,param=Dict())
 
 	canvas = get(param, "canvas", "NULL") # called by GUI, or REPL
@@ -12,8 +9,8 @@ function SeisPlotAmplitudeSpectrum(in,param=Dict())
 	xunits = get(param,"xunits","(Hz)")
 	ylabel = get(param,"ylabel","Amplitude")
 	yunits = get(param,"yunits"," ")
-	oy = get(param,"oy",0)
-	dy = get(param,"dy",0.001)
+	ot = get(param,"ot",0)
+	dt = get(param,"dt",0.001)
 	dpi = get(param,"dpi",100)
 	wbox = get(param,"wbox",4)
 	hbox = get(param,"hbox",4)
@@ -21,7 +18,7 @@ function SeisPlotAmplitudeSpectrum(in,param=Dict())
 	interpolation = get(param,"interpolation","none")
 
 	nx = size(in[:,:],2)
-	df = 1/dy/size(in[:,:],1)
+	df = 1/dt/size(in[:,:],1)
 	FMAX = df*size(in[:,:],1)/2 
 	nf = convert(Int32,floor((size(in[:,:],1)/2)*fmax/FMAX))
 	y = fftshift(sum(abs(fft(in[:,:],1)),2))/nx
@@ -46,6 +43,7 @@ function SeisPlotAmplitudeSpectrum(in,param=Dict())
 		plt.title(title)
 		plt.xlabel(join([xlabel " " xunits]))
 		plt.ylabel(join([ylabel " " yunits]))
+		plt.axis([0,fmax,0,1.1])
 
 		if (name == "NULL")
 			plt.show()
@@ -57,8 +55,6 @@ function SeisPlotAmplitudeSpectrum(in,param=Dict())
 	# set the visual parameters, axis markers, etc
 	if (canvas != "NULL")
 		canvas[:axis]([0,fmax,0,1.1])
-	else
-		plt.axis([0,fmax,0,1.1])
 	end
 
 end

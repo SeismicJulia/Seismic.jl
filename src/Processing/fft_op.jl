@@ -5,6 +5,6 @@ function fft_op(in,param=Dict())
 	else
 		out = bfft(in)/sqrt(length(in[:]))	
 	end
-	
+
 	return out
 end

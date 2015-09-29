@@ -8,6 +8,7 @@ void wem(float **d, float **m, float **wav,
          int nz, float oz, float dz, float gz, float sz,
          float **vel_src, float fmin, float fmax,
          int padt, int padx,
+	 float damping,
          bool adj, bool pade_flag, bool verbose);
 void extrap1f(float **m,complex **d_g_wx, complex **d_s_wx,float sigma,
               int iw, int ang_iw_max, int nw,int ifmax,int ntfft,float dw,float dkx,float dky,int nkx,int nky,

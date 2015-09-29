@@ -43,15 +43,15 @@ function SeisPWD(in,param=Dict())
 	for i1 = 1 : n1
 		pp[i1,:] = triangle(w2,n2,pp[i1,:])
 	end
-	
+
 	res = wavekill(1.,pp,n1,n2,d)
-	
+
 	if (format == "angle")
 		pp = atan(pp*get(param,"dz",1)/get(param,"dx",1))*180/pi;
 	end
-		
 
-    return coh,pp,res
+
+	return coh,pp,res
 end
 
 function wavekill(aa,bb,n1,n2,uu)
@@ -83,7 +83,7 @@ function triangle(nbox,nd,xx)
 	for i = 1 : nbox - 1
 		yy[nd-i+1] = yy[nd-i+1] + qq[nd+(nbox-1)+i]
 	end
-    return yy
+	return yy
 end
 
 function boxconv(nbox,nx,xx)
@@ -106,7 +106,7 @@ function boxconv(nbox,nx,xx)
 	for i = 1 : ny
 		yy[i] = yy[i]/nbox
 	end
-    return yy
+	return yy
 end
 
 
