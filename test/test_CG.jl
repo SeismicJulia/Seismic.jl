@@ -14,7 +14,7 @@ mu = 0.2;
 m1 = (L'*L + mu*eye(nm))\(L'*d);
 
 m0 = zeros(nm)
-param = ["Niter"=>nm,"operators"=>[MatrixMultiply],"matrix"=>L,"mu"=>mu]
+param = {"Niter"=>nm,"operators"=>[MatrixMultiply],"matrix"=>L,"mu"=>mu}
 m2,cost = ConjugateGradients(m0,d,param)
 
 # test that quality factor between CG and closed form solution 
