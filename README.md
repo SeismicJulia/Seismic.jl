@@ -10,7 +10,7 @@
 [![Build Status](https://travis-ci.org/SeismicJulia/Seismic.jl.svg?branch=master)](https://travis-ci.org/SeismicJulia/Seismic.jl)
 
 This module provides tools to read, write, process, and plot 3D reflection 
-seismic data. The documentation can be found [here](http://http://seismicjulia.github.io/Seismic.jl).
+seismic data. The documentation can be found [here](http://seismicjulia.github.io/Seismic.jl).
 
 ## Basic usage
 Once you have installed the package you can type `using Seismic` to start using
