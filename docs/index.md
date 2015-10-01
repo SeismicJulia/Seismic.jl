@@ -1,21 +1,28 @@
 # Seismic.jl
 
-Tools to process and image seismic data in the Julia language.
+Seismic data processing, imaging and plotting
 
 ---
 
 ## Overview
 
-Seismic.jl is a **fast**, **simple** and **downright gorgeous** static site
-generator that's geared towards building project documentation. Documentation
-source files are written in Markdown, and configured with a single YAML
-configuration file.
+Seismic.jl provides tools to **process**, **image**, and **plot** reflection seismic data in the Julia language.
 
-### Read and write Segy, SU, and RSF files
+### Read and write SEGY, SU, and RSF files
 
-Builds completely static HTML sites that you can host on GitHub pages, Amazon
-S3, or anywhere else you choose.
+Convert to and from SEGY, SU and RSF file formats
 
+### Simple file format
+
+Data and headers are stored separately as _filename.seisd_ and _filename.seish_ for simplicity.
+
+### Data manipulation
+
+Functions for geometry calculation, sorting, windowing, patching/un-patching, and processing keyed on header word.
+
+### Plotting 
+
+Color and wiggle plots using PyPlot.jl
 
 ---
 
@@ -23,7 +30,7 @@ S3, or anywhere else you choose.
 
 To install Seismic.jl type:
 
-```bash
+```no-highlight
 Pkg.add("Seismic")
 ```
 
@@ -34,7 +41,7 @@ Pkg.add("Seismic")
 To start using the functions simply type `using Seismic`. Below is a simple demonstration of
 the plotting functionality: 
 
-```bash
+```no-highlight
 using PyPlot,Seismic
 
 param = ["nt"=>500,"nx1"=>500,
