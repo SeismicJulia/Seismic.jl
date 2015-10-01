@@ -1,0 +1,24 @@
+site_name: Seismic.jl
+site_url: http://SeismicJulia.github.io/Seismic.jl
+site_description: Julia tools to read, write, process, and plot 3D reflection seismic data.
+site_author: The Signal Analysis and Imaging Group
+
+repo_url: https://github.com/SeismicJulia/Seismic.jl/
+
+pages:
+- Home: index.md
+- User Guide:
+    - Reading and writing data: user-guide/io.md
+    - Manipulating data: user-guide/utils.md
+    - Processing data: user-guide/processing.md
+    - Imaging data: user-guide/imaging.md
+    - Plotting data: user-guide/plotting.md
+- About:
+    - License: about/license.md
+
+markdown_extensions:
+    - toc:
+        permalink: 
+    - admonition:
+
+copyright: Copyright &copy; 2015 <a href="http://saig.physics.ualberta.ca">The Signal Analysis and Imaging Group</a>.

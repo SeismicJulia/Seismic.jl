@@ -26,4 +26,3 @@ SOFTWARE.
 Help
 ====
 For more information please visit http://saig.physics.ualberta.ca
-
