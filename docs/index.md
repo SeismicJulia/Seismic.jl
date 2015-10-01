@@ -8,21 +8,18 @@ Seismic data processing, imaging and plotting
 
 Seismic.jl provides tools to **process**, **image**, and **plot** reflection seismic data in the Julia language.
 
-### Read and write SEGY, SU, and RSF files
+### _Convert data to a simple format_
 
-Convert to and from SEGY, SU and RSF file formats
+Data and headers are stored separately as _filename.seisd_ and _filename.seish_ for 
+simplicity. Functions are available to convert from popular formats such as SEGY, SU and RSF.
 
-### Simple file format
+### _Manipulate data_
 
-Data and headers are stored separately as _filename.seisd_ and _filename.seish_ for simplicity.
+Contains functions for geometry calculation, sorting, windowing, patching/un-patching, and processing keyed on header word.
 
-### Data manipulation
+### _Plot publication quality figures_
 
-Functions for geometry calculation, sorting, windowing, patching/un-patching, and processing keyed on header word.
-
-### Plotting 
-
-Color and wiggle plots using PyPlot.jl
+Produce color and wiggle plots using PyPlot.jl
 
 ---
 
