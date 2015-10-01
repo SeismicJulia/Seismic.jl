@@ -1,24 +1,23 @@
+"""
+# Forward Radon Transform in the frequency domain
+This program transforms a CMP Gather (t-h) to tau-p using least-squares inversion
+
+## IN   
+* param={"dt"=>dt,"parab"=>true/false, "p"=>p, "h"=>h, "flow"=>flow, "fhigh"=>fhigh, "href"=>href}
+  * m:        Radon panel,  m[1:nt,1:nh] nt is number of samples and np is number of curvatures or ray parameters
+  * dt:       sampling interval in secs
+  * parab:    true --> parabolic transform, false --> linear transform
+  * h:        offset vector, h[1:nh]
+  * if parab=true:  p is a vector of residual moveout at reference offset in seconds (also called curvature)
+  * if parab=false: P is a vector of ray parameters  reference (s/m), p[1:np] where np is number of curvatures or ray parameters
+  * flow:     min frequency in the data (Hz)
+  * fhigh:    max frequency in the data (Hz)
+  * href:     reference offset for parabolic Radon Transform
+
+## OUT  
+* d:        data synthetized via forward Radon modeling, d[1:nt, 1:nh]
+"""
 function SeisRadonForward(m,param=Dict()) 
-#
-# SeisRadonInverse: frequency domain forward Radon Transform
-#
-# *** This programs transform a CMP Gather (t-h)  to tau-p using least-squares inversion ***
-#
-# IN   param={"dt"=>dt,"parab"=>true/false, "p"=>p, "h"=>h, "flow"=>flow, "fhigh"=>fhigh, "href"=>href}
-#
-#      m:        Radon panel,  m[1:nt,1:nh] nt is number of samples and np is number of curvatures or ray parameters
-#      dt:       sampling interval in secs
-#      parab:    true --> parabolic transform, false --> linear transform
-#      h:        offset vector, h[1:nh]
-#      p:        if parab=true:  vector of residual moveout at reference offset in seconds (also called curvature)
-#                if parab=false: vector of ray parameters  reference (s/m)
-#                p[1:np] np is number of curvatures or ray parameters
-#      flow:     min frequency in the data (Hz)
-#      fhigh:    max frequency in the data (Hz)
-#      href:     reference offset for parabolic Radon Transform
-#
-# OUT  d:        data synthetized via forward Radon modeling, d[1:nt, 1:nh]
-#
 
         parab = get(param,"parab",true)   # default is parabolic 
         href = get(param,"href",1000.) 
