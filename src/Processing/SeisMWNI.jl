@@ -60,10 +60,10 @@ function SeisMWNI(in,h::Array{Header,1},param::Dict{Any,Any})
 		println(sum(T[:])/length(T[:]))
 		return in,h
 	else
-		T = pad5d(T,1,nk1,nk2,nk3,nk4)
+		T = Pad5D(T,1,nk1,nk2,nk3,nk4)
 		T = squeeze(T[1,:,:,:,:],1)
 		param["wd"] = T
-		d = pad5d(d,nf,nk1,nk2,nk3,nk4)
+		d = Pad5D(d,nf,nk1,nk2,nk3,nk4)
 		D = fft(d,1)
 		for iw=1:iw_max
 			#println(iw,"/",iw_max)
@@ -87,11 +87,3 @@ function SeisMWNI(in,h::Array{Header,1},param::Dict{Any,Any})
 		return out,h
 	end
 end
-
-function pad5d(a,N1,N2,N3,N4,N5)
-	n1,n2,n3,n4,n5 = size(a)
-	b = zeros(N1,N2,N3,N4,N5)
-	b[1:n1,1:n2,1:n3,1:n4,1:n5] = a
-	return b
-end
-

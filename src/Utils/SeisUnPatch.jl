@@ -1,8 +1,9 @@
 include("Header.jl")
 
-function SeisUnPatch(list,out,param=Dict())
+function SeisUnPatch(list::Array{ASCIIString,1},out::ASCIIString,param=Dict())
 
 	style = get(param,"style","sxsygxgy")
+
 	if (style == "sxsygxgy")
 		key = ["t","isx","isy","igx","igy"]
 		min_ix1 = get(param,"min_isx",0)
@@ -388,6 +389,7 @@ function SeisUnPatch(list,out,param=Dict())
 		ot_patch = h_patch[1].o1
 		min_it_patch = int(floor(ot_patch/dt)+1)
 		max_it_patch = int(floor(ot_patch/dt)+nt_patch)
+		
 		min_ix1_patch = getfield(h_patch[1],symbol(key[2]))
 		max_ix1_patch = getfield(h_patch[nx_patch],symbol(key[2]))
 		min_ix2_patch = getfield(h_patch[1],symbol(key[3]))
@@ -397,16 +399,16 @@ function SeisUnPatch(list,out,param=Dict())
 		min_ix4_patch = getfield(h_patch[1],symbol(key[5]))
 		max_ix4_patch = getfield(h_patch[nx_patch],symbol(key[5]))
 
-		min_it_patch  >       1 ? tapti  =  it_WO : tapti  = 0
-		max_it_patch  <      nt ? taptf  =  it_WO : taptf  = 0    
-		min_ix1_patch > min_ix1 ? tapx1i = ix1_WO : tapx1i = 0
-		max_ix1_patch < max_ix1 ? tapx1f = ix1_WO : tapx1f = 0
-		min_ix2_patch > min_ix2 ? tapx2i = ix2_WO : tapx2i = 0
-		max_ix2_patch < max_ix2 ? tapx2f = ix2_WO : tapx2f = 0
-		min_ix3_patch > min_ix3 ? tapx3i = ix3_WO : tapx3i = 0
-		max_ix3_patch < max_ix3 ? tapx3f = ix3_WO : tapx3f = 0
-		min_ix4_patch > min_ix4 ? tapx4i = ix4_WO : tapx4i = 0
-		max_ix4_patch < max_ix4 ? tapx4f = ix4_WO : tapx4f = 0
+		tapti  =  min_it_patch >       1 ? it_WO  : 0
+		taptf  =  max_it_patch <      nt ? it_WO  : 0    
+		tapx1i = min_ix1_patch > min_ix1 ? ix1_WO : 0
+		tapx1f = max_ix1_patch < max_ix1 ? ix1_WO : 0
+		tapx2i = min_ix2_patch > min_ix2 ? ix2_WO : 0
+		tapx2f = max_ix2_patch < max_ix2 ? ix2_WO : 0
+		tapx3i = min_ix3_patch > min_ix3 ? ix3_WO : 0
+		tapx3f = max_ix3_patch < max_ix3 ? ix3_WO : 0
+		tapx4i = min_ix4_patch > min_ix4 ? ix4_WO : 0
+		tapx4f = max_ix4_patch < max_ix4 ? ix4_WO : 0
 
 		d_patch = Taper(d_patch,
 		max_it_patch  -  min_it_patch + 1,
@@ -433,13 +435,15 @@ function SeisUnPatch(list,out,param=Dict())
 			elseif (style=="gxgyhaz")
 				itrace = (h.igx - min_igx)*nx2*nx3*nx4 + (h.igy - min_igy)*nx3*nx4 + (h.ih - min_ih)*nx4 + h.iaz - min_iaz + 1
 			end
-			h.tracenum = convert(Int32,itrace)
+			h.tracenum = itrace
+			h.n1 = nt
+			h.o1 = 0.
 			position_d = 4*nt*(itrace - 1)
 			seek(stream_d,position_d)
 			d = read(stream_d,Float32,nt)
 			d[min_it_patch:max_it_patch] += d_patch[:,j]
 			seek(stream_d,position_d)
-			write(stream_d,convert(Array{Float32,1},d[:]))
+			write(stream_d,d)
 			PutHeader(stream_h,h,itrace)
 		end
 		close(stream_d)

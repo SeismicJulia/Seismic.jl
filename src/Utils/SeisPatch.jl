@@ -1,6 +1,6 @@
 include("Header.jl")
 
-function SeisPatch(in,out,param=Dict())
+function SeisPatch(in::ASCIIString,out::ASCIIString,param=Dict())
 
 	style = get(param,"style","sxsygxgy")
 	if (style == "sxsygxgy")
@@ -126,34 +126,34 @@ function SeisPatch(in,out,param=Dict())
 	end
 
 	NW=it_NW*ix1_NW*ix2_NW*ix3_NW*ix4_NW
-	list = Any[]
+	list = ASCIIString[]
 	for it_W = 1 : it_NW
 		mint = ot + dt*(it_W-1)*(it_WL-it_WO)
-		maxt = mint + dt*it_WL
+		maxt = mint + dt*(it_WL - 1)
 		if (maxt >= tmax)
 			maxt = tmax
 		end
 		for ix1_W = 1 : ix1_NW
 			minx1 = min_ix1 + (ix1_W-1)*(ix1_WL-ix1_WO)
-			maxx1 = minx1 + ix1_WL
+			maxx1 = minx1 + ix1_WL - 1
 			if (maxx1 >= max_ix1)
 				maxx1 =  max_ix1
 			end
 			for ix2_W = 1 : ix2_NW
 				minx2 = min_ix2 + (ix2_W-1)*(ix2_WL-ix2_WO)
-				maxx2 = minx2 + ix2_WL
+				maxx2 = minx2 + ix2_WL - 1
 				if (maxx2 >= max_ix2)
 					maxx2 = max_ix2
 				end
 				for ix3_W = 1 : ix3_NW
 					minx3 = min_ix3 + (ix3_W-1)*(ix3_WL-ix3_WO)
-					maxx3 = minx3 + ix3_WL
+					maxx3 = minx3 + ix3_WL - 1
 					if (maxx3 >= max_ix3)
 						maxx3 = max_ix3
 					end
 					for ix4_W = 1 : ix4_NW
 						minx4 = min_ix4 + (ix4_W-1)*(ix4_WL-ix4_WO)
-						maxx4 = minx4 + ix4_WL
+						maxx4 = minx4 + ix4_WL - 1
 						if (maxx4 >= max_ix4)
 							maxx4 = max_ix4
 						end

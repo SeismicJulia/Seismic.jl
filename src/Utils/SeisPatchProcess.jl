@@ -1,15 +1,3 @@
-@everywhere function MyProcess(filename)
-	d1,h1 = SeisRead(filename)
-	for ifunc = 1 : length(f)
-		func = f[ifunc]
-		d2,h2 = func(d1,h1,f_param)
-		d1 = copy(d2)
-		h1 = copy(h2)
-	end
-	SeisWrite(filename,d1,h1)
-	return(1)
-end
-
 @everywhere function SeisPatchProcess(in,out,param=Dict())	
 	# read data from disk, split into multidimensional overlapping patches, apply 
 	# processes, merge patches with tapers, and write to disk. Processing of patches 
@@ -34,8 +22,21 @@ end
 	patch_names = SeisPatch(in,out,param)
 	a = pmap(MyProcess,patch_names)
 	SeisUnPatch(patch_names,out,param)
-	for ipatch = 1 : length(patch_names)
-		SeisRemove(patch_names[ipatch])
-	end
+	#for ipatch = 1 : length(patch_names)
+	#	SeisRemove(patch_names[ipatch])
+	#end
 
 end
+
+@everywhere function MyProcess(filename)
+	d1,h1 = SeisRead(filename)
+	for ifunc = 1 : length(f)
+		func = f[ifunc]
+		d2,h2 = func(d1,h1,f_param)
+		d1 = copy(d2)
+		h1 = copy(h2)
+	end
+	SeisWrite(filename,d1,h1)
+	return(1)
+end
+

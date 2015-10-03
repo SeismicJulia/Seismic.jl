@@ -22,7 +22,8 @@ SeisWriteHeaders,
 SeisProcessHeaders,
 SeisWindowHeaders,
 ApplyModelWeights,
-ApplyDataWeights
+ApplyDataWeights,
+Pad5D
 include("SegyToSeis.jl")
 include("SeisToSegy.jl")
 include("Header.jl")
@@ -48,3 +49,4 @@ include("SeisProcessHeaders.jl")
 include("SeisWindowHeaders.jl")
 include("ApplyModelWeights.jl")
 include("ApplyDataWeights.jl")
+include("Pad5D.jl")

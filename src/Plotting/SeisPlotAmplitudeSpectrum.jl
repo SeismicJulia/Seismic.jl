@@ -1,6 +1,5 @@
 function SeisPlotAmplitudeSpectrum(in,param=Dict())
 
-	canvas = get(param, "canvas", "NULL") # called by GUI, or REPL
 	fignum = get(param,"fignum",1)
 	aspect = get(param,"aspect",2)
 	fmax = get(param,"fmax",100) # maximum frequency to plot
@@ -12,11 +11,10 @@ function SeisPlotAmplitudeSpectrum(in,param=Dict())
 	ot = get(param,"ot",0)
 	dt = get(param,"dt",0.001)
 	dpi = get(param,"dpi",100)
-	wbox = get(param,"wbox",4)
-	hbox = get(param,"hbox",4)
+	wbox = get(param,"wbox",6)
+	hbox = get(param,"hbox",6)
 	name = get(param,"name","NULL")
 	interpolation = get(param,"interpolation","none")
-
 	nx = size(in[:,:],2)
 	df = 1/dt/size(in[:,:],1)
 	FMAX = df*size(in[:,:],1)/2 
@@ -29,32 +27,24 @@ function SeisPlotAmplitudeSpectrum(in,param=Dict())
 	end
 	x = [0:df:fmax]
 
-
-	if (canvas == "NULL")
-		fig = plt.figure(num=fignum, figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
+	plt.ion()
+	if (!haskey(param,"fignum"))
+		fig = plt.figure(figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
 	else
-		fig = canvas[:get_figure]()
+		fig = plt.figure(num=get(param,"fignum",1), figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
 	end
 
-	if (canvas != "NULL")
-		canvas[:plot](x,y)
-	else
-		plt.plot(x,y)
-		plt.title(title)
-		plt.xlabel(join([xlabel " " xunits]))
-		plt.ylabel(join([ylabel " " yunits]))
-		plt.axis([0,fmax,0,1.1])
+	plt.plot(x,y)
+	plt.title(title)
+	plt.xlabel(join([xlabel " " xunits]))
+	plt.ylabel(join([ylabel " " yunits]))
+	plt.axis([0,fmax,0,1.1])
 
-		if (name == "NULL")
-			plt.show()
-		else  
-			plt.savefig(name,dpi=dpi)
-			plt.close()
-		end
-	end
-	# set the visual parameters, axis markers, etc
-	if (canvas != "NULL")
-		canvas[:axis]([0,fmax,0,1.1])
+	if (name == "NULL")
+		plt.show()
+	else  
+		plt.savefig(name,dpi=dpi)
+		plt.close()
 	end
 
 end
