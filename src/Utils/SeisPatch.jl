@@ -170,7 +170,7 @@ function SeisPatch(in::ASCIIString,out::ASCIIString,param=Dict())
 		end
 	end
 	pmap(grab_patch,patch_list)
-	return name_list        
+	return patch_names
 end
 
 type Patch
