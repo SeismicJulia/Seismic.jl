@@ -126,7 +126,8 @@ function SeisPatch(in::ASCIIString,out::ASCIIString,param=Dict())
 	end
 
 	NW=it_NW*ix1_NW*ix2_NW*ix3_NW*ix4_NW
-	list = ASCIIString[]
+	patch_list = Patch[]
+	patch_names = ASCIIString[]
 	for it_W = 1 : it_NW
 		mint = ot + dt*(it_W-1)*(it_WL-it_WO)
 		maxt = mint + dt*(it_WL - 1)
@@ -160,12 +161,40 @@ function SeisPatch(in::ASCIIString,out::ASCIIString,param=Dict())
 						patch_name = join([out "_" it_W "_" ix1_W "_" ix2_W "_" ix3_W "_" ix4_W])
 						minval=[mint minx1 minx2 minx3 minx4]
 						maxval=[maxt maxx1 maxx2 maxx3 maxx4]
-						SeisWindow(in,patch_name,["key"=>key,"minval"=>minval,"maxval"=>maxval])
-						list = push!(list,patch_name)
+						patch_names = push!(patch_names,patch_name)
+						push!(patch_list,Patch(in,patch_name,key,mint,maxt,minx1,maxx1,minx2,maxx2,minx3,maxx3,minx4,maxx4))
 					end
+
 				end
 			end
 		end
 	end
-	return list        
+	pmap(grab_patch,patch_list)
+	return name_list        
 end
+
+type Patch
+	in
+	name
+	key
+	mint
+	maxt
+	minx1
+	maxx1
+	minx2
+	maxx2
+	minx3
+	maxx3
+	minx4
+	maxx4
+end
+
+function grab_patch(patch)
+
+	minval=[patch.mint patch.minx1 patch.minx2 patch.minx3 patch.minx4]
+	maxval=[patch.maxt patch.maxx1 patch.maxx2 patch.maxx3 patch.maxx4]
+	SeisWindow(patch.in,patch.name,["key"=>patch.key,"minval"=>minval,"maxval"=>maxval])
+
+end
+
+
