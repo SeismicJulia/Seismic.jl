@@ -635,10 +635,11 @@ import Base.convert
 bitstype 32 IBMFloat32
 
 ieeeOfPieces(fr, exp, sgn) = reinterpret(Float32, uint32(fr >>> 9 | exp << 23 | sgn))
-
 import Base.convert
 
 function convert(::Type{Float32}, ibm::IBMFloat32)
+	# credit to Sebastian Good. See:
+	# http://www.palladiumconsulting.com/2014/09/little-performance-explorations-julia/
 	local fr = ntoh(reinterpret(Uint32, ibm))
 	local sgn = fr & 0x8000000 # save sign
 	fr <<= 1 # shift sign out
