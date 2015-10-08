@@ -313,11 +313,11 @@ void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
 				ssop(up_xs,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vp,po_p,pd_p,p1,p2,true,pade_flag,true,verbose);
 			} 
 			if (z >= gz){
-				elastic_separate(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,2); //3
+				elastic_separate(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,3); //3
 				ssop(up_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vp,po_p,pd_p,p1,p2,true,pade_flag,false,verbose);
 				ssop(us1_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vs,po_s,pd_s,p1,p2,true,pade_flag,false,verbose);
 				ssop(us2_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vs,po_s,pd_s,p1,p2,true,pade_flag,false,verbose);
-				elastic_separate(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,1); //4
+				elastic_separate(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,4); //4
 				for (imx=0;imx<nmx;imx++){ 
 					for (imy=0;imy<nmy;imy++){
 						mpp[imx*nmy*nthread + imy*nthread + ithread][iz]  += factor*crealf(conjf(up_xs[imx*nmy + imy])*up_xg[imx*nmy + imy])/cabsf((up_xs[imx*nmy + imy]*conjf(up_xs[imx*nmy + imy])) + sigma);
@@ -709,12 +709,9 @@ void elastic_separate(complex *ux, complex *uy, complex *uz,
 				kzs = kzs/(norm + 1e-10);
 				k = sqrt(kx*kx + ky*ky);
 				if (option == 2){   // Q-inv
-					//up_k[ikx*nky + iky]  = kx*ux_k[ikx*nky + iky] + ky*uy_k[ikx*nky + iky] + kzs*uz_k[ikx*nky + iky];  
-					//us1_k[ikx*nky + iky] = (k*ky - ky*kzp*kzs/(k+1e-10))*ux_k[ikx*nky + iky] + (k*kx - kx*kzp*kzs/(k+1e-10))*uy_k[ikx*nky + iky];   
-					//us2_k[ikx*nky + iky] = (kx*kzp/(k+1e-10))*ux_k[ikx*nky + iky] + (ky*kzp/(k+1e-10))*uy_k[ikx*nky + iky] - k*uz_k[ikx*nky + iky];
-					up_k[ikx*nky + iky]  = kx*ux_k[ikx*nky + iky] + kzs*uz_k[ikx*nky + iky];  
-					us1_k[ikx*nky + iky] = 0.;
-					us2_k[ikx*nky + iky] = -kzp*ux_k[ikx*nky + iky] + kx*uz_k[ikx*nky + iky];
+					up_k[ikx*nky + iky]  = kx*ux_k[ikx*nky + iky] + ky*uy_k[ikx*nky + iky] + kzs*uz_k[ikx*nky + iky];  
+					us1_k[ikx*nky + iky] = (k*ky - ky*kzp*kzs/(k+1e-10))*ux_k[ikx*nky + iky] + (k*kx - kx*kzp*kzs/(k+1e-10))*uy_k[ikx*nky + iky];   
+					us2_k[ikx*nky + iky] = (kx*kzp/(k+1e-10))*ux_k[ikx*nky + iky] + (ky*kzp/(k+1e-10))*uy_k[ikx*nky + iky] - k*uz_k[ikx*nky + iky];
 				}  
 				else{ // option 3  // (Q)*
 					up_k[ikx*nky + iky] = kx*ux_k[ikx*nky + iky] + ky*uy_k[ikx*nky + iky] + conjf(kzp)*uz_k[ikx*nky + iky];  
@@ -791,12 +788,9 @@ void elastic_separate(complex *ux, complex *uy, complex *uz,
 				kzs = kzs/(norm + 1e-10);
 				k = sqrt(kx*kx + ky*ky);
 				if (option == 1){ // Q
-					//ux_k[ikx*nky + iky] =  kx*up_k[ikx*nky + iky] - (ky/(k+1e-10))*us1_k[ikx*nky + iky] + (kx*kzs/(k+1e-10))*us2_k[ikx*nky + iky];  
-					//uy_k[ikx*nky + iky] =  ky*up_k[ikx*nky + iky] + (kx/(k+1e-10))*us1_k[ikx*nky + iky] + (ky*kzs/(k+1e-10))*us2_k[ikx*nky + iky];  
-					//uz_k[ikx*nky + iky] = kzp*up_k[ikx*nky + iky] - k*us2_k[ikx*nky + iky];
-					ux_k[ikx*nky + iky] =  -kx*up_k[ikx*nky + iky] + kzs*us2_k[ikx*nky + iky];  
-					uy_k[ikx*nky + iky] =  0.;
-					uz_k[ikx*nky + iky] = -kzp*up_k[ikx*nky + iky] - kx*us2_k[ikx*nky + iky];
+					ux_k[ikx*nky + iky] =  kx*up_k[ikx*nky + iky] - (ky/(k+1e-10))*us1_k[ikx*nky + iky] + (kx*kzs/(k+1e-10))*us2_k[ikx*nky + iky];  
+					uy_k[ikx*nky + iky] =  ky*up_k[ikx*nky + iky] + (kx/(k+1e-10))*us1_k[ikx*nky + iky] + (ky*kzs/(k+1e-10))*us2_k[ikx*nky + iky];  
+					uz_k[ikx*nky + iky] = kzp*up_k[ikx*nky + iky] - k*us2_k[ikx*nky + iky];
 				}  
 				else{ // option 4 // (Q-inv)*
 					ux_k[ikx*nky + iky] =  kx*up_k[ikx*nky + iky] + (k*ky - ky*conjf(kzp)*conjf(kzs)/(k+1e-10))*us1_k[ikx*nky + iky] + (kx*conjf(kzp)/(k+1e-10))*us2_k[ikx*nky + iky];  

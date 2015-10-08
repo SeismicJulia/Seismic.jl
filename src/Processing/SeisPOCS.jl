@@ -1,4 +1,4 @@
-function SeisPOCS(in,h,param)
+function SeisPOCS(in,h::Array{Header,1},param::Dict{Any,Any})
 
 	style = get(param,"style","sxsygxgy")
 	nt = h[1].n1
