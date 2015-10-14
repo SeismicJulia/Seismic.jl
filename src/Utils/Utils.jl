@@ -23,7 +23,8 @@ SeisProcessHeaders,
 SeisWindowHeaders,
 ApplyModelWeights,
 ApplyDataWeights,
-Pad5D
+Pad5D,
+triangle_filter
 include("SegyToSeis.jl")
 include("SeisToSegy.jl")
 include("Header.jl")
@@ -50,3 +51,4 @@ include("SeisWindowHeaders.jl")
 include("ApplyModelWeights.jl")
 include("ApplyDataWeights.jl")
 include("Pad5D.jl")
+include("Smoothing.jl")
