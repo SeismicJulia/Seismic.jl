@@ -33,7 +33,7 @@ end
 
 function pstm_op(m::Array{Float32,2},trace::Array{Float32,1},v::Array{Float32,2},sx::Float32,sy::Float32,gx::Float32,gy::Float32,nx::Int32,ox::Float32,dx::Float32,ny::Int32,oy::Float32,dy::Float32,nt::Int32,ot::Float32,dt::Float32,aperture::Float32,nsinc::Int32,adj::Bool)
 
-	trace = phase_shift(trace,0.5*pi)
+	trace = phase_shift(trace,pi/2)
 	trace1 = trace.*0
 	trace2 = trace.*0
 	Seismic.integrate(length(trace),trace,trace1,false)
@@ -79,10 +79,8 @@ function pstm_op(m::Array{Float32,2},trace::Array{Float32,1},v::Array{Float32,2}
 							m[it,(ix-1)*ny + iy] += 2*geoms*obliq*sinc(float32( (isinc)/nsinc ))*trace2[jt + isinc]/((k+1)^2)
 							m[it,(ix-1)*ny + iy] += -geoms*obliq*sinc(float32( (isinc)/nsinc ))*trace2[it2 + isinc]/((k+1)^2)
 						end
+						#m[it,(ix-1)*ny + iy] += 2*geoms*obliq*trace[jt]
 					end
-					#if 1 < jt < nt
-					#	m[it,(ix-1)*ny + iy] += geoms*obliq*trace[jt]
-					#end
 				end
 			end
 		end
@@ -94,34 +92,19 @@ end
 
 function phase_shift(x,angle)
 
-	X = fft(x)*exp(-1im*angle)
-	y = real(ifft(X))
-
-	return y
-end
-
-function shift_image(m,param)
-
-	shift = get(param,"shift",5)
-	dx = get(param,"dz",1)
-	nz = size(m,1)
-	nx = size(m,2)
-	nf = 2*nz
-	dw = 2.*pi/nf/dz
+	nx = length(x)
+	nf = 2*nx
 	nw = int(nf/2) + 1
-	M = fft([m;zeros(typeof(m[1]),nf-nz,nx)],1)
-	dw = 2.*pi/nf/dz
+	X = fft([x;zeros(typeof(x[1]),nf-nx)])
 	for iw=1:nw
-		w = iw*dw
-		M[iw,:,:,:,:] *= exp(-1im*w*shift) 
+		X[iw] *= exp(-1im*angle)
 	end
 	# symmetries
 	for iw=nw+1:nf
-		M[iw,:,:,:,:] = conj(M[nf-iw+2,:,:,:,:])
-	end 
-	m = ifft(M,1)
-	return real(m[1:nz,1:nx])
+		X[iw] = conj(X[nf-iw+2])
+	end
+	x = real(ifft(X,1))
+	return x[1:nx]
 
 end
-
 
