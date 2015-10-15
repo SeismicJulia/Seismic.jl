@@ -5,7 +5,6 @@ function SeisPSTM(m::Array{Float32,2},d::Array{Float32,2},param::Dict{Any,Any})
 	nsinc = int32(get(param,"nsinc",5))
 	nsinc = isodd(nsinc) ? int32(nsinc) : int32(nsinc - 1) 
 	aperture = float32(get(param,"aperture",1000.0))
-	fpeak = float32(get(param,"fpeak",50.0))
 	sx = get(param,"sx",fill(0.0f0,size(d,2)))
 	sy = get(param,"sy",fill(0.0f0,size(d,2)))
 	gx = get(param,"gx",fill(0.0f0,size(d,2)))
@@ -24,7 +23,7 @@ function SeisPSTM(m::Array{Float32,2},d::Array{Float32,2},param::Dict{Any,Any})
 		if (adj == true)
 			trace = d[:,itrace]
 		end
-		pstm_op(m,trace,v,sx[itrace],sy[itrace],gx[itrace],gy[itrace],nx,ox,dx,ny,oy,dy,nt,ot,dt,fpeak,aperture,nsinc,adj)
+		pstm_op(m,trace,v,sx[itrace],sy[itrace],gx[itrace],gy[itrace],nx,ox,dx,ny,oy,dy,nt,ot,dt,aperture,nsinc,adj)
 		if (adj == false)
 			d[:,itrace] = trace
 		end
@@ -32,7 +31,7 @@ function SeisPSTM(m::Array{Float32,2},d::Array{Float32,2},param::Dict{Any,Any})
 
 end
 
-function pstm_op(m::Array{Float32,2},trace::Array{Float32,1},v::Array{Float32,2},sx::Float32,sy::Float32,gx::Float32,gy::Float32,nx::Int32,ox::Float32,dx::Float32,ny::Int32,oy::Float32,dy::Float32,nt::Int32,ot::Float32,dt::Float32,fpeak::Float32,aperture::Float32,nsinc::Int32,adj::Bool)
+function pstm_op(m::Array{Float32,2},trace::Array{Float32,1},v::Array{Float32,2},sx::Float32,sy::Float32,gx::Float32,gy::Float32,nx::Int32,ox::Float32,dx::Float32,ny::Int32,oy::Float32,dy::Float32,nt::Int32,ot::Float32,dt::Float32,aperture::Float32,nsinc::Int32,adj::Bool)
 
 	trace1 = trace.*0
 	trace2 = trace.*0
@@ -73,12 +72,15 @@ function pstm_op(m::Array{Float32,2},trace::Array{Float32,1},v::Array{Float32,2}
 					k = max(round(1/fmax/dt-1),0)
 					it1 = jt-int(k)-1
 					it2 = jt+int(k)+1
-					if nsinc < it1 && it2 < nt - nsinc
-						for isinc = - (nsinc - 1)/2 : (nsinc - 1)/2
-							m[it,(ix-1)*ny + iy] += -geoms*obliq*sinc(float32( (isinc)/nsinc ))*trace2[it1 + isinc]/((k+1)^2)
-							m[it,(ix-1)*ny + iy] += 2*geoms*obliq*sinc(float32( (isinc)/nsinc ))*trace2[jt + isinc]/((k+1)^2)
-							m[it,(ix-1)*ny + iy] += -geoms*obliq*sinc(float32( (isinc)/nsinc ))*trace2[it2 + isinc]/((k+1)^2)
-						end
+					#if nsinc < it1 && it2 < nt - nsinc
+					#	for isinc = - (nsinc - 1)/2 : (nsinc - 1)/2
+					#		m[it,(ix-1)*ny + iy] += -geoms*obliq*sinc(float32( (isinc)/nsinc ))*trace2[it1 + isinc]/((k+1)^2)
+					#		m[it,(ix-1)*ny + iy] += 2*geoms*obliq*sinc(float32( (isinc)/nsinc ))*trace2[jt + isinc]/((k+1)^2)
+					#		m[it,(ix-1)*ny + iy] += -geoms*obliq*sinc(float32( (isinc)/nsinc ))*trace2[it2 + isinc]/((k+1)^2)
+					#	end
+					#end
+					if 1 < jt < nt
+						m[it,(ix-1)*ny + iy] += geoms*obliq*trace[jt]
 					end
 				end
 			end
