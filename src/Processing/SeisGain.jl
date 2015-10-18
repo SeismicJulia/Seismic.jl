@@ -9,6 +9,8 @@ function SeisGain(in,param=Dict())
 
 	scale = get(param,"scale",2)
 
+	print(scale)
+	
 	out = in * scale
 
 	return out
