@@ -8,8 +8,6 @@ function SeisGain(in,param=Dict())
 	out = zeros(size(in))
 
 	scale = get(param,"scale",2)
-
-	print(scale)
 	
 	out = in * scale
 
