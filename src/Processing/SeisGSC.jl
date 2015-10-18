@@ -1,3 +1,6 @@
+#geometrical spreading correction by sample * time^power
+#written by GRAM
+
 function SeisGSC(in,param=Dict())
 
 	nt = size(in,1)
