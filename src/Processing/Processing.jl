@@ -1,4 +1,6 @@
 export  SeisPOCS,
+SeisGSC,
+SeisGain,
 SeisMWNI,
 fft_op,
 SeisDecimate,
@@ -16,6 +18,8 @@ SeisWavelets,
 SeisRadonForward,
 SeisRadonInverse
 include("SeisPOCS.jl")
+include("SeisGSC.jl")
+include("SeisGain.jl")
 include("SeisMWNI.jl")
 include("fft_op.jl")
 include("SeisDecimate.jl")
