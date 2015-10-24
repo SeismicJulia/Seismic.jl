@@ -1,4 +1,5 @@
 export  SeisPOCS,
+SeisAGC,
 SeisGSC,
 SeisGain,
 SeisMWNI,
@@ -18,6 +19,7 @@ SeisWavelets,
 SeisRadonForward,
 SeisRadonInverse
 include("SeisPOCS.jl")
+include("SeisAGC.jl")
 include("SeisGSC.jl")
 include("SeisGain.jl")
 include("SeisMWNI.jl")
