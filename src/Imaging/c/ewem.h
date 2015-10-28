@@ -46,7 +46,14 @@ float signf(float a);
 int compare (const void * a, const void * b);
 int omp_thread_count();
 void boundary_condition(complex *d_x,int nmx,int lmx,int nmy,int lmy);
-void elastic_separate(complex *ux, complex *uy, complex *uz,
+void elastic_separate_2d(complex *ux, complex *uz,
+                      complex *up, complex *us2,
+                      float w, 
+                      float dkx, int nkx, int nmx, float omx, float dmx,
+                      float vp,float vs,
+                      fftwf_plan p1,fftwf_plan p2,
+                      int option);
+void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
                       complex *up, complex *us1, complex *us2,
                       float w, 
                       float dkx, int nkx, int nmx, float omx, float dmx,

@@ -25,6 +25,7 @@ function SeisLinearEvents(param=Dict())
 	amp = get(param,"amp",1.)
 	f0 = get(param,"f0",20.)
 	ricker = get(param,"ricker",true)
+	exponent = get(param,"exponent",1.)
 	sinusoidal = get(param,"sinusoidal",false)
 	sinusoidalA = get(param,"sinusoidalA",10.*dt)
 	sinusoidalB = get(param,"sinusoidalB",10.*pi/(ox1 + dx1*nx1))
@@ -43,10 +44,10 @@ function SeisLinearEvents(param=Dict())
 		for ix2=1:nx2 
 			for ix3=1:nx3 
 				for ix4=1:nx4  
-					x1[1,ix1,ix2,ix3,ix4] = ix1*dx1 + ox1
-					x2[1,ix1,ix2,ix3,ix4] = ix2*dx2 + ox2
-					x3[1,ix1,ix2,ix3,ix4] = ix3*dx3 + ox3
-					x4[1,ix1,ix2,ix3,ix4] = ix4*dx4 + ox4
+					x1[1,ix1,ix2,ix3,ix4] = (ix1*dx1 + ox1)^exponent
+					x2[1,ix1,ix2,ix3,ix4] = (ix2*dx2 + ox2)^exponent
+					x3[1,ix1,ix2,ix3,ix4] = (ix3*dx3 + ox3)^exponent
+					x4[1,ix1,ix2,ix3,ix4] = (ix4*dx4 + ox4)^exponent
 				end
 			end
 		end
