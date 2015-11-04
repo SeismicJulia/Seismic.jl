@@ -1,3 +1,4 @@
 language: julia
 julia:
   - release
+  - 0.3
