@@ -189,24 +189,24 @@ function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},param::
 								m1[iz,(iangx)*nangy   + iangy+1] += w4*mpp_shot[iz,ix]
 							end
 						end
-						m2[iz,(iangx-1)*nangy + iangy]   += w1*mps1_shot[iz,ix]
+						m2[iz,(iangx-1)*nangy + iangy]   += w1*signf(angx)*signf(angy)*mps1_shot[iz,ix]
 						if (iangx < nangx)
-							m2[iz,(iangx)*nangy   + iangy]   += w2*mps1_shot[iz,ix]
+							m2[iz,(iangx)*nangy   + iangy]   += w2*signf(angx)*signf(angy)*mps1_shot[iz,ix]
 						end
 						if (nangy > 1)
-							m2[iz,(iangx-1)*nangy + iangy+1] += w3*mps1_shot[iz,ix]
+							m2[iz,(iangx-1)*nangy + iangy+1] += w3*signf(angx)*signf(angy)*mps1_shot[iz,ix]
 							if (iangx < nangx)
-								m2[iz,(iangx)*nangy   + iangy+1] += w4*mps1_shot[iz,ix]
+								m2[iz,(iangx)*nangy   + iangy+1] += w4*signf(angx)*signf(angy)*mps1_shot[iz,ix]
 							end
 						end
-						m3[iz,(iangx-1)*nangy + iangy]   += w1*mps2_shot[iz,ix]
+						m3[iz,(iangx-1)*nangy + iangy]   += w1*signf(angx)*signf(angy)*mps2_shot[iz,ix]
 						if (iangx < nangx)
-							m3[iz,(iangx)*nangy   + iangy]   += w2*mps2_shot[iz,ix]
+							m3[iz,(iangx)*nangy   + iangy]   += w2*signf(angx)*signf(angy)*mps2_shot[iz,ix]
 						end
 						if (nangy > 1)
-							m3[iz,(iangx-1)*nangy + iangy+1] += w3*mps2_shot[iz,ix]
+							m3[iz,(iangx-1)*nangy + iangy+1] += w3*signf(angx)*signf(angy)*mps2_shot[iz,ix]
 							if (iangx < nangx)
-								m3[iz,(iangx)*nangy   + iangy+1] += w4*mps2_shot[iz,ix]
+								m3[iz,(iangx)*nangy   + iangy+1] += w4*signf(angx)*signf(angy)*mps2_shot[iz,ix]
 							end
 						end
 					end
@@ -329,24 +329,24 @@ function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},param::
 									mpp_shot[iz,ix] += w4*m1[iz,(iangx)*nangy   + iangy+1]
 								end
 							end
-							mps1_shot[iz,ix] += w1*m2[iz,(iangx-1)*nangy + iangy]
+							mps1_shot[iz,ix] += w1*signf(angx)*signf(angy)*m2[iz,(iangx-1)*nangy + iangy]
 							if (iangx < nangx)
-								mps1_shot[iz,ix] += w2*m2[iz,(iangx)*nangy   + iangy]
+								mps1_shot[iz,ix] += w2*signf(angx)*signf(angy)*m2[iz,(iangx)*nangy   + iangy]
 							end
 							if (nangy > 1)
-								mps1_shot[iz,ix] += w3*m2[iz,(iangx-1)*nangy + iangy+1]
+								mps1_shot[iz,ix] += w3*signf(angx)*signf(angy)*m2[iz,(iangx-1)*nangy + iangy+1]
 								if (iangx < nangx)
-									mps1_shot[iz,ix] += w4*m2[iz,(iangx)*nangy   + iangy+1]
+									mps1_shot[iz,ix] += w4*signf(angx)*signf(angy)*m2[iz,(iangx)*nangy   + iangy+1]
 								end
 							end
-							mps2_shot[iz,ix] += w1*m3[iz,(iangx-1)*nangy + iangy]
+							mps2_shot[iz,ix] += w1*signf(angx)*signf(angy)*m3[iz,(iangx-1)*nangy + iangy]
 							if (iangx < nangx)
-								mps2_shot[iz,ix] += w2*m3[iz,(iangx)*nangy   + iangy]
+								mps2_shot[iz,ix] += w2*signf(angx)*signf(angy)*m3[iz,(iangx)*nangy   + iangy]
 							end
 							if (nangy > 1)
-								mps2_shot[iz,ix] += w3*m3[iz,(iangx-1)*nangy + iangy+1]
+								mps2_shot[iz,ix] += w3*signf(angx)*signf(angy)*m3[iz,(iangx-1)*nangy + iangy+1]
 								if (iangx < nangx)
-									mps2_shot[iz,ix] += w4*m3[iz,(iangx)*nangy   + iangy+1]
+									mps2_shot[iz,ix] += w4*signf(angx)*signf(angy)*m3[iz,(iangx)*nangy   + iangy+1]
 								end
 							end
 						end
@@ -441,7 +441,7 @@ end
 
 function signf(a)
 
-	b = a < 0 ? -1.0 : 1.0
+	b = a < 0.0 ? -1.0 : 1.0
 	return(b)
 
 end

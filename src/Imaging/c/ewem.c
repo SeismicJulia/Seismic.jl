@@ -313,13 +313,13 @@ void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
 				ssop(up_xs,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vp,po_p,pd_p,p1,p2,true,pade_flag,true,verbose);
 			} 
 			if (z >= gz){
-				// elastic_separate(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,3); //3
-				elastic_separate_2d(ux_xg,uz_xg,up_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,1./po_p[iz],1./po_s[iz],p1,p2,3); //3
+				elastic_separate_3d(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,true);
+				//elastic_separate_2d(ux_xg,uz_xg,up_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,1./po_p[iz],1./po_s[iz],p1,p2,true);
 				ssop(up_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vp,po_p,pd_p,p1,p2,true,pade_flag,false,verbose);
 				ssop(us1_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vs,po_s,pd_s,p1,p2,true,pade_flag,false,verbose);
 				ssop(us2_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vs,po_s,pd_s,p1,p2,true,pade_flag,false,verbose);
-				// elastic_separate(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,4); //4
-				elastic_separate_2d(ux_xg,uz_xg,up_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,1./po_p[iz],1./po_s[iz],p1,p2,4); //4
+				elastic_separate_3d(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,false);
+				//elastic_separate_2d(ux_xg,uz_xg,up_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,1./po_p[iz],1./po_s[iz],p1,p2,false);
 				for (imx=0;imx<nmx;imx++){ 
 					for (imy=0;imy<nmy;imy++){
 						mpp[imx*nmy*nthread + imy*nthread + ithread][iz]  += factor*crealf(conjf(up_xs[imx*nmy + imy])*up_xg[imx*nmy + imy])/cabsf((up_xs[imx*nmy + imy]*conjf(up_xs[imx*nmy + imy])) + sigma);
@@ -347,16 +347,16 @@ void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
 		for (iz=nz-1;iz>=0;iz--){ // extrapolate receiver wavefield 
 			z = oz + dz*iz;
 			if (z >= gz){
-				// elastic_separate(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,2); //2 
-				elastic_separate_2d(ux_xg,uz_xg,up_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,1./po_p[iz],1./po_s[iz],p1,p2,2); //2 
+				elastic_separate_3d(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,true);
+				//elastic_separate_2d(ux_xg,uz_xg,up_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,1./po_p[iz],1./po_s[iz],p1,p2,true);
 				for (ix=0;ix<nmx*nmy;ix++) up_xg[ix]  += smig[ix][iz]*mpp[ix][iz];
 				for (ix=0;ix<nmx*nmy;ix++) us1_xg[ix] += smig[ix][iz]*mps1[ix][iz];
 				for (ix=0;ix<nmx*nmy;ix++) us2_xg[ix] += smig[ix][iz]*mps2[ix][iz];
 				ssop(up_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vp,po_p,pd_p,p1,p2,false,pade_flag,false,verbose);
 				ssop(us1_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vs,po_s,pd_s,p1,p2,false,pade_flag,false,verbose);
 				ssop(us2_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vs,po_s,pd_s,p1,p2,false,pade_flag,false,verbose);
-				// elastic_separate(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,1); //1
-				elastic_separate_2d(ux_xg,uz_xg,up_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,1./po_p[iz],1./po_s[iz],p1,p2,1); //1
+				elastic_separate_3d(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,false);
+				//elastic_separate_2d(ux_xg,uz_xg,up_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,1./po_p[iz],1./po_s[iz],p1,p2,false);
 			}
 		}
 		for (ix=0;ix<nmx*nmy;ix++){
@@ -611,6 +611,15 @@ float signf(float a)
 	return b;
 }
 
+float signfnonzero(float a)
+	/*< sign of a float, if a==0 then gives a value of 1. >*/
+{
+	float b;
+	if (a>=0.)      b = 1.;
+	else b =-1.;
+	return b;
+}
+
 int compare (const void * a, const void * b)
 {
 	float fa = *(const float*) a;
@@ -651,21 +660,19 @@ void elastic_separate_2d(complex *ux, complex *uz,
 		float dkx, int nkx, int nmx, float omx, float dmx,
 		float vp,float vs,
 		fftwf_plan p1,fftwf_plan p2,
-		int option)
+		bool adj)
 {
 	int imx,ikx,ik;
 	fftwf_complex *a,*b;  
 	complex *ux_k,*uz_k,*up_k,*us2_k;
-	float kx,s1,s2,norm;
-	complex kzp,kzs;
+	float kx,s,norm,kz;
 	ux_k = alloc1complex(nkx);
 	uz_k = alloc1complex(nkx);
 	up_k = alloc1complex(nkx);
 	us2_k = alloc1complex(nkx);
 	a  = fftwf_malloc(sizeof(fftwf_complex) * nkx);
 	b  = fftwf_malloc(sizeof(fftwf_complex) * nkx);
-	if (option==2 || option==3){ /* inverse: wavefield components to wavefield potentials */
-
+	if (adj){ /* adjoint (= inverse): wavefield components to wavefield potentials */
 		// x-component
 		for(imx=0;imx<nkx;imx++){ 
 			a[imx] = imx < nmx ? ux[imx] : 0.;
@@ -683,21 +690,20 @@ void elastic_separate_2d(complex *ux, complex *uz,
 		for (ikx=0;ikx<nkx;ikx++){
 				if (ikx<nkx/2.) kx = dkx*ikx;
 				else            kx = -(dkx*nkx - dkx*ikx);
-				s1 = w*w/(vp*vp) - kx*kx;
-				s2 = w*w/(vs*vs) - kx*kx;
-				if (s1>0.) kzp = sqrtf(s1);
-				else kzp = I*sqrtf(-s1);
-				if (s2>0.) kzs = sqrtf(s2);
-				else kzs = I*sqrtf(-s2);
-				norm = kx*kx + kzp*kzs;
-				if (option == 2){   // Q-inv
-					up_k[ikx]  =  I *kx*ux_k[ikx] + I*kzs*uz_k[ikx];  
-					us2_k[ikx] = -I*kzp*ux_k[ikx] + I*kx*uz_k[ikx];
-				}  
-				else{ // option 3  // (Q)*
-					up_k[ikx] = (I*kx*ux_k[ikx] + I*conjf(kzp)*uz_k[ikx])/(norm + 1e-10);  
-					us2_k[ikx] = (-I*conjf(kzs)*ux_k[ikx] + I*kx*uz_k[ikx])/(norm + 1e-10);
-				}  
+				s = w*w/(vp*vp) - kx*kx;
+				if (s>0.) kz = sqrtf(s);
+				else kz = 0.;
+				norm = sqrtf(kx*kx + kz*kz);
+				if (norm > 1.e-8){
+					kx = kx/norm;
+					kz = kz/norm;
+					up_k[ikx]  =  kx*ux_k[ikx] + kz*uz_k[ikx];  
+					us2_k[ikx] = -kz*ux_k[ikx] + kx*uz_k[ikx];
+				}
+				else{
+					up_k[ikx]  = uz_k[ikx];  
+					us2_k[ikx] = ux_k[ikx];
+				}
 		}
 		for (ik=0;ik<nkx;ik++) b[ik] = up_k[ik];
 		fftwf_execute_dft(p2,b,b);
@@ -710,7 +716,7 @@ void elastic_separate_2d(complex *ux, complex *uz,
 			if (imx < nmx) us2[imx] = b[imx]/sqrtf(nkx);
 		}      
 	}
-	else if (option==1 || option==4){ /* forward: wavefield potentials to wavefield components */
+	else { /* forward: wavefield potentials to wavefield components */
 		// p-component
 		for(imx=0;imx<nkx;imx++){ 
 			a[imx] = (imx < nmx) ? up[imx] : 0.;
@@ -726,21 +732,22 @@ void elastic_separate_2d(complex *ux, complex *uz,
 		for (ikx=0;ikx<nkx;ikx++){
 				if (ikx<nkx/2.) kx = dkx*ikx;
 				else         kx = -(dkx*nkx - dkx*ikx);
-				s1 = w*w/(vp*vp) - kx*kx;
-				s2 = w*w/(vs*vs) - kx*kx;
-				if (s1>0.) kzp = sqrtf(s1);
-				else kzp = I*sqrtf(-s1);
-				if (s2>0.) kzs = sqrtf(s2);
-				else kzs = I*sqrtf(-s2);
-				norm = kx*kx + kzp*kzs;
-				if (option == 1){ // Q
-					ux_k[ikx] = (-I*kx*up_k[ikx] + I*kzs*us2_k[ikx])/(norm + 1e-10);  
-					uz_k[ikx] = (-I*kzp*up_k[ikx] - I*kx*us2_k[ikx])/(norm + 1e-10);
-				}  
-				else{ // option 4 // (Q-inv)*
-					ux_k[ikx] =  -I*kx*up_k[ikx] + I*conjf(kzp)*us2_k[ikx];  
-					uz_k[ikx] = -I*conjf(kzs)*up_k[ikx] - I*kx*us2_k[ikx];	    
-				}  
+				s = w*w/(vp*vp) - kx*kx;
+				if (s>0.) kz = sqrtf(s);
+				else kz = 0.;
+				// normalize the wavenumbers
+				norm = sqrtf(kx*kx + kz*kz);
+				if (norm > 1.e-8){
+					kx = kx/norm;
+					kz = kz/norm;
+					ux_k[ikx] = kx*up_k[ikx] - kz*us2_k[ikx];  
+					uz_k[ikx] = kz*up_k[ikx] + kx*us2_k[ikx];   
+
+				}
+				else{
+					uz_k[ikx] = up_k[ikx];  
+					ux_k[ikx] = us2_k[ikx];
+				}
 		}
 		
 		for (ik=0;ik<nkx;ik++) b[ik] = ux_k[ik];
@@ -774,13 +781,12 @@ void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
 		float dky, int nky, int nmy, float omy, float dmy,
 		float vp,float vs,
 		fftwf_plan p1,fftwf_plan p2,
-		int option)
+		bool adj)
 {
 	int imx,imy,ikx,iky,ik;
 	fftwf_complex *a,*b;  
 	complex *ux_k,*uy_k,*uz_k,*up_k,*us1_k,*us2_k;
-	float kx,ky,k,s1,s2,norm;
-	complex kzp,kzs;
+	float kx,ky,kz,s,norm,aa;
 	ux_k = alloc1complex(nkx*nky);
 	uy_k = alloc1complex(nkx*nky);
 	uz_k = alloc1complex(nkx*nky);
@@ -789,7 +795,7 @@ void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
 	us2_k = alloc1complex(nkx*nky);
 	a  = fftwf_malloc(sizeof(fftwf_complex) * nkx*nky);
 	b  = fftwf_malloc(sizeof(fftwf_complex) * nkx*nky);
-	if (option==2 || option==3){ /* inverse: wavefield components to wavefield potentials */
+	if (adj){ /* adjoint (==inverse): wavefield components to wavefield potentials */
 		// x-component
 		for(imx=0;imx<nkx;imx++){ 
 			for(imy=0;imy<nky;imy++){ 
@@ -820,30 +826,24 @@ void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
 				else         kx = -(dkx*nkx - dkx*ikx);
 				if (iky<nky/2.) ky = dky*iky;
 				else         ky = -(dky*nky - dky*iky);
-				s1 = w*w/(vp*vp) - kx*kx - ky*ky;
-				s2 = w*w/(vs*vs) - kx*kx - ky*ky;
-				if (s1>0.) kzp = sqrtf(s1);
-				else kzp = I*sqrtf(-s1);
-				if (s2>0.) kzs = sqrtf(s2);
-				else kzs = I*sqrtf(-s2);
-				// normalize the wavenumbers
-				norm = sqrtf(kx*kx + ky*ky + cabsf(kzp*kzs));
-				//fprintf(stderr,"norm=%f\n",norm);
-				kx = kx/(norm + 1e-10);
-				ky = ky/(norm + 1e-10);
-				kzp = kzp/(norm + 1e-10);
-				kzs = kzs/(norm + 1e-10);
-				k = sqrt(kx*kx + ky*ky);
-				if (option == 2){   // Q-inv
-					up_k[ikx*nky + iky]  = kx*ux_k[ikx*nky + iky] + ky*uy_k[ikx*nky + iky] + kzs*uz_k[ikx*nky + iky];  
-					us1_k[ikx*nky + iky] = (k*ky - ky*kzp*kzs/(k+1e-10))*ux_k[ikx*nky + iky] + (k*kx - kx*kzp*kzs/(k+1e-10))*uy_k[ikx*nky + iky];   
-					us2_k[ikx*nky + iky] = (kx*kzp/(k+1e-10))*ux_k[ikx*nky + iky] + (ky*kzp/(k+1e-10))*uy_k[ikx*nky + iky] - k*uz_k[ikx*nky + iky];
-				}  
-				else{ // option 3  // (Q)*
-					up_k[ikx*nky + iky] = kx*ux_k[ikx*nky + iky] + ky*uy_k[ikx*nky + iky] + conjf(kzp)*uz_k[ikx*nky + iky];  
-					us1_k[ikx*nky + iky] = -(ky/(k+1e-10))*ux_k[ikx*nky + iky] + (kx/(k+1e-10))*uy_k[ikx*nky + iky];  
-					us2_k[ikx*nky + iky] = (kx*conjf(kzs)/(k+1e-10))*ux_k[ikx*nky + iky] + (ky*conjf(kzs)/(k+1e-10))*uy_k[ikx*nky + iky] - k*uz_k[ikx*nky + iky];  
-				}  
+				s = w*w/(vp*vp) - kx*kx - ky*ky;
+				if (s>0.) kz = sqrtf(s);
+				else kz = 0.;
+				norm = sqrtf(kx*kx + ky*ky + kz*kz);
+				kx = kx/norm;
+				ky = ky/norm;
+				kz = kz/norm;				
+				aa = signfnonzero(kx)*signfnonzero(ky)*sqrtf(kx*kx + ky*ky);
+				if (norm > 1.e-8 && fabsf(aa) > 1.e-8){
+					up_k[ikx*nky + iky]  =          kx*ux_k[ikx*nky + iky] +          ky*uy_k[ikx*nky + iky] + kz*uz_k[ikx*nky + iky];  
+					us1_k[ikx*nky + iky] =    (-ky/aa)*ux_k[ikx*nky + iky] +     (kx/aa)*uy_k[ikx*nky + iky];
+					us2_k[ikx*nky + iky] = (-kx*kz/aa)*ux_k[ikx*nky + iky] + (-ky*kz/aa)*uy_k[ikx*nky + iky] + aa*uz_k[ikx*nky + iky];
+				}
+				else{
+					up_k[ikx*nky + iky]  = uz_k[ikx*nky + iky];  
+					us1_k[ikx*nky + iky] = uy_k[ikx*nky + iky];
+					us2_k[ikx*nky + iky] = ux_k[ikx*nky + iky];
+				}
 			}
 		}
 		for (ik=0;ik<nkx*nky;ik++) b[ik] = up_k[ik];
@@ -868,7 +868,7 @@ void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
 			}
 		}      
 	}
-	else if (option==1 || option==4){ /* forward: wavefield potentials to wavefield components */
+	else { /* forward: wavefield potentials to wavefield components */
 		// p-component
 		for(imx=0;imx<nkx;imx++){ 
 			for(imy=0;imy<nky;imy++){ 
@@ -899,30 +899,24 @@ void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
 				else         kx = -(dkx*nkx - dkx*ikx);
 				if (iky<nky/2.) ky = dky*iky;
 				else         ky = -(dky*nky - dky*iky);
-				s1 = w*w/(vp*vp) - kx*kx - ky*ky;
-				s2 = w*w/(vs*vs) - kx*kx - ky*ky;
-				if (s1>0.) kzp = sqrtf(s1);
-				else kzp = I*sqrtf(-s1);
-				if (s2>0.) kzs = sqrtf(s2);
-				else kzs = I*sqrtf(-s2);
-				// normalize the wavenumbers
-				norm = sqrtf(kx*kx + ky*ky + cabsf(kzp*kzs));
-				//fprintf(stderr,"norm=%f\n",norm);
-				kx = kx/(norm + 1e-10);
-				ky = ky/(norm + 1e-10);
-				kzp = kzp/(norm + 1e-10);
-				kzs = kzs/(norm + 1e-10);
-				k = sqrt(kx*kx + ky*ky);
-				if (option == 1){ // Q
-					ux_k[ikx*nky + iky] =  kx*up_k[ikx*nky + iky] - (ky/(k+1e-10))*us1_k[ikx*nky + iky] + (kx*kzs/(k+1e-10))*us2_k[ikx*nky + iky];  
-					uy_k[ikx*nky + iky] =  ky*up_k[ikx*nky + iky] + (kx/(k+1e-10))*us1_k[ikx*nky + iky] + (ky*kzs/(k+1e-10))*us2_k[ikx*nky + iky];  
-					uz_k[ikx*nky + iky] = kzp*up_k[ikx*nky + iky] - k*us2_k[ikx*nky + iky];
-				}  
-				else{ // option 4 // (Q-inv)*
-					ux_k[ikx*nky + iky] =  kx*up_k[ikx*nky + iky] + (k*ky - ky*conjf(kzp)*conjf(kzs)/(k+1e-10))*us1_k[ikx*nky + iky] + (kx*conjf(kzp)/(k+1e-10))*us2_k[ikx*nky + iky];  
-					uy_k[ikx*nky + iky] =  ky*up_k[ikx*nky + iky] + (k*kx - kx*conjf(kzp)*conjf(kzs)/(k+1e-10))*us1_k[ikx*nky + iky] + (ky*conjf(kzp)/(k+1e-10))*us2_k[ikx*nky + iky] ;   
-					uz_k[ikx*nky + iky] = conjf(kzs)*up_k[ikx*nky + iky] - k*us2_k[ikx*nky + iky];	    
-				}  
+				s = w*w/(vp*vp) - kx*kx - ky*ky;
+				if (s>0.) kz = sqrtf(s);
+				else kz = 0.;
+				norm = sqrtf(kx*kx + ky*ky + kz*kz);
+				kx = kx/norm;
+				ky = ky/norm;
+				kz = kz/norm;
+				aa = signfnonzero(kx)*signfnonzero(ky)*sqrtf(kx*kx + ky*ky);
+				if (norm > 1.e-8 && fabsf(aa) > 1.e-8){
+					ux_k[ikx*nky + iky] = kx*up_k[ikx*nky + iky] + (-ky/aa)*us1_k[ikx*nky + iky] + (-kx*kz/aa)*us2_k[ikx*nky + iky];
+					uy_k[ikx*nky + iky] = ky*up_k[ikx*nky + iky] +  (kx/aa)*us1_k[ikx*nky + iky] + (-ky*kz/aa)*us2_k[ikx*nky + iky];
+					uz_k[ikx*nky + iky] = kz*up_k[ikx*nky + iky] +                               +          aa*us2_k[ikx*nky + iky];
+				}
+				else{
+					ux_k[ikx*nky + iky] = us2_k[ikx*nky + iky];
+					uy_k[ikx*nky + iky] = us1_k[ikx*nky + iky];
+					uz_k[ikx*nky + iky] = up_k[ikx*nky + iky];  
+				}
 			}
 		}
 		for (ik=0;ik<nkx*nky;ik++) b[ik] = ux_k[ik];

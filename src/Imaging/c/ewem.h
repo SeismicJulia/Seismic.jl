@@ -43,6 +43,7 @@ void fdop(complex *X,int nx,float dx, complex *a, bool adj);
 void f_op(complex *m,float *d,int nw,int nt,bool adj);
 void progress_msg(float progress);
 float signf(float a);
+float signfnonzero(float a);
 int compare (const void * a, const void * b);
 int omp_thread_count();
 void boundary_condition(complex *d_x,int nmx,int lmx,int nmy,int lmy);
@@ -52,7 +53,7 @@ void elastic_separate_2d(complex *ux, complex *uz,
                       float dkx, int nkx, int nmx, float omx, float dmx,
                       float vp,float vs,
                       fftwf_plan p1,fftwf_plan p2,
-                      int option);
+                      bool adj);
 void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
                       complex *up, complex *us1, complex *us2,
                       float w, 
@@ -60,5 +61,5 @@ void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
                       float dky, int nky, int nmy, float omy, float dmy,
                       float vp,float vs,
                       fftwf_plan p1,fftwf_plan p2,
-                      int option);
+                      bool adj);
 #endif
