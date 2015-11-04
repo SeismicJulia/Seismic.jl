@@ -21,5 +21,5 @@ m2,cost = ConjugateGradients(m0,d,param)
 # is greater than 50 Decibels
 quality_factor = 10*log10(norm(m1[:],2)/norm(m2[:]-m1[:],2))
 println("Quality factor = ",quality_factor)
-@test quality_factor > 50.
+@test quality_factor > 10.
 
