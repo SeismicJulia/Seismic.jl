@@ -40,9 +40,7 @@ function SeisPlotAmplitudeSpectrum(in,param=Dict())
 	plt.ylabel(join([ylabel " " yunits]))
 	plt.axis([0,fmax,0,1.1])
 
-	if (name == "NULL")
-		plt.show()
-	else  
+	if (name != "NULL")
 		plt.savefig(name,dpi=dpi)
 		plt.close()
 	end

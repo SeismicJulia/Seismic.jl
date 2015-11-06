@@ -41,9 +41,8 @@ function SeisPlotFKSpectrum(in,param=Dict())
 	plt.title(title)
 	plt.xlabel(join([xlabel " " xunits]))
 	plt.ylabel(join([ylabel " " yunits]))
-	if (name == "NULL")
-		plt.show()
-	else  
+
+	if (name != "NULL")
 		plt.savefig(name,dpi=dpi)
 		plt.close()
 	end
