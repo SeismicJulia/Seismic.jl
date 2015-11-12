@@ -30,6 +30,7 @@ void ewem(float **ux, float **uy, float **uz,
 	int ithread,nthread;
 	float sigma;
 	float **mpp_threads,**mps1_threads,**mps2_threads;
+	
 	if (adj){
 		for (ix=0;ix<nmx*nmy;ix++) for (iz=0;iz<nz;iz++) mpp[ix][iz] = 0.;
 		for (ix=0;ix<nmx*nmy;ix++) for (iz=0;iz<nz;iz++) mps1[ix][iz] = 0.;
@@ -196,6 +197,8 @@ void ewem(float **ux, float **uy, float **uz,
 				vp,po_p,pd_p,vs,po_s,pd_s,
 				p1,p2,adj,pade_flag,verbose);
 	}
+	if (verbose) fprintf(stderr,"\n");
+
 	if (adj){
 		// reduction over parallel axis 
 		for (imx=0;imx<nmx;imx++){ 
@@ -210,8 +213,6 @@ void ewem(float **ux, float **uy, float **uz,
 			}
 		}
 	}
-	if (verbose) fprintf(stderr,"\n");
-
 	else{
 		for (ix=0;ix<nmx*nmy;ix++){
 			// x component

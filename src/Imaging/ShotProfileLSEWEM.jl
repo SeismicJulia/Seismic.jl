@@ -12,5 +12,6 @@ function ShotProfileLSEWEM(m::Array{ASCIIString,1},m0::Array{ASCIIString,1},d::A
 		param["operators"] = [ApplyDataWeights ShotProfileEWEM]
 	end
 	ConjugateGradients(m,m0,d,cost,param)
+	SeisRemove(wd)
 
 end

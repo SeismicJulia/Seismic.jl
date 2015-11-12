@@ -48,12 +48,13 @@ function ConjugateGradients(m::ASCIIString,m0::ASCIIString,d::ASCIIString,cost_f
 	operators = get(param,"operators",[])
 	param_op = copy(param)
 	cost = Float64[]
-	g = join(["tmp_CG_g_",string(int(rand()*100000))])
-	s = join(["tmp_CG_s_",string(int(rand()*100000))])
-	rr = join(["tmp_CG_rr_",string(int(rand()*100000))])
-	tt = join(["tmp_CG_tt_",string(int(rand()*100000))])
-	r = join(["tmp_CG_r_",string(int(rand()*100000))])
-	t = join(["tmp_CG_t_",string(int(rand()*100000))])
+	rand_string = string(int(rand()*100000))
+	g = join(["tmp_CG_g_",rand_string])
+	s = join(["tmp_CG_s_",rand_string])
+	rr = join(["tmp_CG_rr_",rand_string])
+	tt = join(["tmp_CG_tt_",rand_string])
+	r = join(["tmp_CG_r_",rand_string])
+	t = join(["tmp_CG_t_",rand_string])
 	SeisCopy(m0,m)
 	forward_op(m0,r,operators,param_op)
 	CGStep(r,d,{"a"=>-1.,"b"=>1.})
@@ -149,13 +150,6 @@ function ConjugateGradients(m::Array{ASCIIString,1},m0::Array{ASCIIString,1},d::
 		CGStep(g,rr,{"a"=>[1.;1.;1.],"b"=>mu})
 		gamma = InnerProduct(g,g)
 		beta = gamma/(gamma_old + 1.e-20)
-
-		println("gamma=",gamma)
-		println("gamma_old=",gamma_old)
-		println("alpha=",alpha)
-		println("beta=",beta)
-		println("delta=",delta)
-
 		gamma_old = copy(gamma)
 		CGStep(s,g,{"a"=>[beta;beta;beta],"b"=>[1.;1.;1.]})
 	end
@@ -200,32 +194,34 @@ end
 
 function forward_op(m::ASCIIString,d::ASCIIString,operators,param)
 	param["adj"] = false
-	tmp_filename_m = join(["tmp_CGFWD_m_",string(int(rand()*100000))])
-	tmp_filename_d = join(["tmp_CGFWD_d_",string(int(rand()*100000))])
-	SeisCopy(m,tmp_filename_m)
+	rand_string = string(int(rand()*100000))
+	tmp_m = join(["tmp_CGADJ_m_",rand_string])
+	tmp_d = join(["tmp_CGADJ_d_",rand_string])
+	SeisCopy(m,tmp_m)
 	for iop = length(operators) : -1 : 1
 		op = operators[iop]
-		op(tmp_filename_m,tmp_filename_d,param)
-		SeisCopy(tmp_filename_d,tmp_filename_m)
+		op(tmp_m,tmp_d,param)
+		SeisCopy(tmp_d,tmp_m)
 	end
-	SeisCopy(tmp_filename_d,d)
-	SeisRemove(tmp_filename_m)
-	SeisRemove(tmp_filename_d)
+	SeisCopy(tmp_d,d)
+	SeisRemove(tmp_m)
+	SeisRemove(tmp_d)
 end
 
 function adjoint_op(m::ASCIIString,d::ASCIIString,operators,param)
 	param["adj"] = true
-	tmp_filename_m = join(["tmp_CGADJ_m_",string(int(rand()*100000))])
-	tmp_filename_d = join(["tmp_CGADJ_d_",string(int(rand()*100000))])
-	SeisCopy(d,tmp_filename_d)
+	rand_string = string(int(rand()*100000))
+	tmp_m = join(["tmp_CGADJ_m_",rand_string])
+	tmp_d = join(["tmp_CGADJ_d_",rand_string])
+	SeisCopy(d,tmp_d)
 	for iop = 1 : 1 : length(operators)
 		op = operators[iop]
-		op(tmp_filename_m,tmp_filename_d,param)
-		SeisCopy(tmp_filename_m,tmp_filename_d)
+		op(tmp_m,tmp_d,param)
+		SeisCopy(tmp_m,tmp_d)
 	end
-	SeisCopy(tmp_filename_m,m)
-	SeisRemove(tmp_filename_m)
-	SeisRemove(tmp_filename_d)
+	SeisCopy(tmp_m,m)
+	SeisRemove(tmp_m)
+	SeisRemove(tmp_d)
 end
 
 function forward_op(m::Array{ASCIIString,1},d::Array{ASCIIString,1},operators,param)

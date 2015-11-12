@@ -148,12 +148,12 @@ void wem(float **d, float **m, float **wav,
 		if (verbose) progress_msg(progress);
 		extrap1f(m_threads,d_g_wx,d_s_wx,sigma,iw,ifmax,nw,ifmax,ntfft,dw,dkx,dky,nkx,nky,nz,oz,dz,gz,sz,nmx,omx,dmx,nmy,omy,dmy,nthread,vel,po,pd,p1,p2,adj,pade_flag,verbose);
 	}
+	if (verbose) fprintf(stderr,"\n");
 	if (adj){
 		// reduction over parallel axis 
 		for (imx=0;imx<nmx;imx++) for (imy=0;imy<nmy;imy++) for (ithread=0;ithread<nthread;ithread++) for (iz=0;iz<nz;iz++) m[imx*nmy + imy][iz] += m_threads[imx*nmy*nthread + imy*nthread + ithread][iz];
 	}
-	if (verbose) fprintf(stderr,"\n");
-	if (!adj){
+	else{
 		for (ix=0;ix<nmx*nmy;ix++){
 			for (iw=0;iw<ifmin;iw++) d_w[iw] = 0.;
 			for (iw=ifmin;iw<ifmax;iw++) d_w[iw] = d_g_wx[ix][iw];
