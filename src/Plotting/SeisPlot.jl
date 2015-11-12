@@ -81,9 +81,7 @@ function SeisPlot(in,param=Dict())
 	plt.xlabel(join([xlabel " " xunits]))
 	plt.ylabel(join([ylabel " " yunits]))
 
-	if (name == "NULL")
-		plt.show()
-	else  
+	if (name != "NULL")
 		plt.savefig(name,dpi=dpi)
 		plt.close()
 	end
