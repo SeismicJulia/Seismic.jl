@@ -24,7 +24,12 @@ SeisWindowHeaders,
 ApplyModelWeights,
 ApplyDataWeights,
 Pad5D,
-triangle_filter
+triangle_filter,
+convmtx,
+Synthetic,
+pardx,
+ricker
+
 include("SegyToSeis.jl")
 include("SeisToSegy.jl")
 include("Header.jl")
@@ -52,3 +57,9 @@ include("ApplyModelWeights.jl")
 include("ApplyDataWeights.jl")
 include("Pad5D.jl")
 include("Smoothing.jl")
+include("Convmtx.jl")
+include("Synthetic.jl")
+include("pardx.jl")
+include("ricker.jl")
+
+
