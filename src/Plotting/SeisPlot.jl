@@ -24,6 +24,10 @@ function SeisPlot(in,param=Dict())
 	hbox = get(param,"hbox",6)
 	name = get(param,"name","NULL")
 	interpolation = get(param,"interpolation","none")
+  titlesize     = get(param,"titlesize", 20)
+  labelsize     = get(param,"labelsize", 15)
+  ticksize      = get(param,"ticksize", 10)
+
 
 	plt.ion()
 	if (!haskey(param,"fignum"))
@@ -68,7 +72,8 @@ function SeisPlot(in,param=Dict())
 			im = plt.plot( s*alpha + x[k],y,wiggle_line_color)
 
 			# unless overlay is called, the wiggle plot is filled
-			if (style != "overlay") 
+			if (style != "overlay")
+
 				plt.fill(sp*alpha + x[k],y,wiggle_fill_color)
 			end
 		end
@@ -77,14 +82,21 @@ function SeisPlot(in,param=Dict())
 		plt.axis([ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy])
 	end
 
-	plt.title(title)
-	plt.xlabel(join([xlabel " " xunits]))
-	plt.ylabel(join([ylabel " " yunits]))
 
-	if (name != "NULL")
+  plt.title(title, fontsize=titlesize)
+	plt.xlabel(join([xlabel " " xunits]), fontsize=labelsize)
+	plt.ylabel(join([ylabel " " yunits]), fontsize=labelsize)
+  ax = plt.gca()
+  plt.setp(ax[:get_xticklabels](), fontsize=ticksize)
+  plt.setp(ax[:get_yticklabels](), fontsize=ticksize)
+
+
+	if (name == "NULL")
+		plt.show()
+	else
 		plt.savefig(name,dpi=dpi)
 		plt.close()
 	end
 	return im
-	
+
 end
