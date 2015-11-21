@@ -6,10 +6,12 @@ function ShotProfileLSEWEM(m::Array{ASCIIString,1},m0::Array{ASCIIString,1},d::A
 	wd = join(["tmp_LSM_wd_",string(int(rand()*100000))])
 	CalculateSampling(d[1],wd,param)
 	param["wd"] = wd
+	param["tmute"] = 0.;
+	param["vmute"] = 999999.;
 	if (precon == true)
-		param["operators"] = [ApplyDataWeights ShotProfileEWEM SmoothStructure SmoothGathers]
+		param["operators"] = [ApplyDataWeights SeisMute ShotProfileEWEM SmoothStructure SmoothGathers]
 	else
-		param["operators"] = [ApplyDataWeights ShotProfileEWEM]
+		param["operators"] = [ApplyDataWeights SeisMute ShotProfileEWEM]
 	end
 	ConjugateGradients(m,m0,d,cost,param)
 	SeisRemove(wd)

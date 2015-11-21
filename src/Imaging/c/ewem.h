@@ -11,12 +11,12 @@ void ewem(float **ux, float **uy, float **uz,
           float **vp, float **vs, 
           float fmin, float fmax,
           int padt, int padx,
-	  float damping,
+	      float damping,
           bool adj, bool pade_flag, bool verbose);
 void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
                       complex **ux_g_wx, complex **uy_g_wx, complex **uz_g_wx, 
                       complex **u_s_wx,
-                      float sigma, int iw, int nw,int ifmax,int ntfft,float dw,float dkx,float dky,int nkx,int nky,
+                      float max_source, int iw, int nw,int ifmax,int ntfft,float dw,float dkx,float dky,int nkx,int nky,
                       int nz, float oz, float dz, float gz, float sz,
                       int nmx,float omx, float dmx,
                       int nmy,float omy, float dmy,
@@ -47,13 +47,6 @@ float signfnonzero(float a);
 int compare (const void * a, const void * b);
 int omp_thread_count();
 void boundary_condition(complex *d_x,int nmx,int lmx,int nmy,int lmy);
-void elastic_separate_2d(complex *ux, complex *uz,
-                      complex *up, complex *us2,
-                      float w, 
-                      float dkx, int nkx, int nmx, float omx, float dmx,
-                      float vp,float vs,
-                      fftwf_plan p1,fftwf_plan p2,
-                      bool adj);
 void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
                       complex *up, complex *us1, complex *us2,
                       float w, 
@@ -61,5 +54,5 @@ void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
                       float dky, int nky, int nmy, float omy, float dmy,
                       float vp,float vs,
                       fftwf_plan p1,fftwf_plan p2,
-                      bool adj);
+                      bool inv, bool adj);
 #endif

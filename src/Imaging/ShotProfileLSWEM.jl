@@ -6,10 +6,12 @@ function ShotProfileLSWEM(m,m0,d,param=Dict())
 	wd = join(["tmp_LSM_wd_",string(int(rand()*100000))])
 	CalculateSampling(d,wd,param)
 	param["wd"] = wd
+	param["tmute"] = 0.;
+	param["vmute"] = 999999.;
 	if (precon == true)
-		param["operators"] = [ApplyDataWeights ShotProfileWEM SmoothStructure SmoothGathers]
+		param["operators"] = [ApplyDataWeights SeisMute ShotProfileWEM SmoothStructure SmoothGathers]
 	else
-		param["operators"] = [ApplyDataWeights ShotProfileWEM]
+		param["operators"] = [ApplyDataWeights SeisMute ShotProfileWEM]
 	end
 	ConjugateGradients(m,m0,d,cost,param)
 	SeisRemove(wd)

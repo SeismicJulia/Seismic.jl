@@ -17,7 +17,8 @@ SeisPWD,
 MatrixMultiply,
 SeisWavelets,
 SeisRadonForward,
-SeisRadonInverse
+SeisRadonInverse,
+SeisMute
 include("SeisPOCS.jl")
 include("SeisAGC.jl")
 include("SeisGSC.jl")
@@ -38,3 +39,4 @@ include("MatrixMultiply.jl")
 include("SeisWavelets.jl")
 include("SeisRadonForward.jl")
 include("SeisRadonInverse.jl")
+include("SeisMute.jl")
