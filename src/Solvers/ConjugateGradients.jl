@@ -87,6 +87,7 @@ function ConjugateGradients(m::ASCIIString,m0::ASCIIString,d::ASCIIString,cost_f
 		adjoint_op(g,r,operators,param_op)
 		CGStep(g,rr,{"a"=>1.,"b"=>mu})
 		gamma = InnerProduct(g,g)
+		println("gamma=",gamma)
 		beta = gamma/(gamma_old + 1.e-20)
 		gamma_old = copy(gamma)
 		CGStep(s,g,{"a"=>beta,"b"=>1.})
@@ -133,7 +134,7 @@ function ConjugateGradients(m::Array{ASCIIString,1},m0::Array{ASCIIString,1},d::
 	# initialize tt with zeros
 	SeisCopy(s,tt)
 	CGStep(tt,s,{"a"=>[0.;0.;0.],"b"=>[0.;0.;0.]});
-	gamma_old = InnerProduct(g,g)
+	gamma_old = InnerProduct(g,g)	
 	for iter = 1 : Niter	
 		forward_op(s,t,operators,param_op)
 		CGStep(tt,s,{"a"=>[0.;0.;0.],"b"=>mu});

@@ -62,4 +62,3 @@ include("Synthetic.jl")
 include("pardx.jl")
 include("ricker.jl")
 
-

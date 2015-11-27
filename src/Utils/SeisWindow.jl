@@ -40,7 +40,9 @@ function SeisWindow(in,out,param=Dict())
 	param["f"]=[UpdateHeader]
 	tmp = join(["tmp_SeisWindow_",string(int(rand()*100000))])
 	SeisProcessHeaders(out,tmp,param)
-	cp(join([tmp ".seish"]),join([out ".seish"])); rm(join([tmp ".seish"]));
+	run(`cp ${join([tmp ".seish"])} ${join([out ".seish"])}`);rm(join([tmp ".seish"]));
+
+
 end
 
 function FetchTraces(in,out,param=Dict())
