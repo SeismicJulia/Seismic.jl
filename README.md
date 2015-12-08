@@ -45,7 +45,7 @@ SeisPlot(d[:,:],plotpar);
 plotpar["style"]="overlay"; plotpar["title"]="overlay"; plotpar["name"]="plot3"; 
 SeisPlot(d[:,:],plotpar);
 ```
-will produce these three `.eps` files:
+will produce these three `.png` files:
 
 ![plot1](http://www.ualberta.ca/~kstanton/files/plot1.png "color")
 
