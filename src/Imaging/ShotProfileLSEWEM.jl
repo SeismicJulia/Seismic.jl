@@ -9,7 +9,7 @@ function ShotProfileLSEWEM(m::Array{ASCIIString,1},m0::Array{ASCIIString,1},d::A
 	param["tmute"] = 0.;
 	param["vmute"] = 999999.;
 	if (precon == true)
-		param["operators"] = [ApplyDataWeights SeisMute ShotProfileEWEM SmoothStructure SmoothGathers]
+		param["operators"] = [ApplyDataWeights SeisMute ShotProfileEWEM SmoothGathers]
 	else
 		param["operators"] = [ApplyDataWeights SeisMute ShotProfileEWEM]
 	end
