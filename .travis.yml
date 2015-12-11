@@ -1,3 +1,7 @@
 language: julia
 julia:
+<<<<<<< HEAD
+  - release
+=======
   - 0.3
+>>>>>>> 3339587eff94008ff3ac7ac846c259f90fcaa69f
