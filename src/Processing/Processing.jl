@@ -8,6 +8,7 @@ SeisDecimate,
 SeisStack,
 SmoothGathers,
 FKFilterGathers,
+FKFilter,
 SeisBandPass,
 SmoothStructure,
 SeisSemblance,
@@ -29,6 +30,7 @@ include("SeisDecimate.jl")
 include("SeisStack.jl")
 include("SmoothGathers.jl")
 include("FKFilterGathers.jl")
+include("FKFilter.jl")
 include("SeisBandPass.jl")
 include("SmoothStructure.jl")
 include("SeisSemblance.jl")
