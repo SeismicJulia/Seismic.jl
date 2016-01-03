@@ -1,4 +1,44 @@
-function SeisLinearEvents(;ot=0,dt=0.004,nt=500,ox1=0,dx1=10,nx1=100,ox2=0,dx2=10,nx2=1,ox3=0,dx3=10,nx3=1,ox4=0,dx4=10,nx4=1,tau1=0.3,tau2=0,tau3=0,tau4=0,v1=1500,v2=1500,v3=1500,v4=1500,amp=1,f0=20,ricker=true,exponent=1,sinusoidal=false)	
+"""
+**SeisLinearEvents**
+
+*Generate five dimensional data consisting of linear events*
+
+**IN**   
+
+* ot=0
+* dt=0.004
+* nt=500
+* ox1=0
+* dx1=10
+* nx1=100
+* ox2=0
+* dx2=10
+* nx2=1
+* ox3=0
+* dx3=10
+* nx3=1
+* ox4=0
+* dx4=10
+* nx4=1
+* tau1=[1.0,1.6]
+* tau2=0
+* tau3=0
+* tau4=0
+* v1=[2500,-800]
+* v2=1500
+* v3=1500
+* v4=1500
+* amp=[1,-1]
+* f0=20
+* ricker=true
+* exponent=1
+* sinusoidal=false
+
+**OUT**  
+
+* d: modelled data with dimensions d[1:nt,1:nx1,1:nx2,1:nx3,1:nx4]
+"""
+function SeisLinearEvents(;ot=0,dt=0.004,nt=500,ox1=0,dx1=10,nx1=100,ox2=0,dx2=10,nx2=1,ox3=0,dx3=10,nx3=1,ox4=0,dx4=10,nx4=1,tau1=[1.0,1.6],tau2=0,tau3=0,tau4=0,v1=[2500,-800],v2=1500,v3=1500,v4=1500,amp=[1,-1],f0=20,ricker=true,exponent=1,sinusoidal=false)	
 
 	sinusoidalA = 10.*dt
 	sinusoidalB = 10.*pi/(ox1 + dx1*nx1)
