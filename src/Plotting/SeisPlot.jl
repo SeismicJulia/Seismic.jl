@@ -37,6 +37,8 @@
 
 **OUT**  
 
+*Credits: Aaron Stanton, 2015*
+
 """
 function SeisPlot(in;style="color",wiggle_fill_color="k",wiggle_line_color="k",wiggle_trace_increment=1,xcur=1.2,cmap="Greys",aspect="auto",pclip=98,vmin="NULL",vmax="NULL",title=" ",xlabel=" ",xunits=" ",ylabel=" ",yunits=" ",ox=0,dx=1,oy=0,dy=1,dpi=100,wbox=6,hbox=6,name="NULL",interpolation="none",titlesize=20,labelsize=15,ticksize=10,fignum="NULL")
 

@@ -1,10 +1,7 @@
 include("SegyStruct.jl")
 include("Header.jl")
 
-function SegyToSeis(filename_in,filename_out,param=Dict())
-	format = get(param,"format","segy")
-	swap_bytes = get(param,"swap_bytes",false)
-	input_type = get(param,"input_type","ieee")
+function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=false,input_type="ieee")
 
 	if (format=="su" || format=="rsf")
 		file_hsize = 0

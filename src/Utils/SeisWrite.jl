@@ -1,8 +1,25 @@
+"""
+**SeisWrite**
+
+*Write seismic data in .seis format*
+
+**IN**
+
+* filename
+* d: data as 2d array
+* h: headers as 1d array with elements of type Header
+* itrace=1
+
+**OUT**
+
+*Credits: Aaron Stanton, 2015*
+
+"""
+
 include("Header.jl")
 
-function SeisWrite(filename,d,h,param=Dict())
+function SeisWrite(filename,d,h;itrace=1)
 
-	itrace = get(param,"itrace",1)
 	filename_d = join([filename ".seisd"])
 	filename_h = join([filename ".seish"])
 	if (itrace==1)

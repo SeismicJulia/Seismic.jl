@@ -1,10 +1,66 @@
+"""
+**SeisBin**
+
+*Bin seismic data onto regular grid using trace headers*
+
+**IN**
+
+* in: filename of input, irregularly sampled data
+* out: filename of output, regularly sampled data
+* style="sxsygxgy"
+* ang=90
+* gamma=1
+* osx=0
+* osy=0
+* ogx=0
+* ogy=0
+* omx=0
+* omy=0
+* ohx=0
+* ohy=0
+* oh=0
+* oaz=0
+* dsx=1
+* dsy=1
+* dgx=1
+* dgy=1
+* dmx=1
+* dmy=1
+* dhx=1
+* dhy=1
+* dh=1
+* daz=1
+* min_isx=0
+* max_isx=0
+* min_isy=0
+* max_isy=0
+* min_igx=0
+* max_igx=0
+* min_igy=0
+* max_igy=0
+* min_imx=0
+* max_imx=0
+* min_imy=0
+* max_imy=0
+* min_ihx=0
+* max_ihx=0
+* min_ihy=0
+* max_ihy=0
+* min_ih=0
+* max_ih=0
+* min_iaz=0
+* max_iaz=0
+
+**OUT**
+
+*Credits: Aaron Stanton, 2015*
+
+"""
+
 include("Header.jl")
 
-function SeisBin(in,out,param)
+function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1,min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0)
 
-	style = get(param,"style","sxsygxgy")
-	ang = get(param,"ang",90)
-	gamma = get(param,"gamma",1)
 	rad2deg = 180/pi;
 	deg2rad = pi/180;
 	gammainv = 1/gamma;
@@ -14,58 +70,15 @@ function SeisBin(in,out,param)
 		ang2=deg2rad*(90-ang)
 	end
 
-	osx = get(param,"osx",0)
-	osy = get(param,"osy",0)
-	ogx = get(param,"ogx",0)
-	ogy = get(param,"ogy",0)
-	omx = get(param,"omx",0)
-	omy = get(param,"omy",0)
-	ohx = get(param,"ohx",0)
-	ohy = get(param,"ohy",0)
-	oh = get(param,"oh",0)
-	oaz = get(param,"oaz",0)
-
-	dsx = get(param,"dsx",1)
-	dsy = get(param,"dsy",1)
-	dgx = get(param,"dgx",1)
-	dgy = get(param,"dgy",1)
-	dmx = get(param,"dmx",1)
-	dmy = get(param,"dmy",1)
-	dhx = get(param,"dhx",1)
-	dhy = get(param,"dhy",1)
-	dh  = get(param,"dh",1)
-	daz = get(param,"daz",1)
-
-	min_isx = get(param,"min_isx",0)
-	max_isx = get(param,"max_isx",0)
 	nsx = max_isx - min_isx + 1
-	min_isy = get(param,"min_isy",0)
-	max_isy = get(param,"max_isy",0)
 	nsy = max_isy - min_isy + 1
-	min_igx = get(param,"min_igx",0)
-	max_igx = get(param,"max_igx",0)
 	ngx = max_igx - min_igx + 1
-	min_igy = get(param,"min_igy",0)
-	max_igy = get(param,"max_igy",0)
 	ngy = max_igy - min_igy + 1
-
-	min_imx = get(param,"min_imx",0)
-	max_imx = get(param,"max_imx",0)
 	nmx = max_imx - min_imx + 1
-	min_imy = get(param,"min_imy",0)
-	max_imy = get(param,"max_imy",0)
 	nmy = max_imy - min_imy + 1
-	min_ihx = get(param,"min_ihx",0)
-	max_ihx = get(param,"max_ihx",0)
 	nhx = max_ihx - min_ihx + 1
-	min_ihy = get(param,"min_ihy",0)
-	max_ihy = get(param,"max_ihy",0)
 	nhy = max_ihy - min_ihy + 1
-	min_ih = get(param,"min_ih",0)
-	max_ih = get(param,"max_ih",0)
-	nh = max_ih - min_ih + 1
-	min_iaz = get(param,"min_iaz",0)
-	max_iaz = get(param,"max_iaz",0)
+	nh  = max_ih  - min_ih  + 1
 	naz = max_iaz - min_iaz + 1
 
 	if (style=="sxsygxgy")

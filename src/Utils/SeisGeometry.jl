@@ -1,41 +1,46 @@
+"""
+**SeisGeometry**
+
+*Update headers with Geometry information beginning with shot and receiver coordinates (calculation of midpoints, absolute and vector offsets, azimuth, coordinate rotation, and binning of headers values)*
+
+**IN**    
+* in: input filename (the .seish file is updated)
+* ang=90 inline direction measured in degrees CC from East
+* gamma=1 (vp/vs ratio for PS Asymptotic Conversion Point gathers (use gamma=1 for PP data))
+* osx=0
+* osy=0
+* ogx=0
+* ogy=0
+* omx=0
+* omy=0
+* ohx=0
+* ohy=0
+* oh=0
+* oaz=0
+* dsx=1
+* dsy=1
+* dgx=1
+* dgy=1
+* dmx=1
+* dmy=1
+* dhx=1
+* dhy=1
+* dh=1
+* daz=1
+
+**OUT**
+
+*Credits: A. Stanton, 2015*
+
+"""
+
 include("Header.jl")
 
-function SeisGeometry(in,param=Dict())
-	#
-	#   Update Seis header with geometry
-	# 	param should have fields:
-	#	ang: inline direction measured in degrees CC from East
-	#   gamma (vp/vs ratio for PS Asymptotic Conversion Point gathers (use gamma=1 for PP data))
-	#   osx, osy, ogx, ogy, omx, omy, ohx, ohy, oh, oaz: binning origins
-	#   dsx, dsy, dgx, dgy, dmx, dmy, dhx, dhy, dh, daz: binning increments
-	#
+function SeisGeometry(in;ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1)
 
-	ang = get(param,"ang",90)
-	gamma = get(param,"gamma",1)
-	osx = get(param,"osx",0)
-	osy = get(param,"osy",0)
-	ogx = get(param,"ogx",0)
-	ogy = get(param,"ogy",0)
-	omx = get(param,"omx",0)
-	omy = get(param,"omy",0)
-	ohx = get(param,"ohx",0)
-	ohy = get(param,"ohy",0)
-	oh = get(param,"oh",0)
-	oaz = get(param,"oaz",0)
-	dsx = get(param,"dsx",1)
-	dsy = get(param,"dsy",1)
-	dgx = get(param,"dgx",1)
-	dgy = get(param,"dgy",1)
-	dmx = get(param,"dmx",1)
-	dmy = get(param,"dmy",1)
-	dhx = get(param,"dhx",1)
-	dhy = get(param,"dhy",1)
-	dh  = get(param,"dh",1)
-	daz = get(param,"daz",1)
-
-	rad2deg = 180/pi;
-	deg2rad = pi/180;
-	gammainv = 1/gamma;
+	rad2deg = 180/pi
+	deg2rad = pi/180
+	gammainv = 1/gamma
 	if (ang > 90) 
 		ang2=-deg2rad*(ang-90)
 	else 

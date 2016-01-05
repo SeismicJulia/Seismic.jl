@@ -1,11 +1,28 @@
+"""
+**SeisRead**
+
+*Read seismic data in .seis format*
+
+**IN**   
+
+* filename
+* group="all" ("some" or "gather")
+* key=["imx","imy"]
+* itrace=1
+* ntrace=10000
+
+**OUT**  
+
+* d: data as 2d array 
+* h: headers as 1d array 
+
+*Credits: Aaron Stanton, 2015*
+
+"""
+
 include("Header.jl")
 
-function SeisRead(filename,param=Dict())
-
-	group = get(param,"group","all")
-	key = get(param,"key",["imx","imy"])
-	itrace = get(param,"itrace",1)
-	ntrace = get(param,"ntrace",10000)
+function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 
 	filename_h = join([filename ".seish"])
 	stream_h = open(filename_h)
