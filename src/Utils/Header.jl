@@ -240,3 +240,32 @@ function ExtractHeader(h::Array{Header,1},key::ASCIIString)
 	return out
 	
 end
+
+type Extent
+        n1::Int32
+        n2::Int32
+        n3::Int32
+        n4::Int32
+        n5::Int32
+        o1::Float32
+        o2::Float32
+        o3::Float32
+        o4::Float32
+        o5::Float32
+        d1::Float32
+        d2::Float32
+        d3::Float32
+        d4::Float32
+        d5::Float32
+        label1::ASCIIString
+        label2::ASCIIString
+        label3::ASCIIString
+        label4::ASCIIString
+        label5::ASCIIString
+        unit1::ASCIIString
+        unit2::ASCIIString
+        unit3::ASCIIString
+        unit4::ASCIIString
+        unit5::ASCIIString
+        title::ASCIIString
+end
