@@ -1,3 +1,5 @@
+include("Header.jl")
+
 """
 **SeisRead**
 
@@ -19,9 +21,6 @@
 *Credits: Aaron Stanton, 2015*
 
 """
-
-include("Header.jl")
-
 function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 
 	filename_h = join([filename ".seish"])
