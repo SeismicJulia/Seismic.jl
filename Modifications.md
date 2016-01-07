@@ -1,6 +1,6 @@
 # Modifying the Seismic.jl package
 
-## Items to be addressed in the near future
+## Contents
 
 *	Introduction to making modifications to the package
 *	Naming conventions 
