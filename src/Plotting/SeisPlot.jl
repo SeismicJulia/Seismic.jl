@@ -100,8 +100,7 @@ function SeisPlot(in;style="color",wiggle_fill_color="k",wiggle_line_color="k",w
 end
 
 function SeisPlot(in,extent::Extent;style="color",wiggle_fill_color="k",wiggle_line_color="k",wiggle_trace_increment=1,xcur=1.2,cmap="Greys",aspect="auto",pclip=98,vmin="NULL",vmax="NULL",yunits=" ",dpi=100,wbox=6,hbox=6,name="NULL",interpolation="none",titlesize=20,labelsize=15,ticksize=10,fignum="NULL")
-
-	im = SeisPlot(in,style=style,wiggle_fill_color=wiggle_fill_color,wiggle_line_color=wiggle_line_color,wiggle_trace_increment=wiggle_trace_increment,xcur=xcur,cmap=cmap,aspect=aspect,pclip=pclip,vmin=vmin,vmax=vmax,title=extent.title,xlabel=extent.label2,xunits=extent.unit2,ylabel=extent.label1,yunits=extent.unit1,ox=extent.o2,dx=extent.d2,oy=extent.o1,dy=extent.d1,dpi=dpi,wbox=wbox,hbox=hbox,name=name,interpolation=interpolation,titlesize=titlesize,labelsize=labelsize,ticksize=ticksize,fignum=fignum)
+	im = SeisPlot(in,style=style,wiggle_fill_color=wiggle_fill_color,wiggle_line_color=wiggle_line_color,wiggle_trace_increment=wiggle_trace_increment,xcur=xcur,cmap=cmap,aspect=aspect,pclip=pclip,vmin=vmin,vmax=vmax,title=extent.title,xlabel=extent.label2,xunits=join(["(",extent.unit2,")"]),ylabel=extent.label1,yunits=join(["(",extent.unit1,")"]),ox=extent.o2,dx=extent.d2,oy=extent.o1,dy=extent.d1,dpi=dpi,wbox=wbox,hbox=hbox,name=name,interpolation=interpolation,titlesize=titlesize,labelsize=labelsize,ticksize=ticksize,fignum=fignum)
 	return im
 end
 
