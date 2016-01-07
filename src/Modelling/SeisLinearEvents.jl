@@ -112,7 +112,24 @@ function SeisLinearEvents(;ot=0,dt=0.004,nt=500,ox1=0,dx1=10,nx1=100,ox2=0,dx2=1
 	end 
 	d = ifft(D,1)
 	d = real(d[1:nt,:,:,:,:])
-	return d
+	extent = Extent(convert(Int32,nt),convert(Int32,nx1),convert(Int32,nx2),convert(Int32,nx3),convert(Int32,nx4),
+		   convert(Float32,ot),convert(Float32,ox1),convert(Float32,ox2),convert(Float32,ox3),convert(Float32,ox4),
+		   convert(Float32,dt),convert(Float32,dx1),convert(Float32,dx2),convert(Float32,dx3),convert(Float32,dx4),
+		   "Time","ix1","ix2","ix3","ix4",
+		   "s","index","index","index","index",
+		   "")	
+	if extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1 && extent.n2 == 1 
+		d = reshape(d,int(extent.n1))
+	elseif extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1
+		d = reshape(d,int(extent.n1),int(extent.n2))
+	elseif extent.n5 == 1 && extent.n4 == 1
+		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3))
+	elseif extent.n5 == 1
+		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3),int(extent.n4))
+	else
+		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3),int(extent.n4),int(extent.n5))
+	end
+	return d,extent
 end
 
 function Ricker(f0,dt)
