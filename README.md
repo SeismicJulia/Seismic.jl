@@ -28,5 +28,5 @@ SeisPlot(d[1:500,:],e,cmap="PuOr",wbox=9);
 ```
 will produce this figure:
 
-![plot1](http://www.seismic.physics.ualberta.ca/files/616_79_PR.png)
+![plot1](http://seismic.physics.ualberta.ca/files/616_79_PR.png)
 
