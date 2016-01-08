@@ -20,35 +20,13 @@ Once you have installed the package you can type `using Seismic` to start using
 the functions. For example
 
 ```
-using PyPlot,Seismic
-
-param = ["nt"=>500,"nx1"=>500,
-	 "tau1"=>[0.4 1.0],"tau2"=>[0. 0.],"tau3"=>[0. 0.],"tau4"=>[0. 0.],
-	 "v1"=>[3500. -4000],"v2"=>[99999. 99999.],"v3"=>[99999. 99999.],"v4"=>[99999. 99999.],
-     "amp"=>[1. -0.5], "f0"=>[20. 20.]];
-d = SeisLinearEvents(param);
-
-plotpar = ["style"=>"overlay",
-           "wiggle_trace_increment"=>10,
-           "xcur"=>0.8,
-           "vmin"=>-2,"vmax"=>2,
-           "aspect"=>"auto",
-           "xlabel"=>"X","xunits"=>"meters","ox"=>0,"dx"=>10,
-           "ylabel"=>"Time","yunits"=>"seconds","oy"=>0,"dy"=>0.004,
-           "wbox"=>8,"hbox"=>5,
-           "cmap"=>"seismic"];
-
-plotpar["style"]="color"; plotpar["title"]="color"; plotpar["name"]="plot1"; 
-SeisPlot(d[:,:],plotpar);
-plotpar["style"]="wiggles"; plotpar["title"]="wiggles"; plotpar["name"]="plot2"; 
-SeisPlot(d[:,:],plotpar);
-plotpar["style"]="overlay"; plotpar["title"]="overlay"; plotpar["name"]="plot3"; 
-SeisPlot(d[:,:],plotpar);
+using PyPlot,Seismic;
+download("http://certmapper.cr.usgs.gov/nersl/NPRA/seismic/1979/616_79/PROCESSED/616_79_PR.SGY","616_79_PR.SGY");
+SegyToSeis("616_79_PR.SGY","616_79_PR.seis");
+d,h,e = SeisRead("616_79_PR.seis");
+SeisPlot(d[1:500,:],e,cmap="PuOr",wbox=9);
 ```
-will produce these three `.png` files:
+will produce this figure:
 
-![plot1](http://www.ualberta.ca/~kstanton/files/plot1.png "color")
+![plot1](http://www.seismic.physics.ualberta.ca/files/616_79_PR.png "color")
 
-![plot2](http://www.ualberta.ca/~kstanton/files/plot2.png "wiggles")
-
-![plot3](http://www.ualberta.ca/~kstanton/files/plot3.png "overlay")
