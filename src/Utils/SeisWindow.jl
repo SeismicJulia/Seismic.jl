@@ -1,10 +1,7 @@
 include("Header.jl")
 
-function SeisWindow(in,out,param=Dict())
+function SeisWindow(in,out;key=[],minval=[],maxval=[])
 
-	key = get(param,"key",[])
-	minval = get(param,"minval",[])
-	maxval = get(param,"maxval",minval)
 	SeisWindowHeaders(in,out,param)
 	filename = join([in ".seish"])
 	stream = open(join([in ".seish"]))
@@ -45,24 +42,32 @@ function SeisWindow(in,out,param=Dict())
 
 end
 
-function FetchTraces(in,out,param=Dict())
+function FetchTraces(in,out;ntrace=500,itmin=int32(1),itmax=int32(9e9))
 
-	ntrace = get(param,"ntrace",500)
 	NX = GetNumTraces(out)
 	itrace = int32(1)
-	stream_in  = open(join([in ".seisd"]))
-	stream_out = open(join([out ".seisd"]),"w")
+
+	filename_data_in = chomp(readall(`grep "in=" $in` |> `tail -1` |> `awk '{print substr($1,5,length($1)-5) }' `))
+	DATAPATH = get(ENV,"DATAPATH","./")
+	filename_data_out = join([DATAPATH out "@data@"])
+	stream_in  = open(filename_data_in)
+	stream_out  = open(filename_data_out,"w")
+	extent = ReadTextHeader(in)
+	nt = extent.n1
+	if itmin < 1
+		itmin = int32(1)
+	end
+	if itmax > nt
+		itmax = int32(nt)
+	end
 
 	while itrace <= NX
 		if (itrace > 1)
-			stream_out = open(join([out ".seisd"]),"a")
+			stream_out = open(filename_data_out,"a")
 		end
 		nx = NX - itrace + 1
 		ntrace = nx > ntrace ? ntrace : nx
-		h = SeisReadHeaders(out,["group"=>"some","itrace"=>itrace,"ntrace"=>ntrace])
-		nt = h[1].n1
-		itmin = get(param,"itmin",int32(1))
-		itmax = get(param,"itmax",int32(nt))
+		h = SeisReadHeaders(out,group="some",itrace=itrace,ntrace=ntrace)
 		d = zeros(Float32,itmax-itmin+1,ntrace)
 		SeekTraces!(d,stream_in,h,itmin,itmax,nt,int32(ntrace))
 		write(stream_out,d)

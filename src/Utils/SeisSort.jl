@@ -1,10 +1,32 @@
 include("Header.jl")
 
-function SeisSort(in, out, param=Dict())
+"""
+**SeisSort**
 
-	key = get(param,"key",["imx","imy"])
-	rev = get(param,"rev",false)
-	filename_h = join([in ".seish"])
+*Sort a seis file using its header words*
+
+* a text file with information about data extent, data and header file names
+* a binary file containing data
+* a binary file containing headers
+
+**
+
+**IN**   
+
+* in: input filename
+* out: output filename
+* key=["imx","imy"]
+* rev=false : sort headers in decreasing order 
+* ntrace=1000 : number of traces to read at a time
+
+**OUT**  
+
+*Credits: AS, 2015*
+
+"""
+function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=1000)
+
+	filename_h = success(`grep "headers=" $filename`) ? chomp(readall(`grep "headers=" $filename` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
 	stream_h = open(filename_h)
 	seek(stream_h, header_count["n1"])
 	nt = read(stream_h,Int32)
@@ -36,30 +58,29 @@ function SeisSort(in, out, param=Dict())
 	end
 	close(stream_h)
 	p = convert(Array{Int32,1},sortperm(mykey,rev=rev))
-	FetchHeaders(in,out,p,int32(nx),param)
-	Seismic.FetchTraces(in,out,param)
+	FetchHeaders(in,out,p,int32(nx),ntrace)
+	Seismic.FetchTraces(in,out,ntrace)
 	param["f"]=[UpdateHeader]
 	tmp = join(["tmp_SeisSort_",string(int(rand()*100000))])
 	SeisProcessHeaders(out,tmp,param)
-	cp(join([tmp ".seish"]),join([out ".seish"])); rm(join([tmp ".seish"]));
+	cp(tmp_h,out_h); rm(tmp_h);
 
 end
 
-function FetchHeaders(in::ASCIIString,out::ASCIIString,p::Array{Int32,1},nx::Int32,param)
+function FetchHeaders(in::ASCIIString,out::ASCIIString,p::Array{Int32,1},nx::Int32;ntrace=1000)
 
-	ntrace = get(param,"ntrace",1000)
 	h = Header[]
 	itrace = 1
 	for j = 1:nx
-		append!(h,SeisReadHeaders(in,["group"=>"some","itrace"=>p[j],"ntrace"=>1]))
+		append!(h,SeisReadHeaders(in,group="some",itrace=p[j],ntrace=1))
 		if (length(h) == ntrace)
-			SeisWriteHeaders(out,h,["itrace"=>itrace])
+			SeisWriteHeaders(out,h,itrace=itrace)
 			itrace += ntrace
 			h = Header[]
 		end
 	end 
 	if (length(h) > 0) 
-		SeisWriteHeaders(out,h,["itrace"=>itrace])
+		SeisWriteHeaders(out,h,itrace=itrace)
 	end	
 	
 end

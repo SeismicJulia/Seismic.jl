@@ -1,16 +1,19 @@
 include("Header.jl")
 
-function SeisWindowHeaders(in,out,param=Dict())
+function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],ntrace=500)
 
-	ntrace = get(param,"ntrace",500)
+	param = Dict()
 	param["f"] = [WindowingHeaders]
 	param["group"] = "some"
+	param["key"] = key
+	param["minval"] = minval
+	param["maxval"] = maxval
 	param["ntrace"] = ntrace
-	SeisProcessHeaders(in,out,param);
+	SeisProcessHeaders(in,out,param)
 
 end
 
-function WindowingHeaders(h_in,param)
+function WindowingHeaders(h_in;key=[],minval=[],maxval=[])
 
 	key = get(param,"key",[])
 	minval = convert(Array{Float32,1},vec(get(param,"minval",[])))
