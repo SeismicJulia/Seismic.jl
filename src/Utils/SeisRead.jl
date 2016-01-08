@@ -67,8 +67,8 @@ function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 		h1 = read(stream_h,Header32Bits,nhead*ntrace)
 		h1 = reshape(h1,nhead,int(ntrace))
 		h = Header[]
-		for itrace = 1 : ntrace
-			h = push!(h,BitsToHeader(h1[:,itrace]))    	
+		for j = 1 : ntrace
+			h = push!(h,BitsToHeader(h1[:,j]))    	
 		end    
 		close(stream_h)
 	else

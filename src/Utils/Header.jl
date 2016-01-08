@@ -220,10 +220,10 @@ function HeaderToBits(h);
 	return h_out
 end
 
-function GetNumTraces(in)
+function GetNumTraces(filename_h)
 
 	nhead = length(names(Header))
-	stream_h = open(join([in ".seish"]))
+	stream_h = open(filename_h)
 	nx = int(filesize(stream_h)/(nhead*4))
 	close(stream_h)
 	return nx
@@ -338,7 +338,7 @@ function WriteTextHeader(filename,extent,format,esize,filename_d,filename_h)
 	write(stream,join(["	data_format=\"",format,"\"\n"]))
 	write(stream,join(["	esize=",esize,"\n"]))
 	write(stream,join(["	in=\"",filename_d,"\"\n"]))
-	write(stream,join(["	header=\"",filename_h,"\"\n"]))
+	write(stream,join(["	headers=\"",filename_h,"\"\n"]))
 	close(stream)
 end
 

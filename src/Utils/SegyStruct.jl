@@ -634,37 +634,29 @@ import Base.convert
 
 bitstype 32 IBMFloat32
 
-ieeeOfPieces(fr, exp, sgn) = reinterpret(Float32, uint32(fr >>> 9 | exp << 23 | sgn))
+ieeeOfPieces(fr::Uint32, exp::Int32, sgn::Uint32) = reinterpret(Float32, uint32(fr >>> 9) | uint32(exp << 23) | sgn) :: Float32
 import Base.convert
 
 function convert(::Type{Float32}, ibm::IBMFloat32)
-	# credit to Sebastian Good. See:
-	# http://www.palladiumconsulting.com/2014/09/little-performance-explorations-julia/
-	local fr = ntoh(reinterpret(Uint32, ibm))
-	local sgn = fr & 0x8000000 # save sign
-	fr <<= 1 # shift sign out
-	local exp= fr >>> 25 # save exponent
-	fr <<= 7 # shift exponent out
-	if fr == 0 # short-circuit for zero
-		ieeeOfPieces(0, 0, sgn)
-	else
-		# adjust exponent from base 16 offset 64 radix point before first digit to base 2 offset 127 radix point after first digit
-		# (exp - 64) * 4 + 127 - 1 
-		exp = (exp - 64) * 4 + 127 - 1
-		while (fr < 0x80000000) != 0 # (re)normalize, 3 times max for normalized input
-			exp -= 1
-			fr <<= 1
-		end
+  local fr::Uint32 = ntoh(reinterpret(Uint32, ibm))
+  local sgn::Uint32 = fr & 0x80000000 # save sign
+  fr <<= 1 # shift sign out
+  local exp::Int32 = int32(fr >>> 25) # save exponent
+  fr <<= 7 # shift exponent out
 
-		if exp <= 0
-			# complete underflow, return properly signed zero
-			# OR partial underflow, return denormalized number
-			fr = exp < -24 ? 0 : (fr >>> -exp)
-			ieeeOfPieces(fr, 0, sgn)
-		elseif exp >= 255 then # overflow - return infinity
-			ieeeOfPieces(0, 255, sgn)
-		else # just a plain old number - remove the assumed high bit
-			ieeeOfPieces(fr << 1, exp, sgn)
-		end
-	end  
+  if (fr == uint32(0))
+    zero(Float32)
+  else
+    # normalize the signficand
+    local norm::Uint32 = leading_zeros(fr)
+    fr <<= norm
+    exp = (exp << 2) - 130 - norm
+
+    # exp <= 0 --> ieee(0,0,sgn)
+    # exp >= 255 --> ieee(0,255,sgn)
+    # else -> ieee(fr<<1, exp, sgn)
+    local clexp::Int32 = exp & int32(0xFF) #clamp(exp, int32(0), int32(255))
+    ieeeOfPieces(clexp == exp ? fr << 1 : uint32(0), clexp, sgn)
+  end
 end
+
