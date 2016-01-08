@@ -25,7 +25,6 @@ function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=true,input
 		else
 			error("unknown data format")
 		end
-		println("ntfh= ",ntfh)
 	end
 	stream = open(filename_in)
 	seek(stream, segy_count["ns"] + file_hsize)
