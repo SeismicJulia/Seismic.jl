@@ -25,7 +25,7 @@ function SeisProcessHeaders(in,out,functions,parameters;group="some",key=[],ntra
 				h1 = copy(h2)
 			end
 			num_traces_out = length(h1)
-			SeisWriteHeaders(out,h1,itrace=itrace_out,update_tracenum)
+			SeisWriteHeaders(out,h1,itrace=itrace_out,update_tracenum=update_tracenum)
 			itrace_in += num_traces_in
 			itrace_out += num_traces_out
 		end

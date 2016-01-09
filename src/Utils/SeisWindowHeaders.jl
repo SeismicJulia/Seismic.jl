@@ -2,10 +2,11 @@ include("Header.jl")
 
 function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,ntrace=500)
 	SeisProcessHeaders(in,out,[WindowHeaders],[[:key=>key,:minval=>minval,:maxval=>maxval]],group="some",key=key,ntrace=ntrace,update_tracenum=false)
-
-	filename_h = success(`grep "headers=" $out`) ? chomp(readall(`grep "headers=" $out` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
+	DATAPATH = get(ENV,"DATAPATH","./")
+	filename_d_out = join([DATAPATH out "@data@"])
+	filename_h_out = join([DATAPATH out "@headers@"])	
 	nhead = length(names(Header))
-	stream_h = open(filename_h)
+	stream_h = open(filename_h_out)
 	nx = int(filesize(stream_h)/(nhead*4))
 	h = GrabHeader(stream_h,1)
 	close(stream_h)
@@ -13,15 +14,10 @@ function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,n
 	if nt > h.n1
 		nt = h.n1
 	end
-	DATAPATH = get(ENV,"DATAPATH","./")
-	filename_d_out = join([DATAPATH out "@data@"])
-	filename_h_out = join([DATAPATH out "@headers@"])	
-	extent = Extent(convert(Int32,nt),convert(Int32,nx),convert(Int32,1),convert(Int32,1),convert(Int32,1),
-		   convert(Float32,0),convert(Float32,1),convert(Float32,0),convert(Float32,0),convert(Float32,0),
-		   convert(Float32,h.d1),convert(Float32,1),convert(Float32,1),convert(Float32,1),convert(Float32,1),
-		   "","","","","",
-		   "","","","","",
-		   "")	
+	extent = ReadTextHeader(in)
+	extent.n1 = nt
+	extent.n2 = nx
+	extent.o1 = tmin
 	WriteTextHeader(out,extent,"native_float",4,filename_d_out,filename_h_out)
 	NX = GetNumTraces(out)
 
