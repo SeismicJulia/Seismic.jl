@@ -1,10 +1,9 @@
 include("Header.jl")
 
-function SeisWriteHeaders(filename,h,param=Dict())
+function SeisWriteHeaders(filename,h;itrace=1,update_tracenum=true)
 
-	itrace = get(param,"itrace",1)
-
-	filename_h = join([filename ".seish"])
+	DATAPATH = get(ENV,"DATAPATH","./")
+	filename_h = join([DATAPATH filename "@headers@"])	
 	if (itrace==1)
 		stream_hout = open(filename_h,"w")
 	else
@@ -13,6 +12,9 @@ function SeisWriteHeaders(filename,h,param=Dict())
 	nx = length(h)
 	h1 = Header32Bits[]
 	for j = itrace : itrace + nx - 1
+		if update_tracenum == true
+			h[j - itrace + 1].tracenum = j
+		end	
 		h2 = HeaderToBits(h[j - itrace + 1])
 		append!(h1,h2)
 	end

@@ -220,8 +220,9 @@ function HeaderToBits(h);
 	return h_out
 end
 
-function GetNumTraces(filename_h)
+function GetNumTraces(in)
 
+	filename_h = success(`grep "headers=" $in`) ? chomp(readall(`grep "headers=" $in` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
 	nhead = length(names(Header))
 	stream_h = open(filename_h)
 	nx = int(filesize(stream_h)/(nhead*4))

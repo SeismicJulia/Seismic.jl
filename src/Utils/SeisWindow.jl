@@ -1,52 +1,40 @@
 include("Header.jl")
 
-function SeisWindow(in,out;key=[],minval=[],maxval=[])
+function SeisWindow(in::ASCIIString,out::ASCIIString;key=[],minval=[],maxval=[])
 
-	SeisWindowHeaders(in,out,param)
-	filename = join([in ".seish"])
-	stream = open(join([in ".seish"]))
-	seek(stream, header_count["o1"])
-	ot = read(stream,Float32)
-	seek(stream, header_count["n1"])
-	nt = read(stream,Int32)
-	seek(stream, header_count["d1"])
-	dt = read(stream,Float32)
-	close(stream)
-	tmin = ot
-	tmax = ot + dt*(nt-1)
-	key2 = Any[]
-	minval2 = Any[]
-	maxval2 = Any[]
+	DATAPATH = get(ENV,"DATAPATH","./")
+	extent = ReadTextHeader(in)
+	tmin = extent.o1
+	tmax = extent.o1 + extent.d1*(extent.n1-1)
 	for ikey=1:length(key)
 		if key[ikey] == "t"
 			tmin = minval[ikey]
 			tmax = maxval[ikey]
 		end
 	end
-	itmin = int32((tmin - ot)/dt + 1)
+	itmin = convert(Int32,round((tmin - extent.o1)/extent.d1) + 1)
 	if (itmin < 1)
 		itmin = 1
 	end
-	itmax = int32((tmax - ot)/dt + 1)  
-	if (itmax) > nt
-		itmax = nt
+	itmax = convert(Int32,round((tmax - extent.o1)/extent.d1) + 1)  
+	if (itmax) > extent.n1
+		itmax = extent.n1
 	end
-	param["itmin"] = itmin
-	param["itmax"] = itmax
-	FetchTraces(in,out,param);
-	param["f"]=[UpdateHeader]
+	SeisWindowHeaders(in,out;key=key,minval=minval,maxval=maxval,tmin=tmin,tmax=tmax)
+	FetchTraces(in,out;itmin=itmin,itmax=itmax)
 	tmp = join(["tmp_SeisWindow_",string(int(rand()*100000))])
-	SeisProcessHeaders(out,tmp,param)
-	run(`cp ${join([tmp ".seish"])} ${join([out ".seish"])}`);rm(join([tmp ".seish"]));
-
-
+	SeisProcessHeaders(out,tmp,[UpdateHeader],[[:itmin=>itmin,:itmax=>itmax]])
+	filename_h_tmp = join([DATAPATH tmp "@headers@"])	
+	filename_h_out = join([DATAPATH out "@headers@"])	
+	cp(filename_h_tmp,filename_h_out);
+	rm(filename_h_tmp);
+	
 end
 
 function FetchTraces(in,out;ntrace=500,itmin=int32(1),itmax=int32(9e9))
 
 	NX = GetNumTraces(out)
 	itrace = int32(1)
-
 	filename_data_in = chomp(readall(`grep "in=" $in` |> `tail -1` |> `awk '{print substr($1,5,length($1)-5) }' `))
 	DATAPATH = get(ENV,"DATAPATH","./")
 	filename_data_out = join([DATAPATH out "@data@"])
@@ -91,11 +79,8 @@ function SeekTraces!{T}(d::AbstractArray{T,2},stream_in::IOStream,h::Array{Heade
 	nothing
 end
 
-function UpdateHeader(h,param=Dict())
-
-	itrace = get(param,"itrace",1)
-	itmin = get(param,"itmin",1)
-	itmax = get(param,"itmax",h[1].n1)
+function UpdateHeader(h;itrace=1,itmin=1,itmax=9e9)
+	println("itrace = ",itrace)
 	ot = (itmin-1)*h[1].d1 + h[1].o1
 	nt = itmax - itmin + 1
 	for j = 1 : length(h)

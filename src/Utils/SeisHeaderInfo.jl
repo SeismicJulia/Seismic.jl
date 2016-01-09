@@ -10,7 +10,7 @@ function SeisHeaderInfo(filename,param=Dict())
 	nhead = length(key)
 	filename_headers = success(`grep "headers=" $filename`) ? chomp(readall(`grep "headers=" $filename` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
 	stream = open(filename_headers)
-	NX = GetNumTraces(filename_headers)
+	NX = GetNumTraces(filename)
 	h = GrabHeader(stream,1)
 	println("Displaying information for ", filename," (",NX," traces):")
 	min_h = zeros(Float32,length(key))
