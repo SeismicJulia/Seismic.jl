@@ -19,7 +19,6 @@ function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,n
 	extent.n2 = nx
 	extent.o1 = tmin
 	WriteTextHeader(out,extent,"native_float",4,filename_d_out,filename_h_out)
-	NX = GetNumTraces(out)
 
 end
 

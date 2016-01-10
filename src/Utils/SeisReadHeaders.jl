@@ -3,6 +3,7 @@ include("Header.jl")
 function SeisReadHeaders(filename;group="all",key=[],itrace=1,ntrace=100)
 
 	filename_h = success(`grep "headers=" $filename`) ? chomp(readall(`grep "headers=" $filename` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
+    #extent = ReadTextHeader(filename)
 	stream_h = open(filename_h)
 	nhead = length(names(Header))
 	curr = zeros(length(key),1)

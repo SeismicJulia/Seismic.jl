@@ -31,7 +31,7 @@ function SeisWindow(in::ASCIIString,out::ASCIIString;key=[],minval=[],maxval=[])
 	
 end
 
-function FetchTraces(in,out;ntrace=500,itmin=int32(1),itmax=int32(9e9))
+function FetchTraces(in::ASCIIString,out::ASCIIString;ntrace=500,itmin=int32(1),itmax=int32(9999999999))
 
 	NX = GetNumTraces(out)
 	itrace = int32(1)
@@ -48,7 +48,6 @@ function FetchTraces(in,out;ntrace=500,itmin=int32(1),itmax=int32(9e9))
 	if itmax > nt
 		itmax = int32(nt)
 	end
-
 	while itrace <= NX
 		if (itrace > 1)
 			stream_out = open(filename_data_out,"a")
@@ -80,7 +79,6 @@ function SeekTraces!{T}(d::AbstractArray{T,2},stream_in::IOStream,h::Array{Heade
 end
 
 function UpdateHeader(h;itrace=1,itmin=1,itmax=9e9)
-	println("itrace = ",itrace)
 	ot = (itmin-1)*h[1].d1 + h[1].o1
 	nt = itmax - itmin + 1
 	for j = 1 : length(h)
