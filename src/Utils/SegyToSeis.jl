@@ -1,7 +1,26 @@
 include("SegyStruct.jl")
 include("Header.jl")
 
-function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=true,input_type="ieee")
+"""
+**SegyToSeis**
+
+*Convert SEGY or SU data to seis format.*
+
+**IN**   
+
+* filename_in
+* filename_out
+* format="segy" (or "su")
+* swap_bytes=true (flag to swap bytes)
+* input_type="ibm" (or "ieee")
+
+**OUT**  
+
+*Credits: AS, 2015*
+
+"""
+
+function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=true,input_type="ibm")
 
 	if (format=="su")
 		file_hsize = 0

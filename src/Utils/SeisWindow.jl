@@ -1,7 +1,26 @@
 include("Header.jl")
 
-function SeisWindow(in::ASCIIString,out::ASCIIString;key=[],minval=[],maxval=[])
+"""
+**SeisWindow**
 
+*Window a seis file using header words.*
+
+**IN**   
+
+* in
+* out
+* key=[]
+* minval=[]
+* maxval=[]
+* note that windowing along the time axis is achieved by using the key "t".
+
+**OUT**  
+
+*Credits: AS, 2015*
+
+"""
+
+function SeisWindow(in::ASCIIString,out::ASCIIString;key=[],minval=[],maxval=[])
 	DATAPATH = get(ENV,"DATAPATH","./")
 	extent = ReadTextHeader(in)
 	tmin = extent.o1

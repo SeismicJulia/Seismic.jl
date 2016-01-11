@@ -1,54 +1,25 @@
-function SeisMWNI(in,h::Array{Header,1},param::Dict{Any,Any})
+"""
+**SeisMWNI**
 
-	style = get(param,"style","sxsygxgy")
-	nt = h[1].n1
-	nx = length(h)
-	param["dt"] = h[1].d1
+*Minimum Weighted Norm Interpolation of seismic records.*
 
-	if (style == "sxsygxgy")
-		key = ["t","isx","isy","igx","igy"]
-	elseif (style=="mxmyhxhy")
-		key = ["t","imx","imy","ihx","ihy"]
-	elseif (style=="mxmyhaz")
-		key = ["t","imx","imy","ih","iaz"]
-	elseif (style=="sxsyhxhy")
-		key = ["t","isx","isy","ihx","ihy"]
-	elseif (style=="gxgyhxhy")
-		key = ["t","igx","igy","ihx","ihy"]
-	elseif (style=="sxsyhaz")
-		key = ["t","isx","isy","ih","iaz"]
-	elseif (style=="gxgyhaz")
-		key = ["t","igx","igy","ih","iaz"]
-	else
-		error("style not defined.")
-	end
-	min_ix1 = getfield(h[1],symbol(key[2]))
-	max_ix1 = getfield(h[nx],symbol(key[2]))
-	nx1 = int32(max_ix1 - min_ix1 + 1)
-	min_ix2 = getfield(h[1],symbol(key[3]))
-	max_ix2 = getfield(h[nx],symbol(key[3]))
-	nx2 = int32(max_ix2 - min_ix2 + 1)
-	min_ix3 = getfield(h[1],symbol(key[4]))
-	max_ix3 = getfield(h[nx],symbol(key[4]))
-	nx3 = int32(max_ix3 - min_ix3 + 1)
-	min_ix4 = getfield(h[1],symbol(key[5]))
-	max_ix4 = getfield(h[nx],symbol(key[5]))
-	nx4 = int32(max_ix4 - min_ix4 + 1)
-	d = reshape(in,int(nt),int(nx1),int(nx2),int(nx3),int(nx4))	
-	d = mwni(d,param)
-	return reshape(d,int(nt),int(nx1*nx2*nx3*nx4)),h
-end
+**IN**   
 
-function mwni(in,param)
+* d_in: input data that can have up to 5 dimensions
+* dt=0.001 sampling rate along the time axis (in seconds)
+* fmax=99999. maximum temporal frequency to process.
+* padt=2 padding to use for the time axis
+* padx=1 padding to use for the spatial axes
+* Niter_internal=10 number of internal iterations for Conjugate Gradients
+* Niter_external=3 number of external iterations for iterative reweighting
 
-	param["operators"] = [ApplyDataWeights fft_op ApplyModelWeights]
-	padt = get(param,"padt",2)
-	padx = get(param,"padx",1)
-	Niter = get(param,"Niter",100)
-	alpha = get(param,"alpha",1)
-	perci = 0.999999;
-	percf = 0.0;
-	nt = size(in,1)
+**OUT**  
+
+* d_out: interpolated data
+"""
+function SeisMWNI(in,dt=0.001,fmax=99999.,padt=2,padx=1,Niter_internal=10,Niter_external=3)
+
+    nt = size(in,1)
 	nx1 = size(in,2)
 	nx2 = size(in,3)
 	nx3 = size(in,4)
@@ -71,8 +42,12 @@ function mwni(in,param)
 	nx4 > 1 ? nk4 = padx*nextpow2(nx4) : nk4 = 1
 	nk = nk1*nk2*nk3*nk4
 	# generate sampling operator from the padded data
-	T,h_tmp = CalculateSampling(d)
+	T = CalculateSampling(d)
 	T = T[1,:,:,:,:]
+	param_dataweights = Dict(:wd=>T) 
+    param_fft_op = Dict(:??=>??) 
+    param_modelweights = Dict(:wm=>wm)
+
 	if (sum(T[:])/length(T[:]) < 0.05)
 		println(sum(T[:])/length(T[:]))
 		return in
@@ -85,11 +60,9 @@ function mwni(in,param)
 		for iw=1:iw_max
 			x = squeeze(D[iw,:,:,:,:],1)
 			y = copy(x)
-			param["adj"] = true
-			Y = fft_op(y,param)
-			Y,misfit = IRLS(Y.*0,x,param)
-			param["adj"] = false
-			y = fft_op(Y,param)
+			Y = fft_op(y,adj=true)
+			Y,misfit = IRLS(Y.*0,x,Niter_external,Niter_internal,[ApplyDataWeights fft_op ApplyModelWeights],[param_dataweights param_fft_op param_modelweights])
+			y = fft_op(Y,adj=false)
 			D[iw,:,:,:,:] = y
 		end
 		# symmetries
