@@ -1,3 +1,5 @@
+include("Header.jl")
+
 """
 **SeisGeometry**
 
@@ -33,8 +35,6 @@
 *Credits: A. Stanton, 2015*
 
 """
-
-include("Header.jl")
 
 function SeisGeometry(in;ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1)
 

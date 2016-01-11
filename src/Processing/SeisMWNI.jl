@@ -45,7 +45,7 @@ function SeisMWNI(in,dt=0.001,fmax=99999.,padt=2,padx=1,Niter_internal=10,Niter_
 	T = CalculateSampling(d)
 	T = T[1,:,:,:,:]
 	param_dataweights = Dict(:wd=>T) 
-    param_fft_op = Dict(:??=>??) 
+    param_fft_op =  Dict(:wd=>T) 
     param_modelweights = Dict(:wm=>wm)
 
 	if (sum(T[:])/length(T[:]) < 0.05)

@@ -1,3 +1,5 @@
+include("Header.jl")
+
 """
 **SeisPatch**
 
@@ -43,7 +45,6 @@
 *Credits: A. Stanton, 2015*
 
 """
-include("Header.jl")
 
 function SeisPatch(in::ASCIIString,out::ASCIIString;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0)
 
