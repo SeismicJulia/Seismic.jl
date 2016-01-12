@@ -14,7 +14,7 @@ function Synthetic(vp, dt, dx, fpp)
 
   tpp = zeros(nr,n)
 
-#   the time location of reflecter
+#   the time location of reflector
   for in = 1:n
     for k = 1:nr
       for l =1: k
@@ -26,7 +26,7 @@ function Synthetic(vp, dt, dx, fpp)
   ntp = int(floor( maximum(tpp)/dt)) + 30
   rpp = zeros(ntp,n)
 
-#   put reflection coeffcient to right time location
+#   put reflection coefficient to right time location
   for in = 1:n
     for k = 1:nr
       jp = int(floor(tpp[k, in]/dt)+1)

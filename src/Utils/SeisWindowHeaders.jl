@@ -1,20 +1,31 @@
 include("Header.jl")
 
-function SeisWindowHeaders(in,out,param=Dict())
-
-	ntrace = get(param,"ntrace",500)
-	param["f"] = [WindowingHeaders]
-	param["group"] = "some"
-	param["ntrace"] = ntrace
-	SeisProcessHeaders(in,out,param);
+function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,ntrace=500)
+	SeisProcessHeaders(in,out,[WindowHeaders],[[:key=>key,:minval=>minval,:maxval=>maxval]],group="some",key=key,ntrace=ntrace,update_tracenum=false)
+	DATAPATH = get(ENV,"DATAPATH","./")
+	filename_d_out = join([DATAPATH out "@data@"])
+	filename_h_out = join([DATAPATH out "@headers@"])	
+	nhead = length(names(Header))
+	stream_h = open(filename_h_out)
+	nx = int(filesize(stream_h)/(nhead*4))
+	h = GrabHeader(stream_h,1)
+	close(stream_h)
+	nt = convert(Int64,round((tmax - tmin)/h.d1)) + 1
+	if nt > h.n1
+		nt = h.n1
+	end
+	extent = ReadTextHeader(in)
+	extent.n1 = nt
+	extent.n2 = nx
+	extent.o1 = tmin
+	WriteTextHeader(out,extent,"native_float",4,filename_d_out,filename_h_out)
 
 end
 
-function WindowingHeaders(h_in,param)
+function WindowHeaders(h_in;key=[],minval=[],maxval=[])
 
-	key = get(param,"key",[])
-	minval = convert(Array{Float32,1},vec(get(param,"minval",[])))
-	maxval = convert(Array{Float32,1},vec(get(param,"maxval",minval)))
+	minval = convert(Array{Float32,1},vec(minval))
+	maxval = convert(Array{Float32,1},vec(maxval))
 	nx = length(h_in)
 	key2 = ASCIIString[]
 	minval2 = Float32[]
@@ -31,8 +42,7 @@ function WindowingHeaders(h_in,param)
 end
 
 function RejectHeaders(h_in::Array{Header,1},key::Array{ASCIIString,1},minval::Array{Float32,1},maxval::Array{Float32,1},nkeys::Int32,nx::Int32)
-	h_out = Header[]
-		
+	h_out = Header[]	
 	keep = true
 	key_val = 0f0
 	for j=1:nx

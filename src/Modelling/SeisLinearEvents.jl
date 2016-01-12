@@ -1,36 +1,69 @@
-function SeisLinearEvents(param=Dict())	
-	ot = get(param,"ot",0.)
-	dt = get(param,"dt",0.004)
-	nt = get(param,"nt",500)
-	ox1 = get(param,"ox1",0.)
-	dx1 = get(param,"dx1",10)
-	nx1 = get(param,"nx1",20)
-	ox2 = get(param,"ox2",0.)
-	dx2 = get(param,"dx2",10)
-	nx2 = get(param,"nx2",1)
-	ox3 = get(param,"ox3",0.)
-	dx3 = get(param,"dx3",10)
-	nx3 = get(param,"nx3",1)
-	ox4 = get(param,"ox4",0.)
-	dx4 = get(param,"dx4",10)
-	nx4 = get(param,"nx4",1)
-	tau1 = get(param,"tau1",0.3)
-	tau2 = get(param,"tau2",0.*tau1)
-	tau3 = get(param,"tau3",0.*tau1)
-	tau4 = get(param,"tau4",0.*tau1)
-	v1 = get(param,"v1",1500.)
-	v2 = get(param,"v2",1.*v1)
-	v3 = get(param,"v3",1.*v1)
-	v4 = get(param,"v4",1.*v1)
-	amp = get(param,"amp",1.)
-	f0 = get(param,"f0",20.)
-	ricker = get(param,"ricker",true)
-	exponent = get(param,"exponent",1.)
-	sinusoidal = get(param,"sinusoidal",false)
-	sinusoidalA = get(param,"sinusoidalA",10.*dt)
-	sinusoidalB = get(param,"sinusoidalB",10.*pi/(ox1 + dx1*nx1))
-	sinusoidalC = get(param,"sinusoidalC",0.)
+"""
+**SeisLinearEvents**
+
+*Generate five dimensional data consisting of linear events*
+
+**IN**   
+
+* ot=0
+* dt=0.004
+* nt=500
+* ox1=0
+* dx1=10
+* nx1=100
+* ox2=0
+* dx2=10
+* nx2=1
+* ox3=0
+* dx3=10
+* nx3=1
+* ox4=0
+* dx4=10
+* nx4=1
+* tau1=[1.0,1.6]
+* tau2=0
+* tau3=0
+* tau4=0
+* v1=[2500,-800]
+* v2=1500
+* v3=1500
+* v4=1500
+* amp=[1,-1]
+* f0=20
+* ricker=true
+* exponent=1
+* sinusoidal=false
+
+**OUT**  
+
+* d: modelled data with dimensions d[1:nt,1:nx1,1:nx2,1:nx3,1:nx4]
+
+*Credits: Aaron Stanton, 2015*
+
+"""
+function SeisLinearEvents(;ot=0,dt=0.004,nt=500,ox1=0,dx1=10,nx1=100,ox2=0,dx2=10,nx2=1,ox3=0,dx3=10,nx3=1,ox4=0,dx4=10,nx4=1,tau1=[1.0,1.6],tau2=0,tau3=0,tau4=0,v1=[2500,-800],v2=1500,v3=1500,v4=1500,amp=[1,-1],f0=20,ricker=true,exponent=1,sinusoidal=false)	
+
+	sinusoidalA = 10.*dt
+	sinusoidalB = 10.*pi/(ox1 + dx1*nx1)
+	sinusoidalC = 0.
 	
+	if length(tau1) != length(tau2) || length(tau1) != length(tau3) || length(tau1) != length(tau4)
+		tau2 = 0*tau1
+		tau3 = 0*tau1
+		tau4 = 0*tau1
+	end
+	if length(v1) != length(v2) || length(v1) != length(v3) || length(v1) != length(tau4)
+		v2 = 99999*v1
+		v3 = 99999*v1
+		v4 = 99999*v1
+	end
+	if length(amp) != length(v1)
+		amp = 1 + 0*v1
+	end
+	if length(f0) != length(v1)
+		f0 = 20 + 0*v1
+	end
+
 	d = zeros(nt,nx1,nx2,nx3,nx4)	
 	nf = 4*nextpow2(nt) + 1
 	dw = 2.*pi/nf/dt
@@ -79,7 +112,24 @@ function SeisLinearEvents(param=Dict())
 	end 
 	d = ifft(D,1)
 	d = real(d[1:nt,:,:,:,:])
-	return d
+	extent = Extent(convert(Int32,nt),convert(Int32,nx1),convert(Int32,nx2),convert(Int32,nx3),convert(Int32,nx4),
+		   convert(Float32,ot),convert(Float32,ox1),convert(Float32,ox2),convert(Float32,ox3),convert(Float32,ox4),
+		   convert(Float32,dt),convert(Float32,dx1),convert(Float32,dx2),convert(Float32,dx3),convert(Float32,dx4),
+		   "Time","ix1","ix2","ix3","ix4",
+		   "s","index","index","index","index",
+		   "")	
+	if extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1 && extent.n2 == 1 
+		d = reshape(d,int(extent.n1))
+	elseif extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1
+		d = reshape(d,int(extent.n1),int(extent.n2))
+	elseif extent.n5 == 1 && extent.n4 == 1
+		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3))
+	elseif extent.n5 == 1
+		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3),int(extent.n4))
+	else
+		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3),int(extent.n4),int(extent.n5))
+	end
+	return d,extent
 end
 
 function Ricker(f0,dt)

@@ -222,8 +222,9 @@ end
 
 function GetNumTraces(in)
 
+	filename_h = success(`grep "headers=" $in`) ? chomp(readall(`grep "headers=" $in` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
 	nhead = length(names(Header))
-	stream_h = open(join([in ".seish"]))
+	stream_h = open(filename_h)
 	nx = int(filesize(stream_h)/(nhead*4))
 	close(stream_h)
 	return nx
@@ -240,3 +241,136 @@ function ExtractHeader(h::Array{Header,1},key::ASCIIString)
 	return out
 	
 end
+
+type Extent
+        n1::Int32
+        n2::Int32
+        n3::Int32
+        n4::Int32
+        n5::Int32
+        o1::Float32
+        o2::Float32
+        o3::Float32
+        o4::Float32
+        o5::Float32
+        d1::Float32
+        d2::Float32
+        d3::Float32
+        d4::Float32
+        d5::Float32
+        label1::ASCIIString
+        label2::ASCIIString
+        label3::ASCIIString
+        label4::ASCIIString
+        label5::ASCIIString
+        unit1::ASCIIString
+        unit2::ASCIIString
+        unit3::ASCIIString
+        unit4::ASCIIString
+        unit5::ASCIIString
+        title::ASCIIString
+end
+
+function ReadTextHeader(filename)
+	n1 = success(`grep "n1" $filename`) ? int(chomp(readall(`grep "n1" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	n2 = success(`grep "n2" $filename`) ? int(chomp(readall(`grep "n2" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	n3 = success(`grep "n3" $filename`) ? int(chomp(readall(`grep "n3" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	n4 = success(`grep "n4" $filename`) ? int(chomp(readall(`grep "n4" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	n5 = success(`grep "n5" $filename`) ? int(chomp(readall(`grep "n5" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	o1 = success(`grep "o1" $filename`) ? float(chomp(readall(`grep "o1" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
+	o2 = success(`grep "o2" $filename`) ? float(chomp(readall(`grep "o2" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
+	o3 = success(`grep "o3" $filename`) ? float(chomp(readall(`grep "o3" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
+	o4 = success(`grep "o4" $filename`) ? float(chomp(readall(`grep "o4" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
+	o5 = success(`grep "o5" $filename`) ? float(chomp(readall(`grep "o5" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
+	d1 = success(`grep "d1" $filename`) ? float(chomp(readall(`grep "d1" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	d2 = success(`grep "d2" $filename`) ? float(chomp(readall(`grep "d2" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	d3 = success(`grep "d3" $filename`) ? float(chomp(readall(`grep "d3" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	d4 = success(`grep "d4" $filename`) ? float(chomp(readall(`grep "d4" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	d5 = success(`grep "d5" $filename`) ? float(chomp(readall(`grep "d5" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
+	label1 = success(`grep "label1" $filename`) ? chomp(readall(`grep "label1" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
+	label2 = success(`grep "label2" $filename`) ? chomp(readall(`grep "label2" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
+	label3 = success(`grep "label3" $filename`) ? chomp(readall(`grep "label3" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
+	label4 = success(`grep "label4" $filename`) ? chomp(readall(`grep "label4" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
+	label5 = success(`grep "label5" $filename`) ? chomp(readall(`grep "label5" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
+	unit1 = success(`grep "unit1" $filename`) ? chomp(readall(`grep "unit1" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
+	unit2 = success(`grep "unit2" $filename`) ? chomp(readall(`grep "unit2" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
+	unit3 = success(`grep "unit3" $filename`) ? chomp(readall(`grep "unit3" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
+	unit4 = success(`grep "unit4" $filename`) ? chomp(readall(`grep "unit4" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
+	unit5 = success(`grep "unit5" $filename`) ? chomp(readall(`grep "unit5" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
+	title = success(`grep "title" $filename`) ? chomp(readall(`grep "title" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
+	extent = Extent(convert(Int32,n1),convert(Int32,n2),convert(Int32,n3),convert(Int32,n4),convert(Int32,n5),
+		   convert(Float32,o1),convert(Float32,o2),convert(Float32,o3),convert(Float32,o4),convert(Float32,o5),
+		   convert(Float32,d1),convert(Float32,d2),convert(Float32,d3),convert(Float32,d4),convert(Float32,d5),
+		   label1,label2,label3,label4,label5,
+		   unit1,unit2,unit3,unit4,unit5,
+		   title)	
+	return extent
+end
+
+function WriteTextHeader(filename,extent,format,esize,filename_d,filename_h)
+	# write the text header
+	stream = open(filename, "w")	
+	write(stream,join(["	n1=",extent.n1,"\n"]))
+	write(stream,join(["	n2=",extent.n2,"\n"]))
+	write(stream,join(["	n3=",extent.n3,"\n"]))
+	write(stream,join(["	n4=",extent.n4,"\n"]))
+	write(stream,join(["	n5=",extent.n5,"\n"]))
+	write(stream,join(["	o1=",extent.o1,"\n"]))
+	write(stream,join(["	o2=",extent.o2,"\n"]))
+	write(stream,join(["	o3=",extent.o3,"\n"]))
+	write(stream,join(["	o4=",extent.o4,"\n"]))
+	write(stream,join(["	o5=",extent.o5,"\n"]))
+	write(stream,join(["	d1=",extent.d1,"\n"]))
+	write(stream,join(["	d2=",extent.d2,"\n"]))
+	write(stream,join(["	d3=",extent.d3,"\n"]))
+	write(stream,join(["	d4=",extent.d4,"\n"]))
+	write(stream,join(["	d5=",extent.d5,"\n"]))
+	write(stream,join(["	label1=\"",extent.label1,"\"\n"]))
+	write(stream,join(["	label2=\"",extent.label2,"\"\n"]))
+	write(stream,join(["	label3=\"",extent.label3,"\"\n"]))
+	write(stream,join(["	label4=\"",extent.label4,"\"\n"]))
+	write(stream,join(["	label5=\"",extent.label5,"\"\n"]))
+	write(stream,join(["	unit1=\"",extent.unit1,"\"\n"]))
+	write(stream,join(["	unit2=\"",extent.unit2,"\"\n"]))
+	write(stream,join(["	unit3=\"",extent.unit3,"\"\n"]))
+	write(stream,join(["	unit4=\"",extent.unit4,"\"\n"]))
+	write(stream,join(["	unit5=\"",extent.unit5,"\"\n"]))
+	write(stream,join(["	title=\"",extent.title,"\"\n"]))
+	write(stream,join(["	data_format=\"",format,"\"\n"]))
+	write(stream,join(["	esize=",esize,"\n"]))
+	write(stream,join(["	in=\"",filename_d,"\"\n"]))
+	write(stream,join(["	headers=\"",filename_h,"\"\n"]))
+	close(stream)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,7 +16,6 @@ SeisCopy,
 SeisRemove,
 CalculateSampling,
 InnerProduct,
-SeisTorque,
 SeisReadHeaders,
 SeisWriteHeaders,
 SeisProcessHeaders,
@@ -28,7 +27,10 @@ triangle_filter,
 convmtx,
 Synthetic,
 pardx,
-ricker
+ricker,
+WeightingOp,
+LinearOperator
+
 
 include("SegyToSeis.jl")
 include("SeisToSegy.jl")
@@ -48,7 +50,6 @@ include("SeisCopy.jl")
 include("SeisRemove.jl")
 include("CalculateSampling.jl")
 include("InnerProduct.jl")
-include("SeisTorque.jl")
 include("SeisReadHeaders.jl")
 include("SeisWriteHeaders.jl")
 include("SeisProcessHeaders.jl")
@@ -61,4 +62,5 @@ include("Convmtx.jl")
 include("Synthetic.jl")
 include("pardx.jl")
 include("ricker.jl")
-
+include("WeightingOp.jl")
+include("LinearOperator.jl")

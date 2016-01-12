@@ -1,35 +1,28 @@
-function ConjugateGradients(m0,d,param::Dict{Any,Any})
+function ConjugateGradients(d,operators,parameters;Niter=10,mu=0)
 	# Conjugate Gradients following Algorithm 2 from Scales, 1987. 
 	# The user provides an array of linear operators. Ensure linear operator(s) pass the dot product.
 
-	Niter = get(param,"Niter",10)
-	mu = get(param,"mu",0.)
 	mu = sqrt(mu)
-	operators = get(param,"operators",[])
-	param_op = copy(param)
 	cost = Float64[]
-
-	m = copy(m0)
-	r = forward_op(m0,operators,param_op)
-	r = d - r
-	rr = 0. - mu*m0;
-	push!(cost,InnerProduct(r[:],r[:]) + InnerProduct(rr[:],rr[:]))
-	g = adjoint_op(r,operators,param_op)
-	g = g + mu.*rr
+	r = copy(d)
+	push!(cost,InnerProduct(r,r))
+	g = LinearOperator(r,operators,parameters,adj=true)
+	m = zeros(g)
+	rr = zeros(g)
 	s = copy(g)
-	gamma_old = InnerProduct(g[:],g[:])
+	gamma_old = InnerProduct(g,g)
 	for iter = 1 : Niter
-		t = forward_op(s,operators,param_op)
+		t = LinearOperator(s,operators,parameters,adj=false)
 		tt = mu.*s
-		delta = InnerProduct(t[:],t[:]) + InnerProduct(tt[:],tt[:])
+		delta = InnerProduct(t,t) + InnerProduct(tt,tt)
 		alpha = gamma_old/(delta + 1.e-20)
 		m = m + alpha*s
 		r = r - alpha*t
 		rr = rr - alpha*tt
-		push!(cost,InnerProduct(r[:],r[:]) + InnerProduct(rr[:],rr[:]))
-		g = adjoint_op(r,operators,param_op)
+		push!(cost,InnerProduct(r,r) + InnerProduct(rr,rr))
+		g = LinearOperator(r,operators,parameters,adj=true)
 		g = g + mu*rr
-		gamma = InnerProduct(g[:],g[:])
+		gamma = InnerProduct(g,g)
 		beta = gamma/(gamma_old + 1.e-20)
 		gamma_old = copy(gamma)
 		s = beta*s + g
@@ -161,36 +154,6 @@ function ConjugateGradients(m::Array{ASCIIString,1},m0::Array{ASCIIString,1},d::
 	SeisRemove(r);
 	SeisRemove(t);
 
-end
-
-function forward_op(m,operators,param)
-	param["adj"] = false
-	d = [];
-	if length(operators) > 0
-		for iop = length(operators) : -1 : 1
-			op = operators[iop]
-			d = op(m,param)
-			m = copy(d)
-		end
-	else
-		d = copy(m)
-	end
-	return d
-end
-
-function adjoint_op(d,operators,param)
-	param["adj"] = true
-	m = [];
-	if length(operators) > 0
-		for iop = 1 : 1 : length(operators)
-			op = operators[iop]
-			m = op(d,param)
-			d = copy(m)
-		end
-	else
-		m = copy(d)
-	end
-	return m
 end
 
 function forward_op(m::ASCIIString,d::ASCIIString,operators,param)

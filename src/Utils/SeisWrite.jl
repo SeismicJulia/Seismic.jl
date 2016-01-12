@@ -1,11 +1,30 @@
 include("Header.jl")
 
-function SeisWrite(filename,d,h,param=Dict())
+"""
+**SeisWrite**
 
-	itrace = get(param,"itrace",1)
-	filename_d = join([filename ".seisd"])
-	filename_h = join([filename ".seish"])
+*Write seismic data in .seis format*
+
+**IN**
+
+* filename
+* d: data
+* h: headers as 1d array with elements of type Header
+* extent: extent of the data (try _names(Extent)_ to see the information this contains)
+* itrace=1
+
+**OUT**
+
+*Credits: AS, 2015*
+
+"""
+function SeisWrite(filename,d,h::Array{Header,1},extent::Extent;itrace=1)
+
+	DATAPATH = get(ENV,"DATAPATH","./")
+	filename_d = join([DATAPATH filename "@data@"])
+	filename_h = join([DATAPATH filename "@headers@"])	
 	if (itrace==1)
+		WriteTextHeader(filename,extent,"native_float",4,filename_d,filename_h)
 		stream_dout = open(filename_d,"w")
 		stream_hout = open(filename_h,"w")
 	else
@@ -14,7 +33,7 @@ function SeisWrite(filename,d,h,param=Dict())
 	end
 	write(stream_dout,convert(Array{Float32,1},d[:]))
 	close(stream_dout)
-	nx = size(d,2)
+	nx = size(d[:,:],2)
 	h1 = Header32Bits[]
 	for j = itrace : itrace + nx - 1
 		h[j - itrace + 1].tracenum = j 
@@ -23,4 +42,14 @@ function SeisWrite(filename,d,h,param=Dict())
 	end
 	write(stream_hout,h1)
 	close(stream_hout)
+end
+
+function SeisWrite(filename,d,extent::Extent)
+
+	DATAPATH = get(ENV,"DATAPATH","./")
+	filename_d = join([DATAPATH filename "@data@"])
+	WriteTextHeader(filename,extent,"native_float",4,filename_d,"NULL")
+	stream_dout = open(filename_d,"w")
+	write(stream_dout,convert(Array{Float32,1},d[:]))
+	close(stream_dout)
 end

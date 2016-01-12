@@ -1,14 +1,14 @@
-function DotTest(m_rand,d_rand,op,param=Dict())
+function DotTest(m_rand,d_rand,operators,parameters)
 	# Dot product test for a vector of linear operators
 
-	m_adj = Seismic.adjoint_op(d_rand,op,param)
-	d_fwd = Seismic.forward_op(m_rand,op,param)
-	inner1 = InnerProduct(d_rand[:],d_fwd[:])
-	inner2 = InnerProduct(m_rand[:],m_adj[:])
-	println("These values should be close to each other:")
+	m_adj = LinearOperator(d_rand,operators,parameters,adj=true)
+	d_fwd = LinearOperator(m_rand,operators,parameters,adj=false)
+	inner1 = InnerProduct(d_rand,d_fwd)
+	inner2 = InnerProduct(m_rand,m_adj)
 	println("<d_rand,d_fwd> = ",inner1)
 	println("<m_rand,m_adj> = ",inner2)
-
+	return inner1,inner2
+	
 end
 
 function DotTest(m_rand::ASCIIString,d_rand::ASCIIString,op,param=Dict())

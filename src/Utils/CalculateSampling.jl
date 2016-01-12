@@ -1,6 +1,6 @@
-function CalculateSampling(in,h=[],param=Dict())
+function CalculateSampling(in)
 
-	cutoff = get(param,"cutoff",1e-10)
+	cutoff = 1e-10
 	itrace = 1
 	wd = zeros(Float32,size(in))
 	for itrace = 1 : size(in[:,:],2)
@@ -9,7 +9,7 @@ function CalculateSampling(in,h=[],param=Dict())
 			wd[:,itrace] = 1.
 		end
 	end
-	return wd,h;
+	return wd;
 end
 
 function CalculateSampling(in::ASCIIString,wd::ASCIIString,param=Dict())
