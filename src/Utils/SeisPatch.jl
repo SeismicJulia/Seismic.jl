@@ -1,78 +1,123 @@
 include("Header.jl")
 
-function SeisPatch(in::ASCIIString,out::ASCIIString,param=Dict())
+"""
+**SeisPatch**
 
-	style = get(param,"style","sxsygxgy")
+*Creation of overlapping 5d patches from a 5d volume*
+
+**IN**    
+* in: input filename 
+* out: prefix for output filenames
+* style="sxsygxgy"
+* min_isx=0
+* max_isx=0
+* min_isy=0
+* max_isy=0
+* min_igx=0
+* max_igx=0
+* min_igy=0
+* max_igy=0
+* min_imx=0
+* max_imx=0
+* min_imy=0
+* max_imy=0
+* min_ihx=0
+* max_ihx=0
+* min_ihy=0
+* max_ihy=0
+* min_ih=0
+* max_ih=0
+* min_iaz=0
+* max_iaz=0
+* it_WL=9e9
+* it_WO=0
+* ix1_WL=9e9
+* ix1_WO=0
+* ix2_WL=9e9
+* ix2_WO=0
+* ix3_WL=9e9
+* ix3_WO=0
+* ix4_WL=9e9
+* ix4_WO=0
+
+**OUT**
+
+*Credits: A. Stanton, 2015*
+
+"""
+
+function SeisPatch(in::ASCIIString,out::ASCIIString;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0)
+
 	if (style == "sxsygxgy")
 		key = ["t","isx","isy","igx","igy"]
-		min_ix1 = get(param,"min_isx",0)
-		max_ix1 = get(param,"max_isx",0)
-		min_ix2 = get(param,"min_isy",0)
-		max_ix2 = get(param,"max_isy",0)
-		min_ix3 = get(param,"min_igx",0)
-		max_ix3 = get(param,"max_igx",0)
-		min_ix4 = get(param,"min_igy",0)
-		max_ix4 = get(param,"max_igy",0)
+		min_ix1 = min_isx
+		max_ix1 = max_isx
+		min_ix2 = min_isy
+		max_ix2 = max_isy
+		min_ix3 = min_igx
+		max_ix3 = max_igx
+		min_ix4 = min_igy
+		max_ix4 = max_igy
 	elseif (style=="mxmyhxhy")
 		key = ["t","imx","imy","ihx","ihy"]
-		min_ix1 = get(param,"min_imx",0)
-		max_ix1 = get(param,"max_imx",0)
-		min_ix2 = get(param,"min_imy",0)
-		max_ix2 = get(param,"max_imy",0)
-		min_ix3 = get(param,"min_ihx",0)
-		max_ix3 = get(param,"max_ihx",0)
-		min_ix4 = get(param,"min_ihy",0)
-		max_ix4 = get(param,"max_ihy",0)
+		min_ix1 = min_imx
+		max_ix1 = max_imx
+		min_ix2 = min_imy
+		max_ix2 = max_imy
+		min_ix3 = min_ihx
+		max_ix3 = max_ihx
+		min_ix4 = min_ihy
+		max_ix4 = max_ihy
 	elseif (style=="mxmyhaz")
 		key = ["t","imx","imy","ih","iaz"]
-		min_ix1 = get(param,"min_imx",0)
-		max_ix1 = get(param,"max_imx",0)
-		min_ix2 = get(param,"min_imy",0)
-		max_ix2 = get(param,"max_imy",0)
-		min_ix3 = get(param,"min_ih",0)
-		max_ix3 = get(param,"max_ih",0)
-		min_ix4 = get(param,"min_iaz",0)
-		max_ix4 = get(param,"max_iaz",0)
+		min_ix1 = min_imx
+		max_ix1 = max_imx
+		min_ix2 = min_imy
+		max_ix2 = max_imy
+		min_ix3 = min_ih
+		max_ix3 = max_ih
+		min_ix4 = min_iaz
+		max_ix4 = max_iaz
 	elseif (style=="sxsyhxhy")
 		key = ["t","isx","isy","ihx","ihy"]
-		min_ix1 = get(param,"min_isx",0)
-		max_ix1 = get(param,"max_isx",0)
-		min_ix2 = get(param,"min_isy",0)
-		max_ix2 = get(param,"max_isy",0)
-		min_ix3 = get(param,"min_ihx",0)
-		max_ix3 = get(param,"max_ihx",0)
-		min_ix4 = get(param,"min_ihy",0)
-		max_ix4 = get(param,"max_ihy",0)
+		min_ix1 = min_isx
+		max_ix1 = max_isx
+		min_ix2 = min_isy
+		max_ix2 = max_isy
+		min_ix3 = min_ihx
+		max_ix3 = max_ihx
+		min_ix4 = min_ihy
+		max_ix4 = max_ihy
 	elseif (style=="gxgyhxhy")
 		key = ["t","igx","igy","ihx","ihy"]
-		min_ix1 = get(param,"min_igx",0)
-		max_ix1 = get(param,"max_igx",0)
-		min_ix2 = get(param,"min_igy",0)
-		max_ix2 = get(param,"max_igy",0)
-		min_ix3 = get(param,"min_ihx",0)
-		max_ix3 = get(param,"max_ihx",0)
-		min_ix4 = get(param,"min_ihy",0)
-		max_ix4 = get(param,"max_ihy",0)
+		min_ix1 = min_igx
+		max_ix1 = max_igx
+		min_ix2 = min_igy
+		max_ix2 = max_igy
+		min_ix3 = min_ihx
+		max_ix3 = max_ihx
+		min_ix4 = min_ihy
+		max_ix4 = max_ihy
 	elseif (style=="sxsyhaz")
 		key = ["t","isx","isy","ih","iaz"]
-		min_ix1 = get(param,"min_isx",0)
-		max_ix1 = get(param,"max_isx",0)
-		min_ix2 = get(param,"min_isy",0)
-		max_ix2 = get(param,"max_isy",0)
-		min_ix3 = get(param,"min_ih",0)
-		max_ix3 = get(param,"max_ih",0)
-		min_ix4 = get(param,"min_iaz",0)
-		max_ix4 = get(param,"max_iaz",0)
+		min_ix1 = min_isx
+		max_ix1 = max_isx
+		min_ix2 = min_isy
+		max_ix2 = max_isy
+		min_ix3 = min_ih
+		max_ix3 = max_ih
+		min_ix4 = min_iaz
+		max_ix4 = max_iaz
 	elseif (style=="gxgyhaz")
 		key = ["t","igx","igy","ih","iaz"]
-		min_ix1 = get(param,"min_igx",0)
-		max_ix1 = get(param,"max_igx",0)
-		min_ix2 = get(param,"min_igy",0)
-		max_ix2 = get(param,"max_igy",0)
-		min_ix3 = get(param,"min_ih",0)
-		max_ix3 = get(param,"max_ih",0)
-		min_ix4 = get(param,"min_iaz",0)
-		max_ix4 = get(param,"max_iaz",0)
+		min_ix1 = min_igx
+		max_ix1 = max_igx
+		min_ix2 = min_igy
+		max_ix2 = max_igy
+		min_ix3 = min_ih
+		max_ix3 = max_ih
+		min_ix4 = min_iaz
+		max_ix4 = max_iaz
 	else
 		error("style not defined.")
 	end
@@ -90,16 +135,12 @@ function SeisPatch(in::ASCIIString,out::ASCIIString,param=Dict())
 	ot = read(stream,Float32)
 
 	close(stream)
-	it_WL = get(param,"it_WL",nt)
-	it_WO = get(param,"it_WO",0)
-	ix1_WL = get(param,"ix1_WL",nx1)
-	ix1_WO = get(param,"ix1_WO",0)
-	ix2_WL = get(param,"ix2_WL",nx2)
-	ix2_WO = get(param,"ix2_WO",0)
-	ix3_WL = get(param,"ix3_WL",nx3)
-	ix3_WO = get(param,"ix3_WO",0)
-	ix4_WL = get(param,"ix4_WL",nx4)
-	ix4_WO = get(param,"ix4_WO",0)
+	it_WL  = it_WL  > nt  ? nt  : it_WL
+	ix1_WL = ix1_WL > nx1 ? nx1 : ix1_WL
+	ix2_WL = ix2_WL > nx2 ? nx2 : ix2_WL
+	ix3_WL = ix3_WL > nx3 ? nx3 : ix3_WL
+	ix4_WL = ix4_WL > nx4 ? nx4 : ix4_WL
+
 
 	tmax = ot + dt*nt
 	it_NW = int(floor(nt/(it_WL-it_WO)))

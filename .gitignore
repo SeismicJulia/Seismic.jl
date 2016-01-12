@@ -39,8 +39,9 @@ Thumbs.db
 
 # seismic files #
 ######################
-*.seisd
-*.seish
+*.seis
+*.seis@data@
+*.seis@headers@
 *.su
 *.rsf
 *.rsf@

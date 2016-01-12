@@ -1,6 +1,6 @@
 include("Header.jl")
 
-function SeisHeaderInfo(in,param=Dict())
+function SeisHeaderInfo(filename,param=Dict())
 	#
 	#   print Seis header information
 	#
@@ -8,9 +8,9 @@ function SeisHeaderInfo(in,param=Dict())
 	ntrace = get(param,"ntrace",100000)
 	key = names(Header)
 	nhead = length(key)
-	filename = join([in ".seish"])
-	stream = open(filename)
-	NX = GetNumTraces(in)
+	filename_headers = success(`grep "headers=" $filename`) ? chomp(readall(`grep "headers=" $filename` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
+	stream = open(filename_headers)
+	NX = GetNumTraces(filename)
 	h = GrabHeader(stream,1)
 	println("Displaying information for ", filename," (",NX," traces):")
 	min_h = zeros(Float32,length(key))

@@ -1,51 +1,25 @@
-function SeisPOCS(in,h::Array{Header,1},param::Dict{Any,Any})
+"""
+**SeisPOCS**
 
-	style = get(param,"style","sxsygxgy")
-	nt = h[1].n1
-	nx = length(h)
-	param["dt"] = h[1].d1
+*Projection Onto Convex Sets interpolation of seismic records.*
 
-	if (style == "sxsygxgy")
-		key = ["t","isx","isy","igx","igy"]
-	elseif (style=="mxmyhxhy")
-		key = ["t","imx","imy","ihx","ihy"]
-	elseif (style=="mxmyhaz")
-		key = ["t","imx","imy","ih","iaz"]
-	elseif (style=="sxsyhxhy")
-		key = ["t","isx","isy","ihx","ihy"]
-	elseif (style=="gxgyhxhy")
-		key = ["t","igx","igy","ihx","ihy"]
-	elseif (style=="sxsyhaz")
-		key = ["t","isx","isy","ih","iaz"]
-	elseif (style=="gxgyhaz")
-		key = ["t","igx","igy","ih","iaz"]
-	else
-		error("style not defined.")
-	end
-	min_ix1 = getfield(h[1],symbol(key[2]))
-	max_ix1 = getfield(h[nx],symbol(key[2]))
-	nx1 = int32(max_ix1 - min_ix1 + 1)
-	min_ix2 = getfield(h[1],symbol(key[3]))
-	max_ix2 = getfield(h[nx],symbol(key[3]))
-	nx2 = int32(max_ix2 - min_ix2 + 1)
-	min_ix3 = getfield(h[1],symbol(key[4]))
-	max_ix3 = getfield(h[nx],symbol(key[4]))
-	nx3 = int32(max_ix3 - min_ix3 + 1)
-	min_ix4 = getfield(h[1],symbol(key[5]))
-	max_ix4 = getfield(h[nx],symbol(key[5]))
-	nx4 = int32(max_ix4 - min_ix4 + 1)
-	d = reshape(in,int(nt),int(nx1),int(nx2),int(nx3),int(nx4))	
-	d = pocs(d,param)
-	return reshape(d,int(nt),int(nx1*nx2*nx3*nx4)),h
-end
+**IN**   
 
-function pocs(in,param)
+* d_in: input data that can have up to 5 dimensions
+* p=1., exponent for thresholding (1 is equivalent to soft thres. high number is equivalent to hard thresholding)
+* alpha=1 add-back ratio for imputation step. Use 1 for noise free data, and < 1 for denoising of original traces.
+* dt=0.001 sampling rate along the time axis (in seconds)
+* fmax=99999. maximum temporal frequency to process.
+* padt=2 padding to use for the time axis
+* padx=1 padding to use for the spatial axes
+* Niter=100 number of iterations
 
-	p = get(param,"p",8.) # Exponent for thresholding, 1=>soft 2=>stein large=>hard thresholding 
-	padt = get(param,"padt",2)
-	padx = get(param,"padx",1)
-	Niter = get(param,"Niter",100)
-	alpha = get(param,"alpha",1)
+**OUT**  
+
+* d_out: interpolated data
+"""
+function SeisPOCS(in;p=1.,dt=0.001,fmax=99999.,padt=2,padx=1,Niter=100,alpha=1)
+
 	perci = 0.999999;
 	percf = 0.0;
 	nt = size(in,1)
@@ -56,10 +30,9 @@ function pocs(in,param)
 	d = zeros(Float32,nt,nx1,nx2,nx3,nx4)
 	d[1:nt,1:nx1,1:nx2,1:nx3,1:nx4] = in
 	nf = padt*nextpow2(nt)
-	dt = get(param,"dt",0.001)
 	dw = 2.*pi/nf/dt
 	nw = int(nf/2) + 1
-	fmax = get(param,"fmax",int(floor(0.5/dt)))
+	fmax = fmax < 0.5/dt ? fmax : 0.5/dt
 	if(fmax*dt*nf < nw) 
 		iw_max = int(floor(fmax*dt*nf))
 	else 
@@ -71,7 +44,7 @@ function pocs(in,param)
 	nx4 > 1 ? nk4 = padx*nextpow2(nx4) : nk4 = 1
 	nk = nk1*nk2*nk3*nk4
 	# generate sampling operator from the padded data
-	T,h_tmp = CalculateSampling(d)
+	T = CalculateSampling(d)
 	T = T[1,:,:,:,:]
 	if (sum(T[:])/length(T[:]) < 0.05)
 		println(sum(T[:])/length(T[:]))
@@ -79,7 +52,6 @@ function pocs(in,param)
 	else
 		T = Pad5D(T,1,nk1,nk2,nk3,nk4)
 		T = squeeze(T[1,:,:,:,:],1)
-		param["wd"] = T	
 		d = Pad5D(d,nf,nk1,nk2,nk3,nk4)
 		D = fft(d,1)
 		for iw=1:iw_max

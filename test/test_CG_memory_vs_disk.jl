@@ -10,20 +10,11 @@ d = L*m;
 d = d + 0.2*rand(nd);
 
 m0 = zeros(nm)
-param = {"Niter"=>nm,"operators"=>[MatrixMultiply],"matrix"=>L,"mu"=>0.1}
-m1,cost = ConjugateGradients(m0,d,param)
+m1,cost = ConjugateGradients(m0,d,[[MatrixMultiplyOp]],[[:matrix_multiply=>0.1]],Niter=nm)
 
-h = Header[];
-push!(h,Seismic.InitSeisHeader());
-h[1].tracenum = 1
-h[1].n1 = nd;
-SeisWrite("d",d[:],h)
+SeisWrite("d",d)
 
-h = Header[];
-push!(h,Seismic.InitSeisHeader());
-h[1].tracenum = 1
-h[1].n1 = nm;
-SeisWrite("m0",0.*m[:],h)
+SeisWrite("m0",0.*m)
 
 ConjugateGradients("m2","m0","d","misfit.txt",param)
 m2,h = SeisRead("m2")
