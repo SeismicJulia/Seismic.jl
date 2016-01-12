@@ -3,7 +3,7 @@ SeisAGC,
 SeisGSC,
 SeisGain,
 SeisMWNI,
-fft_op,
+FFTOp,
 SeisDecimate,
 SeisStack,
 SmoothGathers,
@@ -15,7 +15,7 @@ SeisSemblance,
 SeisNMO,
 SeisFXDecon,
 SeisPWD,
-MatrixMultiply,
+MatrixMultiplyOp,
 SeisWavelets,
 SeisRadonForward,
 SeisRadonInverse,
@@ -25,7 +25,7 @@ include("SeisAGC.jl")
 include("SeisGSC.jl")
 include("SeisGain.jl")
 include("SeisMWNI.jl")
-include("fft_op.jl")
+include("FFTOp.jl")
 include("SeisDecimate.jl")
 include("SeisStack.jl")
 include("SmoothGathers.jl")
@@ -37,7 +37,7 @@ include("SeisSemblance.jl")
 include("SeisNMO.jl")
 include("SeisFXDecon.jl")
 include("SeisPWD.jl")
-include("MatrixMultiply.jl")
+include("MatrixMultiplyOp.jl")
 include("SeisWavelets.jl")
 include("SeisRadonForward.jl")
 include("SeisRadonInverse.jl")

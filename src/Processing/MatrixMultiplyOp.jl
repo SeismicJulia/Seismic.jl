@@ -1,7 +1,5 @@
-function MatrixMultiply(in,param::Dict{Any,Any})
+function MatrixMultiplyOp(in,adj;matrix=1)
 
-	adj = get(param,"adj",false)
-	matrix = get(param,"matrix",eye(length(in)))
 	if (adj)
 		out = matrix'*in
 	else
@@ -11,7 +9,7 @@ function MatrixMultiply(in,param::Dict{Any,Any})
 	return out
 end
 
-function MatrixMultiply(in,h::Array{Header,1},param=Dict())
+function MatrixMultiplyOp(in,h::Array{Header,1},param=Dict())
 
 	adj = get(param,"adj",false)
 	matrix = get(param,"matrix",eye(length(in)))
@@ -33,7 +31,7 @@ function MatrixMultiply(in,h::Array{Header,1},param=Dict())
 	return out,h
 end
 
-function MatrixMultiply(m::ASCIIString,d::ASCIIString,param=Dict())
+function MatrixMultiplyOp(m::ASCIIString,d::ASCIIString,param=Dict())
 
 	adj = get(param,"adj",false)
 	ntrace = get(param,"ntrace",100000)

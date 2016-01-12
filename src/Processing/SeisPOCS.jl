@@ -17,7 +17,8 @@
 **OUT**  
 
 * d_out: interpolated data
-"""function SeisPOCS(in;p=1.,dt=0.001,fmax=99999.,padt=2,padx=1,Niter=100,alpha=1)
+"""
+function SeisPOCS(in;p=1.,dt=0.001,fmax=99999.,padt=2,padx=1,Niter=100,alpha=1)
 
 	perci = 0.999999;
 	percf = 0.0;

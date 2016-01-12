@@ -1,4 +1,4 @@
-function InnerProduct(in1,in2,h1=Header[],h2=Header[],param=Dict())
+function InnerProduct(in1,in2)
 	
 	return convert(Float32,real(sum(conj(in1[:]).*in2[:])))
 	
