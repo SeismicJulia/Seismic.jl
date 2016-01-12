@@ -44,7 +44,7 @@ function SeisPOCS(in;p=1.,dt=0.001,fmax=99999.,padt=2,padx=1,Niter=100,alpha=1)
 	nx4 > 1 ? nk4 = padx*nextpow2(nx4) : nk4 = 1
 	nk = nk1*nk2*nk3*nk4
 	# generate sampling operator from the padded data
-	T,h_tmp = CalculateSampling(d)
+	T = CalculateSampling(d)
 	T = T[1,:,:,:,:]
 	if (sum(T[:])/length(T[:]) < 0.05)
 		println(sum(T[:])/length(T[:]))

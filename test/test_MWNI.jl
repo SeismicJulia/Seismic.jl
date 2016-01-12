@@ -4,7 +4,7 @@ using Base.Test
 d,e = SeisLinearEvents()
 ddec = SeisDecimate(d,perc=50)
 
-dmwni = SeisMWNI(ddec,dt=0.004,fmax=100,Niter=100)
+dmwni = SeisMWNI(ddec,dt=0.004,fmax=100,Niter_external=10,Niter_internal=3)
 
 # test that quality factor is greater than 10 Decibels
 quality_factor = 10*log10(norm(d[:],2)/norm(dmwni[:]-d[:],2))
