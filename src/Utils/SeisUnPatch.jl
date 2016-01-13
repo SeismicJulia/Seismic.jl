@@ -367,7 +367,7 @@ function SeisUnPatch(list::Array{ASCIIString,1},out::ASCIIString;style="sxsygxgy
 					h[1].selev = convert(typeof(h[1].selev),0)
 					h[1].gelev = convert(typeof(h[1].gelev),0)
 					h[1].trid = convert(typeof(h[1].trid),0)
-					SeisWrite(out,d,h,["itrace"=>j])
+					SeisWrite(out,d,h,itrace=j)
 					j += 1
 				end
 			end

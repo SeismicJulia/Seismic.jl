@@ -296,7 +296,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 					h[1].selev = convert(typeof(h[1].selev),0)
 					h[1].gelev = convert(typeof(h[1].gelev),0)
 					h[1].trid = convert(typeof(h[1].trid),0)
-					SeisWrite(out,d,h,["itrace"=>j])
+					SeisWrite(out,d,h,itrace=j)
 					j += 1
 				end
 			end
@@ -310,7 +310,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 
 	if (style=="sxsygxgy")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,{"group"=>"some","itrace"=>j,"ntrace"=>1})
+			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].isx - min_isx)*nx2*nx3*nx4 + (h[1].isy - min_isy)*nx3*nx4 + (h[1].igx - min_igx)*nx4 + h[1].igy - min_igy + 1
 			if (h[1].isx >= min_isx && h[1].isx <= max_isx && h[1].isy >= min_isy && h[1].isy <= max_isy && h[1].igx >= min_igx && h[1].igx <= max_igx && h[1].igy >= min_igy && h[1].igy <= max_igy)
 				h[1].tracenum = convert(Int32,itrace)
@@ -324,7 +324,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="mxmyhxhy")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,{"group"=>"some","itrace"=>j,"ntrace"=>1})
+			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].imx - min_imx)*nx2*nx3*nx4 + (h[1].imy - min_imy)*nx3*nx4 + (h[1].ihx - min_ihx)*nx4 + h[1].ihy - min_ihy + 1
 			if (h[1].imx >= min_imx && h[1].imx <= max_imx && h[1].imy >= min_imy && h[1].imy <= max_imy && h[1].ihx >= min_ihx && h[1].ihx <= max_ihx && h[1].ihy >= min_ihy && h[1].ihy <= max_ihy)
 				h[1].tracenum = convert(Int32,itrace)
@@ -338,7 +338,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="mxmyhaz")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,{"group"=>"some","itrace"=>j,"ntrace"=>1})
+			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].imx - min_imx)*nx2*nx3*nx4 + (h[1].imy - min_imy)*nx3*nx4 + (h[1].ih - min_ih)*nx4 + h[1].iaz - min_iaz + 1
 			if (h[1].imx >= min_imx && h[1].imx <= max_imx && h[1].imy >= min_imy && h[1].imy <= max_imy && h[1].ih >= min_ih && h[1].ih <= max_ih && h[1].iaz >= min_iaz && h[1].iaz <= max_iaz)
 				h[1].tracenum = convert(Int32,itrace)
@@ -352,7 +352,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="sxsyhxhy")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,{"group"=>"some","itrace"=>j,"ntrace"=>1})
+			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].isx - min_isx)*nx2*nx3*nx4 + (h[1].isy - min_isy)*nx3*nx4 + (h[1].ihx - min_ihx)*nx4 + h[1].ihy - min_ihy + 1
 			if (h[1].isx >= min_isx && h[1].isx <= max_isx && h[1].isy >= min_isy && h[1].isy <= max_isy && h[1].ihx >= min_ihx && h[1].ihx <= max_ihx && h[1].ihy >= min_ihy && h[1].ihy <= max_ihy)
 				h[1].tracenum = convert(Int32,itrace)
@@ -366,7 +366,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="gxgyhxhy")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,{"group"=>"some","itrace"=>j,"ntrace"=>1})
+			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].igx - min_igx)*nx2*nx3*nx4 + (h[1].igy - min_igy)*nx3*nx4 + (h[1].ihx - min_ihx)*nx4 + h[1].ihy - min_ihy + 1
 			if (h[1].igx >= min_igx && h[1].igx <= max_igx && h[1].igy >= min_igy && h[1].igy <= max_igy && h[1].ihx >= min_ihx && h[1].ihx <= max_ihx && h[1].ihy >= min_ihy && h[1].ihy <= max_ihy)
 				h[1].tracenum = convert(Int32,itrace)
@@ -380,7 +380,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="sxsyhaz")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,{"group"=>"some","itrace"=>j,"ntrace"=>1})
+			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].isx - min_isx)*nx2*nx3*nx4 + (h[1].isy - min_isy)*nx3*nx4 + (h[1].ih - min_ih)*nx4 + h[1].iaz - min_iaz + 1
 			if (h[1].isx >= min_isx && h[1].isx <= max_isx && h[1].isy >= min_isy && h[1].isy <= max_isy && h[1].ih >= min_ih && h[1].ih <= max_ih && h[1].iaz >= min_iaz && h[1].iaz <= max_iaz)
 				h[1].tracenum = convert(Int32,itrace)
@@ -394,7 +394,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="gxgyhaz")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,{"group"=>"some","itrace"=>j,"ntrace"=>1})
+			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].igx - min_igx)*nx2*nx3*nx4 + (h[1].igy - min_igy)*nx3*nx4 + (h[1].ih - min_ih)*nx4 + h[1].iaz - min_iaz + 1
 			if (h[1].igx >= min_igx && h[1].igx <= max_igx && h[1].igy >= min_igy && h[1].igy <= max_igy && h[1].ih >= min_ih && h[1].ih <= max_ih && h[1].iaz >= min_iaz && h[1].iaz <= max_iaz)
 				h[1].tracenum = convert(Int32,itrace)

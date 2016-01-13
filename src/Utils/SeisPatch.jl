@@ -234,7 +234,7 @@ function grab_patch(patch)
 
 	minval=[patch.mint patch.minx1 patch.minx2 patch.minx3 patch.minx4]
 	maxval=[patch.maxt patch.maxx1 patch.maxx2 patch.maxx3 patch.maxx4]
-	SeisWindow(patch.in,patch.name,["key"=>patch.key,"minval"=>minval,"maxval"=>maxval])
+	SeisWindow(patch.in,patch.name,key=patch.key,minval=minval,maxval=maxval)
 
 end
 

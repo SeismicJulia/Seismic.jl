@@ -58,8 +58,8 @@ function SeisProcess(in1::ASCIIString,in2::ASCIIString,out::ASCIIString,operator
 	ntrace = get(param,"ntrace",100)
 
 	if (group=="all")
-		d1,h1 = SeisRead(in1,["group"=>group,"key"=>key,"itrace"=>1,"ntrace"=>ntrace])
-		d2,h2 = SeisRead(in2,["group"=>group,"key"=>key,"itrace"=>1,"ntrace"=>ntrace])
+		d1,h1 = SeisRead(in1,group=group,key=key,itrace=1,ntrace=ntrace)
+		d2,h2 = SeisRead(in2,group=group,key=key,itrace=1,ntrace=ntrace)
 		for ifunc = 1 : length(f)
 			func = f[ifunc]
 			d3,h3 = func(d1,d2,h1,h2,param)
@@ -72,8 +72,8 @@ function SeisProcess(in1::ASCIIString,in2::ASCIIString,out::ASCIIString,operator
 		itrace_out = 1
 		nx = GetNumTraces(in1)
 		while itrace_in <= nx
-			d1,h1 = SeisRead(in1,["group"=>group,"key"=>key,"itrace"=>itrace_in,"ntrace"=>ntrace])
-			d2,h2 = SeisRead(in2,["group"=>group,"key"=>key,"itrace"=>itrace_in,"ntrace"=>ntrace])
+			d1,h1 = SeisRead(in1,group=group,key=key,itrace=itrace_in,ntrace=ntrace)
+			d2,h2 = SeisRead(in2,group=group,key=key,itrace=itrace_in,ntrace=ntrace)
 			num_traces_in = size(d1,2)
 			for ifunc = 1 : length(f)
 				func = f[ifunc]
@@ -82,7 +82,7 @@ function SeisProcess(in1::ASCIIString,in2::ASCIIString,out::ASCIIString,operator
 				h1 = copy(h3)
 			end
 			num_traces_out = size(d1,2)
-			SeisWrite(out,d1,h1,["itrace"=>itrace_out])
+			SeisWrite(out,d1,h1,itrace=itrace_out)
 			itrace_in += num_traces_in
 			itrace_out += num_traces_out
 		end

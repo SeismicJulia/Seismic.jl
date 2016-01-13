@@ -1,7 +1,7 @@
 include("Header.jl")
 
 function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,ntrace=500)
-	SeisProcessHeaders(in,out,[WindowHeaders],[[:key=>key,:minval=>minval,:maxval=>maxval]],group="some",key=key,ntrace=ntrace,update_tracenum=false)
+	SeisProcessHeaders(in,out,[WindowHeaders],[Dict(:key=>key,:minval=>minval,:maxval=>maxval)],group="some",key=key,ntrace=ntrace,update_tracenum=false)
 	DATAPATH = get(ENV,"DATAPATH","./")
 	filename_d_out = join([DATAPATH out "@data@"])
 	filename_h_out = join([DATAPATH out "@headers@"])	

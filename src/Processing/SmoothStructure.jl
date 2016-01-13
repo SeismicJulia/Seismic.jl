@@ -1,4 +1,4 @@
-function SmoothStructure(m::ASCIIString,d::ASCIIString,param=Dict())
+function SmoothStructure(m::ASCIIString,d::ASCIIString,param)
 
 	adj = get(param,"adj",false)
 	param["f"] = [smooth_structure]
@@ -7,13 +7,13 @@ function SmoothStructure(m::ASCIIString,d::ASCIIString,param=Dict())
 	tmp1 = join(["tmp_SmoothStructure1_",string(int(rand()*100000))])
 	tmp2 = join(["tmp_SmoothStructure2_",string(int(rand()*100000))])
 	if (adj==false)
-		SeisSort(m,tmp1,{"key"=>["iaz","iang","imy","imx"]});
+		SeisSort(m,tmp1,key=["iaz","iang","imy","imx"]);
 		SeisProcess(tmp1,tmp2,param)
-		SeisSort(tmp2,d,{"key"=>["imx","imy","iang","iaz"]});	
+		SeisSort(tmp2,d,key=["imx","imy","iang","iaz"]);	
 	else
-		SeisSort(d,tmp1,{"key"=>["iaz","iang","imy","imx"]});
+		SeisSort(d,tmp1,key=["iaz","iang","imy","imx"]);
 		SeisProcess(tmp1,tmp2,param)
-		SeisSort(tmp2,m,{"key"=>["imx","imy","iang","iaz"]});	
+		SeisSort(tmp2,m,key=["imx","imy","iang","iaz"]);	
 	end
 	SeisRemove(tmp1)
 	SeisRemove(tmp2)

@@ -47,7 +47,7 @@ function SeisMWNI(in;dt=0.001,fmax=99999.,padt=2,padx=1,Niter_internal=10,Niter_
 		T = Pad5D(T,1,nk1,nk2,nk3,nk4)
 		T = squeeze(T[1,:,:,:,:],1)
 		operators = [WeightingOp,FFTOp,WeightingOp]
-		parameters = [[:w=>T],[:normalize=>true],[:w=>ones(T)]]
+		parameters = [Dict(:w=>T),Dict(:normalize=>true),Dict(:w=>ones(T))]
 		d = Pad5D(d,nf,nk1,nk2,nk3,nk4)
 		D = fft(d,1)
 		for iw=1:iw_max
