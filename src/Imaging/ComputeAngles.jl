@@ -1,29 +1,41 @@
-function ComputeAngles(angx,angy,param)
+"""
+**ComputeAngles**
 
-	vel = get(param,"vel","vel") # seis file containing the velocity (should have same x, y, and z dimensions as the desired image)
-	dip_flag = get(param,"dip_flag","n") # flag for correcting angles to be relative to reflector normal
-	dipx_name = get(param,"dipx","NULL") # seis file containing the reflector normals relative to vertical in the x direction (should have same x, y, and z dimensions as the desired image)
-	dipy_name = get(param,"dipy","NULL") # seis file containing the reflector normals relative to vertical in the y direction (should have same x, y, and z dimensions as the desired image)
-	wav = get(param,"wav","wav") # seis file containing the source wavelet (in time domain) 
-	sz = get(param,"sz",0) # source depth (Dev: read this from source wavelet file for variable source depth)
-	gz = get(param,"gz",0) # receiver depth (Dev: read this from data file for variable source depth (but then what to do in fwd op?))
-	nhx = get(param,"nhx",101)  # number of offset bins
-	ohx = get(param,"ohx",1000) # min offset (surface offset in the data)
-	dhx = get(param,"dhx",10)   # offset increment
-	nhy = get(param,"nhy",101)  # number of offset bins
-	ohy = get(param,"ohy",1000) # min offset (surface offset in the data)
-	dhy = get(param,"dhy",10)   # offset increment
-	pade_flag = get(param,"pade_flag","n") # flag for Pade Fourier correction
-	fmin = get(param,"fmin",0)  # min frequency to process (Hz)
-	fmax = get(param,"fmax",80) # max frequency to process (Hz)
-	padt = get(param,"padt",2)  # pad factor for the time axis
-	padx = get(param,"padx",2) # pad factor for the spatial axes
-	omp = get(param,"omp",1) # number of shared memory threads to use for frequency slice processing 
-	verbose = get(param,"verbose","n") # flag for error / debugging messages
-	sx = get(param,"sx",[0]) # array of source X positions (meters)
-	sy = get(param,"sy",[0]) # array of source Y positions (meters)
+*Compute angles for shot gathers. These angles can be used for mapping migrated shots into angle gathers during shot profile migration.*
+
+**IN**   
+
+
+* angx = "angx" : filename for incidence angles in the x direction for each shot
+* angy = "angy" : filename for incidence angles in the y direction for each shot
+* dip_flag = false : flag to subtract reflector dip from the computed angles to make them with reference to reflector normal
+* vel = "vel" : seis file containing the velocity (should have same x and z dimensions as the desired image)
+* wav = "wav" : seis file containing the source wavelet (in time domain) 
+* sz = 0. : source depth (Dev: read this from source wavelet file for variable source depth)
+* nhx = 101 : number of offset bins
+* ohx = 1000. : min offset (surface offset in the data)
+* dhx = 10. : offset increment
+* nhy = 101 : number of offset bins
+* ohy = 1000. : min offset (surface offset in the data)
+* dhy = 10. : offset increment
+* pade_flag = false : flag for Pade Fourier correction
+* fmin = 0. : min frequency to process (Hz)
+* fmax = 80. : max frequency to process (Hz)
+* padt = 2 : pad factor for the time axis
+* padx = 2 : pad factor for the spatial axes
+* verbose = false : flag for error / debugging messages
+* sx = [0.] : array of source X positions (meters)
+* sy = [0.] : array of source Y positions (meters)
+
+**OUT**  
+
+*Credits: AS, 2015*
+
+"""
+
+function ComputeAngles(angx::ASCIIString,angy::ASCIIString,dip_flag=false,vel="vel",wav="wav",sz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
+
 	nshot = length(sx)	
-
 	if (dip_flag=="y")
 		dipx,h = SeisRead(dipx_name)
 		dipy,h = SeisRead(dipy_name)
@@ -68,8 +80,8 @@ function ComputeAngles(angx,angy,param)
 		shot_list[ishot].fmax = fmax
 		shot_list[ishot].omp = omp
 		shot_list[ishot].pade_flag = pade_flag
-		shot_list[ishot].dip_flag = dip_flag
-		shot_list[ishot].verbose = verbose	
+		shot_list[ishot].dip_flag = (dip_flag == true) ? "y" : "n"
+		shot_list[ishot].verbose = (verbose == true) ? "y" : "n"	
 	end
 
 	a = pmap(compute_angles,shot_list)
@@ -78,8 +90,8 @@ function ComputeAngles(angx,angy,param)
 	for ishot = 1 : nshot
 		angx_shot,h_shot = SeisRead(shot_list[ishot].angx)
 		angy_shot,h_shot = SeisRead(shot_list[ishot].angy)
-		SeisWrite(angx,angx_shot,h_shot,["itrace"=>j])
-		SeisWrite(angy,angy_shot,h_shot,["itrace"=>j])
+		SeisWrite(angx,angx_shot,h_shot,itrace=j)
+		SeisWrite(angy,angy_shot,h_shot,itrace=j)
 		j += size(angx_shot,2)
 		SeisRemove(shot_list[ishot].angx)
 		SeisRemove(shot_list[ishot].angy)

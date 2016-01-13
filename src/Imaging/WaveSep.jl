@@ -15,12 +15,12 @@ end
 
 function Sep1Shot(shot)
 
-	run( `wavesep H=${shot.H}
-	ux=${shot.ux} uy=${shot.uy} uz=${shot.uz} 
-	up=${shot.up} us=${shot.us} 
-	vp=${shot.vp} vs=${shot.vs}
-	fmin=${shot.fmin} fmax=${shot.fmax}
-	verbose=${shot.verbose}`)
+	run( `wavesep H=$(shot.H)
+	ux=$(shot.ux) uy=$(shot.uy) uz=$(shot.uz) 
+	up=$(shot.up) us=$(shot.us) 
+	vp=$(shot.vp) vs=$(shot.vs)
+	fmin=$(shot.fmin) fmax=$(shot.fmax)
+	verbose=$(shot.verbose)`)
 	return(1)
 
 end
@@ -51,9 +51,9 @@ function WaveSep(ux,uy,uz,up,us;H=true,decomp=true,vp=2000,vs=1000,fmin=0,fmax=8
 		shot_list[ishot].vs = vs
 		shot_list[ishot].fmin = fmin
 		shot_list[ishot].fmax = fmax
-		shot_list[ishot].decomp = (decomp == true) ? "y" : "n"
-		shot_list[ishot].H = (H == true) ? "y" : "n"
-		shot_list[ishot].verbose = (verbose == true) ? "y" : "n"
+		shot_list[ishot].decomp = decomp == true ? "y" : "n"
+		shot_list[ishot].H = H == true ? "y" : "n"
+		shot_list[ishot].verbose = verbose == true ? "y" : "n"
 	end
 	if (decomp == "y")
 		for ishot = 1 : nshot
