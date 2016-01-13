@@ -634,29 +634,29 @@ import Base.convert
 
 bitstype 32 IBMFloat32
 
-ieeeOfPieces(fr::UInt32, exp::Int32, sgn::UInt32) = reinterpret(Float32, uint32(fr >>> 9) | uint32(exp << 23) | sgn) :: Float32
+ieeeOfPieces(fr::UInt32, exp::Int32, sgn::UInt32) = reinterpret(Float32, UInt32(fr >>> 9) | UInt32(exp << 23) | sgn) :: Float32
 import Base.convert
 
 function convert(::Type{Float32}, ibm::IBMFloat32)
   local fr::UInt32 = ntoh(reinterpret(UInt32, ibm))
   local sgn::UInt32 = fr & 0x80000000 # save sign
   fr <<= 1 # shift sign out
-  local exp::Int32 = int32(fr >>> 25) # save exponent
+  local exp::Int32 = Int32(fr >>> 25) # save exponent
   fr <<= 7 # shift exponent out
 
-  if (fr == uint32(0))
+  if (fr == UInt32(0))
     zero(Float32)
   else
     # normalize the signficand
-    local norm::Uint32 = leading_zeros(fr)
+    local norm::UInt32 = leading_zeros(fr)
     fr <<= norm
     exp = (exp << 2) - 130 - norm
 
     # exp <= 0 --> ieee(0,0,sgn)
     # exp >= 255 --> ieee(0,255,sgn)
     # else -> ieee(fr<<1, exp, sgn)
-    local clexp::Int32 = exp & int32(0xFF) #clamp(exp, int32(0), int32(255))
-    ieeeOfPieces(clexp == exp ? fr << 1 : uint32(0), clexp, sgn)
+    local clexp::Int32 = exp & Int32(0xFF) #clamp(exp, Int32(0), int32(255))
+    ieeeOfPieces(clexp == exp ? fr << 1 : UInt32(0), clexp, sgn)
   end
 end
 
