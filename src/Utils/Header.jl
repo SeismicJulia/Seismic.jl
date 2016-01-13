@@ -32,7 +32,7 @@ type Header
 	trid::Int32
 end
 
-header_count = Dict{String,Int32}()
+header_count = Dict{AbstractString,Int32}()
 header_count["tracenum"] = 0
 header_count["o1"]    = 4
 header_count["n1"]    = 8

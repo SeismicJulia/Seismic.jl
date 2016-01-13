@@ -1,7 +1,7 @@
 include("SegyStruct.jl")
 include("Header.jl")
 
-function SeisToSegy(in,out,su=true)
+function SeisToSegy(in,out;su=true)
 
 	if (su==true)
 		file_hsize = 0
@@ -21,7 +21,7 @@ function SeisToSegy(in,out,su=true)
 	h_segy = Array(SegyHeader,1)
 	h_seis = Array(Header,1)
 	for j = 1 : nx
-		d,h1 = SeisRead(in,"some",["tracenum"],["itrace"=>j,"ntrace"=>1])
+		d,h1 = SeisRead(in,ntrace=1)
 		h_segy[1] = MapHeaders(h1,j,"SeisToSegy")     
 		position = file_hsize + total*(j-1)*4 + segy_count["trace"]
 		seek(stream,position)
