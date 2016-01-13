@@ -53,7 +53,7 @@ function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=true,input
 		nt = read(stream,Int16)
 	end
 	total = 60 + nt
-	nx = int((filesize(stream)-file_hsize)/4/total)
+	nx = round(Int,(filesize(stream)-file_hsize)/4/total)
 	println("number of traces: ",nx)
 	println("number of samples per trace: ",nt)
 	h_segy = Array(SegyHeader,1)

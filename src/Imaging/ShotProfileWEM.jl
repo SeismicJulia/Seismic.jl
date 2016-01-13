@@ -1,107 +1,50 @@
-function ShotProfileWEM(m::ASCIIString,d::ASCIIString,param::Dict{Any,Any})
-# 
-# ShotProfileWEM: Shot Profile Wave Equation Migration and Demigration 
-# of 3D isotropic data.
-#
-# IN   
-#      adjoint operator (param["adj"] = true)
-#              d : data file name
-#      forward operator (param["adj"] = false)
-#              m : image file name
-#
-#      param={"adj"=>true,
-#			  "vel"=>"vel",
-#             "angx"=>"angx","angy"=>"angy",
-#             "wav"=>"wav",
-#             "sz"=>sz,"gz"=>gz,
-#             "nhx"=>nhx,"ohx"=>ohx,"dhx"=>dhx,"nhy"=>nhy,"ohy"=>ohy,"dhy"=>dhy,
-#             "pade_flag"=>"n"
-#
-#      Where the parameters stored in param are:
-#
-#      adj : flag for adjoint (migration), or forward (demigration)
-#      vel : seis file containing the velocity (should have same x, y and z dimensions as the desired image)
-#      angx : seis file containing incidence angles in the x direction for each shot
-#      angy : seis file containing incidence angles in the y direction for each shot
-#      wav : seis file containing the source wavelet (in time domain) 
-#      sz : source depth (Dev: read this from source wavelet file for variable source depth)
-#      gz : receiver depth (Dev: read this from data file for variable source depth (but then what to do in fwd op?))
-#      nhx : number of offset bins
-#      ohx : min offset (surface offset of the data)
-#      dhx : offset increment
-#      nhy : number of offset bins
-#      ohy : min offset (surface offset of the data)
-#      dhy : offset increment
-#      pade_flag : flag for Pade Fourier correction
-#      nangx : number of angle bins in x direction
-#      oangx : min angle in x direction (angle between source incidence angle and reflector normal in Degrees)
-#      dangx : angle increment in x direction
-#      nangy : number of angle bins in y direction
-#      oangy : min angle in y direction (angle between source incidence angle and reflector normal in Degrees)
-#      dangy : angle increment in y direction
-#      fmin : min frequency to process (Hz)
-#      fmax : max frequency to process (Hz)
-#      padt : pad factor for the time axis
-#      padx : pad factor for the spatial axes
-#      verbose : flag for error / debugging messages
-#      sx : array of source X positions (meters)
-#      sy : array of source Y positions (meters)
-# 
-# OUT  note: outputs are specified in the function parameters with inputs.
-#      if param["adj"] == true
-#              mpp : PP image file name
-#              mps : PS image file name
-#              msp : SP image file name
-#              mss : SS image file name
-#      else
-#              ux : data X-component file name
-#              uy : data Y-component file name
-#              uz : data Z-component file name
-#
-# Example of forward operator: param["adj"] = false
-#
-#	Make reflectivity and velocity models
-# 	param = {"ot"=>0,"dt"=>10,"nt"=>500,"ox1"=>0,"dx1"=>10,"nx1"=>500,"tau1"=>a,"v1"=>a.*0 + 3,"amp"=>[1,-1,1,-1,1,-1,1,-1,1,-1,1,-1],"f0"=>a.*0 + 0.01,"sinusoidal"=>true,"sinusoidalA"=>200};
-#	m = SeisLinearEvents(param); m = m[:,:];
-#	v = m.*0 + 2000.;
-#   
-# Example with parameters provided by the user 
-# 
-#      param=["dt"=>0.004,"fc"=>20]
-#      (t,w) = ricker(param)
-#      plot(t,w) 
-#      xlabel('Time (s)')
+"""
+**ShotProfileWEM**
 
-	adj = get(param,"adj",true) # flag for adjoint (migration), or forward (demigration)
-	damping = get(param,"damping",1000.)  # damping for deconvolution imaging condition
-	vel = get(param,"vel","vel") # seis file containing the velocity (should have same x and z dimensions as the desired image)
-	angx = get(param,"angx","angx") # seis file containing incidence angles in the x direction for each shot
-	angy = get(param,"angy","angy") # seis file containing incidence angles in the y direction for each shot
-	wav = get(param,"wav","wav") # seis file containing the source wavelet (in time domain) 
-	sz = get(param,"sz",0.) # source depth (Dev: read this from source wavelet file for variable source depth)
-	gz = get(param,"gz",0.) # receiver depth (Dev: read this from data file for variable source depth (but then what to do in fwd op?))
-	nhx = get(param,"nhx",101)  # number of offset bins
-	ohx = get(param,"ohx",1000.) # min offset (surface offset in the data)
-	dhx = get(param,"dhx",10.)   # offset increment
-	nhy = get(param,"nhy",101)  # number of offset bins
-	ohy = get(param,"ohy",1000.) # min offset (surface offset in the data)
-	dhy = get(param,"dhy",10.)   # offset increment
-	pade_flag = get(param,"pade_flag",false) # flag for Pade Fourier correction
-	nangx = get(param,"nangx",1) # number of angle bins in x direction
-	oangx = get(param,"oangx",0.) # min angle in x direction (angle between source incidence angle and reflector normal in Degrees)
-	dangx = get(param,"dangx",1.) # angle increment in x direction
-	nangy = get(param,"nangy",1) # number of angle bins in y direction
-	oangy = get(param,"oangy",0.) # min angle in y direction (angle between source incidence angle and reflector normal in Degrees)
-	dangy = get(param,"dangy",1.) # angle increment in y direction
-	fmin = get(param,"fmin",0.)  # min frequency to process (Hz)
-	fmax = get(param,"fmax",80.) # max frequency to process (Hz)
-	padt = get(param,"padt",2)  # pad factor for the time axis
-	padx = get(param,"padx",2) # pad factor for the spatial axes
-	verbose = get(param,"verbose",false) # flag for error / debugging messages
-	sx = get(param,"sx",[0.]) # array of source X positions (meters)
-	sy = get(param,"sy",[0.]) # array of source Y positions (meters)
+*Shot Profile Wave Equation Migration and Demigration of 3D isotropic data.*
+
+**IN**   
+
+* m : filename of image 
+* d : filename of data
+* adj : flag for adjoint (migration), or forward (demigration) (default=true) 
+* damping = 1000. : damping for deconvolution imaging condition
+* vel = "vel" : seis file containing the velocity (should have same x and z dimensions as the desired image)
+* angx = "angx" : seis file containing incidence angles in the x direction for each shot
+* angy = "angy" : seis file containing incidence angles in the y direction for each shot
+* wav = "wav" : seis file containing the source wavelet (in time domain) 
+* sz = 0. : source depth (Dev: read this from source wavelet file for variable source depth)
+* gz = 0. : receiver depth (Dev: read this from data file for variable source depth (but then what to do in fwd op?))
+* nhx = 101 : number of offset bins
+* ohx = 1000. : min offset (surface offset in the data)
+* dhx = 10. : offset increment
+* nhy = 101 : number of offset bins
+* ohy = 1000. : min offset (surface offset in the data)
+* dhy = 10. : offset increment
+* pade_flag = false : flag for Pade Fourier correction
+* nangx = 1 : number of angle bins in x direction
+* oangx = 0. : min angle in x direction (angle between source incidence angle and reflector normal in Degrees)
+* dangx = 1. : angle increment in x direction
+* nangy = 1 : number of angle bins in y direction
+* oangy = 0. : min angle in y direction (angle between source incidence angle and reflector normal in Degrees)
+* dangy = 1. : angle increment in y direction
+* fmin = 0. : min frequency to process (Hz)
+* fmax = 80. : max frequency to process (Hz)
+* padt = 2 : pad factor for the time axis
+* padx = 2 : pad factor for the spatial axes
+* verbose = false : flag for error / debugging messages
+* sx = [0.] : array of source X positions (meters)
+* sy = [0.] : array of source Y positions (meters)
+
+**OUT**  
+
+*Credits: AS, 2015*
+
+"""
+
+function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel="vel",angx="angx",angy="angy",wav="wav",sz=0.,gz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,nangx=1,oangx=0,dangx=1,nangy=1,oangy=0,dangy=1,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
+	
 	nshot = length(sx)	
-
 	v,h = SeisRead(vel)
 	min_imx = h[1].imx
 	max_imx = h[end].imx
@@ -150,14 +93,14 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,param::Dict{Any,Any})
 
 	if (nangx != 1 || nangy != 1)
 		for ishot = 1 : nshot
-			SeisWindow(angx,shot_list[ishot].angx,["key"=>["sx","sy"],"minval"=>[sx[ishot],sy[ishot]],"maxval"=>[sx[ishot],sy[ishot]]])
-			SeisWindow(angy,shot_list[ishot].angy,["key"=>["sx","sy"],"minval"=>[sx[ishot],sy[ishot]],"maxval"=>[sx[ishot],sy[ishot]]])
+			SeisWindow(angx,shot_list[ishot].angx,key=["sx","sy"],minval=[sx[ishot],sy[ishot]],maxval=[sx[ishot],sy[ishot]])
+			SeisWindow(angy,shot_list[ishot].angy,key=["sx","sy"],minval=[sx[ishot],sy[ishot]],maxval=[sx[ishot],sy[ishot]])
 		end
 	end
 
 	if (adj == true)
 		for ishot = 1 : nshot
-			SeisWindow(d,shot_list[ishot].d,["key"=>["sx","sy","gx","gy"],"minval"=>[sx[ishot],sy[ishot],min_gx,min_gy],"maxval"=>[sx[ishot],sy[ishot],max_gx,max_gy]])
+			SeisWindow(d,shot_list[ishot].d,key=["sx","sy","gx","gy"],minval=[sx[ishot],sy[ishot],min_gx,min_gy],maxval=[sx[ishot],sy[ishot],max_gx,max_gy])
 		end
 		a = pmap(shotwem,shot_list)
 		j = 1    
@@ -183,7 +126,7 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,param::Dict{Any,Any})
 						h[(iangx-1)*nangy + iangy].az = convert(typeof(h[1].az),(iangy-1)*dangy + oangy)
 					end
 				end
-				SeisWrite(m,gather,h,["itrace"=>j])
+				SeisWrite(m,gather,h,itrace=j)
 				j += nangx*nangy
 			end
 		end
@@ -334,14 +277,14 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,param::Dict{Any,Any})
 				end
 			end
 			SeisWrite(shot_list[ishot].m,m_shot,h_shot)
-		end	
+		end
 		close(stream_m)
 		close(stream_h)	
 		a = pmap(shotwem,shot_list)
 		j = 1
 		for ishot = 1 : nshot
 			d_shot,h_shot = SeisRead(shot_list[ishot].d)
-			SeisWrite(d,d_shot,h_shot,["itrace"=>j])
+			SeisWrite(d,d_shot,h_shot,itrace=j)
 			j += size(d_shot,2)
 			SeisRemove(shot_list[ishot].d)
 			SeisRemove(shot_list[ishot].m)

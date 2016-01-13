@@ -20,8 +20,6 @@ SeisReadHeaders,
 SeisWriteHeaders,
 SeisProcessHeaders,
 SeisWindowHeaders,
-ApplyModelWeights,
-ApplyDataWeights,
 Pad5D,
 triangle_filter,
 convmtx,
@@ -54,8 +52,6 @@ include("SeisReadHeaders.jl")
 include("SeisWriteHeaders.jl")
 include("SeisProcessHeaders.jl")
 include("SeisWindowHeaders.jl")
-include("ApplyModelWeights.jl")
-include("ApplyDataWeights.jl")
 include("Pad5D.jl")
 include("Smoothing.jl")
 include("Convmtx.jl")

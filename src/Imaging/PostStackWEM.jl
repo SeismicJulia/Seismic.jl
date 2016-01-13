@@ -1,23 +1,21 @@
-function PostStackWEM(m,d,param)
+function PostStackWEM(m,d,adj;vel="NULL",damping=1000,nt=1,ot=0,dt=0.001,wav="NULL",gz=0,fmin=0,fmax=99999,padt=2,padx=2,verbose=true)
 	# 
 	# PostStackWEM: Post Stack Wave Equation Migration and Demigration 
 	# of 3D isotropic data.
 
-	adj = get(param,"adj",true) # flag for adjoint (migration), or forward (demigration)
-	nt = get(param,"nt",1) # trace length
-	ot = get(param,"ot",0) # trace origin
-	dt = get(param,"dt",0.001) # trace sample rate
-	damping = get(param,"damping",1000.)  # damping for deconvolution imaging condition
-	vel = get(param,"vel","vel") # seis file containing the velocity (should have same x and z dimensions as the desired image)
-	wav = get(param,"wav","wav") # seis file containing the source wavelet (in time domain) 
-	gz = get(param,"gz",0.) # receiver depth
-	pade_flag = get(param,"pade_flag",false) # flag for Pade Fourier correction
-	fmin = get(param,"fmin",0)  # min frequency to process (Hz)
-	fmax = get(param,"fmax",floor(0.5/dt))  # min frequency to process (Hz)
-	padt = get(param,"padt",2)  # pad factor for the time axis
-	padx = get(param,"padx",2) # pad factor for the spatial axes
-	omp = get(param,"omp",1) # number of shared memory threads to use for frequency slice processing 
-	verbose = get(param,"verbose",false) # flag for error / debugging messages
+	#adj: flag for adjoint (migration), or forward (demigration)
+	#nt: trace length
+	#ot:trace origin
+	#dt : trace sample rate
+	#damping: damping for deconvolution imaging condition
+	#vel :seis file containing the velocity (should have same x and z dimensions as the desired image)
+	#wav :seis file containing the source wavelet (in time domain) 
+	#gz : receiver depth
+	#fmin : min frequency to process (Hz)
+	#fmax : max frequency to process (Hz)
+	#padt : pad factor for the time axis
+	#padx : pad factor for the spatial axes 
+	#verbose : flag for error / debugging messages
 
 	v,h = SeisRead(vel)
 	min_imx = h[1].imx
@@ -31,14 +29,6 @@ function PostStackWEM(m,d,param)
 	nz = int(h[1].n1)
 	dz = h[1].d1
 	oz = h[1].o1
-	param_zowem = {"adj"=>adj,
-	               "omx"=>min_imx,"dmx"=>dmx,"nmx"=>nmx,
-	               "omy"=>min_imy,"dmy"=>dmy,"nmy"=>nmy,
-	               "oz"=>oz,"dz"=>dz,"nz"=>nz,
-	               "ot"=>ot,"dt"=>dt,"nt"=>nt,	               
-	               "padt"=>padt,"padx"=>padx,
-	               "v"=>v,
-	               "fmin"=>fmin,"fmax"=>fmax}
 	if (adj)
 		d1,h = SeisRead(d)
 		d1 = reshape(d1,nt,nmx,nmy)
@@ -52,7 +42,7 @@ function PostStackWEM(m,d,param)
 	else
 		m1,h = SeisRead(m)
 		m1 = reshape(m1,nz,nmx,nmy)
-		d1 = zowem(m1,param_zowem)
+		d1 = zowem(m1,adj,omx=min_imx,dmx=dmx,nmx=nmx,omy=min_imy,dmy=dmy,nmy=nmy,oz=oz,dz=dz,nz=nz,ot=ot,dt=dt,nt=nt,padt=padt,padx=padx,v=v,fmin=fmin,fmax=fmax)
 		for ix = 1 : nmx*nmy
 			h[ix].n1 = nt
 			h[ix].o1 = ot
@@ -64,26 +54,7 @@ function PostStackWEM(m,d,param)
 	return
 end
 
-function zowem(in,param::Dict{Any,Any})
-
-	adj = get(param,"adj",true)
-	omx = get(param,"omx",0)
-	dmx = get(param,"dmx",1)
-	nmx = get(param,"nmx",1)
-	omy = get(param,"omy",0)
-	dmy = get(param,"dmy",1)
-	nmy = get(param,"nmy",1)
-	oz = get(param,"oz",0)
-	dz = get(param,"dz",1)
-	nz = get(param,"nz",1)
-	ot = get(param,"ot",0)
-	dt = get(param,"dt",1)
-	nt = get(param,"nt",1)
-	padt = get(param,"padt",2)
-	padx = get(param,"padx",2)
-	v = get(param,"v",[])
-	fmin = get(param,"fmin",0)
-	fmax = get(param,"fmax",floor(0.5/dt))
+function zowem(in,adj;omx=0,dmx=1,nmx=1,omy=0,dmy=1,nmy=1,oz=0,dz=1,nz=1,ot=0,dt=1,nt=1,padt=2,padx=2,v=[],fmin=0.,fmax=999999.)
 	
 	nf = padt*nt
 	nkx = nmx > 1 ? padx*nmx : 1
@@ -147,7 +118,7 @@ function zowem(in,param::Dict{Any,Any})
 		for iw=iw_min:iw_max
 			param["w"] = iw*dw
 			x = squeeze(D[iw,:,:],1)
-			m,x = extrap1f(m,x,param)
+			m,x = extrap1f(m,x,adj,w=w,dz=dz,po=po,pd=pd,nz=nz,kx=kx,ky=ky)
 			D[iw,:,:] = x
 		end
 		# symmetries
@@ -160,24 +131,15 @@ function zowem(in,param::Dict{Any,Any})
 	
 end
 
-function extrap1f(m,d,param)
-
-	adj = get(param,"adj",true)
-	w = get(param,"w",1)
-	dz = get(param,"dz",1)
-	po = get(param,"po",[])
-	pd = get(param,"pd",[])
-	nz = get(param,"nz",1)
-	kx = get(param,"kx",[])
-	ky = get(param,"ky",[])
+function extrap1f(m,d,adj,w=1,dz=1,po=[],pd=[],nz=1,kx=[],ky=[])
 
 	if (adj)
 		for iz = 1 : 1 : nz
-			d = fft_op(d,{"adj"=>true})
+			d = FFTOp(d,true)
 			s = (w.^2)*(po[iz]*po[iz]) - kx.^2 - ky.^2
 			s[(s.<.0)] = 0.
 			d = d.*exp(1im*sqrt(s)*dz)
-			d = fft_op(d,{"adj"=>false})
+			d = fft_op(d,false)
 			#d = d.*exp(1im*w*pd[iz]*dz)
 			m[iz,:,:] = squeeze(m[iz,:,:],1) + 2*real(d)
 		end
@@ -185,11 +147,11 @@ function extrap1f(m,d,param)
 		for iz = nz : -1 : 1
 			d += squeeze(m[iz,:,:],1)
 			#d = d.*exp(-1im*w*pd[iz]*dz)
-			d = fft_op(d,{"adj"=>true})
+			d = fft_op(d,true)
 			s = (w.^2)*(po[iz]^2) - kx.^2 - ky.^2
 			s[(s.<.0)] = 0.
 			d = d.*exp(-1im*sqrt(s)*dz)	
-			d = fft_op(d,{"adj"=>false})
+			d = fft_op(d,false)
 		end
 	end
 	return m,d

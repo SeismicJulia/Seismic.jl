@@ -42,7 +42,7 @@ function SeisWindow(in::ASCIIString,out::ASCIIString;key=[],minval=[],maxval=[])
 	SeisWindowHeaders(in,out;key=key,minval=minval,maxval=maxval,tmin=tmin,tmax=tmax)
 	FetchTraces(in,out;itmin=itmin,itmax=itmax)
 	tmp = join(["tmp_SeisWindow_",string(int(rand()*100000))])
-	SeisProcessHeaders(out,tmp,[UpdateHeader],[[:itmin=>itmin,:itmax=>itmax]])
+	SeisProcessHeaders(out,tmp,[UpdateHeader],[Dict(:itmin=>itmin,:itmax=>itmax)])
 	filename_h_tmp = join([DATAPATH tmp "@headers@"])	
 	filename_h_out = join([DATAPATH out "@headers@"])	
 	cp(filename_h_tmp,filename_h_out);
