@@ -1,4 +1,5 @@
-using Seismic
+using Compat
+@compat using Seismic
 using Base.Test
 
 d,e = SeisLinearEvents()
