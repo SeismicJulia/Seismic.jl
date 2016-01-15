@@ -49,8 +49,8 @@ function SeisPlotCoordinates(headers;style="sxsygxgy",cmap="Greys",aspect="auto"
 		sy = Seismic.ExtractHeader(headers,"sy")
 		gx = Seismic.ExtractHeader(headers,"gx")
 		gy = Seismic.ExtractHeader(headers,"gy")
-		plt.scatter(gx,gy,marker="^",s=5,color="b");
-		plt.scatter(sx,sy,marker="*",s=8,color="r");
+		im = plt.scatter(gx,gy,marker="^",s=5,color="b");
+		im = plt.scatter(sx,sy,marker="*",s=8,color="r");
 		#plt.axis([ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy])
 	elseif (style == "fold")
 		imx = Seismic.ExtractHeader(headers,"imx")
@@ -96,5 +96,5 @@ function SeisPlotCoordinates(headers;style="sxsygxgy",cmap="Greys",aspect="auto"
 		plt.savefig(name,dpi=dpi)
 		plt.close()
 	end
-
+	return im
 end
