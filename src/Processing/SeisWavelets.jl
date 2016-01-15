@@ -10,7 +10,7 @@
 
 module SeisWavelets 
 
-function Ricker(param=Dict())
+function Ricker(;dt=0.002,fc=20)
 # 
 # Ricker: Ricker wavelet of central frequency fc sampled every dt seconds
 #
@@ -36,12 +36,10 @@ function Ricker(param=Dict())
 #      xlabel("Time (s)")
 
 
-	dt = get(param, "dt",0.002)
-	fc = get(param, "fc",20)
 
 	nw = 6./fc/dt
 	nc = floor(nw/2)
-	t = dt*[-nc:1:nc]
+	t = dt*collect(-nc:1:nc)
 	b = (fc*pi*t).^2
 	w = (1.-2.*b).*exp(-b)
 
@@ -49,7 +47,7 @@ function Ricker(param=Dict())
 
 end 
 
-function Ormsby(param=Dict())
+function Ormsby(;dt=0.002,f=[2.,10.,40.,60.])
 #
 # Ormsby: Ormsby wavelet sampled every dt seconds with corner frequencies 
 #         defined by the vector f=[f1,f2,f3,f4]. The final wavelet is multiply
@@ -88,8 +86,6 @@ function Ormsby(param=Dict())
 #      plot(t,w) 
 #      xlabel("Time (s)")
 
-	dt = get(param,"dt",0.002)
-	f = get(param,"f",[2.,10.,40.,60.])
 
 	f1 = f[1]
 	f2 = f[2]
@@ -120,7 +116,7 @@ function Ormsby(param=Dict())
 
 end
 
-function Berlage(param=Dict())
+function Berlage(;dt=0.002,alpha=0.4,m=2,f0=20.,phi0=3.14*90/180.)
 #
 # Berlage: Berlage wavelet
 #
@@ -139,12 +135,6 @@ function Berlage(param=Dict())
 #            doi: 10.1190/1.1442799
 # 
 
-	dt = get(param,"dt",0.002)
-	alpha = get(param,"alpha",0.4)
-	m = get(param,"m",2.)
-	f0 = get(param,"f0",20.)
-	phi0 = get(param,"phi0",3.14*90/180.)
-
 	nw = 6./(f0*dt)
 	t = dt*[0:1:nw-1]
 
@@ -157,7 +147,7 @@ function Berlage(param=Dict())
 
 end
 
-function Kolmogoroff(param=Dict())
+function Kolmogoroff(w=[])
 #
 # kolmog: Kolmogoroff factorization. This program is used to transform a wavelet into its
 #         minimum phase equivalent
@@ -177,7 +167,6 @@ function Kolmogoroff(param=Dict())
 #
 # Reference: Jon F. Claerbout, 1976, Fundamentals of Geophysical Data Processing, McGraw Hill.
 
-	w = get(param,"w",[])
 	nw = length(w)
 	nf = 8*nextpow2(nw)
 	W = fft([w,zeros(nf-nw,1)])

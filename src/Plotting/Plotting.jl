@@ -4,9 +4,9 @@ using PyCall
 export SeisPlot,
 SeisPlotFKSpectrum,
 SeisPlotAmplitudeSpectrum,
-SeisMap
+SeisPlotCoordinates
 include("SeisPlot.jl")
 include("SeisPlotFKSpectrum.jl")
 include("SeisPlotAmplitudeSpectrum.jl")
-include("SeisMap.jl")
+include("SeisPlotCoordinates.jl")
 

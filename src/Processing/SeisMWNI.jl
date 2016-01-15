@@ -63,6 +63,6 @@ function SeisMWNI(in;dt=0.001,fmax=99999.,padt=2,padx=1,Niter_internal=10,Niter_
 		end 
 		d = ifft(D,1)
 		d = real(d[1:nt,1:nx1,1:nx2,1:nx3,1:nx4])
-		return reshape(d,size(in))
+		return d
 	end
 end

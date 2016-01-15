@@ -23,22 +23,22 @@ include("Header.jl")
 
 * d: data as 2d array 
 * h: headers as 1d array 
-* extent: extent of the data (try _names(Extent)_ to see the information this contains)
+* extent: extent of the data (try _fieldnames(Extent)_ to see the information this contains)
 
 *Credits: AS, 2015*
 
 """
 function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 
-	filename_data = chomp(readall(`grep "in=" $filename` |> `tail -1` |> `awk '{print substr($1,5,length($1)-5) }' `))
-	filename_headers = success(`grep "headers=" $filename`) ? chomp(readall(`grep "headers=" $filename` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
+	filename_data = ParseDataName(filename)
+	filename_headers = ParseHeaderName(filename)
 	extent = ReadTextHeader(filename)
 	stream_d = open(filename_data)
-	dtype = chomp(readall(`grep "data_format" $filename` |> `tail -1` |> `awk '{print substr($1,14,length($1)-14)}'` ))
+	dtype = ParseDataFormat(filename)
 	dtype = dtype == "native_float" ? Float32 : Complex{Float32}
-	esize = int(chomp(readall(`grep "esize" $filename` |> `tail -1` |> `awk '{print substr($1,7,length($1))}'` )))
-	total = int(filesize(stream_d)/esize)
-	nhead = length(names(Header))
+	esize = ParseDataESize(filename)
+	total = convert(Int,filesize(stream_d)/esize)
+	@compat nhead = length(fieldnames(Header))
 	curr = zeros(length(key),1)
 	prev = 1*curr
 	nx = extent.n2*extent.n3*extent.n4*extent.n5
@@ -65,7 +65,7 @@ function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 		position_h = 4*nhead*(itrace-1)
 		seek(stream_h,position_h)
 		h1 = read(stream_h,Header32Bits,nhead*ntrace)
-		h1 = reshape(h1,nhead,int(ntrace))
+		h1 = reshape(h1,nhead,convert(Int,ntrace))
 		h = Header[]
 		for j = 1 : ntrace
 			h = push!(h,BitsToHeader(h1[:,j]))    	
@@ -78,16 +78,20 @@ function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 	position_d = 4*extent.n1*(itrace-1)
 	seek(stream_d,position_d)
 	d = read(stream_d,dtype,extent.n1*ntrace)
-	if extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1 && extent.n2 == 1 
-		d = reshape(d,int(extent.n1))
-	elseif extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1
-		d = reshape(d,int(extent.n1),int(extent.n2))
-	elseif extent.n5 == 1 && extent.n4 == 1
-		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3))
-	elseif extent.n5 == 1
-		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3),int(extent.n4))
+	if group=="all"
+		if extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1 && extent.n2 == 1 
+			d = reshape(d,int(extent.n1))
+		elseif extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1
+			d = reshape(d,convert(Int,extent.n1),convert(Int,extent.n2))
+		elseif extent.n5 == 1 && extent.n4 == 1
+			d = reshape(d,convert(Int,extent.n1),convert(Int,extent.n2),convert(Int,extent.n3))
+		elseif extent.n5 == 1
+			d = reshape(d,convert(Int,extent.n1),convert(Int,extent.n2),convert(Int,extent.n3),convert(Int,extent.n4))
+		else
+			d = reshape(d,convert(Int,extent.n1),convert(Int,extent.n2),convert(Int,extent.n3),convert(Int,extent.n4),convert(Int,extent.n5))
+		end
 	else
-		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3),int(extent.n4),int(extent.n5))
+		d = reshape(d,convert(Int,extent.n1),ntrace)
 	end
 	close(stream_d)
 	if filename_headers != "NULL"
