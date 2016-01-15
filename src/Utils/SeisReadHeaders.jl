@@ -2,13 +2,12 @@ include("Header.jl")
 
 function SeisReadHeaders(filename;group="all",key=[],itrace=1,ntrace=100)
 
-	filename_h = success(`grep "headers=" $filename`) ? chomp(readall(`grep "headers=" $filename` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
-    #extent = ReadTextHeader(filename)
+	filename_h = ParseHeaderName(filename)
 	stream_h = open(filename_h)
-	nhead = length(names(Header))
+	@compat nhead = length(fieldnames(Header))
 	curr = zeros(length(key),1)
 	prev = 1*curr
-	nx = int(filesize(stream_h)/(4*length(names(Header)))) - itrace + 1
+	@compat nx = round(Int,filesize(stream_h)/(4*length(fieldnames(Header)))) - itrace + 1
 	if (group == "all")
 		ntrace = nx
 	elseif (group == "gather")
@@ -31,7 +30,7 @@ function SeisReadHeaders(filename;group="all",key=[],itrace=1,ntrace=100)
 	seek(stream_h,position_h)
 
 	h1 = read(stream_h,Header32Bits,nhead*ntrace)
-	h1 = reshape(h1,nhead,int(ntrace))
+	h1 = reshape(h1,nhead,round(Int,ntrace))
 	h = Header[]
 	for itrace = 1 : ntrace
 		h = push!(h,BitsToHeader(h1[:,itrace]))    	

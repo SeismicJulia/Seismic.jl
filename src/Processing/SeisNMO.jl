@@ -1,26 +1,19 @@
-function SeisNMO(in,h,param=Dict())
+function SeisNMO(in;dt=0.001,offset=1000.,tnmo=0.,vnmo=1500.,max_stretch=1000)
 
 	nt,nx = size(in)
-	dt = h[1].d1
-
-	offset = Float32[]
-	for itrace = 1 : nx
-		push!(offset,h[itrace].h)
-	end
-
-	tnmo = get(param,"tnmo",[0:5:nt-1]*dt)
-	vnmo = get(param,"vnmo",tnmo*0 + 1500)
-	max_stretch = get(param,"max_stretch",100)
+	if length(offset) < size(in,2)
+		offset = offset[1]*ones(in,2)
+	end	
 	# interpolate tau,v pairs to match sampling of input data 
 	if (length(vnmo) == 1)
 		tnmo = convert(Float64,tnmo);
 		vnmo = convert(Float64,vnmo);
-		ti = [0:1:nt-1]*dt
+		ti = collect(0:1:nt-1)*dt
 		vi = ones(1,nt)*vnmo
 	else
 		tnmo = convert(Array{Float64,1},vec(tnmo))
 		vnmo = convert(Array{Float64,1},vec(vnmo))
-		ti = [0:1:nt-1]*dt
+		ti = collect(0:1:nt-1)*dt
 		g = InterpIrregular(tnmo, vnmo, BCnan, InterpLinear)
 		vi = g[ti]
 	end
@@ -31,8 +24,8 @@ function SeisNMO(in,h,param=Dict())
 			time = sqrt(ti[it]^2 + (offset[ix]/vi[it]).^2)
 			stretch = (time-ti[it])/(ti[it]+1e-10)
 			if (stretch<max_stretch/100)
-				its = time/dt+1
-				it1 = floor(time/dt+1)
+				its = round(Int,time/dt)+1
+				it1 = round(Int,floor(time/dt))+1
 				it2 = it1+1
 				a = its-it1
 				if (it2 <= nt) 
@@ -41,5 +34,21 @@ function SeisNMO(in,h,param=Dict())
 			end
 		end
 	end
+	return out
+end
+
+function SeisNMO(in,h::Array{Header,1};tnmo=0.,vnmo=1500.,max_stretch=1000)
+
+	offset = Seismic.ExtractHeader(h,"h")
+	dt = h[1].d1
+	out = SeisNMO(in;dt=dt,offset=offset,tnmo=tnmo,vnmo=vnmo,max_stretch=max_stretch)
 	return out,h
+	
+end
+
+function SeisNMO(in::ASCIIString,out::ASCIIString;tnmo=0.,vnmo=1500.,max_stretch=1000)
+
+	@compat parameters = Dict(:tnmo=>tnmo,:vnmo=>vnmo,:max_stretch=>max_stretch)
+	SeisProcess(in,out,[SeisNMO],[parameters],group="some",ntrace=100000)
+
 end

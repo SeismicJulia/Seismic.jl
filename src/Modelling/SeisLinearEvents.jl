@@ -67,8 +67,8 @@ function SeisLinearEvents(;ot=0,dt=0.004,nt=500,ox1=0,dx1=10,nx1=100,ox2=0,dx2=1
 	d = zeros(nt,nx1,nx2,nx3,nx4)	
 	nf = 4*nextpow2(nt) + 1
 	dw = 2.*pi/nf/dt
-	nw = int(floor(nf/2)) + 1
-	t = [0:1:nt-1]'*dt
+	nw = round(Int,floor(nf/2)) + 1
+	t = collect(0:1:nt-1)'*dt
 	x1 = Array(Float32,1,nx1,nx2,nx3,nx4)
 	x2 = Array(Float32,1,nx1,nx2,nx3,nx4)
 	x3 = Array(Float32,1,nx1,nx2,nx3,nx4)
@@ -88,11 +88,11 @@ function SeisLinearEvents(;ot=0,dt=0.004,nt=500,ox1=0,dx1=10,nx1=100,ox2=0,dx2=1
 
 	D = zeros(Complex{Float64},nf,nx1,nx2,nx3,nx4)
 	for ievent=1:length(tau1)
-		wav = Ricker(f0[ievent],dt)
+		t,wav = SeisWavelets.Ricker(fc=f0[ievent],dt=dt)
 		nwav = length(wav)
-		wav = cat(2,wav,zeros(1,nf-length(wav)))
+		wav = cat(2,wav',zeros(1,nf-length(wav)))
 		Wav = fft(wav',1)
-		delay = dt*(int(nwav/2)+1)
+		delay = dt*(round(Int,nwav/2)+1)
 		for iw=1:nw
 			w = (iw-1)*dw
 			shift = tau1[ievent] + tau2[ievent] + tau3[ievent] + tau4[ievent] + x1/v1[ievent] + x2/v2[ievent] + x3/v3[ievent] + x4/v4[ievent] - delay
@@ -119,27 +119,15 @@ function SeisLinearEvents(;ot=0,dt=0.004,nt=500,ox1=0,dx1=10,nx1=100,ox2=0,dx2=1
 		   "s","index","index","index","index",
 		   "")	
 	if extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1 && extent.n2 == 1 
-		d = reshape(d,int(extent.n1))
+		d = reshape(d,round(Int,extent.n1))
 	elseif extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1
-		d = reshape(d,int(extent.n1),int(extent.n2))
+		d = reshape(d,round(Int,extent.n1),round(Int,extent.n2))
 	elseif extent.n5 == 1 && extent.n4 == 1
-		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3))
+		d = reshape(d,round(Int,extent.n1),round(Int,extent.n2),round(Int,extent.n3))
 	elseif extent.n5 == 1
-		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3),int(extent.n4))
+		d = reshape(d,round(Int,extent.n1),round(Int,extent.n2),round(Int,extent.n3),round(Int,extent.n4))
 	else
-		d = reshape(d,int(extent.n1),int(extent.n2),int(extent.n3),int(extent.n4),int(extent.n5))
+		d = reshape(d,round(Int,extent.n1),round(Int,extent.n2),round(Int,extent.n3),round(Int,extent.n4),round(Int,extent.n5))
 	end
 	return d,extent
-end
-
-function Ricker(f0,dt)
-	nw=int(2.2/f0/dt)
-	nw=2*int(nw/2)+1
-	nc=int(nw/2)
-	w = zeros(nw,1)
-	k=[1:1:nw]'
-	alpha = (nc-k+1)*f0*dt*pi
-	beta=alpha.^2
-	w = (1.-beta.*2).*exp(-beta)
-	return w
 end

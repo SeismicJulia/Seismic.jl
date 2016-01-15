@@ -1,14 +1,13 @@
 include("Header.jl")
 
-function SeisHeaderInfo(filename,param=Dict())
+function SeisHeaderInfo(filename;ntrace=100000)
 	#
 	#   print Seis header information
 	#
 
-	ntrace = get(param,"ntrace",100000)
-	key = names(Header)
+	@compat	key = fieldnames(Header)
 	nhead = length(key)
-	filename_headers = success(`grep "headers=" $filename`) ? chomp(readall(`grep "headers=" $filename` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
+	filename_headers = ParseHeaderName(filename)
 	stream = open(filename_headers)
 	NX = GetNumTraces(filename)
 	h = GrabHeader(stream,1)
@@ -30,7 +29,7 @@ function SeisHeaderInfo(filename,param=Dict())
 		position = 4*nhead*(itrace-1)
 		seek(stream,position)
 		h1 = read(stream,Header32Bits,nhead*ntrace)
-		h1 = reshape(h1,nhead,int(ntrace))
+		h1 = reshape(h1,nhead,convert(Int,ntrace))
 		for ikey = 1 : length(key)
 			keytype = eval(parse("typeof(Seismic.InitSeisHeader().$(string(key[ikey])))"))
 			h2 = reinterpret(keytype,vec(h1[ikey,:]))
