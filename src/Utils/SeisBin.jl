@@ -82,26 +82,54 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 	naz = max_iaz - min_iaz + 1
 
 	if (style=="sxsygxgy")
-		nx1=nsx;nx2=nsy;nx3=ngx;nx4=ngy
+		nx1=nsx;nx2=nsy;nx3=ngx;nx4=ngy;
+		ox1=osx;ox2=osy;ox3=ogx;ox4=ogy;
+		dx1=dsx;dx2=dsy;dx3=dgx;dx4=dgy;
+		label2="sx";label3="sy";label4="gx";label5="gy";
+		unit2="m";unit3="m";unit4="m";unit5="m";
 	elseif (style=="mxmyhxhy")
-		nx1=nmx;nx2=nmy;nx3=nhx;nx4=nhy
+		nx1=nmx;nx2=nmy;nx3=nhx;nx4=nhy;
+		ox1=omx;ox2=omy;ox3=ohx;ox4=ohy;
+		dx1=dmx;dx2=dmy;dx3=dhx;dx4=dhy;
+		label2="mx";label3="my";label4="hx";label5="hy";
+		unit2="m";unit3="m";unit4="m";unit5="m";
 	elseif (style=="mxmyhaz")
-		nx1=nmx;nx2=nmy;nx3=nh;nx4=naz
+		nx1=nmx;nx2=nmy;nx3=nh;nx4=naz;
+		ox1=omx;ox2=omy;ox3=oh;ox4=oaz;
+		dx1=dmx;dx2=dmy;dx3=dh;dx4=daz;
+		label2="mx";label3="my";label4="h";label5="az";
+		unit2="m";unit3="m";unit4="m";unit5="Degrees";
 	elseif (style=="sxsyhxhy")
-		nx1=nsx;nx2=nsy;nx3=nhx;nx4=nhy
+		nx1=nsx;nx2=nsy;nx3=nhx;nx4=nhy;
+		ox1=osx;ox2=osy;ox3=ohx;ox4=ohy;
+		dx1=dsx;dx2=dsy;dx3=dhx;dx4=dhy;
+		label2="sx";label3="sy";label4="hx";label5="hy";
+		unit2="m";unit3="m";unit4="m";unit5="m";
 	elseif (style=="gxgyhxhy")
-		nx1=ngx;nx2=ngy;nx3=nhx;nx4=nhy
+		nx1=ngx;nx2=ngy;nx3=nhx;nx4=nhy;
+		ox1=ogx;ox2=ogy;ox3=ohx;ox4=ohy;
+		dx1=dgx;dx2=dgy;dx3=dhx;dx4=dhy;
+		label2="gx";label3="gy";label4="hx";label5="hy";
+		unit2="m";unit3="m";unit4="m";unit5="m";
 	elseif (style=="sxsyhaz")
-		nx1=nsx;nx2=nsy;nx3=nh;nx4=naz
+		nx1=nsx;nx2=nsy;nx3=nh;nx4=naz;
+		ox1=osx;ox2=osy;ox3=oh;ox4=oaz;
+		dx1=dsx;dx2=dsy;dx3=dh;dx4=daz;
+		label2="sx";label3="sy";label4="hx";label5="az";
+		unit2="m";unit3="m";unit4="m";unit5="Degrees";
 	elseif (style=="gxgyhaz")
-		nx1=ngx;nx2=ngy;nx3=nh;nx4=naz
+		nx1=ngx;nx2=ngy;nx3=nh;nx4=naz;
+		ox1=ogx;ox2=ogy;ox3=oh;ox4=oaz;
+		dx1=dgx;dx2=dgy;dx3=dh;dx4=daz;
+		label2="gx";label3="gy";label4="h";label5="az";
+		unit2="m";unit3="m";unit4="m";unit5="Degrees";
 	else
 		error("style not recognized.")
 	end
 	nx_out = nx1*nx2*nx3*nx4
 
-	stream = open(join([in ".seish"]))
-	nx_in = int(filesize(stream)/(4*length(names(Header))))
+	stream = open(ParseHeaderName(in))
+	@compat nx_in = int(filesize(stream)/(4*length(fieldnames(Header))))
 	seek(stream, header_count["n1"])
 	nt = read(stream,Int32)
 	seek(stream, header_count["d1"])
@@ -111,6 +139,19 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 	h = Array(Header,1)
 	h[1] = InitSeisHeader()
 
+	extent = Extent(convert(Int32,nt),convert(Int32,nx1),convert(Int32,nx2),convert(Int32,nx3),convert(Int32,nx4),
+		   convert(Float32,0),convert(Float32,ox1),convert(Float32,ox2),convert(Float32,ox3),convert(Float32,ox4),
+		   convert(Float32,dt),convert(Float32,dx1),convert(Float32,dx2),convert(Float32,dx3),convert(Float32,dx4),
+		   "Time",label2,label3,label4,label5,
+		   "s",unit2,unit3,unit4,unit5,
+		   "")
+		   
+	println("extent.n1=",extent.n1)
+	println("extent.n2=",extent.n2)
+	println("extent.n3=",extent.n3)
+	println("extent.n4=",extent.n4)
+	println("extent.n5=",extent.n5)
+	
 	j = 1    
 	for ix1 = 1 : nx1
 		for ix2 = 1 : nx2
@@ -296,21 +337,21 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 					h[1].selev = convert(typeof(h[1].selev),0)
 					h[1].gelev = convert(typeof(h[1].gelev),0)
 					h[1].trid = convert(typeof(h[1].trid),0)
-					SeisWrite(out,d,h,itrace=j)
+					SeisWrite(out,d,h,extent,itrace=j)
 					j += 1
 				end
 			end
 		end
 	end
 
-	out_d = join([out ".seisd"])
-	out_h = join([out ".seish"])
+	out_d = ParseDataName(out)
+	out_h = ParseHeaderName(out)
 	stream_d = open(out_d,"a")
 	stream_h = open(out_h,"a")
 
 	if (style=="sxsygxgy")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].isx - min_isx)*nx2*nx3*nx4 + (h[1].isy - min_isy)*nx3*nx4 + (h[1].igx - min_igx)*nx4 + h[1].igy - min_igy + 1
 			if (h[1].isx >= min_isx && h[1].isx <= max_isx && h[1].isy >= min_isy && h[1].isy <= max_isy && h[1].igx >= min_igx && h[1].igx <= max_igx && h[1].igy >= min_igy && h[1].igy <= max_igy)
 				h[1].tracenum = convert(Int32,itrace)
@@ -324,7 +365,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="mxmyhxhy")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].imx - min_imx)*nx2*nx3*nx4 + (h[1].imy - min_imy)*nx3*nx4 + (h[1].ihx - min_ihx)*nx4 + h[1].ihy - min_ihy + 1
 			if (h[1].imx >= min_imx && h[1].imx <= max_imx && h[1].imy >= min_imy && h[1].imy <= max_imy && h[1].ihx >= min_ihx && h[1].ihx <= max_ihx && h[1].ihy >= min_ihy && h[1].ihy <= max_ihy)
 				h[1].tracenum = convert(Int32,itrace)
@@ -338,7 +379,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="mxmyhaz")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].imx - min_imx)*nx2*nx3*nx4 + (h[1].imy - min_imy)*nx3*nx4 + (h[1].ih - min_ih)*nx4 + h[1].iaz - min_iaz + 1
 			if (h[1].imx >= min_imx && h[1].imx <= max_imx && h[1].imy >= min_imy && h[1].imy <= max_imy && h[1].ih >= min_ih && h[1].ih <= max_ih && h[1].iaz >= min_iaz && h[1].iaz <= max_iaz)
 				h[1].tracenum = convert(Int32,itrace)
@@ -352,7 +393,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="sxsyhxhy")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].isx - min_isx)*nx2*nx3*nx4 + (h[1].isy - min_isy)*nx3*nx4 + (h[1].ihx - min_ihx)*nx4 + h[1].ihy - min_ihy + 1
 			if (h[1].isx >= min_isx && h[1].isx <= max_isx && h[1].isy >= min_isy && h[1].isy <= max_isy && h[1].ihx >= min_ihx && h[1].ihx <= max_ihx && h[1].ihy >= min_ihy && h[1].ihy <= max_ihy)
 				h[1].tracenum = convert(Int32,itrace)
@@ -366,7 +407,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="gxgyhxhy")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].igx - min_igx)*nx2*nx3*nx4 + (h[1].igy - min_igy)*nx3*nx4 + (h[1].ihx - min_ihx)*nx4 + h[1].ihy - min_ihy + 1
 			if (h[1].igx >= min_igx && h[1].igx <= max_igx && h[1].igy >= min_igy && h[1].igy <= max_igy && h[1].ihx >= min_ihx && h[1].ihx <= max_ihx && h[1].ihy >= min_ihy && h[1].ihy <= max_ihy)
 				h[1].tracenum = convert(Int32,itrace)
@@ -380,7 +421,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="sxsyhaz")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].isx - min_isx)*nx2*nx3*nx4 + (h[1].isy - min_isy)*nx3*nx4 + (h[1].ih - min_ih)*nx4 + h[1].iaz - min_iaz + 1
 			if (h[1].isx >= min_isx && h[1].isx <= max_isx && h[1].isy >= min_isy && h[1].isy <= max_isy && h[1].ih >= min_ih && h[1].ih <= max_ih && h[1].iaz >= min_iaz && h[1].iaz <= max_iaz)
 				h[1].tracenum = convert(Int32,itrace)
@@ -394,7 +435,7 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		end
 	elseif (style=="gxgyhaz")
 		for j = 1 : nx_in
-			d,h = SeisRead(in,group="some",itrace=j,ntrace=1)
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
 			itrace = (h[1].igx - min_igx)*nx2*nx3*nx4 + (h[1].igy - min_igy)*nx3*nx4 + (h[1].ih - min_ih)*nx4 + h[1].iaz - min_iaz + 1
 			if (h[1].igx >= min_igx && h[1].igx <= max_igx && h[1].igy >= min_igy && h[1].igy <= max_igy && h[1].ih >= min_ih && h[1].ih <= max_ih && h[1].iaz >= min_iaz && h[1].iaz <= max_iaz)
 				h[1].tracenum = convert(Int32,itrace)

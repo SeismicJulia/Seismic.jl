@@ -1,7 +1,7 @@
 include("Header.jl")
 
 function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,ntrace=500)
-	SeisProcessHeaders(in,out,[WindowHeaders],[Dict(:key=>key,:minval=>minval,:maxval=>maxval)],group="some",key=key,ntrace=ntrace,update_tracenum=false)
+	@compat SeisProcessHeaders(in,out,[WindowHeaders],[Dict(:key=>key,:minval=>minval,:maxval=>maxval)],group="some",key=key,ntrace=ntrace,update_tracenum=false)
 	DATAPATH = get(ENV,"DATAPATH","./")
 	filename_d_out = join([DATAPATH out "@data@"])
 	filename_h_out = join([DATAPATH out "@headers@"])	
@@ -14,10 +14,12 @@ function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,n
 	if nt > h.n1
 		nt = h.n1
 	end
-	extent = ReadTextHeader(in)
-	extent.n1 = nt
-	extent.n2 = nx
-	extent.o1 = tmin
+	extent = Extent(convert(Int32,nt),convert(Int32,nx),convert(Int32,1),convert(Int32,1),convert(Int32,1),
+		   convert(Float32,tmin),convert(Float32,1),convert(Float32,0),convert(Float32,0),convert(Float32,0),
+		   convert(Float32,h.d1),convert(Float32,1),convert(Float32,1),convert(Float32,1),convert(Float32,1),
+		   "Time","Trace Number","","","",
+		   "s","index","","","",
+		   "")	
 	WriteTextHeader(out,extent,"native_float",4,filename_d_out,filename_h_out)
 
 end
