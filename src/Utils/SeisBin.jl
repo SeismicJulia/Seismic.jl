@@ -59,7 +59,7 @@ include("Header.jl")
 
 """
 
-function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1,min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0)
+function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1,min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,ntrace=10000)
 
 	rad2deg = 180/pi;
 	deg2rad = pi/180;
@@ -145,12 +145,6 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 		   "Time",label2,label3,label4,label5,
 		   "s",unit2,unit3,unit4,unit5,
 		   "")
-		   
-	println("extent.n1=",extent.n1)
-	println("extent.n2=",extent.n2)
-	println("extent.n3=",extent.n3)
-	println("extent.n4=",extent.n4)
-	println("extent.n5=",extent.n5)
 	
 	j = 1    
 	for ix1 = 1 : nx1
@@ -350,104 +344,139 @@ function SeisBin(in,out;style="sxsygxgy",ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,
 	stream_h = open(out_h,"a")
 
 	if (style=="sxsygxgy")
-		for j = 1 : nx_in
-			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
-			itrace = (h[1].isx - min_isx)*nx2*nx3*nx4 + (h[1].isy - min_isy)*nx3*nx4 + (h[1].igx - min_igx)*nx4 + h[1].igy - min_igy + 1
-			if (h[1].isx >= min_isx && h[1].isx <= max_isx && h[1].isy >= min_isy && h[1].isy <= max_isy && h[1].igx >= min_igx && h[1].igx <= max_igx && h[1].igy >= min_igy && h[1].igy <= max_igy)
-				h[1].tracenum = convert(Int32,itrace)
-				if (itrace > 0 && itrace <= nx_out)
-					position_d = 4*nt*(itrace - 1)
-					seek(stream_d,position_d)
-					write(stream_d,d)
-					PutHeader(stream_h,h[1],itrace)
+		j = 1
+		while j <= nx_in	
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=ntrace)
+			num_traces_in = size(d[:,:],2)
+			for k = 1 : num_traces_in
+				itrace = (h[k].isx - min_isx)*nx2*nx3*nx4 + (h[k].isy - min_isy)*nx3*nx4 + (h[k].igx - min_igx)*nx4 + h[k].igy - min_igy + 1
+				if (h[k].isx >= min_isx && h[k].isx <= max_isx && h[k].isy >= min_isy && h[k].isy <= max_isy && h[k].igx >= min_igx && h[k].igx <= max_igx && h[k].igy >= min_igy && h[k].igy <= max_igy)
+					h[k].tracenum = convert(Int32,itrace)
+					if (itrace > 0 && itrace <= nx_out)
+						position_d = 4*nt*(itrace - 1)
+						seek(stream_d,position_d)
+						write(stream_d,d[:,k])
+						PutHeader(stream_h,h[k],itrace)
+					end
 				end
 			end
+			j += num_traces_in
 		end
 	elseif (style=="mxmyhxhy")
-		for j = 1 : nx_in
-			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
-			itrace = (h[1].imx - min_imx)*nx2*nx3*nx4 + (h[1].imy - min_imy)*nx3*nx4 + (h[1].ihx - min_ihx)*nx4 + h[1].ihy - min_ihy + 1
-			if (h[1].imx >= min_imx && h[1].imx <= max_imx && h[1].imy >= min_imy && h[1].imy <= max_imy && h[1].ihx >= min_ihx && h[1].ihx <= max_ihx && h[1].ihy >= min_ihy && h[1].ihy <= max_ihy)
-				h[1].tracenum = convert(Int32,itrace)
-				if (itrace > 0 && itrace <= nx_out)
-					position_d = 4*nt*(itrace - 1)
-					seek(stream_d,position_d)
-					write(stream_d,d)
-					PutHeader(stream_h,h[1],itrace)
+		j = 1
+		while j <= nx_in	
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=ntrace)
+			num_traces_in = size(d[:,:],2)
+			for k = 1 : num_traces_in
+				itrace = (h[k].imx - min_imx)*nx2*nx3*nx4 + (h[k].imy - min_imy)*nx3*nx4 + (h[k].ihx - min_ihx)*nx4 + h[k].ihy - min_ihy + 1
+				if (h[k].imx >= min_imx && h[k].imx <= max_imx && h[k].imy >= min_imy && h[k].imy <= max_imy && h[k].ihx >= min_ihx && h[k].ihx <= max_ihx && h[k].ihy >= min_ihy && h[k].ihy <= max_ihy)
+					h[k].tracenum = convert(Int32,itrace)
+					if (itrace > 0 && itrace <= nx_out)
+						position_d = 4*nt*(itrace - 1)
+						seek(stream_d,position_d)
+						write(stream_d,d[:,k])
+						PutHeader(stream_h,h[k],itrace)
+					end
 				end
 			end
+			j += num_traces_in
 		end
 	elseif (style=="mxmyhaz")
-		for j = 1 : nx_in
-			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
-			itrace = (h[1].imx - min_imx)*nx2*nx3*nx4 + (h[1].imy - min_imy)*nx3*nx4 + (h[1].ih - min_ih)*nx4 + h[1].iaz - min_iaz + 1
-			if (h[1].imx >= min_imx && h[1].imx <= max_imx && h[1].imy >= min_imy && h[1].imy <= max_imy && h[1].ih >= min_ih && h[1].ih <= max_ih && h[1].iaz >= min_iaz && h[1].iaz <= max_iaz)
-				h[1].tracenum = convert(Int32,itrace)
-				if (itrace > 0 && itrace <= nx_out)
-					position_d = 4*nt*(itrace - 1)
-					seek(stream_d,position_d)
-					write(stream_d,d)
-					PutHeader(stream_h,h[1],itrace)
+		j = 1
+		while j <= nx_in	
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=ntrace)
+			num_traces_in = size(d[:,:],2)
+			for k = 1 : num_traces_in
+				itrace = (h[k].imx - min_imx)*nx2*nx3*nx4 + (h[k].imy - min_imy)*nx3*nx4 + (h[k].ih - min_ih)*nx4 + h[k].iaz - min_iaz + 1
+				if (h[k].imx >= min_imx && h[k].imx <= max_imx && h[k].imy >= min_imy && h[k].imy <= max_imy && h[k].ih >= min_ih && h[k].ih <= max_ih && h[k].iaz >= min_iaz && h[k].iaz <= max_iaz)
+					h[k].tracenum = convert(Int32,itrace)
+					if (itrace > 0 && itrace <= nx_out)
+						position_d = 4*nt*(itrace - 1)
+						seek(stream_d,position_d)
+						write(stream_d,d[:,k])
+						PutHeader(stream_h,h[k],itrace)
+					end
 				end
 			end
+			j += num_traces_in
 		end
 	elseif (style=="sxsyhxhy")
-		for j = 1 : nx_in
-			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
-			itrace = (h[1].isx - min_isx)*nx2*nx3*nx4 + (h[1].isy - min_isy)*nx3*nx4 + (h[1].ihx - min_ihx)*nx4 + h[1].ihy - min_ihy + 1
-			if (h[1].isx >= min_isx && h[1].isx <= max_isx && h[1].isy >= min_isy && h[1].isy <= max_isy && h[1].ihx >= min_ihx && h[1].ihx <= max_ihx && h[1].ihy >= min_ihy && h[1].ihy <= max_ihy)
-				h[1].tracenum = convert(Int32,itrace)
-				if (itrace > 0 && itrace <= nx_out)
-					position_d = 4*nt*(itrace - 1)
-					seek(stream_d,position_d)
-					write(stream_d,d)
-					PutHeader(stream_h,h[1],itrace)
+		j = 1
+		while j <= nx_in	
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=ntrace)
+			num_traces_in = size(d[:,:],2)
+			for k = 1 : num_traces_in
+				itrace = (h[k].isx - min_isx)*nx2*nx3*nx4 + (h[k].isy - min_isy)*nx3*nx4 + (h[k].ihx - min_ihx)*nx4 + h[k].ihy - min_ihy + 1
+				if (h[k].isx >= min_isx && h[k].isx <= max_isx && h[k].isy >= min_isy && h[k].isy <= max_isy && h[k].ihx >= min_ihx && h[k].ihx <= max_ihx && h[k].ihy >= min_ihy && h[k].ihy <= max_ihy)
+					h[k].tracenum = convert(Int32,itrace)
+					if (itrace > 0 && itrace <= nx_out)
+						position_d = 4*nt*(itrace - 1)
+						seek(stream_d,position_d)
+						write(stream_d,d[:,k])
+						PutHeader(stream_h,h[k],itrace)
+					end
 				end
 			end
+			j += num_traces_in
 		end
 	elseif (style=="gxgyhxhy")
-		for j = 1 : nx_in
-			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
-			itrace = (h[1].igx - min_igx)*nx2*nx3*nx4 + (h[1].igy - min_igy)*nx3*nx4 + (h[1].ihx - min_ihx)*nx4 + h[1].ihy - min_ihy + 1
-			if (h[1].igx >= min_igx && h[1].igx <= max_igx && h[1].igy >= min_igy && h[1].igy <= max_igy && h[1].ihx >= min_ihx && h[1].ihx <= max_ihx && h[1].ihy >= min_ihy && h[1].ihy <= max_ihy)
-				h[1].tracenum = convert(Int32,itrace)
-				if (itrace > 0 && itrace <= nx_out)
-					position_d = 4*nt*(itrace - 1)
-					seek(stream_d,position_d)
-					write(stream_d,d)
-					PutHeader(stream_h,h[1],itrace)
+		j = 1
+		while j <= nx_in	
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=ntrace)
+			num_traces_in = size(d[:,:],2)
+			for k = 1 : num_traces_in
+				itrace = (h[k].igx - min_igx)*nx2*nx3*nx4 + (h[k].igy - min_igy)*nx3*nx4 + (h[k].ihx - min_ihx)*nx4 + h[k].ihy - min_ihy + 1
+				if (h[k].igx >= min_igx && h[k].igx <= max_igx && h[k].igy >= min_igy && h[k].igy <= max_igy && h[k].ihx >= min_ihx && h[k].ihx <= max_ihx && h[k].ihy >= min_ihy && h[k].ihy <= max_ihy)
+					h[k].tracenum = convert(Int32,itrace)
+					if (itrace > 0 && itrace <= nx_out)
+						position_d = 4*nt*(itrace - 1)
+						seek(stream_d,position_d)
+						write(stream_d,d[:,k])
+						PutHeader(stream_h,h[k],itrace)
+					end
 				end
 			end
+			j += num_traces_in
 		end
 	elseif (style=="sxsyhaz")
-		for j = 1 : nx_in
-			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
-			itrace = (h[1].isx - min_isx)*nx2*nx3*nx4 + (h[1].isy - min_isy)*nx3*nx4 + (h[1].ih - min_ih)*nx4 + h[1].iaz - min_iaz + 1
-			if (h[1].isx >= min_isx && h[1].isx <= max_isx && h[1].isy >= min_isy && h[1].isy <= max_isy && h[1].ih >= min_ih && h[1].ih <= max_ih && h[1].iaz >= min_iaz && h[1].iaz <= max_iaz)
-				h[1].tracenum = convert(Int32,itrace)
-				if (itrace > 0 && itrace <= nx_out)
-					position_d = 4*nt*(itrace - 1)
-					seek(stream_d,position_d)
-					write(stream_d,d)
-					PutHeader(stream_h,h[1],itrace)
+		j = 1
+		while j <= nx_in	
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=ntrace)
+			num_traces_in = size(d[:,:],2)
+			for k = 1 : num_traces_in
+				itrace = (h[k].isx - min_isx)*nx2*nx3*nx4 + (h[k].isy - min_isy)*nx3*nx4 + (h[k].ih - min_ih)*nx4 + h[k].iaz - min_iaz + 1
+				if (h[k].isx >= min_isx && h[k].isx <= max_isx && h[k].isy >= min_isy && h[k].isy <= max_isy && h[k].ih >= min_ih && h[k].ih <= max_ih && h[k].iaz >= min_iaz && h[k].iaz <= max_iaz)
+					h[k].tracenum = convert(Int32,itrace)
+					if (itrace > 0 && itrace <= nx_out)
+						position_d = 4*nt*(itrace - 1)
+						seek(stream_d,position_d)
+						write(stream_d,d[:,k])
+						PutHeader(stream_h,h[k],itrace)
+					end
 				end
 			end
+			j += num_traces_in
 		end
 	elseif (style=="gxgyhaz")
-		for j = 1 : nx_in
-			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=1)
-			itrace = (h[1].igx - min_igx)*nx2*nx3*nx4 + (h[1].igy - min_igy)*nx3*nx4 + (h[1].ih - min_ih)*nx4 + h[1].iaz - min_iaz + 1
-			if (h[1].igx >= min_igx && h[1].igx <= max_igx && h[1].igy >= min_igy && h[1].igy <= max_igy && h[1].ih >= min_ih && h[1].ih <= max_ih && h[1].iaz >= min_iaz && h[1].iaz <= max_iaz)
-				h[1].tracenum = convert(Int32,itrace)
-				if (itrace > 0 && itrace <= nx_out)
-					position_d = 4*nt*(itrace - 1)
-					seek(stream_d,position_d)
-					write(stream_d,d)
-					PutHeader(stream_h,h[1],itrace)
+		j = 1
+		while j <= nx_in	
+			d,h,e = SeisRead(in,group="some",itrace=j,ntrace=ntrace)
+			num_traces_in = size(d[:,:],2)
+			for k = 1 : num_traces_in
+				itrace = (h[k].igx - min_igx)*nx2*nx3*nx4 + (h[k].igy - min_igy)*nx3*nx4 + (h[k].ih - min_ih)*nx4 + h[k].iaz - min_iaz + 1
+				if (h[k].igx >= min_igx && h[k].igx <= max_igx && h[k].igy >= min_igy && h[k].igy <= max_igy && h[k].ih >= min_ih && h[k].ih <= max_ih && h[k].iaz >= min_iaz && h[k].iaz <= max_iaz)
+					h[k].tracenum = convert(Int32,itrace)
+					if (itrace > 0 && itrace <= nx_out)
+						position_d = 4*nt*(itrace - 1)
+						seek(stream_d,position_d)
+						write(stream_d,d[:,k])
+						PutHeader(stream_h,h[k],itrace)
+					end
 				end
 			end
+			j += num_traces_in
 		end
-	end
+	end	
 	close(stream_d)
 	close(stream_h)
 
