@@ -26,6 +26,8 @@ int main (int argc, char *argv[])
 	int nhx,nhy,ntraces;
 	int padt,padx;
 	bool adj,pade_flag,verbose;
+	struct SeisFileHeader fh;
+	
 	if (!par_read_bool(argc,argv,"adj",&adj)) adj = true;
 	if (!par_read_float(argc,argv,"damping",&damping)) damping = 1000.;
 	if (!par_read_bool(argc,argv,"verbose",&verbose)) verbose = false;
@@ -49,23 +51,27 @@ int main (int argc, char *argv[])
 	if (!par_read_int(argc,argv,"padt",&padt)) padt = 2;
 	if (!par_read_int(argc,argv,"padx",&padx)) padx = 2;
 	// get dimensions from velocity (nz,oz,dz,nx,ox,dx) and wavelet (nt,sx) files
-	SeisDim(wav_name,&nt,&ntraces);
-	SeisDim(vel_name,&nz,&ntraces);
+	InitFileHeader(&fh);
+	ReadFileHeader(wav_name,&fh);
+	nt = fh.n1;
+	ReadFileHeader(vel_name,&fh);
+	nz = fh.n1; ntraces = fh.n2*fh.n3*fh.n4*fh.n5;
+	
 	//fprintf(stderr,"nx=%d\n",nx);
 	//fprintf(stderr,"nz=%d\n",nz);
 	//fprintf(stderr,"nt=%d\n",nt);
 	h_wav = allocSeisHeader(1);
 	wav = alloc2float(nt,1); 		
-	SeisRead(wav_name,wav,h_wav,nt,1);
-	ot = h_wav[0].o1;
-	dt = h_wav[0].d1;
+	SeisRead(wav_name,wav,h_wav,&fh);
+	ot = fh.o1;
+	dt = fh.d1;
 	h_vel = allocSeisHeader(ntraces);
 	vel = alloc2float(nz,ntraces);
-	SeisRead(vel_name,vel,h_vel,nz,ntraces); 	
+	SeisRead(vel_name,vel,h_vel,&fh); 	
 	nx = h_vel[ntraces-1].imx - h_vel[0].imx + 1;
 	ny = h_vel[ntraces-1].imy - h_vel[0].imy + 1;
-	oz = h_vel[0].o1;
-	dz = h_vel[0].d1;
+	oz = fh.o1;
+	dz = fh.d1;
 	ox = h_vel[0].mx;
 	dx = dhx;
 	oy = h_vel[0].my;
@@ -96,12 +102,12 @@ int main (int argc, char *argv[])
 	if (adj){
 		h_d = allocSeisHeader(nxa*nya);
 		d = alloc2float(nt,nxa*nya);
-		SeisRead(d_name,d,h_d,nt,nxa*nya);
+		SeisRead(d_name,d,h_d,&fh);
 	}        
 	else{
 		h_m = allocSeisHeader(nxa*nya);
 		m = alloc2float(nz,nxa*nya);
-		SeisRead(m_name,m,h_m,nz,nxa*nya);
+		SeisRead(m_name,m,h_m,&fh);
 	}
 	if (adj){
 		m = alloc2float(nz,nxa*nya);
@@ -145,10 +151,18 @@ int main (int argc, char *argv[])
 		for (ix=0;ix<nxa*nya;ix++) h_m[ix].my = h_d[ix].gy;
 		for (ix=0;ix<nxa*nya;ix++) h_m[ix].imx = (int) truncf((h_m[ix].mx - ox)/dx);
 		for (ix=0;ix<nxa*nya;ix++) h_m[ix].imy = (int) truncf((h_m[ix].my - oy)/dy);
-		SeisWrite(m_name,m,h_m,nz,nxa*nya);
+		InitFileHeader(&fh);
+		fh.n1 = nz; fh.o1 = oz; fh.d1 = dz;
+		fh.n2 = nxa; fh.o2 = xmin; fh.d2 = dx;
+		fh.n3 = nya; fh.o3 = ymin; fh.d3 = dy;
+		SeisWrite(m_name,m,h_m,&fh);
 	}
 	else{
-		SeisWrite(d_name,d,h_d,nt,nxa*nya);
+		InitFileHeader(&fh);
+		fh.n1 = nt; fh.o1 = ot; fh.d1 = dt;
+		fh.n2 = nxa; fh.o2 = xmin; fh.d2 = dx;
+		fh.n3 = nya; fh.o3 = ymin; fh.d3 = dy;
+		SeisWrite(d_name,d,h_d,&fh);
 	}
 	free2float(d); 
 	free2float(m); 
