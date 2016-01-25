@@ -270,16 +270,20 @@ void freeSeisHeader(struct SeisHeader *p)
 void SeisRead(char *in,float **d,struct SeisHeader *h, int nt, int nx)
 {
 	FILE *fp_d,*fp_h;
-	char in_d[512],in_h[512];
+	char in_d[100],in_h[100];
 	int ix;
-	sprintf(in_d, "%s.seisd",in);
-	sprintf(in_h, "%s.seish",in);  	
+	ParseDataName(in,in_d);
+	ParseHeaderName(in,in_h);
   
 	fp_h = fopen(in_h,"rb");
 	if (!fp_h){
-		printf("Unable to open %s\n",in_h);
+		printf("SeisRead: Unable to open %s\n",in_h);
 		return;
 	}
+	
+	printf("SeisRead: attempting to open %s\n",in_h);
+	
+	
 	for (ix=0; ix<nx; ix++){	
 		fread(&h[ix],sizeof(struct SeisHeader),1,fp_h);
 	}
@@ -287,7 +291,7 @@ void SeisRead(char *in,float **d,struct SeisHeader *h, int nt, int nx)
 
 	fp_d=fopen(in_d,"rb");
 	if (!fp_d){
-		printf("Unable to open %s\n",in_d);
+		printf("SeisRead: Unable to open %s\n",in_d);
 		return;
 	}
 	for (ix=0; ix<nx; ix++){	
@@ -302,14 +306,14 @@ void SeisRead(char *in,float **d,struct SeisHeader *h, int nt, int nx)
 void SeisWrite(char *out,float **d,struct SeisHeader *h, int nt, int nx)
 {
 	FILE *fp_d,*fp_h;
-	char out_d[512],out_h[512];
+	char out_d[100],out_h[100];
 	int ix;
 	sprintf(out_d, "%s.seisd",out);
 	sprintf(out_h, "%s.seish",out);  	
   
 	fp_h = fopen(out_h,"wb");
 	if (!fp_h){
-		printf("Unable to open %s\n",out_h);
+		printf("SeisWrite: Unable to open %s\n",out_h);
 		return;
 	}
 	for (ix=0; ix<nx; ix++){	
@@ -319,7 +323,7 @@ void SeisWrite(char *out,float **d,struct SeisHeader *h, int nt, int nx)
 
 	fp_d=fopen(out_d,"wb");
 	if (!fp_d){
-		printf("Unable to open %s\n",out_d);
+		printf("SeisWrite: Unable to open %s\n",out_d);
 		return;
 	}
 	for (ix=0; ix<nx; ix++){	
@@ -330,18 +334,59 @@ void SeisWrite(char *out,float **d,struct SeisHeader *h, int nt, int nx)
 	return;
 }
 
+void ParseDataName(char *filename,char *dname)
+{
+    FILE *fp;
+    char fline[100];
+    char *newline;
+    int count = 0, occ = 0;
+	char *pattern = "in=";
+    fp = fopen(filename, "r");
+    while (fgets(fline, 100, fp) != NULL) {
+        count++;
+        if (newline == strchr(fline, '\n'))
+            *newline = '\0';
+        if (strstr(fline, pattern) != NULL) {
+            strncpy(dname, fline + 5, (int)strlen(fline) - 7);
+            occ++;
+        }
+    }
+	return;
+	
+}
+
+void ParseHeaderName(char *filename,char *hname)
+{
+    FILE *fp;
+    char fline[100];
+    char *newline;
+    int count = 0, occ = 0;
+	char *pattern = "headers=";
+    fp = fopen(filename, "r");
+    while (fgets(fline, 100, fp) != NULL) {
+        count++;
+        if (newline == strchr(fline, '\n'))
+            *newline = '\0';
+        if (strstr(fline, pattern) != NULL) {
+            strncpy(hname, fline + 10, (int)strlen(fline) - 12);
+            occ++;
+        }
+    }
+	return;
+	
+}
+
 /* return the dimensions (nt and nx) of a seis file */
 void SeisDim(char *in,int *nt, int *nx)
 {
 	FILE *fp_h;
-	char in_h[512];
+	char in_h[100];
 	struct SeisHeader h;
 	struct stat st;
-	
-	sprintf(in_h, "%s.seish",in);  	
+	ParseHeaderName(in,in_h);
 	fp_h = fopen(in_h,"rb");
 	if (!fp_h){
-		printf("Unable to open %s\n",in_h);
+		printf("SeisDim: Unable to open %s\n",in_h);
 		return;
 	}
 	fread(&h,sizeof(struct SeisHeader),1,fp_h);

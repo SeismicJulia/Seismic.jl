@@ -86,4 +86,6 @@ void SeisRead(char *in,float **d,struct SeisHeader *h, int nt, int nx);
 void SeisWrite(char *out,float **d,struct SeisHeader *h, int nt, int nx);
 void SeisDim(char *in,int *nt, int *nx);
 void InitSeisHeader(struct SeisHeader *h, int nx);
+void ParseDataName(char *filename,char *dname);
+void ParseHeaderName(char *filename,char *hname);
 #endif

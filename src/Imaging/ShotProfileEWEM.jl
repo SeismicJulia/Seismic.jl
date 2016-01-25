@@ -43,11 +43,11 @@
 
 """
 
-function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},adj=true;damping=1000.,vp="vp",vs="vs",angx="angx",angy="angy",wav="wav",sz=0.,gz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,nangx=1,oangx=0,dangx=1,nangy=1,oangy=0,dangy=1,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
+function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},adj=true;damping=1000.,vp="vp.seis",vs="vs.seis",angx="angx.seis",angy="angy.seis",wav="wav.seis",sz=0.,gz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,nangx=1,oangx=0,dangx=1,nangy=1,oangy=0,dangy=1,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
 
 
 	nshot = length(sx)	
-	vel,h = SeisRead(vp)
+	vel,h,extent = SeisRead(vp)
 	min_imx = h[1].imx
 	max_imx = h[end].imx
 	dmx = dhx
