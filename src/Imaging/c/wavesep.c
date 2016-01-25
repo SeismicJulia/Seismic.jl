@@ -28,6 +28,8 @@ int main (int argc, char *argv[])
 	float **ux,**uy,**uz,**up,**us;
 	float ox,dx,oy,dy,ot,dt,fmin,fmax,vp,vs;
 	bool decomp,verbose,H;
+	struct SeisFileHeader fh;
+
 	if (!par_read_bool(argc,argv,"verbose",&verbose)) verbose = false;
 	if (!par_read_bool(argc,argv,"H",&H)) H = true; // flag for exact Helmholtz decomp op (y), or adjoint of inverse Helmholtz decomp op (n)
 	if (!par_read_bool(argc,argv,"decomp",&decomp)) decomp = true; // flag for decomposition from data components to potentials (y), or recomposition from potentials to data components (n)
@@ -42,20 +44,21 @@ int main (int argc, char *argv[])
 	if (!par_read_float(argc,argv,"fmin",&fmin)) fmin = 0;
 	if (!par_read_float(argc,argv,"fmax",&fmax)) fmax = 80;
 	// get dimensions from files
-	if (decomp){
-		SeisDim(ux_name,&nt,&ntraces);
-	}
-	else{
-		SeisDim(up_name,&nt,&ntraces);
-	}
+	
+	
+	InitFileHeader(&fh);
+	if (decomp) ReadFileHeader(ux_name,&fh);
+	else        ReadFileHeader(up_name,&fh);
+	nt = fh.n1;
+	ntraces = fh.n2*fh.n3*fh.n4*fh.n5;
 	h = allocSeisHeader(ntraces);
 	if (decomp){
 		ux = alloc2float(nt,ntraces);
-		SeisRead(ux_name,ux,h,nt,ntraces);
+		SeisRead(ux_name,ux,h,&fh);
 		uy = alloc2float(nt,ntraces);
-		SeisRead(uy_name,uy,h,nt,ntraces);
+		SeisRead(uy_name,uy,h,&fh);
 		uz = alloc2float(nt,ntraces);
-		SeisRead(uz_name,uz,h,nt,ntraces);
+		SeisRead(uz_name,uz,h,&fh);
 		up = alloc2float(nt,ntraces);
 		us = alloc2float(nt,ntraces); 
 		for (ix=0;ix<ntraces;ix++) for (it=0;it<nt;it++) up[ix][it] = 0.; 
@@ -64,9 +67,9 @@ int main (int argc, char *argv[])
 	else{
 		h = allocSeisHeader(ntraces);
 		up = alloc2float(nt,ntraces);
-		SeisRead(up_name,up,h,nt,ntraces);
+		SeisRead(up_name,up,h,&fh);
 		us = alloc2float(nt,ntraces);
-		SeisRead(us_name,us,h,nt,ntraces);
+		SeisRead(us_name,us,h,&fh);
 		ux = alloc2float(nt,ntraces);
 		uy = alloc2float(nt,ntraces); 
 		uz = alloc2float(nt,ntraces);
@@ -87,13 +90,13 @@ int main (int argc, char *argv[])
 	wesep2dop(ux,uy,uz,up,us,nt,ot,dt,nx,ox,dx,ny,oy,dy,vp,vs,fmin,fmax,decomp,H,verbose);
 
 	if (decomp){
-		SeisWrite(up_name,up,h,nt,ntraces);
-		SeisWrite(us_name,us,h,nt,ntraces);
+		SeisWrite(up_name,up,h,&fh);
+		SeisWrite(us_name,us,h,&fh);
 	}
 	else {
-		SeisWrite(ux_name,ux,h,nt,ntraces);
-		SeisWrite(uy_name,uy,h,nt,ntraces);  	
-		SeisWrite(uz_name,uz,h,nt,ntraces);  	
+		SeisWrite(ux_name,ux,h,&fh);
+		SeisWrite(uy_name,uy,h,&fh);  	
+		SeisWrite(uz_name,uz,h,&fh);  	
 	}         
 
 	free2float(up); 

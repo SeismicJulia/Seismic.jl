@@ -114,7 +114,12 @@ function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},adj=tru
 		a = pmap(shotewem,shot_list)
 		j = 1
 		gather = zeros(Float32,nz,nangx*nangy)
-
+		extent = Seismic.Extent(nz,nmx,nmy,nangx,1,
+				0,1,1,1,1,
+				dt,1,1,1,1,
+				"Time","Trace Number","","","",
+				"s","index","","","",
+				"")
 		for imx = 1 : nmx
 			for imy = 1 : nmy
 				h = Header[]
@@ -135,9 +140,9 @@ function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},adj=tru
 						h[(iangx-1)*nangy + iangy].az = convert(typeof(h[1].az),(iangy-1)*dangy + oangy)
 					end
 				end
-				SeisWrite(m[1],gather,h,itrace=j)
-				SeisWrite(m[2],gather,h,itrace=j)
-				SeisWrite(m[3],gather,h,itrace=j)
+				SeisWrite(m[1],gather,h,extent,itrace=j)
+				SeisWrite(m[2],gather,h,extent,itrace=j)
+				SeisWrite(m[3],gather,h,extent,itrace=j)
 				j += nangx*nangy
 			end
 		end

@@ -34,6 +34,8 @@ int main (int argc, char *argv[])
 	int nhx,nhy,ntraces;
 	int padt,padx;
 	bool adj,pade_flag,verbose;
+	struct SeisFileHeader fh;
+
 	if (!par_read_bool(argc,argv,"adj",&adj)) adj = true;
 	if (!par_read_float(argc,argv,"damping",&damping)) damping = 1000.;
 	if (!par_read_bool(argc,argv,"verbose",&verbose)) verbose = false;
@@ -62,31 +64,34 @@ int main (int argc, char *argv[])
 	if (!par_read_int(argc,argv,"padt",&padt)) padt = 2;
 	if (!par_read_int(argc,argv,"padx",&padx)) padx = 2;
 	// get dimensions from velocity (nz,oz,dz,nx,ox,dx) and wavelet (nt,sx) files
-	
-	SeisDim(wav_name,&nt,&ntraces);
-	SeisDim(vp_name,&nz,&ntraces);	
+	InitFileHeader(&fh);
+	ReadFileHeader(wav_name,&fh);
+	nt = fh.n1;
+	ReadFileHeader(vp_name,&fh);
+	nz = fh.n1; ntraces = fh.n2*fh.n3*fh.n4*fh.n5;
+
 	//fprintf(stderr,"nx=%d\n",nx);
 	//fprintf(stderr,"nz=%d\n",nz);
 	//fprintf(stderr,"nt=%d\n",nt);
 	h_wav = allocSeisHeader(1);
 	wav = alloc2float(nt,1); 		
-	SeisRead(wav_name,wav,h_wav,nt,1);
-	ot = h_wav[0].o1;
-	dt = h_wav[0].d1;	
+	SeisRead(wav_name,wav,h_wav,&fh);
+	ot = fh.o1;
+	dt = fh.d1;
 	h_vp = allocSeisHeader(ntraces);
 	vp = alloc2float(nz,ntraces);
-	SeisRead(vp_name,vp,h_vp,nz,ntraces);
+	SeisRead(vp_name,vp,h_vp,&fh); 	
 	h_vs = allocSeisHeader(ntraces); 	
 	vs = alloc2float(nz,ntraces);
-	SeisRead(vs_name,vs,h_vs,nz,ntraces);  	 	
+	SeisRead(vs_name,vs,h_vs,&fh); 	
 	nx = h_vp[ntraces-1].imx - h_vp[0].imx + 1;
 	ny = h_vp[ntraces-1].imy - h_vp[0].imy + 1;
-	oz = h_vp[0].o1;
-	dz = h_vp[0].d1;
+	oz = fh.o1;
+	dz = fh.d1;
 	ox = h_vp[0].mx;
 	dx = dhx;
 	oy = h_vp[0].my;
-	dy = dhy;	
+	dy = dhy;
 	// calculate number of x points within the shot aperture
 	xmin = ox > sx + ohx ? ox : sx + ohx;
 	xmax = ox + (nx-1)*dx < sx + ohx + (nhx-1)*dhx ? ox + (nx-1)*dx : sx + ohx + (nhx-1)*dhx;
@@ -117,24 +122,24 @@ int main (int argc, char *argv[])
 	if (adj){
 		h_ux = allocSeisHeader(nxa*nya);
 		ux = alloc2float(nt,nxa*nya);
-		SeisRead(ux_name,ux,h_ux,nt,nxa*nya);
+		SeisRead(ux_name,ux,h_ux,&fh);
 		h_uy = allocSeisHeader(nxa*nya);
 		uy = alloc2float(nt,nxa*nya);
-		SeisRead(uy_name,uy,h_uy,nt,nxa*nya);
+		SeisRead(uy_name,uy,h_uy,&fh);
 		h_uz = allocSeisHeader(nxa*nya);
 		uz = alloc2float(nt,nxa*nya);
-		SeisRead(uz_name,uz,h_uz,nt,nxa*nya);
+		SeisRead(uz_name,uz,h_uz,&fh);
 	}        
 	else{
 		h_mpp = allocSeisHeader(nxa*nya);
 		mpp = alloc2float(nz,nxa*nya);
-		SeisRead(mpp_name,mpp,h_mpp,nz,nxa*nya);
+		SeisRead(mpp_name,mpp,h_mpp,&fh);
 		h_mps1 = allocSeisHeader(nxa*nya);
 		mps1 = alloc2float(nz,nxa*nya);
-		SeisRead(mps1_name,mps1,h_mps1,nz,nxa*nya);
+		SeisRead(mps1_name,mps1,h_mps1,&fh);
 		h_mps2 = allocSeisHeader(nxa*nya);
 		mps2 = alloc2float(nz,nxa*nya);
-		SeisRead(mps2_name,mps2,h_mps2,nz,nxa*nya);
+		SeisRead(mps2_name,mps2,h_mps2,&fh);
 	}
 	if (adj){
 		mpp = alloc2float(nz,nxa*nya);
@@ -206,29 +211,37 @@ int main (int argc, char *argv[])
 		adj,pade_flag,verbose);
 
 	if (adj){
+		InitFileHeader(&fh);
+		fh.n1 = nz; fh.o1 = oz; fh.d1 = dz;
+		fh.n2 = nxa; fh.o2 = xmin; fh.d2 = dx;
+		fh.n3 = nya; fh.o3 = ymin; fh.d3 = dy;
 		for (ix=0;ix<nxa*nya;ix++) h_mpp[ix].trid = 1;
 		for (ix=0;ix<nxa*nya;ix++) h_mpp[ix].mx = h_ux[ix].gx;
 		for (ix=0;ix<nxa*nya;ix++) h_mpp[ix].my = h_ux[ix].gy;
 		for (ix=0;ix<nxa*nya;ix++) h_mpp[ix].imx = (int) truncf((h_mpp[ix].mx - ox)/dx);
 		for (ix=0;ix<nxa*nya;ix++) h_mpp[ix].imy = (int) truncf((h_mpp[ix].my - oy)/dy);
-		SeisWrite(mpp_name,mpp,h_mpp,nz,nxa*nya);
+		SeisWrite(mpp_name,mpp,h_mpp,&fh);
 		for (ix=0;ix<nxa*nya;ix++) h_mps1[ix].trid = 2;
 		for (ix=0;ix<nxa*nya;ix++) h_mps1[ix].mx = h_ux[ix].gx;
 		for (ix=0;ix<nxa*nya;ix++) h_mps1[ix].my = h_ux[ix].gy;
 		for (ix=0;ix<nxa*nya;ix++) h_mps1[ix].imx = (int) truncf((h_mps1[ix].mx - ox)/dx);
 		for (ix=0;ix<nxa*nya;ix++) h_mps1[ix].imy = (int) truncf((h_mps1[ix].my - oy)/dy);
-		SeisWrite(mps1_name,mps1,h_mps1,nz,nxa*nya);
+		SeisWrite(mps1_name,mps1,h_mps1,&fh);
 		for (ix=0;ix<nxa*nya;ix++) h_mps2[ix].trid = 2;
 		for (ix=0;ix<nxa*nya;ix++) h_mps2[ix].mx = h_ux[ix].gx;
 		for (ix=0;ix<nxa*nya;ix++) h_mps2[ix].my = h_ux[ix].gy;
 		for (ix=0;ix<nxa*nya;ix++) h_mps2[ix].imx = (int) truncf((h_mps2[ix].mx - ox)/dx);
 		for (ix=0;ix<nxa*nya;ix++) h_mps2[ix].imy = (int) truncf((h_mps2[ix].my - oy)/dy);
-		SeisWrite(mps2_name,mps2,h_mps2,nz,nxa*nya);
+		SeisWrite(mps2_name,mps2,h_mps2,&fh);
 	}
 	else{
-		SeisWrite(ux_name,ux,h_ux,nt,nxa*nya);
-		SeisWrite(uy_name,uy,h_uy,nt,nxa*nya);
-		SeisWrite(uz_name,uz,h_uz,nt,nxa*nya);
+		InitFileHeader(&fh);
+		fh.n1 = nt; fh.o1 = ot; fh.d1 = dt;
+		fh.n2 = nxa; fh.o2 = xmin; fh.d2 = dx;
+		fh.n3 = nya; fh.o3 = ymin; fh.d3 = dy;
+		SeisWrite(ux_name,ux,h_ux,&fh);
+		SeisWrite(uy_name,uy,h_uy,&fh);
+		SeisWrite(uz_name,uz,h_uz,&fh);
 	}
 
 	free2float(ux); 

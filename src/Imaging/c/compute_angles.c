@@ -25,6 +25,8 @@ int main (int argc, char *argv[])
 	float ohx,dhx,ohy,dhy;
 	int nhx,nhy,ntraces;
 	bool pade_flag,verbose,dip_flag;
+	struct SeisFileHeader fh;
+	
 	if (!par_read_bool(argc,argv,"verbose",&verbose)) verbose = false;
 	if (!par_read_bool(argc,argv,"dip_flag",&dip_flag)) dip_flag = false; // flag to correct angles relative to reflector normal
 	if (!par_read_bool(argc,argv,"pade_flag",&pade_flag)) pade_flag = false; // flag for Pade Fourier correction
@@ -46,19 +48,22 @@ int main (int argc, char *argv[])
 	if (!par_read_float(argc,argv,"fmin",&fmin)) fmin = 0;
 	if (!par_read_float(argc,argv,"fmax",&fmax)) fmax = 80;
 	// get dimensions from velocity (nz,oz,dz,nx,ox,dx) and wavelet (nt,sx) files
-	SeisDim(wav_name,&nt,&ntraces);
-	SeisDim(vel_name,&nz,&ntraces);
+	InitFileHeader(&fh);
+	ReadFileHeader(wav_name,&fh);
+	nt = fh.n1;
+	ReadFileHeader(vel_name,&fh);
+	nz = fh.n1; ntraces = fh.n2*fh.n3*fh.n4*fh.n5;
 	//fprintf(stderr,"nx=%d\n",nx);
 	//fprintf(stderr,"nz=%d\n",nz);
 	//fprintf(stderr,"nt=%d\n",nt);
 	h_wav = allocSeisHeader(1);
 	wav = alloc2float(nt,1); 		
-	SeisRead(wav_name,wav,h_wav,nt,1);
+	SeisRead(wav_name,wav,h_wav,&fh);
 	ot = h_wav[0].o1;
 	dt = h_wav[0].d1;
 	h_vel = allocSeisHeader(ntraces);
 	vel = alloc2float(nz,ntraces);
-	SeisRead(vel_name,vel,h_vel,nz,ntraces); 	
+	SeisRead(vel_name,vel,h_vel,&fh); 	
 	nx = h_vel[ntraces-1].imx - h_vel[0].imx + 1;
 	ny = h_vel[ntraces-1].imy - h_vel[0].imy + 1;
 	oz = h_vel[0].o1;
@@ -114,8 +119,8 @@ int main (int argc, char *argv[])
 		dipy = alloc2float(nz,ntraces);
 		h_dipx = allocSeisHeader(ntraces);
 		h_dipy = allocSeisHeader(ntraces);
-		SeisRead(dipx_name,dipx,h_dipx,nz,ntraces); 	
-		SeisRead(dipy_name,dipy,h_dipy,nz,ntraces); 	
+		SeisRead(dipx_name,dipx,h_dipx,&fh); 	
+		SeisRead(dipy_name,dipy,h_dipy,&fh); 	
 		for (imx=0;imx<nxa;imx++){
 			for (imy=0;imy<nya;imy++){
 				for (iz=0;iz<nz;iz++) angx[imx*nya + imy][iz] += dipx[(imx + ixmin_aperture)*ny + (imy + iymin_aperture)][iz];
@@ -128,9 +133,13 @@ int main (int argc, char *argv[])
 		freeSeisHeader(h_dipy);
 	}
 
-	SeisWrite(angx_name,angx,h_angx,nz,nxa*nya);
+	InitFileHeader(&fh);
+	fh.n1 = nz; fh.o1 = oz; fh.d1 = dz;
+	fh.n2 = nxa; fh.o2 = xmin; fh.d2 = dx;
+	fh.n3 = nya; fh.o3 = ymin; fh.d3 = dy;
+	SeisWrite(angx_name,angx,h_angx,&fh);
 	freeSeisHeader(h_angx);
-	SeisWrite(angy_name,angy,h_angy,nz,nxa*nya);
+	SeisWrite(angy_name,angy,h_angy,&fh);
 	freeSeisHeader(h_angy);
 	free2float(angx); 
 	free2float(angy); 
