@@ -239,6 +239,7 @@ int main (int argc, char *argv[])
 		fh.n1 = nt; fh.o1 = ot; fh.d1 = dt;
 		fh.n2 = nxa; fh.o2 = xmin; fh.d2 = dx;
 		fh.n3 = nya; fh.o3 = ymin; fh.d3 = dy;
+		sprintf(fh.dname,"%s%s",getenv("DATAPATH"); check if datapath is NULL and just use current directory if so.
 		SeisWrite(ux_name,ux,h_ux,&fh);
 		SeisWrite(uy_name,uy,h_uy,&fh);
 		SeisWrite(uz_name,uz,h_uz,&fh);

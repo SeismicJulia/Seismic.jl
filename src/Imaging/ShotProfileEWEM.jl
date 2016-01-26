@@ -114,11 +114,11 @@ function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},adj=tru
 		a = pmap(shotewem,shot_list)
 		j = 1
 		gather = zeros(Float32,nz,nangx*nangy)
-		extent = Seismic.Extent(nz,nmx,nmy,nangx,1,
-				0,1,1,1,1,
-				dt,1,1,1,1,
-				"Time","Trace Number","","","",
-				"s","index","","","",
+		extent = Seismic.Extent(nz,nmx,nmy,nangx,nangy,
+				oz,dhx*min_imx,dhy*min_imy,oangx,oangy,
+				dz,dhx,dhy,dangx,dangy,
+				"Depth","mx","my","angx","angy",
+				"s","m","m","degrees","degrees",
 				"")
 		for imx = 1 : nmx
 			for imy = 1 : nmy
@@ -147,12 +147,12 @@ function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},adj=tru
 			end
 		end
 
-		mpp_m = join([m[1] ".seisd"])
-		mpp_h = join([m[1] ".seish"])
-		mps1_m = join([m[2] ".seisd"])
-		mps1_h = join([m[2] ".seish"])
-		mps2_m = join([m[3] ".seisd"])
-		mps2_h = join([m[3] ".seish"])
+		mpp_m = ParseDataName(m[1])
+		mpp_h = ParseHeaderName(m[1])
+		mps1_m = ParseDataName(m[2])
+		mps1_h = ParseHeaderName(m[2])
+		mps2_m = ParseDataName(m[3])
+		mps2_h = ParseHeaderName(m[3])
 		stream_mpp = open(mpp_m,"a+")
 		stream_hpp = open(mpp_h,"a+")
 		stream_mps1 = open(mps1_m,"a+")
@@ -161,12 +161,12 @@ function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},adj=tru
 		stream_hps2 = open(mps2_h,"a+")
 
 		for ishot = 1 : nshot
-			mpp_shot,hpp_shot  = SeisRead(shot_list[ishot].mpp)
-			mps1_shot,hps1_shot  = SeisRead(shot_list[ishot].mps1)
-			mps2_shot,hps2_shot  = SeisRead(shot_list[ishot].mps2)
+			mpp_shot,hpp_shot,extent  = SeisRead(shot_list[ishot].mpp)
+			mps1_shot,hps1_shot,extent  = SeisRead(shot_list[ishot].mps1)
+			mps2_shot,hps2_shot,extent  = SeisRead(shot_list[ishot].mps2)
 			if (nangx != 1 || nangy != 1)
-				angx_shot,h_ang = SeisRead(shot_list[ishot].angx)
-				angy_shot,h_ang = SeisRead(shot_list[ishot].angy)
+				angx_shot,h_ang,extent = SeisRead(shot_list[ishot].angx)
+				angy_shot,h_ang,extent = SeisRead(shot_list[ishot].angy)
 			else
 				angx_shot = 0.*mpp_shot
 				angy_shot = 0.*mpp_shot
