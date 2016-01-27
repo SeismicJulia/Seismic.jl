@@ -119,6 +119,7 @@ int main (int argc, char *argv[])
 	//SeisWrite("vel_aperture",vel_aperture,h_vel_aperture,nz,nxa*nya);
 	free2float(vp); 
 	free2float(vs); 
+
 	if (adj){
 		h_ux = allocSeisHeader(nxa*nya);
 		ux = alloc2float(nt,nxa*nya);
@@ -142,6 +143,27 @@ int main (int argc, char *argv[])
 		SeisRead(mps2_name,mps2,h_mps2,&fh);
 	}
 	if (adj){
+	
+	
+	
+	/////////////////// test
+		InitFileHeader(&fh);
+		fh.n1 = nt; fh.o1 = ot; fh.d1 = dt;
+		fh.n2 = nxa; fh.o2 = xmin; fh.d2 = dx;
+		fh.n3 = nya; fh.o3 = ymin; fh.d3 = dy;
+		SeisWrite("test_SeisWrite.seis",ux,h_ux,&fh);
+	/////////////////// test
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		mpp = alloc2float(nz,nxa*nya);
 		mps1 = alloc2float(nz,nxa*nya);
 		mps2 = alloc2float(nz,nxa*nya);
@@ -239,7 +261,6 @@ int main (int argc, char *argv[])
 		fh.n1 = nt; fh.o1 = ot; fh.d1 = dt;
 		fh.n2 = nxa; fh.o2 = xmin; fh.d2 = dx;
 		fh.n3 = nya; fh.o3 = ymin; fh.d3 = dy;
-		sprintf(fh.dname,"%s%s",getenv("DATAPATH"); check if datapath is NULL and just use current directory if so.
 		SeisWrite(ux_name,ux,h_ux,&fh);
 		SeisWrite(uy_name,uy,h_uy,&fh);
 		SeisWrite(uz_name,uz,h_uz,&fh);

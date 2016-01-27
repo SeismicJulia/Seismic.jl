@@ -651,7 +651,7 @@ void elastic_separate_3d(complex *ux, complex *uy, complex *uz,
 {
 	int imx,imy,ikx,iky,ik;
 	fftwf_complex *a,*b;  
-	complex *ux_k,*uy_k,*uz_k,*up_k,*us1_k,*us2_k;
+	complex *ux_k,*uz_k,*up_k,*us2_k;
 	float kx,kxp,kxs,kzp,kzs,sp,ss,norm,norm_p,norm_s;
 	ux_k = alloc1complex(nkx*nky);
 	//uy_k = alloc1complex(nkx*nky);

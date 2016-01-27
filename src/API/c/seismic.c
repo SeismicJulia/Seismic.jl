@@ -301,6 +301,22 @@ void SeisWrite(char *out,float **d,struct SeisHeader *h, struct SeisFileHeader *
 {
 	int ix,nx;
 	FILE *fp_d,*fp_h;
+	const char* datapath;
+	// get DATAPATH environmental variable if it exists, and prepend it to dname and hname. 
+	datapath = getenv("DATAPATH");
+	if (datapath != NULL){
+		strcpy (fh->dname,datapath);
+		strcat (fh->dname,out);
+		strcpy (fh->hname,datapath);
+		strcat (fh->hname,out);
+	}
+	else{
+		strcpy (fh->dname,out);
+		strcpy (fh->hname,out);
+	}	
+	strcat (fh->dname,"@data@");
+	strcat (fh->hname,"@headers@");
+	
 	WriteFileHeader(out,fh);
 	nx = fh->n2*fh->n3*fh->n4*fh->n5;
   
@@ -365,7 +381,7 @@ void ReadFileHeader(char *filename,struct SeisFileHeader *fh)
 {
 	FILE *fp;
 	char fline[100];
-	char *newline;
+	char *newline = NULL;
 	char tmp[100];
 	fp = fopen(filename, "r");
 	while (fgets(fline, 100, fp) != NULL) {
