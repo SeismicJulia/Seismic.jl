@@ -143,27 +143,6 @@ int main (int argc, char *argv[])
 		SeisRead(mps2_name,mps2,h_mps2,&fh);
 	}
 	if (adj){
-	
-	
-	
-	/////////////////// test
-		InitFileHeader(&fh);
-		fh.n1 = nt; fh.o1 = ot; fh.d1 = dt;
-		fh.n2 = nxa; fh.o2 = xmin; fh.d2 = dx;
-		fh.n3 = nya; fh.o3 = ymin; fh.d3 = dy;
-		SeisWrite("test_SeisWrite.seis",ux,h_ux,&fh);
-	/////////////////// test
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 		mpp = alloc2float(nz,nxa*nya);
 		mps1 = alloc2float(nz,nxa*nya);
 		mps2 = alloc2float(nz,nxa*nya);
@@ -218,6 +197,16 @@ int main (int argc, char *argv[])
 		for (ix=0;ix<nxa*nya;ix++) h_uz[ix].ihx = (int) truncf((h_uz[ix].hx - ohx)/dhx);
 		for (ix=0;ix<nxa*nya;ix++) h_uz[ix].ihy = (int) truncf((h_uz[ix].hy - ohy)/dhy);
 	}
+
+fprintf(stderr,"nt=%d,ot=%f,dt=%f\n",nt,ot,dt);
+fprintf(stderr,"nxa=%d,xmin=%f,dx=%f\n",nxa,xmin,dx);
+fprintf(stderr,"nya=%d,ymin=%f,dy=%f\n",nya,ymin,dy);
+fprintf(stderr,"sx=%f,sy=%f\n",sx,sy);
+fprintf(stderr,"nz=%d,oz=%f,dz=%f\n",nz,oz,dz);
+fprintf(stderr,"sz=%f,gz=%f\n",sz,gz);
+fprintf(stderr,"fmin=%f,fmax=%f\n",fmin,fmax);
+fprintf(stderr,"padt=%d,padx=%d\n",padt,padx);
+
 	ewem(ux,uy,uz,
 		mpp,mps1,mps2, 
 		wav,

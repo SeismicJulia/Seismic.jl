@@ -3,6 +3,7 @@ include("Header.jl")
 function SeisWriteHeaders(filename,h;itrace=1,update_tracenum=true)
 
 	DATAPATH = get(ENV,"DATAPATH","./")
+	filename_d = join([DATAPATH filename "@data@"])	
 	filename_h = join([DATAPATH filename "@headers@"])	
 	if (itrace==1)
 		stream_hout = open(filename_h,"w")
@@ -20,4 +21,9 @@ function SeisWriteHeaders(filename,h;itrace=1,update_tracenum=true)
 	end
 	write(stream_hout,h1)
 	close(stream_hout)
+	
+	# update header file name in text header
+	extent = ReadTextHeader(filename)
+	WriteTextHeader(filename,extent,"native_float",4,filename_d,filename_h)
+	
 end

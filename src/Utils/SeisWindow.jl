@@ -47,7 +47,7 @@ function SeisWindow(in::ASCIIString,out::ASCIIString;key=[],minval=[],maxval=[])
 	filename_h_out = join([DATAPATH out "@headers@"])	
 	cp(filename_h_tmp,filename_h_out);
 	rm(filename_h_tmp);
-	
+	rm(tmp);
 end
 
 function FetchTraces(in::ASCIIString,out::ASCIIString;ntrace=500,itmin=int32(1),itmax=int32(9999999999))
