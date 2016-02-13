@@ -42,7 +42,7 @@
 
 """
 
-function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel="vel",angx="angx",angy="angy",wav="wav",sz=0.,gz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,nangx=1,oangx=0,dangx=1,nangy=1,oangy=0,dangy=1,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
+function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel="vel",angx="angx",angy="angy",wav="wav",sz=0.,gz=0.,nangx=1,oangx=0,dangx=1,nangy=1,oangy=0,dangy=1,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
 	
 	nshot = length(sx)	
 	v,h = SeisRead(vel)
@@ -64,7 +64,7 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 
 	shot_list = Array(Shot,nshot)
 	for ishot = 1 : nshot
-		shot_list[ishot] = Shot(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+		shot_list[ishot] = Shot(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 		shot_list[ishot].m = join([m "_shot_" int(floor(sx[ishot])) "_" int(floor(sy[ishot]))])
 		shot_list[ishot].d = join([d "_shot_" int(floor(sx[ishot])) "_" int(floor(sy[ishot]))])
 		shot_list[ishot].angx = join([angx "_shot_" int(floor(sx[ishot])) "_" int(floor(sy[ishot]))])
@@ -76,18 +76,11 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 		shot_list[ishot].sy = sy[ishot]
 		shot_list[ishot].sz = sz
 		shot_list[ishot].gz = gz
-		shot_list[ishot].ohx = ohx
-		shot_list[ishot].dhx = dhx
-		shot_list[ishot].nhx = nhx
-		shot_list[ishot].ohy = ohy
-		shot_list[ishot].dhy = dhy
-		shot_list[ishot].nhy = nhy
 		shot_list[ishot].fmin = fmin
 		shot_list[ishot].fmax = fmax
 		shot_list[ishot].padt = padt
 		shot_list[ishot].padx = padx		
 		shot_list[ishot].adj = (adj == true) ? "y" : "n"
-		shot_list[ishot].pade_flag = (pade_flag == true) ? "y" : "n"
 		shot_list[ishot].verbose = (verbose == true) ? "y" : "n"
 	end
 
@@ -100,7 +93,7 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 
 	if (adj == true)
 		for ishot = 1 : nshot
-			SeisWindow(d,shot_list[ishot].d,key=["sx","sy","gx","gy"],minval=[sx[ishot],sy[ishot],min_gx,min_gy],maxval=[sx[ishot],sy[ishot],max_gx,max_gy])
+			SeisWindow(d,shot_list[ishot].d,key=["sx","sy"],minval=[sx[ishot],sy[ishot]],maxval=[sx[ishot],sy[ishot]])
 		end
 		a = pmap(shotwem,shot_list)
 		j = 1    
@@ -205,15 +198,9 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 
 		for ishot = 1 : nshot
 			sx = shot_list[ishot].sx
-			min_imxa = min_imx > int(floor((sx + ohx)/dhx)) - min_imx ? min_imx : int(floor((sx + ohx)/dhx)) - min_imx
-			max_imxa = max_imx < int(floor((sx + ohx)/dhx)) + nhx - 1 ? max_imx : int(floor((sx + ohx)/dhx)) + nhx - 1
-			nmxa = max_imxa - min_imxa + 1
 			sy = shot_list[ishot].sy
-			min_imya = min_imy > int(floor((sy + ohy)/dhy)) - min_imy ? min_imy : int(floor((sy + ohy)/dhy)) - min_imy
-			max_imya = max_imy < int(floor((sy + ohy)/dhy)) + nhy - 1 ? max_imy : int(floor((sy + ohy)/dhy)) + nhy - 1
-			nmya = max_imya - min_imya + 1
 			j = 1    				
-			h_shot = Array(Header,nmxa*nmya)
+			h_shot = Array(Header,nmx*nmy)
 			for imx = 1 : nmxa
 				for imy = 1 : nmya
 					h_shot[j] = Seismic.InitSeisHeader() 
@@ -221,14 +208,14 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 					h_shot[j].o1 = convert(typeof(h_shot[1].o1),0)
 					h_shot[j].n1 = convert(typeof(h_shot[1].n1),nz)
 					h_shot[j].d1 = convert(typeof(h_shot[1].d1),dz)
-					h_shot[j].imx = convert(typeof(h_shot[1].imx),imx-1 + min_imxa)
-					h_shot[j].imy = convert(typeof(h_shot[1].imy),imy-1 + min_imya)
+					h_shot[j].imx = convert(typeof(h_shot[1].imx),imx-1 + min_imx)
+					h_shot[j].imy = convert(typeof(h_shot[1].imy),imy-1 + min_imy)
 					h_shot[j].mx = convert(typeof(h_shot[1].mx),dmx*h_shot[j].imx)
 					h_shot[j].my = convert(typeof(h_shot[1].my),dmy*h_shot[j].imy)
 					j += 1
 				end
 			end
-			m_shot = zeros(nz,nmxa*nmya)
+			m_shot = zeros(nz,nmx*nmy)
 			if (nangx != 1 || nangy != 1)
 				angx_shot,h_ang = SeisRead(shot_list[ishot].angx)
 				angy_shot,h_ang = SeisRead(shot_list[ishot].angy)
@@ -236,12 +223,12 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 				angx_shot = 0.*m_shot
 				angy_shot  = 0.*m_shot
 			end	
-			for imx = 1 : nmxa
-				for imy = 1 : nmya
+			for imx = 1 : nmx
+				for imy = 1 : nmy
 					ix = (imx - 1)*nmy + imy
 					h_shot[ix].sx = convert(typeof(h[1].sx),shot_list[ishot].sx)
 					h_shot[ix].sy = convert(typeof(h[1].sy),shot_list[ishot].sy)	
-					itrace = (imx-1 + min_imxa)*nmy*nangx*nangy + (imy-1 + min_imya)*nangx*nangy
+					itrace = (imx-1 + min_imx)*nmy*nangx*nangy + (imy-1 + min_imy)*nangx*nangy
 					position_m = 4*nz*itrace
 					seek(stream_m,position_m)
 					m = read(stream_m,Float32,nz*nangx*nangy)
@@ -308,18 +295,11 @@ type Shot
 	sy
 	sz
 	gz
-	ohx
-	dhx
-	nhx
-	ohy
-	dhy
-	nhy
 	fmin
 	fmax
 	padt
 	padx
 	adj
-	pade_flag
 	verbose
 end
 
@@ -331,11 +311,9 @@ function shotwem(shot)
 	join(["adj=",shot.adj]), 
 	join(["d=",shot.d]), join(["m=",shot.m]), join(["vel=",shot.vel]),  join(["wav=",shot.wav]),  
 	join(["damping=",shot.damping]), join(["sx=",shot.sx]), join(["sy=",shot.sy]),  join(["sz=",shot.sz]),  join(["gz=",shot.gz]), 
-	join(["ohx=",shot.ohx]),  join(["dhx=",shot.dhx]),  join(["nhx=",shot.nhx]), 
-	join(["ohy=",shot.ohy]),  join(["dhy=",shot.dhy]),  join(["nhy=",shot.nhy]),   
 	join(["fmin=",shot.fmin]),  join(["fmax=",shot.fmax]), 
 	join(["padt=",shot.padt]),  join(["padx=",shot.padx]), 
-	join(["pade_flag=",shot.pade_flag]),  join(["verbose=",shot.verbose]) ] 
+	join(["verbose=",shot.verbose]) ] 
 	a = ccall((:main, "shotwem"), Int32, (Int32, Ptr{Ptr{Uint8}}), length(argv), argv)                    
 	return(a)
 end
