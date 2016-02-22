@@ -1,18 +1,18 @@
 #include "seismic.h"
 #include "ewem.h"
 void ewem(float **ux, float **uy, float **uz,
-		float **mpp, float **mps1, float **mps2,
-		float **wav,
-		int nt, float ot, float dt, 
-		int nmx,float omx, float dmx,
-		int nmy,float omy, float dmy,
-		float sx,float sy,
-		int nz, float oz, float dz, float gz, float sz,
-		float **vp, float **vs, 
-		float fmin, float fmax,
-		int padt, int padx,
-		float damping,
-		bool adj, bool pade_flag, bool verbose)
+	  float **mpp, float **mps1, float **mps2,
+	  float **wav,
+	  int nt, float ot, float dt, 
+	  int nmx,float omx, float dmx,
+	  int nmy,float omy, float dmy,
+	  float sx,float sy,
+	  int nz, float oz, float dz, float gz, float sz,
+	  float **vp, float **vs, 
+	  float fmin, float fmax,
+	  int padt, int padx,
+	  float damping,
+	  bool adj, bool verbose)
 /*< elastic wave equation depth migration operator. >*/
 {
 	int iz,ix,imx,imy,igx,igy,ik,iw,it,nw,nkx,nky,ntfft;
@@ -190,7 +190,7 @@ void ewem(float **ux, float **uy, float **uz,
 				nz,oz,dz,gz,sz,nmx,omx,dmx,nmy,omy,dmy,
 				nthread,
 				vp,po_p,pd_p,vs,po_s,pd_s,
-				p1,p2,adj,pade_flag,verbose);
+				p1,p2,adj,verbose);
 	}
 	if (verbose) fprintf(stderr,"\n");
 
@@ -264,7 +264,7 @@ void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
 		float **vp,float *po_p,float **pd_p,
 		float **vs,float *po_s,float **pd_s,
 		fftwf_plan p1,fftwf_plan p2,
-		bool adj, bool pade_flag, bool verbose)
+		bool adj, bool verbose)
 /*< extrapolate 1 frequency >*/
 {
 	float w,factor,z;
@@ -307,7 +307,7 @@ void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
 	for (iz=0;iz<nz;iz++){ // extrapolate source wavefield 
 		z = oz + dz*iz;
 		if (z >= sz){
-			ssop(up_xs,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vp,po_p,pd_p,p1,p2,true,pade_flag,true,verbose);
+			ssop(up_xs,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vp,po_p,pd_p,p1,p2,true,true,verbose);
 			for (ix=0;ix<nmx*nmy;ix++) smig[ix][iz]  = up_xs[ix]/max_source;
 		}
 		else{
@@ -319,9 +319,9 @@ void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
 			z = oz + dz*iz;
 			if (z >= gz){
 				elastic_separate_3d(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,true,adj);
-				ssop(up_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vp,po_p,pd_p,p1,p2,true,pade_flag,false,verbose);
-				ssop(us1_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vs,po_s,pd_s,p1,p2,true,pade_flag,false,verbose);
-				ssop(us2_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vs,po_s,pd_s,p1,p2,true,pade_flag,false,verbose);
+				ssop(up_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vp,po_p,pd_p,p1,p2,true,false,verbose);
+				ssop(us1_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vs,po_s,pd_s,p1,p2,true,false,verbose);
+				ssop(us2_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,dz,iz,vs,po_s,pd_s,p1,p2,true,false,verbose);
 				elastic_separate_3d(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,false,adj);
 				for (imx=0;imx<nmx;imx++){ 
 					for (imy=0;imy<nmy;imy++){
@@ -341,9 +341,9 @@ void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
 				for (ix=0;ix<nmx*nmy;ix++) up_xg[ix]  += smig[ix][iz]*mpp[ix][iz];
 				for (ix=0;ix<nmx*nmy;ix++) us1_xg[ix] += smig[ix][iz]*mps1[ix][iz];
 				for (ix=0;ix<nmx*nmy;ix++) us2_xg[ix] += smig[ix][iz]*mps2[ix][iz];
-				ssop(up_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vp,po_p,pd_p,p1,p2,false,pade_flag,false,verbose);
-				ssop(us1_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vs,po_s,pd_s,p1,p2,false,pade_flag,false,verbose);
-				ssop(us2_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vs,po_s,pd_s,p1,p2,false,pade_flag,false,verbose);
+				ssop(up_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vp,po_p,pd_p,p1,p2,false,false,verbose);
+				ssop(us1_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vs,po_s,pd_s,p1,p2,false,false,verbose);
+				ssop(us2_xg,w,dkx,dky,nkx,nky,nmx,omx,dmx,nmy,omy,dmy,-dz,iz,vs,po_s,pd_s,p1,p2,false,false,verbose);
 				elastic_separate_3d(ux_xg,uy_xg,uz_xg,up_xg,us1_xg,us2_xg,w,dkx,nkx,nmx,omx,dmx,dky,nky,nmy,omy,dmy,1./po_p[iz],1./po_s[iz],p1,p2,false,adj);
 			}
 		}
@@ -371,7 +371,6 @@ void ssop(complex *d_x,
 		float **v,float *po,float **pd,
 		fftwf_plan p1,fftwf_plan p2,
 		bool adj, 
-		bool pade_flag, 
 		bool src,
 		bool verbose)
 {
@@ -402,7 +401,6 @@ void ssop(complex *d_x,
 	}
 	else{
 		boundary_condition(d_x,nmx,lmx,nmy,lmy);    
-		if (pade_flag) pade(d_x,nmx,omx,dmx,nmy,omy,dmy,dz,w,iz,v,po,pd,adj,src,verbose);
 		for(imx=0; imx<nkx;imx++){ 
 			for(imy=0; imy<nky;imy++){ 
 				if (imx < nmx && imy < nmy){
@@ -437,7 +435,6 @@ void ssop(complex *d_x,
 			}
 		}
 
-		if (pade_flag) pade(d_x,nmx,omx,dmx,nmy,omy,dmy,dz,w,iz,v,po,pd,adj,src,verbose);
 		boundary_condition(d_x,nmx,lmx,nmy,lmy);    
 
 	}
@@ -455,64 +452,6 @@ void ssop(complex *d_x,
 	fftwf_free(a);
 	fftwf_free(b);
 
-
-	return;
-}
-
-void pade(complex *d,
-		int nmx,float omx,float dmx,int nmy,float omy,float dmy,float dz,
-		float w, int iz,
-		float **v,float *po,float **pd,
-		bool adj, bool src,
-		bool verbose)
-/*  Split-Step Padé Fourier migration correction: Huang and Fehler (2002) */
-{
-
-	int imx,imy;
-	float m,ko,w2;
-	complex *aX,*X,*aY,*Y;
-
-	if (w>60.) w2 = w;
-	else w2 = 60.;
-	X = alloc1complex(nmx); 
-	aX = alloc1complex(nmx); 
-	for (imy=0;imy<nmy;imy++){
-		for (imx=0;imx<nmx;imx++){ 
-			X[imx] = d[imx*nmy + imy];
-			m = v[imx*nmy + imy][iz]*po[iz];
-			ko = w*po[iz];
-			if (src) aX[imx] =-(v[imx*nmy + imy][iz]*v[imx*nmy + imy][iz]/(w2*w2))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
-			else     aX[imx] = (v[imx*nmy + imy][iz]*v[imx*nmy + imy][iz]/(w2*w2))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
-		}
-		fdop(X,nmx,dmx,aX,adj);
-		for (imx=0;imx<nmx;imx++){
-			//fprintf(stderr,"a=%f + %fi\n",crealf(a),cimagf(a));
-			if (adj) d[imx*nmy + imy] += X[imx];
-			else     d[imx*nmy + imy] -= X[imx];
-		}
-	}
-	free1complex(aX);
-	free1complex(X);
-
-	Y = alloc1complex(nmy); 
-	aY = alloc1complex(nmy); 
-	for (imx=0;imx<nmx;imx++){
-		for (imy=0;imy<nmy;imy++){ 
-			Y[imy] = d[imx*nmy + imy];
-			m = v[imx*nmy + imy][iz]*po[iz];
-			ko = w*po[iz];
-			if (src) aY[imy] =-(v[imx*nmy + imy][iz]*v[imx*nmy + imy][iz]/(w2*w2))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
-			else     aY[imy] = (v[imx*nmy + imy][iz]*v[imx*nmy + imy][iz]/(w2*w2))*I*(m-1.)*ko*fabsf(dz)/(2.*m*m);
-		}
-		fdop(Y,nmy,dmy,aY,adj);
-		for (imy=0;imy<nmy;imy++){
-			//fprintf(stderr,"a=%f + %fi\n",crealf(a),cimagf(a));
-			if (adj) d[imx*nmy + imy] += Y[imy];
-			else     d[imx*nmy + imy] -= Y[imy];
-		}
-	}
-	free1complex(aY);
-	free1complex(Y);
 
 	return;
 }

@@ -15,13 +15,6 @@
 * wav = "wav" : seis file containing the source wavelet (in time domain) 
 * sz = 0. : source depth (Dev: read this from source wavelet file for variable source depth)
 * gz = 0. : receiver depth (Dev: read this from data file for variable source depth (but then what to do in fwd op?))
-* nhx = 101 : number of offset bins
-* ohx = 1000. : min offset (surface offset in the data)
-* dhx = 10. : offset increment
-* nhy = 101 : number of offset bins
-* ohy = 1000. : min offset (surface offset in the data)
-* dhy = 10. : offset increment
-* pade_flag = false : flag for Pade Fourier correction
 * nangx = 1 : number of angle bins in x direction
 * oangx = 0. : min angle in x direction (angle between source incidence angle and reflector normal in Degrees)
 * dangx = 1. : angle increment in x direction
@@ -48,19 +41,17 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 	v,h = SeisRead(vel)
 	min_imx = h[1].imx
 	max_imx = h[end].imx
-	dmx = dhx
-	nmx = max_imx - min_imx + 1
+	nx = max_imx - min_imx + 1
+	ox = h[1].mx
+	dx = h[2].mx - ox
 	min_imy = h[1].imy
 	max_imy = h[end].imy
-	dmy = dhy
-	nmy = max_imy - min_imy + 1
+	ny = max_imy - min_imy + 1
+	oy = h[1].my
+	dy = ny > 1 ? h[nx+1].my - oy : dx
 	nz = h[1].n1
 	dz = h[1].d1
 	oz = h[1].o1
-	min_gx = h[1].mx
-	max_gx = h[end].mx
-	min_gy = h[1].my
-	max_gy = h[end].my
 
 	shot_list = Array(Shot,nshot)
 	for ishot = 1 : nshot
@@ -111,8 +102,8 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 						h[(iangx-1)*nangy + iangy].d1 = convert(typeof(h[1].d1),dz)
 						h[(iangx-1)*nangy + iangy].imx = convert(typeof(h[1].imx),imx-1 + min_imx)
 						h[(iangx-1)*nangy + iangy].imy = convert(typeof(h[1].imy),imy-1 + min_imy)			
-						h[(iangx-1)*nangy + iangy].mx = convert(typeof(h[1].mx),dhx*(imx-1 + min_imx))
-						h[(iangx-1)*nangy + iangy].my = convert(typeof(h[1].my),dhy*(imy-1 + min_imy))
+						h[(iangx-1)*nangy + iangy].mx = convert(typeof(h[1].mx),dx*(imx-1 + min_imx))
+						h[(iangx-1)*nangy + iangy].my = convert(typeof(h[1].my),dy*(imy-1 + min_imy))
 						h[(iangx-1)*nangy + iangy].iang = convert(typeof(h[1].iang),iangx-1)		
 						h[(iangx-1)*nangy + iangy].ang = convert(typeof(h[1].ang),(iangx-1)*dangx + oangx)
 						h[(iangx-1)*nangy + iangy].iaz = convert(typeof(h[1].iaz),iangy-1)
@@ -210,8 +201,8 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 					h_shot[j].d1 = convert(typeof(h_shot[1].d1),dz)
 					h_shot[j].imx = convert(typeof(h_shot[1].imx),imx-1 + min_imx)
 					h_shot[j].imy = convert(typeof(h_shot[1].imy),imy-1 + min_imy)
-					h_shot[j].mx = convert(typeof(h_shot[1].mx),dmx*h_shot[j].imx)
-					h_shot[j].my = convert(typeof(h_shot[1].my),dmy*h_shot[j].imy)
+					h_shot[j].mx = convert(typeof(h_shot[1].mx),dx*h_shot[j].imx)
+					h_shot[j].my = convert(typeof(h_shot[1].my),dy*h_shot[j].imy)
 					j += 1
 				end
 			end
@@ -223,12 +214,12 @@ function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;damping=1000.,vel
 				angx_shot = 0.*m_shot
 				angy_shot  = 0.*m_shot
 			end	
-			for imx = 1 : nmx
-				for imy = 1 : nmy
-					ix = (imx - 1)*nmy + imy
+			for imx = 1 : nx
+				for imy = 1 : ny
+					ix = (imx - 1)*ny + imy
 					h_shot[ix].sx = convert(typeof(h[1].sx),shot_list[ishot].sx)
 					h_shot[ix].sy = convert(typeof(h[1].sy),shot_list[ishot].sy)	
-					itrace = (imx-1 + min_imx)*nmy*nangx*nangy + (imy-1 + min_imy)*nangx*nangy
+					itrace = (imx-1 + min_imx)*ny*nangx*nangy + (imy-1 + min_imy)*nangx*nangy
 					position_m = 4*nz*itrace
 					seek(stream_m,position_m)
 					m = read(stream_m,Float32,nz*nangx*nangy)

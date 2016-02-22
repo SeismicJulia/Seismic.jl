@@ -11,8 +11,8 @@ void ewem(float **ux, float **uy, float **uz,
           float **vp, float **vs, 
           float fmin, float fmax,
           int padt, int padx,
-	      float damping,
-          bool adj, bool pade_flag, bool verbose);
+	  float damping,
+          bool adj, bool verbose);
 void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
                       complex **ux_g_wx, complex **uy_g_wx, complex **uz_g_wx, 
                       complex **u_s_wx,
@@ -24,21 +24,14 @@ void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
                       float **vp,float *po_p,float **pd_p,
                       float **vs,float *po_s,float **pd_s,
                       fftwf_plan p1,fftwf_plan p2,
-                      bool adj, bool pade_flag, bool verbose);
+                      bool adj, bool verbose);
 void ssop(complex *d_x,
           float w,float dkx,float dky,int nkx,int nky,int nmx,float omx,float dmx,int nmy,float omy,float dmy,float dz,int iz,
           float **v,float *po,float **pd,
           fftwf_plan p1,fftwf_plan p2,
-          bool adj, 
-          bool pade_flag, 
+          bool adj,
           bool src,
           bool verbose);
-void pade(complex *d,
-           int nmx,float omx,float dmx,int nmy,float omy,float dmy,float dz,
-           float w, int iz,
-           float **v,float *po,float **pd,
-           bool adj, bool src,
-           bool verbose);
 void fdop(complex *X,int nx,float dx, complex *a, bool adj);
 void f_op(complex *m,float *d,int nw,int nt,bool adj);
 void progress_msg(float progress);
