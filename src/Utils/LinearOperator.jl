@@ -23,7 +23,7 @@ end
 
 function LinearOperator(m::ASCIIString,d::ASCIIString,operators,parameters;adj=true)
 
-    rand_string = string(int(rand()*100000))
+    rand_string = string(round(Int,rand()*100000))
     tmp_m = join(["tmp_CG_m_",rand_string])
     tmp_d = join(["tmp_CG_d_",rand_string])
     if adj

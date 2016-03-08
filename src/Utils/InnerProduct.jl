@@ -11,8 +11,8 @@ function InnerProduct(in1::ASCIIString,in2::ASCIIString;ntrace=10000)
 		itrace_in = 1
 		nx = GetNumTraces(in1)
 		while itrace_in <= nx
-			d1,h1 = SeisRead(in1,group="some",itrace=itrace_in,ntrace=ntrace)
-			d2,h2 = SeisRead(in2,group="some",itrace=itrace_in,ntrace=ntrace)
+			d1,h1,e = SeisRead(in1,group="some",itrace=itrace_in,ntrace=ntrace)
+			d2,h2,e = SeisRead(in2,group="some",itrace=itrace_in,ntrace=ntrace)
 			ip += InnerProduct(d1,d2)		
 			num_traces_in = size(d1,2)
 			itrace_in += num_traces_in

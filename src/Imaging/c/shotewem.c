@@ -27,14 +27,12 @@ int main (int argc, char *argv[])
 	int nx,ny,nz,nt,ix,iz,it;
 	float **ux,**uy,**uz,**mpp,**mps1,**mps2,**vp,**vs,**wav,sx,sy,sz,gz;
 	float ox,dx,oy,dy,oz,dz,ot,dt,fmin,fmax;
-	float damping;
 	int ntraces;
 	int padt,padx;
 	bool adj,verbose;
 	struct SeisFileHeader fh;
 
 	if (!par_read_bool(argc,argv,"adj",&adj)) adj = true;
-	if (!par_read_float(argc,argv,"damping",&damping)) damping = 1000.;
 	if (!par_read_bool(argc,argv,"verbose",&verbose)) verbose = false;
 	if (!par_read_string(argc,argv,"ux", ux_name)) { docs (); exit (1); }
 	if (!par_read_string(argc,argv,"uy", uy_name)) { docs (); exit (1); }
@@ -52,7 +50,7 @@ int main (int argc, char *argv[])
 	if (!par_read_float(argc,argv,"fmin",&fmin)) fmin = 0;
 	if (!par_read_float(argc,argv,"fmax",&fmax)) fmax = 80;
 	if (!par_read_int(argc,argv,"padt",&padt)) padt = 1;
-	if (!par_read_int(argc,argv,"padx",&padx)) padx = 2;
+	if (!par_read_int(argc,argv,"padx",&padx)) padx = 1;
 	// get dimensions from velocity (nz,oz,dz,nx,ox,dx) and wavelet (nt,sx) files
 	InitFileHeader(&fh);
 	ReadFileHeader(wav_name,&fh);
@@ -166,7 +164,6 @@ int main (int argc, char *argv[])
 	     vp,vs, 
 	     fmin,fmax,
 	     padt,padx,
-	     damping,
 	     adj,verbose);
 
 	if (adj){

@@ -2,7 +2,7 @@ include("Header.jl")
 
 function SeisWriteHeaders(filename,h;itrace=1,update_tracenum=true)
 
-	DATAPATH = get(ENV,"DATAPATH","./")
+        DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
 	filename_d = join([DATAPATH filename "@data@"])	
 	filename_h = join([DATAPATH filename "@headers@"])	
 	if (itrace==1)

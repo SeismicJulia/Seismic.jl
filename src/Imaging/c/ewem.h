@@ -11,7 +11,6 @@ void ewem(float **ux, float **uy, float **uz,
           float **vp, float **vs, 
           float fmin, float fmax,
           int padt, int padx,
-	  float damping,
           bool adj, bool verbose);
 void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
                       complex **ux_g_wx, complex **uy_g_wx, complex **uz_g_wx, 
@@ -32,7 +31,6 @@ void ssop(complex *d_x,
           bool adj,
           bool src,
           bool verbose);
-void fdop(complex *X,int nx,float dx, complex *a, bool adj);
 void f_op(complex *m,float *d,int nw,int nt,bool adj);
 void progress_msg(float progress);
 float signf(float a);

@@ -11,7 +11,6 @@ void ewem(float **ux, float **uy, float **uz,
 	  float **vp, float **vs, 
 	  float fmin, float fmax,
 	  int padt, int padx,
-	  float damping,
 	  bool adj, bool verbose)
 /*< elastic wave equation depth migration operator. >*/
 {
@@ -367,12 +366,12 @@ void elastic_extrap1f(float **mpp, float **mps1, float **mps2,
 }
 
 void ssop(complex *d_x,
-		float w,float dkx,float dky,int nkx,int nky,int nmx,float omx,float dmx,int nmy,float omy,float dmy,float dz,int iz,
-		float **v,float *po,float **pd,
-		fftwf_plan p1,fftwf_plan p2,
-		bool adj, 
-		bool src,
-		bool verbose)
+	float w,float dkx,float dky,int nkx,int nky,int nmx,float omx,float dmx,int nmy,float omy,float dmy,float dz,int iz,
+	float **v,float *po,float **pd,
+	fftwf_plan p1,fftwf_plan p2,
+	bool adj, 
+	bool src,
+	bool verbose)
 {
 
 	float kx,ky,s;
@@ -452,34 +451,6 @@ void ssop(complex *d_x,
 	fftwf_free(a);
 	fftwf_free(b);
 
-
-	return;
-}
-
-void fdop(complex *X,int nx,float dx, complex *a, bool adj)
-	/* centered 2nd order finite difference approximation to the 2nd derivative */
-{
-	int ix;
-	complex *X2;
-
-	if (nx > 3){
-		X2 = alloc1complex(nx);
-		if (adj){
-			X2[0] = -2.*a[0]*X[0] + a[0]*X[1];
-			X2[nx-1] = -2.*a[nx-1]*X[nx-1] + a[nx-1]*X[nx-2];
-			for (ix=1;ix<nx-1;ix++) X2[ix] = (a[ix]*X[ix-1] - 2.*a[ix]*X[ix] + a[ix]*X[ix+1]);
-		}
-		else{
-			X2[0] = -2.*a[0]*X[0] + a[1]*X[1];
-			X2[nx-1] = -2.*a[nx-1]*X[nx-1] + a[nx-2]*X[nx-2];
-			for (ix=1;ix<nx-1;ix++) X2[ix] = (a[ix-1]*X[ix-1] - 2.*a[ix]*X[ix] + a[ix+1]*X[ix+1]);
-		}
-		for (ix=0;ix<nx;ix++) X[ix] = X2[ix]/dx/dx;
-		free1complex(X2);
-	}
-	else{
-		for (ix=0;ix<nx;ix++) X[ix] = 0.;
-	}
 
 	return;
 }

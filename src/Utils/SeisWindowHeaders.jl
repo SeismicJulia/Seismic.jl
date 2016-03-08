@@ -2,7 +2,7 @@ include("Header.jl")
 
 function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,ntrace=1000000)
 	@compat SeisProcessHeaders(in,out,[WindowHeaders],[Dict(:key=>key,:minval=>minval,:maxval=>maxval)],group="some",key=key,ntrace=ntrace,update_tracenum=false)
-	DATAPATH = get(ENV,"DATAPATH","./")
+        DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
 	filename_d_out = join([DATAPATH out "@data@"])
 	filename_h_out = join([DATAPATH out "@headers@"])	
 	@compat nhead = length(fieldnames(Header))

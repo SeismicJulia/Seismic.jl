@@ -95,11 +95,9 @@ function ShotProfileEWEM(m::Array{ASCIIString,1},d::Array{ASCIIString,1},adj=tru
 			SeisWindow(d[2],shot_list[ishot].uy,key=["sx","sy"],minval=[sx[ishot],sy[ishot]],maxval=[sx[ishot],sy[ishot]])
 			SeisWindow(d[3],shot_list[ishot].uz,key=["sx","sy"],minval=[sx[ishot],sy[ishot]],maxval=[sx[ishot],sy[ishot]])
 		end
-println("A")
 		@sync @parallel for ishot = 1 : nshot
 			a = shotewem(shot_list[ishot])
 		end
-println("B")
 		j = 1
 		gather = zeros(Float32,nz,nangx*nangy)
 		extent = Seismic.Extent(nz,nx,ny,nangx,nangy,
@@ -135,7 +133,6 @@ println("B")
 			end
 		end
 
-println("C")
 		mpp_m = ParseDataName(m[1])
 		mpp_h = ParseHeaderName(m[1])
 		mps1_m = ParseDataName(m[2])
@@ -228,12 +225,12 @@ println("C")
 				seek(stream_mps2,position_m)
 				write(stream_mps2,convert(Array{Float32,1},m3[:]))
 			end
-		#	SeisRemove(shot_list[ishot].ux)
-		#	SeisRemove(shot_list[ishot].uy)
-		#	SeisRemove(shot_list[ishot].uz)
-		#	SeisRemove(shot_list[ishot].mpp)
-		#	SeisRemove(shot_list[ishot].mps1)
-		#	SeisRemove(shot_list[ishot].mps2)			
+			SeisRemove(shot_list[ishot].ux)
+			SeisRemove(shot_list[ishot].uy)
+			SeisRemove(shot_list[ishot].uz)
+			SeisRemove(shot_list[ishot].mpp)
+			SeisRemove(shot_list[ishot].mps1)
+			SeisRemove(shot_list[ishot].mps2)			
 			if (nangx != 1 || nangy != 1)
 				SeisRemove(shot_list[ishot].angx)
 				SeisRemove(shot_list[ishot].angy)
@@ -284,8 +281,8 @@ println("C")
 			mps1_shot = zeros(nz,nx*ny)
 			mps2_shot = zeros(nz,nx*ny)
 			if (nangx != 1 || nangy != 1)
-				angx_shot,h_ang = SeisRead(shot_list[ishot].angx)
-				angy_shot,h_ang = SeisRead(shot_list[ishot].angy)
+				angx_shot,h_ang,extent = SeisRead(shot_list[ishot].angx)
+				angy_shot,h_ang,extent = SeisRead(shot_list[ishot].angy)
 			else
 				angx_shot = 0.*mpp_shot
 				angy_shot = 0.*mpp_shot
@@ -365,7 +362,7 @@ println("C")
 		close(stream_hps1)	
 		close(stream_mps2)
 		close(stream_hps2)	
-		for ishot = 1 : nshot
+		@sync @parallel for ishot = 1 : nshot
 			a = shotewem(shot_list[ishot])
 		end
 		j = 1
