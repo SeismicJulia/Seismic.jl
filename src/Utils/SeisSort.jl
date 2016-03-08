@@ -59,7 +59,7 @@ function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=1000)
 	close(stream_h)
 	p = convert(Array{Int32,1},sortperm(mykey,rev=rev))
 	FetchHeaders(in,out,p,nx)
-    DATAPATH = get(ENV,"DATAPATH","./")
+    DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
     filename_d_out = join([DATAPATH out "@data@"])
     filename_h_out = join([DATAPATH out "@headers@"])    
     nhead = length(names(Header))
@@ -80,7 +80,7 @@ function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=1000)
     filename_h_out = join([DATAPATH out "@headers@"])    
     cp(filename_h_tmp,filename_h_out);
     rm(filename_h_tmp);
-
+	rm(tmp);
 end
 
 function FetchHeaders(in::ASCIIString,out::ASCIIString,p::Array{Int32,1},nx;ntrace=1000)

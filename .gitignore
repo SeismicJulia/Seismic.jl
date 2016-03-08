@@ -1,3 +1,10 @@
+# temporary files #
+###################
+*.jl~
+*.c~
+*.seis~
+*.txt~
+
 # Compiled source #
 ###################
 *.com

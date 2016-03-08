@@ -1,13 +1,13 @@
 include("Header.jl")
 
-function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,ntrace=500)
+function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,ntrace=1000000)
 	@compat SeisProcessHeaders(in,out,[WindowHeaders],[Dict(:key=>key,:minval=>minval,:maxval=>maxval)],group="some",key=key,ntrace=ntrace,update_tracenum=false)
-	DATAPATH = get(ENV,"DATAPATH","./")
+        DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
 	filename_d_out = join([DATAPATH out "@data@"])
 	filename_h_out = join([DATAPATH out "@headers@"])	
-	nhead = length(names(Header))
+	@compat nhead = length(fieldnames(Header))
 	stream_h = open(filename_h_out)
-	nx = int(filesize(stream_h)/(nhead*4))
+	nx = round(Int,filesize(stream_h)/(nhead*4))
 	h = GrabHeader(stream_h,1)
 	close(stream_h)
 	nt = convert(Int64,round((tmax - tmin)/h.d1)) + 1
@@ -40,10 +40,10 @@ function WindowHeaders(h_in;key=[],minval=[],maxval=[])
 		end
 	end
 	
-	return RejectHeaders(h_in,key2,minval2,maxval2,int32(length(key2)),int32(length(h_in)))
+	return RejectHeaders(h_in,key2,minval2,maxval2,length(key2),length(h_in))
 end
 
-function RejectHeaders(h_in::Array{Header,1},key::Array{ASCIIString,1},minval::Array{Float32,1},maxval::Array{Float32,1},nkeys::Int32,nx::Int32)
+function RejectHeaders(h_in::Array{Header,1},key::Array{ASCIIString,1},minval::Array{Float32,1},maxval::Array{Float32,1},nkeys,nx)
 	h_out = Header[]	
 	keep = true
 	key_val = 0f0
