@@ -72,7 +72,7 @@ function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 		end    
 		close(stream_h)
 	else
-		ntrace = nx
+		ntrace = nx > ntrace ? ntrace : nx
 	end
 	stream_d = open(filename_data)
 	position_d = 4*extent.n1*(itrace-1)
