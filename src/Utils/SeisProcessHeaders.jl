@@ -1,4 +1,4 @@
-function SeisProcessHeaders(in,out,functions,parameters;group="some",key=[],ntrace=100,update_tracenum=true)	
+function SeisProcessHeaders(in,out,functions,parameters;group="some",key=[],ntrace=1000000,update_tracenum=true)	
 
 	if (group=="all")
 		h1 = SeisReadHeaders(in,group=group,key=key,itrace=1,ntrace=ntrace)

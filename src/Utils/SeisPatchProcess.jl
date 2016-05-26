@@ -1,4 +1,4 @@
-@everywhere function SeisPatchProcess(in,out,param=Dict())	
+function SeisPatchProcess(in,out,param=Dict())	
 	# read data from disk, split into multidimensional overlapping patches, apply 
 	# processes, merge patches with tapers, and write to disk. Processing of patches 
 	# can be done in parallel by running the code using (for example): julia -p 2 script_name.jl
@@ -28,7 +28,7 @@
 
 end
 
-@everywhere function MyProcess(filename)
+function MyProcess(filename)
 	d1,h1 = SeisRead(filename)
 	for ifunc = 1 : length(f)
 		func = f[ifunc]

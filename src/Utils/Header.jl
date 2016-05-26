@@ -74,7 +74,7 @@ function InitSeisHeader()
 end
 
 function GrabHeader(stream,j)
-	position = 4*length(names(Header))*(j-1)
+	@compat position = 4*length(fieldnames(Header))*(j-1)
 	seek(stream,position)
 	h = InitSeisHeader()
 	h.tracenum = read(stream,typeof(h.tracenum))
@@ -112,7 +112,7 @@ function GrabHeader(stream,j)
 end
 
 function PutHeader(stream,h,j)
-	position = 4*length(names(Header))*(j-1)
+	@compat position = 4*length(fieldnames(Header))*(j-1)
 	seek(stream,position)
 	write(stream,h.tracenum)
 	write(stream,h.o1)
@@ -222,14 +222,38 @@ end
 
 function GetNumTraces(in)
 
-	filename_h = success(`grep "headers=" $in`) ? chomp(readall(`grep "headers=" $in` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
-	nhead = length(names(Header))
+	filename_h = ParseHeaderName(in)
+	@compat nhead = length(fieldnames(Header))
 	stream_h = open(filename_h)
-	nx = int(filesize(stream_h)/(nhead*4))
+	nx = round(Int,filesize(stream_h)/(nhead*4))
 	close(stream_h)
 	return nx
 
 end        
+
+function ParseHeaderName(filename::ASCIIString)
+
+	return success(`grep "headers=" $filename`) ? chomp(readall(pipeline(`grep "headers=" $filename` ,pipeline(`tail -1` , `awk '{print substr($1,10,length($1)-10) }' `))    )) : "NULL"	
+	
+end	
+
+function ParseDataName(filename::ASCIIString)
+
+	return chomp(readall(pipeline(`grep "in=" $filename` ,pipeline(`tail -1` , `awk '{print substr($1,5,length($1)-5) }' `))    ))
+
+end
+
+function ParseDataFormat(filename::ASCIIString)
+
+	return chomp(readall(pipeline(`grep "data_format" $filename` , pipeline(`tail -1` , `awk '{print substr($1,14,length($1)-14)}'`)) ))
+
+end
+
+function ParseDataESize(filename::ASCIIString)
+
+	@compat return parse(Int,chomp(readall(pipeline(`grep "esize" $filename` , pipeline(`tail -1` , `awk '{print substr($1,7,length($1))}'`)) )))
+
+end
 
 function ExtractHeader(h::Array{Header,1},key::ASCIIString)
 	
@@ -272,32 +296,32 @@ type Extent
 end
 
 function ReadTextHeader(filename)
-	n1 = success(`grep "n1" $filename`) ? int(chomp(readall(`grep "n1" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	n2 = success(`grep "n2" $filename`) ? int(chomp(readall(`grep "n2" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	n3 = success(`grep "n3" $filename`) ? int(chomp(readall(`grep "n3" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	n4 = success(`grep "n4" $filename`) ? int(chomp(readall(`grep "n4" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	n5 = success(`grep "n5" $filename`) ? int(chomp(readall(`grep "n5" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	o1 = success(`grep "o1" $filename`) ? float(chomp(readall(`grep "o1" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
-	o2 = success(`grep "o2" $filename`) ? float(chomp(readall(`grep "o2" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
-	o3 = success(`grep "o3" $filename`) ? float(chomp(readall(`grep "o3" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
-	o4 = success(`grep "o4" $filename`) ? float(chomp(readall(`grep "o4" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
-	o5 = success(`grep "o5" $filename`) ? float(chomp(readall(`grep "o5" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 0
-	d1 = success(`grep "d1" $filename`) ? float(chomp(readall(`grep "d1" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	d2 = success(`grep "d2" $filename`) ? float(chomp(readall(`grep "d2" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	d3 = success(`grep "d3" $filename`) ? float(chomp(readall(`grep "d3" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	d4 = success(`grep "d4" $filename`) ? float(chomp(readall(`grep "d4" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	d5 = success(`grep "d5" $filename`) ? float(chomp(readall(`grep "d5" $filename` |> `tail -1` |> `awk '{print substr($1,4,length($1))}'` ))) : 1
-	label1 = success(`grep "label1" $filename`) ? chomp(readall(`grep "label1" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
-	label2 = success(`grep "label2" $filename`) ? chomp(readall(`grep "label2" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
-	label3 = success(`grep "label3" $filename`) ? chomp(readall(`grep "label3" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
-	label4 = success(`grep "label4" $filename`) ? chomp(readall(`grep "label4" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
-	label5 = success(`grep "label5" $filename`) ? chomp(readall(`grep "label5" $filename` |> `tail -1` |> `awk '{print substr($0,10,length($0)-10)}'` )) : ""
-	unit1 = success(`grep "unit1" $filename`) ? chomp(readall(`grep "unit1" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
-	unit2 = success(`grep "unit2" $filename`) ? chomp(readall(`grep "unit2" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
-	unit3 = success(`grep "unit3" $filename`) ? chomp(readall(`grep "unit3" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
-	unit4 = success(`grep "unit4" $filename`) ? chomp(readall(`grep "unit4" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
-	unit5 = success(`grep "unit5" $filename`) ? chomp(readall(`grep "unit5" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
-	title = success(`grep "title" $filename`) ? chomp(readall(`grep "title" $filename` |> `tail -1` |> `awk '{print substr($0,9,length($0)-9)}'` )) : ""
+	@compat n1 = success(`grep "n1" $filename`) ? parse(Int,chomp(readall(pipeline(`grep "n1" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	@compat n2 = success(`grep "n2" $filename`) ? parse(Int,chomp(readall(pipeline(`grep "n2" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	@compat n3 = success(`grep "n3" $filename`) ? parse(Int,chomp(readall(pipeline(`grep "n3" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	@compat n4 = success(`grep "n4" $filename`) ? parse(Int,chomp(readall(pipeline(`grep "n4" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	@compat n5 = success(`grep "n5" $filename`) ? parse(Int,chomp(readall(pipeline(`grep "n5" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	o1 = success(`grep "o1" $filename`) ? float(chomp(readall(pipeline(`grep "o1" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 0
+	o2 = success(`grep "o2" $filename`) ? float(chomp(readall(pipeline(`grep "o2" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 0
+	o3 = success(`grep "o3" $filename`) ? float(chomp(readall(pipeline(`grep "o3" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 0
+	o4 = success(`grep "o4" $filename`) ? float(chomp(readall(pipeline(`grep "o4" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 0
+	o5 = success(`grep "o5" $filename`) ? float(chomp(readall(pipeline(`grep "o5" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 0
+	d1 = success(`grep "d1" $filename`) ? float(chomp(readall(pipeline(`grep "d1" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	d2 = success(`grep "d2" $filename`) ? float(chomp(readall(pipeline(`grep "d2" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	d3 = success(`grep "d3" $filename`) ? float(chomp(readall(pipeline(`grep "d3" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	d4 = success(`grep "d4" $filename`) ? float(chomp(readall(pipeline(`grep "d4" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	d5 = success(`grep "d5" $filename`) ? float(chomp(readall(pipeline(`grep "d5" $filename` , pipeline(`tail -1` , `awk '{print substr($1,4,length($1))}'`)) ))) : 1
+	label1 = success(`grep "label1" $filename`) ? chomp(readall(pipeline(`grep "label1" $filename` , pipeline(`tail -1` , `awk '{print substr($0,10,length($0)-10)}'`)) )) : ""
+	label2 = success(`grep "label2" $filename`) ? chomp(readall(pipeline(`grep "label2" $filename` , pipeline(`tail -1` , `awk '{print substr($0,10,length($0)-10)}'`)) )) : ""
+	label3 = success(`grep "label3" $filename`) ? chomp(readall(pipeline(`grep "label3" $filename` , pipeline(`tail -1` , `awk '{print substr($0,10,length($0)-10)}'`)) )) : ""
+	label4 = success(`grep "label4" $filename`) ? chomp(readall(pipeline(`grep "label4" $filename` , pipeline(`tail -1` , `awk '{print substr($0,10,length($0)-10)}'`)) )) : ""
+	label5 = success(`grep "label5" $filename`) ? chomp(readall(pipeline(`grep "label5" $filename` , pipeline(`tail -1` , `awk '{print substr($0,10,length($0)-10)}'`)) )) : ""
+	unit1 = success(`grep "unit1" $filename`) ? chomp(readall(pipeline(`grep "unit1" $filename` , pipeline(`tail -1` , `awk '{print substr($0,9,length($0)-9)}'`)) )) : ""
+	unit2 = success(`grep "unit2" $filename`) ? chomp(readall(pipeline(`grep "unit2" $filename` , pipeline(`tail -1` , `awk '{print substr($0,9,length($0)-9)}'`)) )) : ""
+	unit3 = success(`grep "unit3" $filename`) ? chomp(readall(pipeline(`grep "unit3" $filename` , pipeline(`tail -1` , `awk '{print substr($0,9,length($0)-9)}'`)) )) : ""
+	unit4 = success(`grep "unit4" $filename`) ? chomp(readall(pipeline(`grep "unit4" $filename` , pipeline(`tail -1` , `awk '{print substr($0,9,length($0)-9)}'`)) )) : ""
+	unit5 = success(`grep "unit5" $filename`) ? chomp(readall(pipeline(`grep "unit5" $filename` , pipeline(`tail -1` , `awk '{print substr($0,9,length($0)-9)}'`)) )) : ""
+	title = success(`grep "title" $filename`) ? chomp(readall(pipeline(`grep "title" $filename` , pipeline(`tail -1` , `awk '{print substr($0,9,length($0)-9)}'`)) )) : ""
 	extent = Extent(convert(Int32,n1),convert(Int32,n2),convert(Int32,n3),convert(Int32,n4),convert(Int32,n5),
 		   convert(Float32,o1),convert(Float32,o2),convert(Float32,o3),convert(Float32,o4),convert(Float32,o5),
 		   convert(Float32,d1),convert(Float32,d2),convert(Float32,d3),convert(Float32,d4),convert(Float32,d5),

@@ -1,14 +1,6 @@
-function SeisMute(in,h,param=Dict())
+function SeisMute(in;offset=[0.],tmute=0.,vmute=1500.,taper=0.1,dt=0.001)
 
 	nt,nx = size(in)
-	dt = h[1].d1
-	tmute = get(param,"tmute",0.)
-	vmute = get(param,"vmute",1500.)
-	taper = get(param,"taper",0.1)
-	offset = Float32[]
-	for itrace = 1 : nx
-		push!(offset,sqrt((h[itrace].gx - h[itrace].sx)^2 + (h[itrace].gy - h[itrace].sy)^2 ))
-	end
 	out = copy(in)
 	for it = 1:nt
 		for ix = 1:nx
@@ -22,6 +14,19 @@ function SeisMute(in,h,param=Dict())
 			end
 		end
 	end
+	
+	return out
+end
+
+function SeisMute(in,h::Array{Header,1};offset=[0],tmute=0.,vmute=1500.,taper=0.1,dt=0.001)
+
+	nt,nx = size(in)
+	offset = Float32[]
+	for itrace = 1 : nx
+		push!(offset,sqrt((h[itrace].gx - h[itrace].sx)^2 + (h[itrace].gy - h[itrace].sy)^2 ))
+	end
+	out = SeisMute(in,offset=offset,tmute=tmute,vmute=vmute,taper=taper,dt=h[1].dt)	
+	
 	return out,h
 end
 

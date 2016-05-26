@@ -18,8 +18,9 @@ function SeisProcess(in::ASCIIString,out::ASCIIString,operators,parameters;group
 		d1,h1,e1 = SeisRead(in,group=group,key=key,itrace=1,ntrace=ntrace)
 		for j = 1 : length(operators)
 			op = operators[j]
-			d2 = op(d1,h1,parameters[j])
+			d2,h2 = op(d1,h1;parameters[j]...)
 			d1 = copy(d2)
+			h1 = copy(h2)
 		end
 		SeisWrite(out,d1,h1,e1)
 	else
@@ -31,8 +32,9 @@ function SeisProcess(in::ASCIIString,out::ASCIIString,operators,parameters;group
 			num_traces_in = size(d1,2)
 			for j = 1 : length(operators)
 				op = operators[j]
-				d2 = op(d1,h1,parameters[j])
+				d2,h2 = op(d1,h1;parameters[j]...)
 				d1 = copy(d2)
+				h1 = copy(h2)
 			end
 			num_traces_out = size(d1,2)
 			SeisWrite(out,d1,h1,e1,itrace=itrace_out)
@@ -46,7 +48,7 @@ end
 function SeisProcess(in::Array{ASCIIString,1},out::Array{ASCIIString,1},operators,parameters;group="some",key=[],ntrace=10000)
  	
 	for j = 1 : length(in)
-		SeisProcess(in[j],out[j],param)
+		SeisProcess(in[j],out[j],parameters)
 	end
 
 end

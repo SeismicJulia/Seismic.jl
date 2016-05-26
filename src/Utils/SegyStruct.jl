@@ -589,20 +589,22 @@ end
 function MapHeaders(h_in,j,map_type)
 
 	if map_type=="SegyToSeis"
+		scalco = abs(convert(Float32,h_in[1].scalco)) < 10 ? convert(Float32,h_in[1].scalco) : sign(convert(Float32,h_in[1].scalco))*log10(abs(convert(Float32,h_in[1].scalco)))
+		scalel = abs(convert(Float32,h_in[1].scalel)) < 10 ? convert(Float32,h_in[1].scalel) : sign(convert(Float32,h_in[1].scalco))*log10(abs(convert(Float32,h_in[1].scalco)))
 		h_out = InitSeisHeader()
 		h_out.tracenum = convert(typeof(h_out.tracenum),j)
 		h_out.o1 = convert(typeof(h_out.o1),0)
 		h_out.n1 = convert(typeof(h_out.n1),h_in[1].ns)
 		h_out.d1 = convert(typeof(h_out.d1),h_in[1].dt/1000000)
-		h_out.sx = h_in[1].scalco >= 0 ? convert(typeof(h_out.sx),h_in[1].sx)*10^convert(Float32,h_in[1].scalco) : convert(typeof(h_out.sx),h_in[1].sx)/(10^abs(convert(Float32,h_in[1].scalco)))
-		h_out.sy = h_in[1].scalco >= 0 ? convert(typeof(h_out.sy),h_in[1].sy)*10^convert(Float32,h_in[1].scalco) : convert(typeof(h_out.sx),h_in[1].sy)/(10^abs(convert(Float32,h_in[1].scalco)))
-		h_out.gx = h_in[1].scalco >= 0 ? convert(typeof(h_out.gx),h_in[1].gx)*10^convert(Float32,h_in[1].scalco) : convert(typeof(h_out.gx),h_in[1].gx)/(10^abs(convert(Float32,h_in[1].scalco)))
-		h_out.gy = h_in[1].scalco >= 0 ? convert(typeof(h_out.gy),h_in[1].gy)*10^convert(Float32,h_in[1].scalco) : convert(typeof(h_out.gy),h_in[1].gy)/(10^abs(convert(Float32,h_in[1].scalco)))
+		h_out.sx = scalco >= 0 ? convert(typeof(h_out.sx),h_in[1].sx)*10^scalco : convert(typeof(h_out.sx),h_in[1].sx)/(10^abs(scalco))
+		h_out.sy = scalco >= 0 ? convert(typeof(h_out.sy),h_in[1].sy)*10^scalco : convert(typeof(h_out.sx),h_in[1].sy)/(10^abs(scalco))
+		h_out.gx = scalco >= 0 ? convert(typeof(h_out.gx),h_in[1].gx)*10^scalco : convert(typeof(h_out.gx),h_in[1].gx)/(10^abs(scalco))
+		h_out.gy = scalco >= 0 ? convert(typeof(h_out.gy),h_in[1].gy)*10^scalco : convert(typeof(h_out.gy),h_in[1].gy)/(10^abs(scalco))
 		h_out.h = convert(typeof(h_out.h),h_in[1].offset)
 		h_out.isx = convert(typeof(h_out.isx),h_in[1].ep)
 		h_out.imx = convert(typeof(h_out.imx),h_in[1].cdp)
-		h_out.selev = h_in[1].scalel >= 0 ? convert(typeof(h_out.selev),h_in[1].selev)*(10^convert(Float32,h_in[1].scalel)) : convert(typeof(h_out.selev),h_in[1].selev)/(10^abs(convert(Float32,h_in[1].scalel)))
-		h_out.gelev = h_in[1].scalel >= 0 ? convert(typeof(h_out.gelev),h_in[1].gelev)*(10^convert(Float32,h_in[1].scalel)) : convert(typeof(h_out.gelev),h_in[1].gelev)/(10^abs(convert(Float32,h_in[1].scalel)))
+		h_out.selev = scalel >= 0 ? convert(typeof(h_out.selev),h_in[1].selev)*(10^scalel) : convert(typeof(h_out.selev),h_in[1].selev)/(10^abs(scalel))
+		h_out.gelev = scalel >= 0 ? convert(typeof(h_out.gelev),h_in[1].gelev)*(10^scalel) : convert(typeof(h_out.gelev),h_in[1].gelev)/(10^abs(scalel))
 		h_out.trid = convert(typeof(h_out.trid),h_in[1].trid)
 	else
 		h_out = InitSegyHeader()
@@ -613,17 +615,17 @@ function MapHeaders(h_in,j,map_type)
 		h_out.counit = convert(typeof(h_out.counit),1)
 		h_out.gain = convert(typeof(h_out.gain),1)
 		h_out.corr = convert(typeof(h_out.corr),1)
-		h_out.ns = convert(typeof(h_out.ns),int(h_in[1].n1))
-		h_out.dt = convert(typeof(h_out.dt),int(h_in[1].d1*1000000))
-		h_out.sx = convert(typeof(h_out.sx),int(h_in[1].sx)*1000)
-		h_out.sy = convert(typeof(h_out.sy),int(h_in[1].sy)*1000)
-		h_out.gx = convert(typeof(h_out.gx),int(h_in[1].gx)*1000)
-		h_out.gy = convert(typeof(h_out.gy),int(h_in[1].gy)*1000)
-		h_out.offset = convert(typeof(h_out.offset),int(h_in[1].h))
-		h_out.ep = convert(typeof(h_out.ep),int(h_in[1].isx))
-		h_out.cdp = convert(typeof(h_out.cdp),int(h_in[1].imx))
-		h_out.selev = convert(typeof(h_out.selev),int(h_in[1].selev*1000))
-		h_out.gelev = convert(typeof(h_out.gelev),int(h_in[1].gelev*1000))
+		h_out.ns = convert(typeof(h_out.ns),Int(h_in[1].n1))
+		h_out.dt = convert(typeof(h_out.dt),round(Int,h_in[1].d1*1000000))
+		h_out.sx = convert(typeof(h_out.sx),Int(h_in[1].sx)*1000)
+		h_out.sy = convert(typeof(h_out.sy),Int(h_in[1].sy)*1000)
+		h_out.gx = convert(typeof(h_out.gx),Int(h_in[1].gx)*1000)
+		h_out.gy = convert(typeof(h_out.gy),Int(h_in[1].gy)*1000)
+		h_out.offset = convert(typeof(h_out.offset),Int(h_in[1].h))
+		h_out.ep = convert(typeof(h_out.ep),Int(h_in[1].isx))
+		h_out.cdp = convert(typeof(h_out.cdp),Int(h_in[1].imx))
+		h_out.selev = convert(typeof(h_out.selev),Int(h_in[1].selev*1000))
+		h_out.gelev = convert(typeof(h_out.gelev),Int(h_in[1].gelev*1000))
 		h_out.trid = convert(typeof(h_out.trid),h_in[1].trid)
 	end
 
@@ -634,17 +636,17 @@ import Base.convert
 
 bitstype 32 IBMFloat32
 
-ieeeOfPieces(fr::UInt32, exp::Int32, sgn::UInt32) = reinterpret(Float32, UInt32(fr >>> 9) | UInt32(exp << 23) | sgn) :: Float32
+ieeeOfPieces(fr::UInt32, exp::Int32, sgn::UInt32) = reinterpret(Float32, convert(UInt32,fr >>> 9) | convert(UInt32,exp << 23) | sgn) :: Float32
 import Base.convert
 
 function convert(::Type{Float32}, ibm::IBMFloat32)
   local fr::UInt32 = ntoh(reinterpret(UInt32, ibm))
   local sgn::UInt32 = fr & 0x80000000 # save sign
   fr <<= 1 # shift sign out
-  local exp::Int32 = Int32(fr >>> 25) # save exponent
+  local exp::Int32 = convert(Int32,fr >>> 25) # save exponent
   fr <<= 7 # shift exponent out
 
-  if (fr == UInt32(0))
+  if (fr == convert(UInt32,0))
     zero(Float32)
   else
     # normalize the signficand
@@ -655,8 +657,8 @@ function convert(::Type{Float32}, ibm::IBMFloat32)
     # exp <= 0 --> ieee(0,0,sgn)
     # exp >= 255 --> ieee(0,255,sgn)
     # else -> ieee(fr<<1, exp, sgn)
-    local clexp::Int32 = exp & Int32(0xFF) #clamp(exp, Int32(0), int32(255))
-    ieeeOfPieces(clexp == exp ? fr << 1 : UInt32(0), clexp, sgn)
+    local clexp::Int32 = exp & convert(Int32,0xFF)
+    ieeeOfPieces(clexp == exp ? fr << 1 : convert(UInt32,0), clexp, sgn)
   end
 end
 

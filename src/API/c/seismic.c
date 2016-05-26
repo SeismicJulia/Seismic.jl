@@ -267,31 +267,29 @@ void freeSeisHeader(struct SeisHeader *p)
 }
 
 /* read a seis file */
-void SeisRead(char *in,float **d,struct SeisHeader *h, int nt, int nx)
+void SeisRead(char *in,float **d,struct SeisHeader *h, struct SeisFileHeader *fh)
 {
+	int ix,nx;
 	FILE *fp_d,*fp_h;
-	char in_d[512],in_h[512];
-	int ix;
-	sprintf(in_d, "%s.seisd",in);
-	sprintf(in_h, "%s.seish",in);  	
-  
-	fp_h = fopen(in_h,"rb");
+	InitFileHeader(fh);
+	ReadFileHeader(in,fh);
+	nx = fh->n2*fh->n3*fh->n4*fh->n5;
+	fp_h = fopen(fh->hname,"rb");
 	if (!fp_h){
-		printf("Unable to open %s\n",in_h);
+		printf("SeisRead: Unable to open %s\n",fh->hname);
 		return;
 	}
-	for (ix=0; ix<nx; ix++){	
+	for (ix=0; ix<nx; ix++){
 		fread(&h[ix],sizeof(struct SeisHeader),1,fp_h);
 	}
 	fclose(fp_h);
-
-	fp_d=fopen(in_d,"rb");
+	fp_d=fopen(fh->dname,"rb");
 	if (!fp_d){
-		printf("Unable to open %s\n",in_d);
+		printf("SeisRead: Unable to open %s\n",fh->dname);
 		return;
 	}
 	for (ix=0; ix<nx; ix++){	
-		fread(d[ix],sizeof(float),nt,fp_d);
+		fread(d[ix],sizeof(float),fh->n1,fp_d);
 	}	
 	fclose(fp_d);
 	
@@ -299,17 +297,32 @@ void SeisRead(char *in,float **d,struct SeisHeader *h, int nt, int nx)
 }
 
 /* write a seis file */
-void SeisWrite(char *out,float **d,struct SeisHeader *h, int nt, int nx)
+void SeisWrite(char *out,float **d,struct SeisHeader *h, struct SeisFileHeader *fh)
 {
+	int ix,nx;
 	FILE *fp_d,*fp_h;
-	char out_d[512],out_h[512];
-	int ix;
-	sprintf(out_d, "%s.seisd",out);
-	sprintf(out_h, "%s.seish",out);  	
+	const char* datapath;
+	// get DATAPATH environmental variable if it exists, and prepend it to dname and hname. 
+	datapath = getenv("DATAPATH");
+	if (datapath != NULL){
+		strcpy (fh->dname,datapath);
+		strcat (fh->dname,out);
+		strcpy (fh->hname,datapath);
+		strcat (fh->hname,out);
+	}
+	else{
+		strcpy (fh->dname,out);
+		strcpy (fh->hname,out);
+	}	
+	strcat (fh->dname,"@data@");
+	strcat (fh->hname,"@headers@");
+	
+	WriteFileHeader(out,fh);
+	nx = fh->n2*fh->n3*fh->n4*fh->n5;
   
-	fp_h = fopen(out_h,"wb");
+	fp_h = fopen(fh->hname,"wb");
 	if (!fp_h){
-		printf("Unable to open %s\n",out_h);
+		printf("SeisWrite: Unable to open %s\n",fh->hname);
 		return;
 	}
 	for (ix=0; ix<nx; ix++){	
@@ -317,78 +330,132 @@ void SeisWrite(char *out,float **d,struct SeisHeader *h, int nt, int nx)
 	}
 	fclose(fp_h);
 
-	fp_d=fopen(out_d,"wb");
+	fp_d=fopen(fh->dname,"wb");
 	if (!fp_d){
-		printf("Unable to open %s\n",out_d);
+		printf("SeisWrite: Unable to open %s\n",fh->dname);
 		return;
 	}
 	for (ix=0; ix<nx; ix++){	
-		fwrite(d[ix],sizeof(float),nt,fp_d);
+		fwrite(d[ix],sizeof(float),fh->n1,fp_d);
 	}
 	fclose(fp_d);
 	
 	return;
 }
 
-/* return the dimensions (nt and nx) of a seis file */
-void SeisDim(char *in,int *nt, int *nx)
+void InitFileHeader(struct SeisFileHeader *fh)
 {
-	FILE *fp_h;
-	char in_h[512];
-	struct SeisHeader h;
-	struct stat st;
-	
-	sprintf(in_h, "%s.seish",in);  	
-	fp_h = fopen(in_h,"rb");
-	if (!fp_h){
-		printf("Unable to open %s\n",in_h);
-		return;
-	}
-	fread(&h,sizeof(struct SeisHeader),1,fp_h);
-	fclose(fp_h);
-	stat(in_h, &st);
-    *nt = h.n1;
-    *nx = (int) truncf((float) st.st_size/124);
-	return;
+	fh->n1 = 1;
+	fh->n2 = 1;
+	fh->n3 = 1;
+	fh->n4 = 1;
+	fh->n5 = 1;
+	fh->o1 = 0;
+	fh->o2 = 1;
+	fh->o3 = 1;
+	fh->o4 = 1;
+	fh->o5 = 1;
+	fh->d1 = 0;
+	fh->d2 = 1;
+	fh->d3 = 1;
+	fh->d4 = 1;
+	fh->d5 = 1;
+	strcpy(fh->label1,"");
+	strcpy(fh->label2,"");
+	strcpy(fh->label3,"");
+	strcpy(fh->label4,"");
+	strcpy(fh->label5,"");
+	strcpy(fh->unit1,"");
+	strcpy(fh->unit2,"");
+	strcpy(fh->unit3,"");
+	strcpy(fh->unit4,"");
+	strcpy(fh->unit5,"");
+	strcpy(fh->title,"");
+	strcpy(fh->data_format,"native_float");
+	fh->esize = 4;
+	strcpy(fh->dname,"NULL");
+	strcpy(fh->hname,"NULL");
 }
 
-void InitSeisHeader(struct SeisHeader *h, int nx)
+void ReadFileHeader(char *filename,struct SeisFileHeader *fh)
 {
-	int ix;
-	for (ix=0;ix<nx;ix++){
-    	h[ix].tracenum = 0;
-    	h[ix].o1    = 0;
-    	h[ix].n1    = 0;
-    	h[ix].d1    = 0;
-    	h[ix].sx    = 0;
-    	h[ix].sy    = 0;
-    	h[ix].gx    = 0;
-    	h[ix].gy    = 0;
-    	h[ix].mx    = 0;
-    	h[ix].my    = 0;
-    	h[ix].hx    = 0;
-    	h[ix].hy    = 0;
-    	h[ix].h     = 0;
-    	h[ix].az    = 0;
-    	h[ix].ang   = 0;
-    	h[ix].isx   = 0;
-    	h[ix].isy   = 0;
-    	h[ix].igx   = 0;
-    	h[ix].igy   = 0;
-    	h[ix].imx   = 0;
-    	h[ix].imy   = 0;
-    	h[ix].ihx   = 0;
-    	h[ix].ihy   = 0;
-    	h[ix].ih    = 0;
-    	h[ix].iaz   = 0;
-    	h[ix].iang  = 0;
-    	h[ix].selev = 0;
-    	h[ix].gelev = 0;
-    	h[ix].sstat = 0;
-    	h[ix].gstat = 0;
-    	h[ix].trid  = 0;
-    }
-};
+	FILE *fp;
+	char fline[100];
+	char *newline = NULL;
+	char tmp[100];
+	fp = fopen(filename, "r");
+	while (fgets(fline, 100, fp) != NULL) {
+		if (newline == strchr(fline, '\n')) *newline = '\0';
+		if (strstr(fline, "in=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->dname);
+		if (strstr(fline, "headers=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->hname);
+		if (strstr(fline, "title=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->title);
+		if (strstr(fline, "label1=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->label1);
+		if (strstr(fline, "unit1=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->unit1);
+		if (strstr(fline, "n1=") != NULL) sscanf(fline,"%[^= ]=%d", tmp, &fh->n1);
+		if (strstr(fline, "o1=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->o1);
+		if (strstr(fline, "d1=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->d1);
+		if (strstr(fline, "label2=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->label2);
+		if (strstr(fline, "unit2=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->unit2);
+		if (strstr(fline, "n2=") != NULL) sscanf(fline,"%[^= ]=%d", tmp, &fh->n2);
+		if (strstr(fline, "o2=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->o2);
+		if (strstr(fline, "d2=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->d2);
+		if (strstr(fline, "label3=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->label3);
+		if (strstr(fline, "unit3=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->unit3);
+		if (strstr(fline, "n3=") != NULL) sscanf(fline,"%[^= ]=%d", tmp, &fh->n3);
+		if (strstr(fline, "o3=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->o3);
+		if (strstr(fline, "d3=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->d3);
+		if (strstr(fline, "label4=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->label4);
+		if (strstr(fline, "unit4=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->unit4);
+		if (strstr(fline, "n4=") != NULL) sscanf(fline,"%[^= ]=%d", tmp, &fh->n4);
+		if (strstr(fline, "o4=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->o4);
+		if (strstr(fline, "d4=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->d4);
+		if (strstr(fline, "label5=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->label5);
+		if (strstr(fline, "unit5=") != NULL) sscanf(fline,"%[^=\" ]=\"%99[^\"]", tmp, fh->unit5);
+		if (strstr(fline, "n5=") != NULL) sscanf(fline,"%[^= ]=%d", tmp, &fh->n5);
+		if (strstr(fline, "o5=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->o5);
+		if (strstr(fline, "d5=") != NULL) sscanf(fline,"%[^= ]=%f", tmp, &fh->d5);
+	}
+	fclose(fp);
+	return;
 
+}
 
+void WriteFileHeader(char *filename,struct SeisFileHeader *fh)
+{
+	FILE *fp;
+	fp = fopen(filename, "w");
+	fprintf(fp, "	n1=%d\n",fh->n1);
+	fprintf(fp, "	n2=%d\n",fh->n2);
+	fprintf(fp, "	n3=%d\n",fh->n3);
+	fprintf(fp, "	n4=%d\n",fh->n4);
+	fprintf(fp, "	n5=%d\n",fh->n5);
+	fprintf(fp, "	o1=%f\n",fh->o1);
+	fprintf(fp, "	o2=%f\n",fh->o2);
+	fprintf(fp, "	o3=%f\n",fh->o3);
+	fprintf(fp, "	o4=%f\n",fh->o4);
+	fprintf(fp, "	o5=%f\n",fh->o5);
+	fprintf(fp, "	d1=%f\n",fh->d1);
+	fprintf(fp, "	d2=%f\n",fh->d2);
+	fprintf(fp, "	d3=%f\n",fh->d3);
+	fprintf(fp, "	d4=%f\n",fh->d4);
+	fprintf(fp, "	d5=%f\n",fh->d5);
+	fprintf(fp, "	label1=\"%s\"\n",fh->label1);
+	fprintf(fp, "	label2=\"%s\"\n",fh->label2);
+	fprintf(fp, "	label3=\"%s\"\n",fh->label3);
+	fprintf(fp, "	label4=\"%s\"\n",fh->label4);
+	fprintf(fp, "	label5=\"%s\"\n",fh->label5);
+	fprintf(fp, "	unit1=\"%s\"\n",fh->unit1);
+	fprintf(fp, "	unit2=\"%s\"\n",fh->unit2);
+	fprintf(fp, "	unit3=\"%s\"\n",fh->unit3);
+	fprintf(fp, "	unit4=\"%s\"\n",fh->unit4);
+	fprintf(fp, "	unit5=\"%s\"\n",fh->unit5);
+	fprintf(fp, "	unit5=\"%s\"\n",fh->unit5);
+	fprintf(fp, "	title=\"%s\"\n",fh->title);
+	fprintf(fp, "	data_format=\"%s\"\n",fh->data_format);
+	fprintf(fp, "	esize=%d\n",fh->esize);
+	fprintf(fp, "	in=\"%s\"\n",fh->dname);
+	fprintf(fp, "	headers=\"%s\"\n",fh->hname);
+	fclose(fp);
+	return;
 
+}

@@ -47,10 +47,10 @@ function SeisGeometry(in;ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=
 		ang2=deg2rad*(90-ang)
 	end
 
-	filename = join([in ".seish"])
+	filename = ParseHeaderName(in)
 	stream = open(filename,"r+")
 	nhead = 27
-	nx = int(filesize(stream)/(4*length(names(Header))))
+	@compat nx = round(Int,filesize(stream)/(4*length(fieldnames(Header))))
 	for j=1:nx
 		h = GrabHeader(stream,j)
 		h.hx = h.gx - h.sx

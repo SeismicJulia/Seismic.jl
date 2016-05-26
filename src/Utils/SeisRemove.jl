@@ -13,8 +13,8 @@
 """
 function SeisRemove(filename::ASCIIString)
 
-	filename_data = chomp(readall(`grep "in=" $filename` |> `tail -1` |> `awk '{print substr($1,5,length($1)-5) }' `))
-	filename_headers = success(`grep "headers=" $filename`) ? chomp(readall(`grep "headers=" $filename` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
+	filename_data = ParseDataName(filename)
+	filename_headers = ParseHeaderName(filename)	
 	rm(filename);
 	rm(filename_data);
 	if filename_headers != "NULL"
