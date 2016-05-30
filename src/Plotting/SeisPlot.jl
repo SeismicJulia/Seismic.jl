@@ -1,93 +1,121 @@
 """
-**SeisPlot**
+    SeisPlot(d[, extent]; <keyword arguments>)
 
-*Plot 2d seismic data with color, wiggles, or overlay. Optionally can print to a file. *
+Plot time-space, frequency-wavenumber or amplitude-frequency 2D seismic data `d`
+with color, wiggles, or overlay.
 
-**IN**   
-* d: 2d data 
+# Arguments
+* `d`: 2D data to plot.
+* `extent`: extent of the data (optional).
 
-* style="color"
-* wiggle_fill_color="k"
-* wiggle_line_color="k"
-* wiggle_trace_increment=1
-* xcur=1.2
-* cmap="Greys"
-* aspect="auto"
-* pclip=98
-* vmin="NULL"
-* vmax="NULL"
-* title=" "
-* xlabel=" "
-* xunits=" "
-* ylabel=" "
-* yunits=" "
-* ox=0
-* dx=1
-* oy=0
-* dy=1
-* dpi=100
-* wbox=6
-* hbox=6
-* name="NULL"
-* interpolation="Hanning"
-* titlesize=20
-* labelsize=15
-* ticksize=10
-* fignum="NULL"
-* plot_type="TX"
-* fmax=100
+**Keyword arguments**
 
-**OUT**  
+* `plot_type="TX"`: `"TX"` for time-space plot; `"FK"` for frequency-wavenumber
+plot or `"Amplitude"` for amplitude-spectrum plot.
+* `style="color"`: style of the plot: `"color"`, `"wiggles"` or `"overlay"`. 
+* `cmap="PuOr"`: colormap for  `"color"` or `"overlay"` style.
+* `pclip=98`: percentile for determining clip.
+* `vmin="NULL"`: minimum value used in colormapping data.
+* `vmax="NULL"`: maximum value used in colormapping data.
+* `aspect="auto"`: color image aspect ratio.
+* `interpolation="Hanning"`: interpolation method for colormapping data.
+* `fmax=100`: maximum frequency for `"FK"` or `"Amplitude"` plot.
+* `wiggle_fill_color="k"`: color for filling the positive wiggles.
+* `wiggle_line_color="k"`: color for wiggles' lines.
+* `wiggle_trace_increment=1`: increment for wiggle traces.
+* `xcur=1.2`: wiggle excursion in traces corresponding to clip.
+* `scal="NULL"`: scale for wiggles.
+* `title=" "`: title of plot.
+* `titlesize=16`: size of title.
+* `xlabel=" "`: label on x-axis.
+* `xunits=" "`: units of y-axis. 
+* `ylabel=" "`: label on x-axis. 
+* `yunits=" "`: units of y-axis.
+* `labelsize=14`: size of labels on axis.
+* `ox=0`: first point of x-axis.
+* `dx=1`: increment of x-axis.
+* `oy=0`: first point of y-axis.
+* `dy=1`: increment of y-axis.
+* `xticks="NULL"`: ticks on x-axis.
+* `yticks="NULL"`: ticks on y-axis.
+* `xticklabels="NULL"`: labels on ticks of x-axis.
+* `yticklabels="NULL"`: labels on ticks of y-axis.
+* `ticksize=11`: size of labels on ticks.
+* `fignum="NULL"`: number of figure.
+* `wbox=6`: width of figure in inches.
+* `hbox=6`: height of figure in inches.
+* `dpi=100`: dots-per-inch of figure.
+* `name="NULL"`: name of the figure to save (only if `name` is given).
 
-*Credits: Aaron Stanton, 2015*
+# Example
+```julia
+julia> d,extent = SeisLinearEvents(); SeisPlot(d);
+```
 
+Credits: Aaron Stanton, 2015
 """
-function SeisPlot(in;style="color",wiggle_fill_color="k",wiggle_line_color="k",wiggle_trace_increment=1,xcur=1.2,cmap="Greys",aspect="auto",pclip=98,vmin="NULL",vmax="NULL",title=" ",xlabel=" ",xunits=" ",ylabel=" ",yunits="",ox=0,dx=1,oy=0,dy=1,dpi=100,wbox=6,hbox=6,name="NULL",interpolation="Hanning",titlesize=20,labelsize=15,ticksize=10,fignum="NULL",plot_type="TX",fmax=100)
-
-	if (vmin=="NULL" || vmax=="NULL")
-		if (pclip<=100)
-			a = -quantile(abs(in[:]),(pclip/100))
-		else
-			a = -quantile(abs(in[:]),1)*pclip/100
-		end
-		b = -a
+function SeisPlot{T<:Real}(in::Array{T,2}; plot_type="TX", style="color",
+                           cmap="PuOr", pclip=98, vmin="NULL", vmax="NULL",
+                           aspect="auto", interpolation="Hanning", fmax=100, 
+                           wiggle_fill_color="k", wiggle_line_color="k",
+                           wiggle_trace_increment=1, xcur=1.2, scal="NULL",
+                           title=" ", titlesize=16, xlabel=" ", xunits=" ",
+                           ylabel=" ", yunits=" ", labelsize=14, ox=0, dx=1,
+                           oy=0, dy=1, xticks="NULL", yticks="NULL",
+                           xticklabels="NULL", yticklabels="NULL", ticksize=11,
+                           fignum="NULL", wbox=6, hbox=6, dpi=100, name="NULL")
+    if (vmin=="NULL" || vmax=="NULL")
+        if (pclip<=100)
+	    a = -quantile(abs(in[:]), (pclip/100))
 	else
-		a = vmin
-		b = vmax
+	    a = -quantile(abs(in[:]), 1)*pclip/100
 	end
-	plt.ion()
-	if (fignum == "NULL")
-		fig = plt.figure(figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
-	else
-		fig = plt.figure(num=fignum,figsize=(wbox, hbox), dpi=dpi, facecolor="w", edgecolor="k")
-	end
-   if plot_type == "TX" # time space plot
+	b = -a
+    else
+	a = vmin
+	b = vmax
+    end
+    plt.ion()
+    if (fignum == "NULL")
+	fig = plt.figure(figsize=(wbox, hbox), dpi=dpi, facecolor="w",
+                           edgecolor="k")
+    else
+	fig = plt.figure(num=fignum, figsize=(wbox, hbox), dpi=dpi,
+                           facecolor="w", edgecolor="k")
+    end
+    if plot_type == "TX"
 	if (style != "wiggles")
-		im = plt.imshow(in,cmap=cmap,vmin=a,vmax=b,extent=[ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy],aspect=aspect,interpolation=interpolation)
+	    im = plt.imshow(in, cmap=cmap, vmin=a, vmax=b,
+                              extent=[ox - dx/2,ox + (size(in,2)-1)*dx + dx/2,
+                                      oy + (size(in,1)-1)*dy,oy],
+                              aspect=aspect, interpolation=interpolation)
 	end
 	if (style != "color")
-		y = oy+dy*collect(0:1:size(in,1)-1)
-		x = ox+dx*collect(0:1:size(in,2)-1)
-		delta = wiggle_trace_increment*dx
-		hmin = minimum(x)
-		hmax = maximum(x)
-		dmax = maximum(in[:])
-		alpha = xcur*delta/dmax
-		for k = 1:wiggle_trace_increment:size(in,2)
-			x_vert = Float64[]
-			y_vert = Float64[]
-			s = in[:,k]
-			s[1]=0
-			s[end]=0
-			sp = (s+abs(s))/2
-			im = plt.plot( s*alpha + x[k],y,wiggle_line_color)
-			if (style != "overlay")
-				plt.fill(sp*alpha + x[k],y,wiggle_fill_color)
-			end
+            style=="wiggles" ? margin = dx : margin = dx/2
+	    y = oy+dy*collect(0:1:size(in, 1)-1)
+	    x = ox+dx*collect(0:1:size(in, 2)-1)
+	    delta = wiggle_trace_increment*dx
+	    hmin = minimum(x)
+	    hmax = maximum(x)
+            dmax = maximum(abs(in[:]))
+	    alpha = xcur*delta
+            scal=="NULL" ? alpha = alpha/maximum(abs(in[:])) : alpha=alpha*scal
+	    for k = 1:wiggle_trace_increment:size(in, 2)
+		x_vert = Float64[]
+		y_vert = Float64[]
+                s = in[:,k]
+		s[1] =0 
+		s[end] = 0
+		sp = (s+abs(s))/2
+		im = plt.plot( s*alpha + x[k], y, wiggle_line_color)
+		if (style != "overlay")
+		    plt.fill(sp*alpha + x[k], y, wiggle_fill_color)
 		end
-		plt.axis([ox,ox + (size(in,2)-1)*dx,oy + (size(in,1)-1)*dy,oy])
+	    end
+	    plt.axis([ox - margin,ox + (size(in,2)-1)*dx + margin,
+                        oy + (size(in,1)-1)*dy,oy])
 	end
-   elseif plot_type == "FK"
+    elseif plot_type == "FK"
 	xlabel = "Wavenumber"
 	xunits = "(1/m)"
 	ylabel = "Frequency"
@@ -98,21 +126,22 @@ function SeisPlot(in;style="color",wiggle_fill_color="k",wiggle_line_color="k",w
 	df = 1/dy/size(in[:,:],1)
 	FMAX = df*size(in[:,:],1)/2 
 	if fmax > FMAX
-		fmax = FMAX
+	    fmax = FMAX
 	end
 	nf = convert(Int32,floor((size(in[:,:],1)/2)*fmax/FMAX))
 	D = abs(fftshift(fft(in[:,:])))
 	D = D[round(Int,end/2):round(Int,end/2)+nf,:]
 	if (vmin=="NULL" || vmax=="NULL")
-		a = 0.
-		if (pclip<=100)
-			b = quantile(abs(D[:]),(pclip/100))
-		else
-			b = quantile(abs(D[:]),1)*pclip/100
-		end
+	    a = 0.
+	    if (pclip<=100)
+		b = quantile(abs(D[:]),(pclip/100))
+	    else
+		b = quantile(abs(D[:]),1)*pclip/100
+	    end
 	end
-	im = plt.imshow(D,cmap=cmap,vmin=a,vmax=b,extent=[kmin,kmax,fmax,0],aspect=aspect,interpolation=interpolation)
-   elseif plot_type == "Amplitude"
+	im = plt.imshow(D,cmap=cmap,vmin=a,vmax=b,extent=[kmin,kmax,fmax,0],
+                        aspect=aspect,interpolation=interpolation)
+    elseif plot_type == "Amplitude"
 	xlabel = "Frequency"
 	xunits = "(Hz)"
 	ylabel = "Amplitude"
@@ -121,7 +150,7 @@ function SeisPlot(in;style="color",wiggle_fill_color="k",wiggle_line_color="k",w
 	df = 1/dy/size(in[:,:],1)
 	FMAX = df*size(in[:,:],1)/2 
 	if fmax > FMAX
-		fmax = FMAX
+	    fmax = FMAX
 	end
 	nf = convert(Int32,floor((size(in[:,:],1)/2)*fmax/FMAX))
 	y = fftshift(sum(abs(fft(in[:,:],1)),2))/nx
@@ -136,32 +165,52 @@ function SeisPlot(in;style="color",wiggle_fill_color="k",wiggle_line_color="k",w
 	plt.xlabel(join([xlabel " " xunits]))
 	plt.ylabel(join([ylabel " " yunits]))
 	plt.axis([0,fmax,0,1.1])
-   else
+    else
 	error("plot_type not recognized.")
-   end 
-	plt.title(title, fontsize=titlesize)
-	plt.xlabel(join([xlabel " " xunits]), fontsize=labelsize)
-	plt.ylabel(join([ylabel " " yunits]), fontsize=labelsize)
-	ax = plt.gca()
-	plt.setp(ax[:get_xticklabels](), fontsize=ticksize)
-	plt.setp(ax[:get_yticklabels](), fontsize=ticksize)
-	if (name == "NULL")
-		plt.show()
-	else
-		plt.savefig(name,dpi=dpi)
-		plt.close()
-	end
-	return im
+    end
+    plt.title(title, fontsize=titlesize)
+    plt.xlabel(join([xlabel " " xunits]), fontsize=labelsize)
+    plt.ylabel(join([ylabel " " yunits]), fontsize=labelsize)
+    xticks == "NULL" ? nothing : plt.xticks(xticks)
+    yticks == "NULL" ? nothing : plt.yticks(yticks)
+    ax = plt.gca()
+    xticklabels == "NULL" ? nothing : ax[:set_xticklabels](xticklabels)
+    yticklabels == "NULL" ? nothing : ax[:set_yticklabels](yticklabels)
+    plt.setp(ax[:get_xticklabels](), fontsize=ticksize)
+    plt.setp(ax[:get_yticklabels](), fontsize=ticksize)
+    if (name == "NULL")
+	plt.show()
+    else
+	plt.savefig(name, dpi=dpi)
+	plt.close()
+    end
+    return im
 end
 
-function SeisPlot(in,extent::Extent;style="color",wiggle_fill_color="k",wiggle_line_color="k",wiggle_trace_increment=1,xcur=1.2,cmap="Greys",aspect="auto",pclip=98,vmin="NULL",vmax="NULL",yunits=" ",dpi=100,wbox=6,hbox=6,name="NULL",interpolation="Hanning",titlesize=20,labelsize=15,ticksize=10,fignum="NULL",plot_type="TX",fmax=100)
-	im = SeisPlot(in,style=style,wiggle_fill_color=wiggle_fill_color,wiggle_line_color=wiggle_line_color,wiggle_trace_increment=wiggle_trace_increment,xcur=xcur,cmap=cmap,aspect=aspect,pclip=pclip,vmin=vmin,vmax=vmax,title=extent.title,xlabel=extent.label2,xunits=join(["(",extent.unit2,")"]),ylabel=extent.label1,yunits=join(["(",extent.unit1,")"]),ox=extent.o2,dx=extent.d2,oy=extent.o1,dy=extent.d1,dpi=dpi,wbox=wbox,hbox=hbox,name=name,interpolation=interpolation,titlesize=titlesize,labelsize=labelsize,ticksize=ticksize,fignum=fignum,plot_type=plot_type,fmax=fmax)
-	return im
-end
-
-function SeisPlot(in::ASCIIString;style="color",wiggle_fill_color="k",wiggle_line_color="k",wiggle_trace_increment=1,xcur=1.2,cmap="Greys",aspect="auto",pclip=98,vmin="NULL",vmax="NULL",title=" ",xlabel=" ",xunits=" ",ylabel=" ",yunits=" ",ox=0,dx=1,oy=0,dy=1,dpi=100,wbox=6,hbox=6,name="NULL",interpolation="Hanning",titlesize=20,labelsize=15,ticksize=10,fignum="NULL",plot_type="TX",fmax=100)
-
-	d,h = SeisRead(in)
-	SeisPlot(d,style=style,wiggle_fill_color=wiggle_fill_color,wiggle_line_color=wiggle_line_color,wiggle_trace_increment=wiggle_trace_increment,xcur=xcur,cmap=cmap,aspect=aspect,pclip=pclip,vmin=vmin,vmax=vmax,title=title,xlabel=xlabel,xunits=xunits,ylabel=ylabel,yunits=yunits,ox=ox,dx=dx,oy=oy,dy=dy,dpi=dpi,wbox=wbox,hbox=hbox,name=name,interpolation=interpolation,titlesize=titlesize,labelsize=labelsize,ticksize=ticksize,fignum=fignum,plot_type=plot_type,fmax=fmax)
-
+function SeisPlot{T<:Real}(in::Array{T,2}, extent::Extent;
+                           plot_type="TX", style="color",
+                           cmap="PuOr", pclip=98, vmin="NULL", vmax="NULL",
+                           aspect="auto", interpolation="Hanning", fmax=100, 
+                           wiggle_fill_color="k", wiggle_line_color="k",
+                           wiggle_trace_increment=1, xcur=1.2, scal="NULL",
+                           title=" ", titlesize=16, xlabel=" ", xunits=" ",
+                           ylabel=" ", yunits=" ", labelsize=14, ox=0, dx=1,
+                           oy=0, dy=1, xticks="NULL", yticks="NULL",
+                           xticklabels="NULL", yticklabels="NULL", ticksize=11,
+                           fignum="NULL", wbox=6, hbox=6, dpi=100, name="NULL")
+    im = SeisPlot(in, plot_type=plot_type, style=style, cmap=cmap, pclip=pclip,
+                  vmin=vmin, vmax=vmax, aspect=aspect,
+                  interpolation=interpolation, fmax=fmax, 
+                  wiggle_fill_color=wiggle_fill_color,
+                  wiggle_line_color=wiggle_line_color,
+                  wiggle_trace_increment=wiggle_trace_increment, xcur=xcur,
+                  scal=scal, title=extent.title,  titlesize=titlesize,
+                  xlabel=extent.label2, xunits=join(["(",extent.unit2,")"]),
+                  ylabel=extent.label1, yunits=join(["(",extent.unit1,")"]),
+                  labelsize=labelsize, ox=extent.o2, dx=extent.d2, oy=extent.o1,
+                  dy=extent.d1, xticks=xticks, yticks=yticks,
+                  xticklabels=xticklabels, yticklabels=yticklabels,
+                  ticksize=ticksize, wbox=wbox, hbox=hbox, dpi=dpi, name=name, 
+                  fignum=fignum)
+    return im
 end
