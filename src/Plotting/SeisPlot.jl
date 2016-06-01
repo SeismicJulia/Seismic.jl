@@ -1,8 +1,8 @@
 """
     SeisPlot(d[, extent]; <keyword arguments>)
 
-Plot time-space, frequency-wavenumber or amplitude-frequency 2D seismic data `d`
-with color, wiggles, or overlay.
+Plot time-space, frequency-wavenumber or amplitude-frequency 2D seismic data `d'
+with color, wiggles or overlay.
 
 # Arguments
 * `d`: 2D data to plot.
@@ -11,7 +11,7 @@ with color, wiggles, or overlay.
 **Keyword arguments**
 
 * `plot_type="TX"`: `"TX"` for time-space plot; `"FK"` for frequency-wavenumber
-plot or `"Amplitude"` for amplitude-spectrum plot.
+plot or `"Amplitude"` for amplitude spectrum plot.
 * `style="color"`: style of the plot: `"color"`, `"wiggles"` or `"overlay"`. 
 * `cmap="PuOr"`: colormap for  `"color"` or `"overlay"` style.
 * `pclip=98`: percentile for determining clip.
