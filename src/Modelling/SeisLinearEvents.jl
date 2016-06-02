@@ -13,28 +13,25 @@ Generate five dimensional data `d` consisting of linear events.
 * `ox1=0.0`: first sample for the first spatial dimension in meters.
 * `dx1=10.0`: sample interval for the first spatial dimension in meters.
 * `nx1=100`: number of samples for the first spatial dimension.
-* `ox2=0.0`: first sample for the first spatial dimension in meters.
-* `dx2=10.0`: sample interval for the first spatial dimension in meters.
-* `nx2=1`: number of samples for the first spatial dimension. 
-* `ox3=0.0`: first sample for the first spatial dimension in meters.
-* `dx3=10.0`: sample interval for the first spatial dimension in meters.
-* `nx3=1`: number of samples for the first spatial dimension.
-* `ox4=0.0`: first sample for the first spatial dimension in meters.
-* `dx4=10.0`: sample interval for the first spatial dimension in meters.
-* `nx4=1`:number of samples for the first spatial dimension. 
-* `tau1=[1.0, 1.6]`: 
-* `tau2=0.0`: 
-* `tau3=0.0`: 
-* `tau4=0.0`: 
-* `v1=[2500.0,-800.0]`: 
-* `v2=1500.0`: 
-* `v3=1500.0`: 
-* `v4=1500.0`: 
-* `amp=[1.0,-1.0]`: 
-* `f0=20.0`: 
-* `ricker=true`: 
-* `exponent=1`: 
-* `sinusoidal=false`: 
+* `ox2=0.0`: first sample for the second spatial dimension in meters.
+* `dx2=10.0`: sample interval for the second spatial dimension in meters.
+* `nx2=1`: number of samples for the second spatial dimension. 
+* `ox3=0.0`: second sample for the third spatial dimension in meters.
+* `dx3=10.0`: sample interval for the third spatial dimension in meters.
+* `nx3=1`: number of samples for the third spatial dimension.
+* `ox4=0.0`: third sample for the fourth spatial dimension in meters.
+* `dx4=10.0`: sample interval for the fourth spatial dimension in meters.
+* `nx4=1`:number of samples for the fourth spatial dimension. 
+* `tau1=[1.0, 1.6]`: intercept traveltimes for each event.
+* `v1=[2500.0,-800.0]`: ??? in the first spatial dimension.
+* `v2=1500.0`:  ??? in the second spatial dimension.
+* `v3=1500.0`: ??? in the third spatial dimension.
+* `v4=1500.0`:  ??? in the fourth spatial dimension.
+* `amp=[1.0,-1.0]`: amplitudes for each linear event.
+* `wavelet="ricker"`: wavelet used to model the linear events.
+* `f0=[20.0]`: central frequency of wavelet for each linear event.
+* `exponent=1.0`: ???
+* `sinusoidal=false`: ???
 
 # Example
 ```julia
@@ -48,7 +45,8 @@ function SeisLinearEvents(; ot=0.0, dt=0.004, nt=500, ox1=0.0, dx1=10.0,
                           nx3=1, ox4=0.0, dx4=10.0, nx4=1, tau1=[1.0,1.6],
                           tau2=0.0, tau3=0.0, tau4=0.0, v1=[2500.0,-800.0],
                           v2=1500.0, v3=1500.0, v4=1500.0, amp=[1.0,-1.0],
-                          f0=20.0, ricker=true, exponent=1.0, sinusoidal=false)
+                          f0=[20.0], wavelet="ricker", exponent=1.0,
+                          sinusoidal=false)
     sinusoidalA = 10.0*dt
     sinusoidalB = 10.0*pi/(ox1 + dx1*nx1)
     sinusoidalC = 0.0
@@ -82,7 +80,7 @@ function SeisLinearEvents(; ot=0.0, dt=0.004, nt=500, ox1=0.0, dx1=10.0,
     nf = 4*nextpow2(nt) + 1
     dw = 2.0*pi/nf/dt
     nw = round(Int, floor(nf/2)) + 1
-    t = collect(0:1:nt-1)'*dt
+    t = collect(0:1:nt-1)*dt
     x1 = Array(Float32, 1, nx1, nx2, nx3, nx4)
     x2 = Array(Float32, 1, nx1, nx2, nx3, nx4)
     x3 = Array(Float32, 1, nx1, nx2, nx3, nx4)
@@ -91,13 +89,13 @@ function SeisLinearEvents(; ot=0.0, dt=0.004, nt=500, ox1=0.0, dx1=10.0,
                   ox4, dx4, nx4, exponent);
     D = zeros(Complex{Float64}, nf, nx1, nx2, nx3, nx4)
     for ievent = 1:length(tau1)
-	t, wav = SeisWavelets.Ricker(fc=f0[ievent], dt=dt)
+	wav = Ricker(f0=f0[ievent], dt=dt)
 	nwav = length(wav)
-	wav = cat(2, wav', zeros(1, nf-length(wav)))
-	Wav = fft(wav',1)
+	wav = cat(1, wav, zeros(nf-length(wav)))
+	Wav = fft(wav)
 	delay = dt*(round(Int, nwav/2) + 1)
 	UpdateEvents!(D, nw, dw, x1, x2, x3, x4, tau1, tau2, tau3, tau4, v1, v2,
-                      v3, v4, amp, ievent, delay, ricker, Wav, sinusoidal,
+                      v3, v4, amp, ievent, delay, wavelet, Wav, sinusoidal,
                       sinusoidalA, sinusoidalB, sinusoidalC)
     end
     for iw = nw+1:nf
@@ -150,7 +148,7 @@ function UpdateCoords!(x1, x2, x3, x4, ox1, dx1, nx1, ox2, dx2, nx2, ox3, dx3,
 end
 
 function UpdateEvents!(D, nw, dw, x1, x2, x3, x4, tau1, tau2, tau3, tau4, v1,
-                       v2, v3, v4, amp, ievent, delay, ricker, Wav, sinusoidal,
+                       v2, v3, v4, amp, ievent, delay, wavelet, Wav, sinusoidal,
                        sinusoidalA, sinusoidalB, sinusoidalC)
     for iw = 1:nw
 	w = (iw - 1)*dw
@@ -163,7 +161,7 @@ function UpdateEvents!(D, nw, dw, x1, x2, x3, x4, tau1, tau2, tau3, tau4, v1,
                       + sinusoidalA*sin(sinusoidalB*x3 + sinusoidalC)
                       + sinusoidalA*sin(sinusoidalB*x4 + sinusoidalC))
 	end	
-	if (ricker)
+	if wavelet == "ricker"
 	    D[iw, :, :, :, :] += amp[ievent]*Wav[iw]*exp(-1im*w*shift)
 	else
 	    D[iw, :, :, :, :] += amp[ievent]*exp(-1im*w*(shift + delay))

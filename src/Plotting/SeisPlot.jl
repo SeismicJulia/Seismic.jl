@@ -1,7 +1,7 @@
 """
-    SeisPlot(d[, extent]; <keyword arguments>)
+    SeisPlot(d [, extent]; <keyword arguments>)
 
-Plot time-space, frequency-wavenumber or amplitude-frequency 2D seismic data `d'
+Plot time-space, frequency-wavenumber or amplitude-frequency 2D seismic data `d`
 with color, wiggles or overlay.
 
 # Arguments
@@ -54,7 +54,7 @@ julia> d,extent = SeisLinearEvents(); SeisPlot(d);
 
 Credits: Aaron Stanton, 2015
 """
-function SeisPlot{T<:Real}(in::Array{T,2}; plot_type="TX", style="color",
+function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
                            cmap="PuOr", pclip=98, vmin="NULL", vmax="NULL",
                            aspect="auto", interpolation="Hanning", fmax=100, 
                            wiggle_fill_color="k", wiggle_line_color="k",
@@ -66,9 +66,9 @@ function SeisPlot{T<:Real}(in::Array{T,2}; plot_type="TX", style="color",
                            fignum="NULL", wbox=6, hbox=6, dpi=100, name="NULL")
     if (vmin=="NULL" || vmax=="NULL")
         if (pclip<=100)
-	    a = -quantile(abs(in[:]), (pclip/100))
+	    a = -quantile(abs(d[:]), (pclip/100))
 	else
-	    a = -quantile(abs(in[:]), 1)*pclip/100
+	    a = -quantile(abs(d[:]), 1)*pclip/100
 	end
 	b = -a
     else
@@ -85,25 +85,25 @@ function SeisPlot{T<:Real}(in::Array{T,2}; plot_type="TX", style="color",
     end
     if plot_type == "TX"
 	if (style != "wiggles")
-	    im = plt.imshow(in, cmap=cmap, vmin=a, vmax=b,
-                              extent=[ox - dx/2,ox + (size(in,2)-1)*dx + dx/2,
-                                      oy + (size(in,1)-1)*dy,oy],
-                              aspect=aspect, interpolation=interpolation)
+	    im = plt.imshow(d, cmap=cmap, vmin=a, vmax=b,
+                            extent=[ox - dx/2,ox + (size(d,2)-1)*dx + dx/2,
+                                    oy + (size(d,1)-1)*dy,oy],
+                            aspect=aspect, interpolation=interpolation)
 	end
 	if (style != "color")
             style=="wiggles" ? margin = dx : margin = dx/2
-	    y = oy+dy*collect(0:1:size(in, 1)-1)
-	    x = ox+dx*collect(0:1:size(in, 2)-1)
+	    y = oy+dy*collect(0:1:size(d, 1)-1)
+	    x = ox+dx*collect(0:1:size(d, 2)-1)
 	    delta = wiggle_trace_increment*dx
 	    hmin = minimum(x)
 	    hmax = maximum(x)
-            dmax = maximum(abs(in[:]))
+            dmax = maximum(abs(d[:]))
 	    alpha = xcur*delta
-            scal=="NULL" ? alpha = alpha/maximum(abs(in[:])) : alpha=alpha*scal
-	    for k = 1:wiggle_trace_increment:size(in, 2)
+            scal=="NULL" ? alpha = alpha/maximum(abs(d[:])) : alpha=alpha*scal
+	    for k = 1:wiggle_trace_increment:size(d, 2)
 		x_vert = Float64[]
 		y_vert = Float64[]
-                s = in[:,k]
+                s = d[:,k]
 		s[1] =0 
 		s[end] = 0
 		sp = (s+abs(s))/2
@@ -112,59 +112,59 @@ function SeisPlot{T<:Real}(in::Array{T,2}; plot_type="TX", style="color",
 		    plt.fill(sp*alpha + x[k], y, wiggle_fill_color)
 		end
 	    end
-	    plt.axis([ox - margin,ox + (size(in,2)-1)*dx + margin,
-                        oy + (size(in,1)-1)*dy,oy])
+	    plt.axis([ox - margin, ox + (size(d, 2)-1)*dx + margin,
+                      oy + (size(d, 1)-1)*dy, oy])
 	end
     elseif plot_type == "FK"
 	xlabel = "Wavenumber"
 	xunits = "(1/m)"
 	ylabel = "Frequency"
 	yunits = "Hz"
-	dk = 1/dx/size(in[:,:],2)
-	kmin = -dk*size(in[:,:],2)/2
-	kmax =  dk*size(in[:,:],2)/2
-	df = 1/dy/size(in[:,:],1)
-	FMAX = df*size(in[:,:],1)/2 
+	dk = 1/dx/size(d[:,:], 2)
+	kmin = -dk*size(d[:,:], 2)/2
+	kmax =  dk*size(d[:,:], 2)/2
+	df = 1/dy/size(d[:,:], 1)
+	FMAX = df*size(d[:,:], 1)/2 
 	if fmax > FMAX
 	    fmax = FMAX
 	end
-	nf = convert(Int32,floor((size(in[:,:],1)/2)*fmax/FMAX))
-	D = abs(fftshift(fft(in[:,:])))
-	D = D[round(Int,end/2):round(Int,end/2)+nf,:]
+	nf = convert(Int32, floor((size(d[:, :], 1)/2)*fmax/FMAX))
+	D = abs(fftshift(fft(d[:, :])))
+	D = D[round(Int,end/2):round(Int,end/2)+nf, :]
 	if (vmin=="NULL" || vmax=="NULL")
 	    a = 0.
 	    if (pclip<=100)
-		b = quantile(abs(D[:]),(pclip/100))
+		b = quantile(abs(D[:]), (pclip/100))
 	    else
-		b = quantile(abs(D[:]),1)*pclip/100
+		b = quantile(abs(D[:]), 1)*pclip/100
 	    end
 	end
-	im = plt.imshow(D,cmap=cmap,vmin=a,vmax=b,extent=[kmin,kmax,fmax,0],
-                        aspect=aspect,interpolation=interpolation)
+	im = plt.imshow(D, cmap=cmap, vmin=a, vmax=b, extent=[kmin,kmax,fmax,0],
+                        aspect=aspect, interpolation=interpolation)
     elseif plot_type == "Amplitude"
 	xlabel = "Frequency"
 	xunits = "(Hz)"
 	ylabel = "Amplitude"
 	yunits = ""
-	nx = size(in[:,:],2)
-	df = 1/dy/size(in[:,:],1)
-	FMAX = df*size(in[:,:],1)/2 
+	nx = size(d[:,:], 2)
+	df = 1/dy/size(d[:, :], 1)
+	FMAX = df*size(d[:, :], 1)/2 
 	if fmax > FMAX
 	    fmax = FMAX
 	end
-	nf = convert(Int32,floor((size(in[:,:],1)/2)*fmax/FMAX))
-	y = fftshift(sum(abs(fft(in[:,:],1)),2))/nx
-	y = y[round(Int,end/2):round(Int,end/2)+nf]
+	nf = convert(Int32, floor((size(d[:, :], 1)/2)*fmax/FMAX))
+	y = fftshift(sum(abs(fft(d[:, :], 1)), 2))/nx
+	y = y[round(Int,end/2):round(Int, end/2)+nf]
 	norm = maximum(y[:])
 	if (norm > 0.)
 		y = y/norm
 	end
 	x = collect(0:df:fmax)
-	im = plt.plot(x,y)
+	im = plt.plot(x, y)
 	plt.title(title)
 	plt.xlabel(join([xlabel " " xunits]))
 	plt.ylabel(join([ylabel " " yunits]))
-	plt.axis([0,fmax,0,1.1])
+	plt.axis([0, fmax, 0, 1.1])
     else
 	error("plot_type not recognized.")
     end
@@ -187,7 +187,7 @@ function SeisPlot{T<:Real}(in::Array{T,2}; plot_type="TX", style="color",
     return im
 end
 
-function SeisPlot{T<:Real}(in::Array{T,2}, extent::Extent;
+function SeisPlot{T<:Real}(d::Array{T,2}, extent::Extent;
                            plot_type="TX", style="color",
                            cmap="PuOr", pclip=98, vmin="NULL", vmax="NULL",
                            aspect="auto", interpolation="Hanning", fmax=100, 
@@ -198,7 +198,7 @@ function SeisPlot{T<:Real}(in::Array{T,2}, extent::Extent;
                            oy=0, dy=1, xticks="NULL", yticks="NULL",
                            xticklabels="NULL", yticklabels="NULL", ticksize=11,
                            fignum="NULL", wbox=6, hbox=6, dpi=100, name="NULL")
-    im = SeisPlot(in, plot_type=plot_type, style=style, cmap=cmap, pclip=pclip,
+    im = SeisPlot(d, plot_type=plot_type, style=style, cmap=cmap, pclip=pclip,
                   vmin=vmin, vmax=vmax, aspect=aspect,
                   interpolation=interpolation, fmax=fmax, 
                   wiggle_fill_color=wiggle_fill_color,
