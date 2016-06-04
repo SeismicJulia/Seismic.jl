@@ -79,4 +79,4 @@ xlim([0, fn])
 xlabel("Frequency (Hz)")
 title("Berlage spectrum")
 
-#tight_layout()
+tight_layout()
