@@ -2,4 +2,4 @@ language: julia
 julia:
   - 0.3
 script:
-  julia -e 'ENV["PYTHON"]=""; Pkg.build("PyCall"); using PyPlot;
+  julia -e 'ENV["PYTHON"]=""; Pkg.build("PyCall"); using PyPlot;'
