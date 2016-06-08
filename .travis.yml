@@ -1,4 +1,7 @@
 language: julia
 julia:
   - 0.3
-  julia -e 'ENV["PYTHON"]=""; Pkg.build("PyCall"); using PyPlot'
+script:
+#  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - julia -e 'Pkg.init(); Pkg.clone(pwd()); 
+  - julia -e 'ENV["PYTHON"]=""; Pkg.build("PyCall"); using PyPlot; Pkg.test("Seismic"; coverage=true)'
