@@ -3,5 +3,6 @@ julia:
   - 0.3
 script:
 #  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.init(); Pkg.clone(pwd()); 
-  - julia -e 'ENV["PYTHON"]=""; Pkg.build("PyCall"); using PyPlot; Pkg.test("Seismic"; coverage=true)'
+  - julia -e 'Pkg.init(); Pkg.clone(pwd())'
+  - julia -e 'ENV["PYTHON"]=""; Pkg.build("PyCall"); Pkg.add("PyPlot")'
+  - julia -e 'Pkg.test("Seismic"; coverage=true)'
