@@ -1,5 +1,5 @@
 module Seismic
-    using Lexicon,Docile,Grid,Requires,Compat
+    using Grid,Requires,Compat
     include("Utils/Utils.jl")
     include("Processing/Processing.jl")
     include("Imaging/Imaging.jl")
