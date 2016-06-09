@@ -1,12 +1,18 @@
 """
-**SeisRadonForward**
+    SeisRadonFreqFor(m, <keyword arguments>)
 
-*Transform a tau-p gather to a time-offset gather using a frequency domain forward Radon operator*
+Transform a tau-p gather to a time-offset gather using a frequency domain
+forward parabolic or linear Radon operator.
 
-**IN**   
+# Arguments
+* `m::Array{T<:Real,2}`: 2D Radon panel, `m[1:nt,1:nh]`, where `nt` is number of
+time samples and `np` the number of curvatures or ray parameters.
 
-* m: Radon panel,  m[1:nt,1:nh] nt is number of samples and np is number of curvatures or ray parameters
-* param={"dt"=>dt,"parab"=>true/false, "p"=>p, "h"=>h, "flow"=>flow, "fhigh"=>fhigh, "href"=>href}
+# Keywords
+* `type
+* `nt::Int=0.002`: sampling interval in seconds.
+* 
+param={"dt"=>dt,"parab"=>true/false, "p"=>p, "h"=>h, "flow"=>flow, "fhigh"=>fhigh, "href"=>href}
   * dt: sampling interval in secs
   * parab: true --> parabolic transform, false --> linear transform
   * h: offset vector, h[1:nh]
