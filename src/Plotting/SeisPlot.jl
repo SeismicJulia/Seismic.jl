@@ -8,8 +8,7 @@ with color, wiggles or overlay.
 * `d`: 2D data to plot.
 * `extent`: extent of the data (optional).
 
-**Keyword arguments**
-
+# Keyword arguments
 * `plot_type="TX"`: `"TX"` for time-space plot; `"FK"` for frequency-wavenumber
 plot or `"Amplitude"` for amplitude spectrum plot.
 * `style="color"`: style of the plot: `"color"`, `"wiggles"` or `"overlay"`. 
@@ -49,7 +48,7 @@ plot or `"Amplitude"` for amplitude spectrum plot.
 
 # Example
 ```julia
-julia> d,extent = SeisLinearEvents(); SeisPlot(d);
+julia> d, extent = SeisLinearEvents(); SeisPlot(d);
 ```
 
 Credits: Aaron Stanton, 2015
