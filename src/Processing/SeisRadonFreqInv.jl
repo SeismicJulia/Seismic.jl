@@ -40,6 +40,7 @@ function SeisRadonFreqInv{Td,Th,Tp}(d::Array{Td,2}; order::ASCIIString="parab",
         I = 2
     elseif order=="linear"
         I = 1
+        href = 1
     else
         error("Order should be equal to parab or linear")
     end
