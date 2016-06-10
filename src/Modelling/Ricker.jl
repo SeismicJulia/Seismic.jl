@@ -9,8 +9,8 @@ Create a Ricker wavelet.
 
 # Examples
 ```julia
-julia> w = Ricker(); plot(w)
-julia> w = Ricker(dt=0.004, f0=20); plot(w)
+julia> w = Ricker(); plot(w);
+julia> w = Ricker(dt=0.004, f0=20); plot(w);
 ```
 
 # Reference
