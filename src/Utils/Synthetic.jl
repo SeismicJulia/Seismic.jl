@@ -37,7 +37,7 @@ function Synthetic(vp, dt, dx, fpp)
   end
 
 #   convolve rpp with wavelet
-  wp = ricker(fpp,dt)
+  wp = Ricker(f0=fpp, dt=dt)
   lenw = length(wp)
   lenrp= size(rpp, 1)
   len  = lenw+lenrp-1
