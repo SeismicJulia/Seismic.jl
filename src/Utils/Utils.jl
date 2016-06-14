@@ -25,9 +25,9 @@ triangle_filter,
 convmtx,
 Synthetic,
 pardx,
-ricker,
 WeightingOp,
-LinearOperator
+LinearOperator,
+SeisDelay
 
 
 include("SegyToSeis.jl")
@@ -57,6 +57,6 @@ include("Smoothing.jl")
 include("Convmtx.jl")
 include("Synthetic.jl")
 include("pardx.jl")
-include("ricker.jl")
 include("WeightingOp.jl")
 include("LinearOperator.jl")
+include("SeisDelay.jl")

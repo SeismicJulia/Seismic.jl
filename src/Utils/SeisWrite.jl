@@ -20,7 +20,7 @@ include("Header.jl")
 """
 function SeisWrite(filename,d,h::Array{Header,1},extent::Extent;itrace=1)
 
-	DATAPATH = get(ENV,"DATAPATH","./")
+        DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
 	filename_d = join([DATAPATH filename "@data@"])
 	filename_h = join([DATAPATH filename "@headers@"])	
 	if (itrace==1)
@@ -46,7 +46,7 @@ end
 
 function SeisWrite(filename,d,extent::Extent)
 
-	DATAPATH = get(ENV,"DATAPATH","./")
+        DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
 	filename_d = join([DATAPATH filename "@data@"])
 	WriteTextHeader(filename,extent,"native_float",4,filename_d,"NULL")
 	stream_dout = open(filename_d,"w")

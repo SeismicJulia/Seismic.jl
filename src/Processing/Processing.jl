@@ -16,9 +16,8 @@ SeisNMO,
 SeisFXDecon,
 SeisPWD,
 MatrixMultiplyOp,
-SeisWavelets,
-SeisRadonForward,
-SeisRadonInverse,
+SeisRadonFreqFor,
+SeisRadonFreqInv,
 SeisMute
 include("SeisPOCS.jl")
 include("SeisAGC.jl")
@@ -38,7 +37,6 @@ include("SeisNMO.jl")
 include("SeisFXDecon.jl")
 include("SeisPWD.jl")
 include("MatrixMultiplyOp.jl")
-include("SeisWavelets.jl")
-include("SeisRadonForward.jl")
-include("SeisRadonInverse.jl")
+include("SeisRadonFreqFor.jl")
+include("SeisRadonFreqInv.jl")
 include("SeisMute.jl")

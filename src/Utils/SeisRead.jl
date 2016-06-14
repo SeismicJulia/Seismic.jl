@@ -65,14 +65,14 @@ function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 		position_h = 4*nhead*(itrace-1)
 		seek(stream_h,position_h)
 		h1 = read(stream_h,Header32Bits,nhead*ntrace)
-		h1 = reshape(h1,nhead,convert(Int,ntrace))
+		h1 = reshape(h1,nhead,convert(Int64,ntrace))
 		h = Header[]
 		for j = 1 : ntrace
 			h = push!(h,BitsToHeader(h1[:,j]))    	
 		end    
 		close(stream_h)
 	else
-		ntrace = nx
+		ntrace = nx > ntrace ? ntrace : nx
 	end
 	stream_d = open(filename_data)
 	position_d = 4*extent.n1*(itrace-1)
@@ -80,7 +80,7 @@ function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 	d = read(stream_d,dtype,extent.n1*ntrace)
 	if group=="all"
 		if extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1 && extent.n2 == 1 
-			d = reshape(d,int(extent.n1))
+			d = reshape(d,Int(extent.n1))
 		elseif extent.n5 == 1 && extent.n4 == 1 && extent.n3 == 1
 			d = reshape(d,convert(Int,extent.n1),convert(Int,extent.n2))
 		elseif extent.n5 == 1 && extent.n4 == 1
@@ -91,7 +91,7 @@ function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
 			d = reshape(d,convert(Int,extent.n1),convert(Int,extent.n2),convert(Int,extent.n3),convert(Int,extent.n4),convert(Int,extent.n5))
 		end
 	else
-		d = reshape(d,convert(Int,extent.n1),ntrace)
+		d = reshape(d,convert(Int64,extent.n1),convert(Int64,ntrace))
 	end
 	close(stream_d)
 	if filename_headers != "NULL"

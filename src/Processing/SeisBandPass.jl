@@ -1,38 +1,22 @@
-function SeisBandPass(d,h::Array{Header,1},param=Dict())
-
-	param["ot"] = h[1].o1
-	param["dt"] = h[1].d1
-	d = SeisBandPass(d,param)
-
-	return d,h;
-end
-
-function SeisBandPass(d,param::Dict{Any,Any})
+function SeisBandPass(d;dt=0.001,fa=0,fb=0,fc=60,fd=80)
 
 	nt = size(d,1)
 	nx = size(d[:,:],2)
-	ot = get(param,"ot",0)
-	dt = get(param,"dt",0.001)
 	nf = iseven(nt) ? nt : nt + 1
 	df = 1/nf/dt
-	nw = int(nf/2) + 1
-	fmin = get(param,"fmin",0)
-	fmax = get(param,"fmax",0.5/dt)
-
-	fa = fmin < 5 ? 0. : fmin - 5.
-	fb = fmin
-	fc = fmax	
-	fd = fmax > 0.5/dt - 5. ? 0.5/dt : fmax + 5.
+	nw = round(Int,nf/2) + 1
 
 	if(fd*dt*nf < nw) 
-		iw_max = int(floor(fd*dt*nf))
+		iw_max = round(Int,floor(fd*dt*nf))
 	else 
-		iw_max = int(floor(0.5/dt))
+		iw_max = round(Int,floor(0.5/dt))
 	end
 
 	d = pad_first_axis(d,nf)
 	m = fft(d,1)/sqrt(size(d,1))
-
+	if fa > 0.
+		m[1,:] *= 0.
+	end
 	for iw=2:iw_max
 		f = df*(iw-1)
 		if (f<fa)
@@ -47,8 +31,6 @@ function SeisBandPass(d,param::Dict{Any,Any})
 			m[iw,:] *= 0.
 		end
 	end
-	#println("size(m)= ",size(m))
-	#println("iw_max= ",iw_max)
 	m[iw_max:end,:] = 0.
 
 	# symmetries    
