@@ -13,11 +13,12 @@ data `d`. Noise can be band limited using kewyord `L`.
 snr is given in dB.
 * `pdf::ASCIIString="gaussian"`: random noise probasbility distribution:
 `"gaussian"` or `"uniform"`.
-* `L::Int=1`: averaging operator length for to band-limit the rndom noise.
+* `L::Int=1`: averaging operator length to band-limit the random noise.
 
 # Examples
 ```julia
 julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn); SNR(w, wn)
+
 julia> d, extent = SeisHypEvents(); dn = SeisAddNoise(d, 1.0, db=true, L=9);
 SeisPlot([d dn], extent); SNR(d, dn, db=true)
 ```
