@@ -11,7 +11,7 @@ with color, wiggles or overlay.
 # Keyword arguments
 * `plot_type="TX"`: `"TX"` for time-space plot; `"FK"` for frequency-wavenumber
 plot or `"Amplitude"` for amplitude spectrum plot.
-* `style="color"`: style of the plot: `"color"`, `"wiggles"` or `"overlay"`. 
+* `style="color"`: style of the plot: `"color"`, `"wiggles"` or `"overlay"`.
 * `cmap="PuOr"`: colormap for  `"color"` or `"overlay"` style.
 * `pclip=98`: percentile for determining clip.
 * `vmin="NULL"`: minimum value used in colormapping data.
@@ -27,8 +27,8 @@ plot or `"Amplitude"` for amplitude spectrum plot.
 * `title=" "`: title of plot.
 * `titlesize=16`: size of title.
 * `xlabel=" "`: label on x-axis.
-* `xunits=" "`: units of y-axis. 
-* `ylabel=" "`: label on x-axis. 
+* `xunits=" "`: units of y-axis.
+* `ylabel=" "`: label on x-axis.
 * `yunits=" "`: units of y-axis.
 * `labelsize=14`: size of labels on axis.
 * `ox=0`: first point of x-axis.
@@ -55,7 +55,7 @@ Credits: Aaron Stanton, 2015
 """
 function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
                            cmap="PuOr", pclip=98, vmin="NULL", vmax="NULL",
-                           aspect="auto", interpolation="Hanning", fmax=100, 
+                           aspect="auto", interpolation="Hanning", fmax=100,
                            wiggle_fill_color="k", wiggle_line_color="k",
                            wiggle_trace_increment=1, xcur=1.2, scal="NULL",
                            title=" ", titlesize=16, xlabel=" ", xunits=" ",
@@ -102,13 +102,11 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	    for k = 1:wiggle_trace_increment:size(d, 2)
 		x_vert = Float64[]
 		y_vert = Float64[]
-                s = d[:,k]
-		s[1] =0 
-		s[end] = 0
-		sp = (s+abs(s))/2
-		im = plt.plot( s*alpha + x[k], y, wiggle_line_color)
+		sc = x[k] * ones(size(d, 1))
+    s  = d[:,k]*alpha + sc
+		im = plt.plot( s, y, wiggle_line_color)
 		if (style != "overlay")
-		    plt.fill(sp*alpha + x[k], y, wiggle_fill_color)
+		    plt.fill_betweenx(y, sc, s, where=s.>sc, facecolor=wiggle_line_color)
 		end
 	    end
 	    plt.axis([ox - margin, ox + (size(d, 2)-1)*dx + margin,
@@ -123,7 +121,7 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	kmin = -dk*size(d[:,:], 2)/2
 	kmax =  dk*size(d[:,:], 2)/2
 	df = 1/dy/size(d[:,:], 1)
-	FMAX = df*size(d[:,:], 1)/2 
+	FMAX = df*size(d[:,:], 1)/2
 	if fmax > FMAX
 	    fmax = FMAX
 	end
@@ -147,7 +145,7 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	yunits = ""
 	nx = size(d[:,:], 2)
 	df = 1/dy/size(d[:, :], 1)
-	FMAX = df*size(d[:, :], 1)/2 
+	FMAX = df*size(d[:, :], 1)/2
 	if fmax > FMAX
 	    fmax = FMAX
 	end
@@ -189,7 +187,7 @@ end
 function SeisPlot{T<:Real}(d::Array{T,2}, extent::Extent;
                            plot_type="TX", style="color",
                            cmap="PuOr", pclip=98, vmin="NULL", vmax="NULL",
-                           aspect="auto", interpolation="Hanning", fmax=100, 
+                           aspect="auto", interpolation="Hanning", fmax=100,
                            wiggle_fill_color="k", wiggle_line_color="k",
                            wiggle_trace_increment=1, xcur=1.2, scal="NULL",
                            title=" ", titlesize=16, xlabel=" ", xunits=" ",
@@ -199,7 +197,7 @@ function SeisPlot{T<:Real}(d::Array{T,2}, extent::Extent;
                            fignum="NULL", wbox=6, hbox=6, dpi=100, name="NULL")
     im = SeisPlot(d, plot_type=plot_type, style=style, cmap=cmap, pclip=pclip,
                   vmin=vmin, vmax=vmax, aspect=aspect,
-                  interpolation=interpolation, fmax=fmax, 
+                  interpolation=interpolation, fmax=fmax,
                   wiggle_fill_color=wiggle_fill_color,
                   wiggle_line_color=wiggle_line_color,
                   wiggle_trace_increment=wiggle_trace_increment, xcur=xcur,
@@ -209,7 +207,7 @@ function SeisPlot{T<:Real}(d::Array{T,2}, extent::Extent;
                   labelsize=labelsize, ox=extent.o2, dx=extent.d2, oy=extent.o1,
                   dy=extent.d1, xticks=xticks, yticks=yticks,
                   xticklabels=xticklabels, yticklabels=yticklabels,
-                  ticksize=ticksize, wbox=wbox, hbox=hbox, dpi=dpi, name=name, 
+                  ticksize=ticksize, wbox=wbox, hbox=hbox, dpi=dpi, name=name,
                   fignum=fignum)
     return im
 end
