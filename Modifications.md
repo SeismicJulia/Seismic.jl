@@ -3,6 +3,7 @@
 ## Contents
 
 * Introduction to making modifications to the package
+* Files organization
 * Naming conventions
 * Formatting conventions
 * Documentation
@@ -14,6 +15,18 @@
 
 * We show [here](http://seismic.physics.ualberta.ca/docs/develop_SeismicJulia.pdf) the basics of how to fork the main repository, edit it, commit the changes, and make pull requests. 
 
+## Files organization
+
+New files must be placed in the proper location. Source files are organized in the following directories into the /src directory:
+* API/c
+* Imaging
+* Modelling
+* Plotting
+* Solvers
+* Utils
+
+Tests (see below) must me placed into /test directory, examples into /examples directory and IJulia examples must be placed in examples/IJulia.
+
 ## Naming conventions
 
 * Programs: SeisProgramName (eg SeisRadon)
@@ -24,30 +37,34 @@
 
 ## Formatting conventions
 
-* General notes: if you want a function to do fancy disk operations, use trace headers, processing on gathers etc, first define a simple function that works on data in memory, then make other function definitions at the end of the file (multiple dispatch) where this function will accept an asciistring input and will do input from disk, call your function, then write to disk.  The idea is to always have a very simple matlab like code at least for the first function definition in the file. Multiple dispatch was designed for these situations.
-* Programs
+* General notes: if you want a function to do fancy disk operations, use trace headers, processing on gathers etc, first define a simple function that works on data in memory, then make other function definitions at the end of the file (multiple dispatch) where this function will accept an ASCII-string input and will do input from disk, call your function, then write to disk.  The idea is to always have a very simple matlab like code at least for the first function definition in the file. Multiple dispatch was designed for these situations.
+
+* Programs:
 ```julia
 function foo(in1, in2; parameter1=default1, parameter2-default2, parameterN=defaultN)
   return out
 end
 ```
-* Linear operators
+
+* Linear operators:
 ```julia
 function foo(m, d, adj=true; parameter1=default1, parameter2=default2, parameterN=defaultN)
+  return m or return d
 end
 ```
-* Optimization routines
+
+* Optimization routines:
 ```julia
-function foo(m,d,op,params;parameter1=default1,parameter2=default2,parameterN=defaultN)
+function foo(m, d, op, params; parameter1=default1, parameter2=default2, parameterN=defaultN)
   return cost
 end
 ```
 
 ## Documentation
 
-There are two components to the documentation
-* Self documentation in the function. This is text (docstrings) that is placed at the top of the function in markdown format. Guidelines for docstring given [here](http://docs.julialang.org/en/release-0.4/manual/documentation/).
-* The website: written in markdown (source files here) and converted to html using MkDocs. Then html is just placed in the website directory.
+There are two components to the documentation:
+* Self documentation in the function. This is text (docstrings) that is placed at the top of the function in markdown format. Guidelines for docstrings given [here](http://docs.julialang.org/en/release-0.4/manual/documentation/).
+* The website: written in Markdown and converted to HTML using MkDocs. Then HTML is just placed in the website directory.
 
 ## Style guidelines
 

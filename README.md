@@ -19,14 +19,16 @@ To use this package you must first install [the Julia programming language](http
 Once you have installed the package you can type `using Seismic` to start using
 the functions. For example
 
-```
-using PyPlot,Seismic;
-download("http://certmapper.cr.usgs.gov/nersl/NPRA/seismic/1979/616_79/PROCESSED/616_79_PR.SGY","616_79_PR.SGY");
-SegyToSeis("616_79_PR.SGY","616_79_PR.seis");
-d,h,e = SeisRead("616_79_PR.seis");
-SeisPlot(d[1:500,:],e,cmap="PuOr",wbox=9);
+```Julia
+using PyPlot, Seismic;
+download("http://certmapper.cr.usgs.gov/nersl/NPRA/seismic/1979/616_79/PROCESSED/616_79_PR.SGY", "616_79_PR.SGY");
+SegyToSeis("616_79_PR.SGY", "616_79_PR.seis");
+d, h, e = SeisRead("616_79_PR.seis");
+SeisPlot(d[1:500, :], e, cmap="PuOr", wbox=9);
 ```
 will produce this figure:
 
 ![plot1](http://seismic.physics.ualberta.ca/files/616_79_PR.png)
 
+## For developers: contributing to the package
+If you want to fork the repository and contribute to Seismic.jl, please read [Modifications.md](https://github.com/SeismicJulia/Seismic.jl/blob/master/Modifications.md) and follow the guidelines.
