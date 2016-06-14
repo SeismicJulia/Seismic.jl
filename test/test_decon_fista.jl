@@ -19,7 +19,7 @@ close(fid)
 mP = [size(dpp,1), size(dpp,2)]
 mR = [size(rpp,1), size(rpp,2)]
 
-w  = ricker(fpp, dt)                       # generate ricker wavelet
+w  = Ricker(f0=fpp, dt=dt)                 # generate ricker wavelet
 Wpp= convmtx(w, mR[1])                     # form convolution matrix
 Wpp= sparse(kron(speye(mP[2]), Wpp))       # form convolution matrix for all traces
 
