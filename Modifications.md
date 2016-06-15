@@ -13,7 +13,7 @@
 
 ## Introduction to making modifications to the package
 
-* We show [here](https://github.com/SeismicJulia/Seismic.jl/blob/master/docs/develop_SeismicJulia.PDF) the basics of how to fork the main repository, edit it, commit the changes, and make pull requests.
+* We show [here](https://seismic.physics.ualberta.ca/docs/develop_SeismicJulia.pdf) the basics of how to fork the main repository, edit it, commit the changes, and make pull requests.
 
 ## Files organization
 
