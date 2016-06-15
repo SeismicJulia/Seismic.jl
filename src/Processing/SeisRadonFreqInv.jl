@@ -8,7 +8,7 @@ domain inverse parabolic or linear Radon operator via least-squares inversion.
 * `d::Array{T<:Real,2}`: 2D data, `d[1:nt,1:nh]`, where `nt` is number of
 time samples and `nh` the number of receivers.
 
-# Keywords
+# Keyword arguments
 * `order::ASCIIString="parab"`: `"parab"` for parabolic transform, `"linear"`
 for linear transform.
 * `dt::Real=0.002`: sampling interval in seconds.
@@ -30,12 +30,12 @@ Canadian Journal of Exploration Geophysics, 22, 44-55.
 *  Sacchi, M.D. and Ulrych, T.J., 1995, High-resolution velocity gathers and
 offset space reconstruction: Geophysics, 60, 1169-1177.
 """
-function SeisRadonFreqInv{Td,Th,Tp}(d::Array{Td,2}; order::ASCIIString="parab",
-                                    dt::Real=0.002, href::Real=1000.0,
-                                    h::Vector{Th}=collect(0.0:20.0:1000.0),
-                                    p::Vector{Tp}=collect(-0.05:0.01:2.2),
-                                    flow::Real=2.0, fhigh::Real=80.0,
-                                    mu::Real=0.001)
+function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
+                          }(d::Array{Td,2}; order::ASCIIString="parab",
+                            dt::Real=0.002, href::Real=1000.0,
+                            h::Vector{Th}=collect(0.0:20.0:1000.0),
+                            p::Vector{Tp}=collect(-0.05:0.01:2.2),
+                            flow::Real=2.0, fhigh::Real=80.0, mu::Real=0.001)
     if order=="parab"
         I = 2
     elseif order=="linear"

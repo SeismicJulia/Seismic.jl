@@ -29,11 +29,12 @@ Canadian Journal of Exploration Geophysics, 22, 44-55.
 *  Sacchi, M.D. and Ulrych, T.J., 1995, High-resolution velocity gathers and
 offset space reconstruction: Geophysics, 60, 1169-1177.
 """
-function SeisRadonFreqFor{Tm,Th,Tp}(m::Array{Tm,2}; order::ASCIIString="parab",
-                                    dt::Real=0.002, href::Real=1000.0,
-                                    h::Vector{Th}=collect(0.0:20.0:1000.0),
-                                    p::Vector{Tp}=collect(-0.05:0.01:2.2),
-                                    flow::Real=2.0, fhigh::Real=80.0)
+function SeisRadonFreqFor{Tm<:Real, Th<:Real, Tp<:Real
+                          }(m::Array{Tm,2}; order::ASCIIString="parab",
+                            dt::Real=0.002, href::Real=1000.0,
+                            h::Vector{Th}=collect(0.0:20.0:1000.0),
+                            p::Vector{Tp}=collect(-0.05:0.01:2.2),
+                            flow::Real=2.0, fhigh::Real=80.0)
     if order=="parab"
         I = 2
     elseif order=="linear"
@@ -49,10 +50,10 @@ function SeisRadonFreqFor{Tm,Th,Tp}(m::Array{Tm,2}; order::ASCIIString="parab",
     M = fft(m, 1)
     iw_low = round(Int, flow*dt*nw+1)
     iw_high = round(Int, fhigh*dt*nw+1)
-    D = zeros(Complex64, nw, nh)
+    D = zeros(Complex{Tm}, nw, nh)
     for iw = iw_low:iw_high
         w  = 2.*pi*(iw-1)/(nw*dt)
-        L = zeros(Complex64, nh, np)
+        L = zeros(Complex{Tm}, nh, np)
         for ip = 1:np
             for ih = 1:nh
                 phi = w*p[ip]*(h[ih]/href)^I

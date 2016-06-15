@@ -9,8 +9,8 @@ download("http://seismic.physics.ualberta.ca/data/gom_cdp_nmo.su",
          "gom_cdp_nmo.su")
 
 # 2- Convert SU to internal SeismicJulia format
-SegyToSeis("gom_cdp_nmo.su","gom_cdp_nmo",format="su",input_type="ieee",
-           swap_bytes=false)
+SegyToSeis("gom_cdp_nmo.su", "gom_cdp_nmo", format="su", input_type="ieee",
+           swap_bytes=true)
 
 # 3- Read data d and trace headers h
 d, h = SeisRead("gom_cdp_nmo")
@@ -24,7 +24,7 @@ dt = h[1].d1
 t1 = (i1-1)*dt
 
 # 4- Model data in the Radom domain via inersion with parabolic Radon transform
-p  = collect(linspace(-0.3,0.9,200))
+p  = collect(linspace(-0.3, 0.9, 200))
 param = Dict(:order=>"parab", :dt=>0.004, :p=>p, :h=>offset, :href=>href,
              :flow=>2., :fhigh=>90.0, :flow=>2.0)
 m = SeisRadonFreqInv(d; mu=0.1, param...)

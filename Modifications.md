@@ -22,6 +22,7 @@ New files must be placed in the proper location. Source files are organized in t
 * Imaging
 * Modelling
 * Plotting
+* Processing
 * Solvers
 * Utils
 
@@ -41,7 +42,7 @@ Tests (see below) must me placed into /test directory, examples into /examples d
 
 * Programs:
 ```julia
-function foo(in1, in2; parameter1=default1, parameter2-default2, parameterN=defaultN)
+function foo(in1, in2; parameter1=default1, parameter2=default2, parameterN=defaultN)
   return out
 end
 ```
