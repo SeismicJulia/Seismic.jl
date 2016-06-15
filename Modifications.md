@@ -13,7 +13,7 @@
 
 ## Introduction to making modifications to the package
 
-* We show [here](https://github.com/SeismicJulia/Seismic.jl/blob/master/docs/develop_SeismicJulia.PDF) the basics of how to fork the main repository, edit it, commit the changes, and make pull requests.
+* We show [here](http://seismic.physics.ualberta.ca/docs/develop_SeismicJulia.pdf) the basics of how to fork the main repository, edit it, commit the changes, and make pull requests.
 
 ## Files organization
 
@@ -22,6 +22,7 @@ New files must be placed in the proper location. Source files are organized in t
 * Imaging
 * Modelling
 * Plotting
+* Processing
 * Solvers
 * Utils
 
@@ -41,7 +42,7 @@ Tests (see below) must me placed into /test directory, examples into /examples d
 
 * Programs:
 ```julia
-function foo(in1, in2; parameter1=default1, parameter2-default2, parameterN=defaultN)
+function foo(in1, in2; parameter1=default1, parameter2=default2, parameterN=defaultN)
   return out
 end
 ```
