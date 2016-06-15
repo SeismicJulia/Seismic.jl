@@ -9,15 +9,16 @@ data `d`. Noise can be band limited using kewyord `L`.
 * `snr::Real`: signal-to-noise ratio.
 
 # Keyword arguments
-* `db::Bool=false`: `db=false` for `snr` is given by amplitude, `db=false` if
+* `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=false` if
 snr is given in dB.
-* `pdf::ASCIIString="gaussian"`: random noise probasbility distribution:
+* `pdf::ASCIIString="gaussian"`: random noise probability distribution:
 `"gaussian"` or `"uniform"`.
-* `L::Int=1`: averaging operator length for to band-limit the rndom noise.
+* `L::Int=1`: averaging operator length to band-limit the random noise.
 
 # Examples
 ```julia
 julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn); SNR(w, wn)
+
 julia> d, extent = SeisHypEvents(); dn = SeisAddNoise(d, 1.0, db=true, L=9);
 SeisPlot([d dn], extent); SNR(d, dn, db=true)
 ```
