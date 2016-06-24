@@ -9,11 +9,11 @@ close("all")
 #         "gom_cdp_nmo.su")
 
 # 2- Convert SU to internal SeismicJulia format
-#SegyToSeis("gom_cdp_nmo.su", "gom_cdp_nmo", format="su", input_type="ieee",
-#           swap_bytes=true)
+#SegyToSeis("gom_cdp_nmo.su", "gom_cdp_nmo.seis", format="su", input_type="ieee",
+ #          swap_bytes=true)
 
 # 3- Read data d and trace headers h
-d, h = SeisRead("gom_cdp_nmo")
+d, h = SeisRead("gom_cdp_nmo.seis")
 i1 = 801; i2 = 1201
 d = d[i1:i2, :]       # Use subset of the data
 imute = findin(d, 0)  # Extract indexes of muted data
@@ -27,7 +27,7 @@ dt = h[1].d1
 p  = collect(linspace(-0.3, 0.9, 200))
 param = Dict(:order=>"parab", :dt=>dt, :p=>p, :h=>offset, :href=>href,
              :flow=>0.0, :fhigh=>125.0)
-m = SeisRadonFreqInv(d; mu=0.1, param...)
+m = SeisRadonFreqInv(d; mu=0.01, param...)
 
 # 5- Filter primaries and keep multiples in Radon gather
 mf = copy(m)

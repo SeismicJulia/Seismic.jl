@@ -56,7 +56,6 @@ function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
     D = fft(d, 1)
     iw_low = round(Int, flow*dt*nw+1)
     iw_high = round(Int, fhigh*dt*nw+1)
-#    iw_high = round(Int, nw/2) + 1
     M = zeros(Complex{Td}, nw, np)
     for iw = iw_low:iw_high
         w  = 2.0*pi*(iw-1)/(nw*dt)
@@ -68,7 +67,6 @@ function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
             end
         end 
         R = L'*L 
-#        r0 = maximum(abs(trace(R)))
         r0 = trace(R)/np
         xa = L'*D[iw, :].'
         Q = mu*r0*eye(np)
@@ -79,6 +77,6 @@ function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
         M[iw, :] = conj(M[nw-iw+2, :])
     end
     m = real(ifft(M, 1))
-    m = m[1:nt, :]
+#    m = m[1:nt, :]
     return m
 end 

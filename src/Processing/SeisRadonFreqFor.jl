@@ -57,7 +57,6 @@ function SeisRadonFreqFor{Tm<:Real, Th<:Real, Tp<:Real
     M = fft(m, 1)
     iw_low = round(Int, flow*dt*nw+1)
     iw_high = round(Int, fhigh*dt*nw+1)
-#    iw_high = round(Int, nw/2) + 1
     D = zeros(Complex{Tm}, nw, nh)
     for iw = iw_low:iw_high
         w  = 2.0*pi*(iw-1)/(nw*dt)
