@@ -79,6 +79,6 @@ function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
         M[iw, :] = conj(M[nw-iw+2, :])
     end
     m = real(ifft(M, 1))
-    m = m[1:nt, :]
+#    m = m[1:nt, :]
     return m
 end 

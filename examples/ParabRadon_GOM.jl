@@ -5,12 +5,12 @@ using PyPlot, Seismic
 close("all")
 
 # 1- Download data set from web site (1 NMO-corrected CMP gather from the GOM)
-#download("http://seismic.physics.ualberta.ca/data/gom_cdp_nmo.su",
-#         "gom_cdp_nmo.su")
+download("http://seismic.physics.ualberta.ca/data/gom_cdp_nmo.su",
+         "gom_cdp_nmo.su")
 
 # 2- Convert SU to internal SeismicJulia format
-#SegyToSeis("gom_cdp_nmo.su", "gom_cdp_nmo", format="su", input_type="ieee",
-#           swap_bytes=true)
+SegyToSeis("gom_cdp_nmo.su", "gom_cdp_nmo", format="su", input_type="ieee",
+           swap_bytes=true)
 
 # 3- Read data d and trace headers h
 d, h = SeisRead("gom_cdp_nmo")

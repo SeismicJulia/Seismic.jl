@@ -29,7 +29,7 @@ param = Dict(:order=>"parab", :dt=>dt, :p=>p, :h=>h, :href=>href, :flow=>0.0,
 d = SeisRadonFreqFor(m, nt; param...)
 
 # 3- Recover Radon gather via LS inversion
-m = SeisRadonFreqInv(d; param..., mu=0.001)
+m = SeisRadonFreqInv(d; param..., mu=0.01)
 
 # 4- Filter primaries and keep multiples in Radon gather  
 mf = copy(m);
@@ -51,7 +51,7 @@ subplot(141)
 SeisPlot(d, title="Data", xlabel="Offset [m]", ylabel="Time [s]",
          vmin=-0.8, vmax = 0.8, ox=h[1], dx=dh, dy=dt, fignum=1)
 subplot(142)
-SeisPlot(m, title="Radon gather", xlabel="Residual moveout [s]",
+SeisPlot(m[1:nt, :], title="Radon gather", xlabel="Residual moveout [s]",
          ox=p[1], dx=dp, dy=dt, fignum=1)
 subplot(143)
 SeisPlot(d_mult, title="Multiples", xlabel="Offset [m]",
