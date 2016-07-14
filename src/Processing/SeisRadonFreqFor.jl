@@ -38,7 +38,6 @@ function SeisRadonFreqFor{Tm<:Real, Th<:Real, Tp<:Real
                             h::Vector{Th}=collect(0.0:20.0:1000.0),
                             p::Vector{Tp}=collect(-0.05:0.01:2.2),
                             flow::Real=0.0, fhigh::Real=125.0)
-    
     if order=="parab"
         I = 2
         href == 0 && (href = maximum(abs(h)))
