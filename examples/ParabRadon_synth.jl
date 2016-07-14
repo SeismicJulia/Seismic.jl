@@ -29,7 +29,7 @@ param = Dict(:order=>"parab", :dt=>dt, :p=>p, :h=>h, :href=>href, :flow=>0.0,
 d = SeisRadonFreqFor(m, nt; param...)
 
 # 3- Recover Radon gather via LS inversion
-m = SeisRadonFreqInv(d; param..., mu=0.01)
+m = SeisRadonFreqInv(d; param..., mu=1e-4)
 
 # 4- Filter primaries and keep multiples in Radon gather  
 mf = copy(m);
