@@ -11,18 +11,19 @@ time samples and `nh` the number of receivers.
 # Keyword arguments
 * `order::ASCIIString="parab"`: `"parab"` for parabolic transform, `"linear"`
 for linear transform.
-* `dt::Real=0.002`: sampling interval in seconds.
-* `h::Vector{Real}=collect(0.0:20.0:1000.0)`: offset vector.
-* `href::Real=1000.0`: reference offset for parabolic Radon Transform.
-* `p::Vector{Real}=collect(-0.05:0.01:2.2)`: if `order="parab"`, `p` is a vector
-of residual moveout at reference offset in seconds ("curvatures");
-if `order=linear`, `p` is a vector of ray parameters reference (s/m).
-* `flow::Real=2.0`: minimum frequency in the data in Hz.
-* `fhigh::Real=80.0`: maximum frequency in the data in Hz.
+* `dt::Real=0.004`: sampling interval in seconds.
+* `h::Vector{Real}=collect(0.0:20.0:1000.0)`: offset vector `h[1:nh]`.
+* `href::Real=0.0`: reference offset for parabolic Radon Transform. If the
+defautl value `href=0.0` is given, `href` is set to `max(abs(h))`.
+* `p::Vector{Real}=collect(-0.05:0.01:2.2)`: `p[1:np]`. If `order="parab"`, `p`
+is a vector of residual moveout ("curvatures") at reference offset `href` in
+seconds; if `order=linear`, `p` is a vector of ray parameters in s/m.
+* `flow::Real=0.0`: minimum frequency in the data in Hz.
+* `fhigh::Real=125.0`: maximum frequency in the data in Hz.
 * `mu::Real=0.001`: trade off parameter or damping for the L.S. inversion.
 
 # Output
-* `m`: inverted Radon panel `m[1:nt, 1:np]`.
+* `m`: inverted Radon panel `m[1:ntau, 1:np]`.
 
 # References
 *  Hampson, D., 1986, Inverse velocity stacking for multiple elimination:
@@ -30,23 +31,27 @@ Canadian Journal of Exploration Geophysics, 22, 44-55.
 *  Sacchi, M.D. and Ulrych, T.J., 1995, High-resolution velocity gathers and
 offset space reconstruction: Geophysics, 60, 1169-1177.
 """
+
 function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
                           }(d::Array{Td,2}; order::ASCIIString="parab",
-                            dt::Real=0.002, href::Real=1000.0,
+                            dt::Real=0.004, href::Real=0.0,
                             h::Vector{Th}=collect(0.0:20.0:1000.0),
                             p::Vector{Tp}=collect(-0.05:0.01:2.2),
-                            flow::Real=2.0, fhigh::Real=80.0, mu::Real=0.001)
+                            flow::Real=0.0, fhigh::Real=125.0, mu::Real=0.001)
     if order=="parab"
         I = 2
+        href == 0 && (href = maximum(abs(h)))
     elseif order=="linear"
         I = 1
-        href = 1
+        href = 1.0
     else
-        error("Order should be equal to parab or linear")
+        error("Order should be equal to \"parab\" or \"linear\"")
     end
-    nt, nh = size(d)
-    nw = nextpow2(nt)
+    nt = size(d, 1)
+    nh = length(h)
+    nh == size(d, 2) || error("lenght(h) must be equal to size(d, 2)")
     np = length(p)
+    nw = 2*nextpow2(nt)
     d = cat(1, d, zeros(Td, nw-nt, nh))
     D = fft(d, 1)
     iw_low = round(Int, flow*dt*nw+1)
@@ -63,8 +68,7 @@ function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
         end 
         R = L'*L 
         r0 = trace(R)/np
-        y = D[iw, :].'
-        xa = L'*y
+        xa = L'*D[iw, :].'
         Q = mu*r0*eye(np)
         x  = (R + Q)\xa
         M[iw, :] = x.'
@@ -73,6 +77,6 @@ function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
         M[iw, :] = conj(M[nw-iw+2, :])
     end
     m = real(ifft(M, 1))
-    m = m[1:nt, :]
+#    m = m[1:nt, :]
     return m
 end 
