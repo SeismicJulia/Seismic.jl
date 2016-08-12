@@ -1,3 +1,17 @@
+function CalculateSampling(in)
+
+	cutoff = 1e-10
+	itrace = 1
+	wd = zeros(Float32,size(in))
+	for itrace = 1 : size(in[:,:],2)
+		a = sum(in[:,itrace].*in[:,itrace])
+		if (a > cutoff) 
+			wd[:,itrace] = 1.
+		end
+	end
+	return wd;
+end
+
 function CalculateSampling(in,h;cutoff=1e-10)
 
 	itrace = 1
