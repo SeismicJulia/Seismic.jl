@@ -1,12 +1,10 @@
-include("Header.jl")
+include("../ReadWrite/Header.jl")
 
 """
 **SeisUnPatch**
-
 *Creation of overlapping 5d patches from a 5d volume*
-
 **IN**    
-* list: array of input filenames
+* patch_names: array of input filenames
 * out: output filename
 * style="sxsygxgy"
 * min_isx=0
@@ -39,14 +37,11 @@ include("Header.jl")
 * ix3_WO=0
 * ix4_WL=9e9
 * ix4_WO=0
-
 **OUT**
-
 *Credits: A. Stanton, 2015*
-
 """
 
-function SeisUnPatch(list::Array{ASCIIString,1},out::ASCIIString;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0,nt=0,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=0,dsy=0,dgx=0,dgy=0,dmx=0,dmy=0,dhx=0,dhy=0,dh=0,daz=0)
+function SeisUnPatch(patch_names::Array{ASCIIString,1},out::ASCIIString;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0,nt=0,ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1)
 
 
 	if (style == "sxsygxgy")
@@ -133,8 +128,6 @@ function SeisUnPatch(list::Array{ASCIIString,1},out::ASCIIString;style="sxsygxgy
 	ix3_WL = ix3_WL > nx3 ? nx3 : ix3_WL
 	ix4_WL = ix4_WL > nx4 ? nx4 : ix4_WL
 
-	ang = get(param,"ang",90)
-	gamma = get(param,"gamma",1)
 	rad2deg = 180/pi;
 	deg2rad = pi/180;
 	gammainv = 1/gamma;
@@ -174,14 +167,22 @@ function SeisUnPatch(list::Array{ASCIIString,1},out::ASCIIString;style="sxsygxgy
 		error("style not recognized.")
 	end
 
-	stream = open(join([list[1] ".seish"]))
-	seek(stream, header_count["d1"])
-	dt = read(stream,Float32)
-	close(stream)
+
+	filename_data = ParseDataName(patch_names[1])
+	filename_headers = ParseHeaderName(patch_names[1])
+	extent = ReadTextHeader(patch_names[1])
+
+	dt = extent.d1
 	d = zeros(Float32,nt,1)
 	h = Array(Header,1)
 	h[1] = InitSeisHeader()
 
+	extent = Seismic.Extent(nt,max_ix4 - min_ix4 + 1,max_ix3 - min_ix3 + 1,max_ix2 - min_ix2 + 1,max_ix1 - min_ix1 + 1,
+	0,0,0,0,0,
+	1,1,1,1,1,
+	"","","","","",
+	"","","","","",
+	"")
 	j = 1    
 	for ix1 = 1 : nx1
 		for ix2 = 1 : nx2
@@ -367,24 +368,25 @@ function SeisUnPatch(list::Array{ASCIIString,1},out::ASCIIString;style="sxsygxgy
 					h[1].selev = convert(typeof(h[1].selev),0)
 					h[1].gelev = convert(typeof(h[1].gelev),0)
 					h[1].trid = convert(typeof(h[1].trid),0)
-					SeisWrite(out,d,h,itrace=j)
+					SeisWrite(out,d,h,extent,itrace=j)
 					j += 1
 				end
 			end
 		end
 	end
 
-	out_d = join([out ".seisd"])
-	out_h = join([out ".seish"])
-	for ipatch = 1 : length(list)
+    DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
+	out_d = join([DATAPATH out "@data@"])
+	out_h = join([DATAPATH out "@headers@"])	
+	for ipatch = 1 : length(patch_names)
 		stream_d = open(out_d,"a+")
 		stream_h = open(out_h,"a+")
-		d_patch,h_patch = SeisRead(list[ipatch])
+		d_patch,h_patch,e_patch = SeisRead(patch_names[ipatch])
 		nx_patch = size(d_patch,2)
 		nt_patch = h_patch[1].n1
 		ot_patch = h_patch[1].o1
-		min_it_patch = int(floor(ot_patch/dt)+1)
-		max_it_patch = int(floor(ot_patch/dt)+nt_patch)
+		min_it_patch = Int(floor(ot_patch/dt)+1)
+		max_it_patch = Int(floor(ot_patch/dt)+nt_patch)
 		
 		min_ix1_patch = getfield(h_patch[1],symbol(key[2]))
 		max_ix1_patch = getfield(h_patch[nx_patch],symbol(key[2]))
@@ -509,4 +511,3 @@ function Taper(d,nt,nx1,nx2,nx3,nx4,tapti,taptf,tapx1i,tapx1f,tapx2i,tapx2f,tapx
 	end
 	return d
 end
-

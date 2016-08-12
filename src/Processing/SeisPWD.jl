@@ -1,10 +1,8 @@
-function SeisPWD(in,param=Dict())
+function SeisPWD(in;w1=10,w2=10,dz=1,dx=1)
 	# dip estimation by Plane Wave Destruction
 	# see http://sepwww.stanford.edu/data/media/public/sep//prof/pvi.pdf Chapter 4.
 	d = copy(in)
 	n1,n2 = size(in)
-	w1 = get(param,"w1",10)
-	w2 = get(param,"w2",10)
 	format = get(param,"format","angle") # output format: "angle" (in degrees wrt vertical) or "dip" (in y samples over x samples)
 	pp = zeros(n1,n2); dx = wavekill(1.,pp,n1,n2,d)
 	pp =  ones(n1,n2); dt = wavekill(0.,pp,n1,n2,d)
@@ -47,7 +45,7 @@ function SeisPWD(in,param=Dict())
 	res = wavekill(1.,pp,n1,n2,d)
 
 	if (format == "angle")
-		pp = atan(pp*get(param,"dz",1)/get(param,"dx",1))*180/pi;
+		pp = atan(pp*dz/dx)*180/pi;
 	end
 
 
@@ -108,23 +106,3 @@ function boxconv(nbox,nx,xx)
 	end
 	return yy
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

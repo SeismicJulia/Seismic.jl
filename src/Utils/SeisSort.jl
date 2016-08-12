@@ -1,36 +1,27 @@
-include("Header.jl")
+include("../ReadWrite/Header.jl")
 
 """
 **SeisSort**
-
 *Sort a seis file using its header words*
-
 * a text file with information about data extent, data and header file names
 * a binary file containing data
 * a binary file containing headers
-
 **
-
 **IN**   
-
 * in: input filename
 * out: output filename
 * key=["imx","imy"]
 * rev=false : sort headers in decreasing order 
 * ntrace=1000 : number of traces to read at a time
-
 **OUT**  
-
 *Credits: AS, 2015*
-
 """
-function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=1000)
-
-	filename_h = success(`grep "headers=" $in`) ? chomp(readall(`grep "headers=" $in` |> `tail -1` |> `awk '{print substr($1,10,length($1)-10) }' `)) : "NULL"
+function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=100000)
+	filename_h = ParseHeaderName(in)
 	stream_h = open(filename_h)
 	seek(stream_h, header_count["n1"])
 	nt = read(stream_h,Int32)
-	nx = convert(Int64,filesize(stream_h)/(4*length(names(Header))))
+	nx = convert(Int64,filesize(stream_h)/(4*length(fieldnames(Header))))
 	h = Header[]    
 	# find min and max for each key
 	h1 = GrabHeader(stream_h,1)
@@ -58,14 +49,12 @@ function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=1000)
 	end
 	close(stream_h)
 	p = convert(Array{Int32,1},sortperm(mykey,rev=rev))
-	FetchHeaders(in,out,p,nx)
     DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
     filename_d_out = join([DATAPATH out "@data@"])
     filename_h_out = join([DATAPATH out "@headers@"])    
-    nhead = length(names(Header))
+    nhead = length(fieldnames(Header))
     stream_h = open(filename_h_out)
-    nx = int(filesize(stream_h)/(nhead*4))
-    h = GrabHeader(stream_h,1)
+    nx = Int(floor(filesize(stream_h)/(nhead*4)))
     close(stream_h)
     extent = ReadTextHeader(in)
     extent.n2 = nx
@@ -73,30 +62,25 @@ function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=1000)
     extent.n4 = 1
     extent.n5 = 1
     WriteTextHeader(out,extent,"native_float",4,filename_d_out,filename_h_out)
+ 	FetchHeaders(filename_h,out,p,nx)
 	Seismic.FetchTraces(in,out)
- 	tmp = join(["tmp_SeisSort_",string(int(rand()*100000))])
+ 	tmp = join(["tmp_SeisSort_",string(Int(floor(rand()*100000)))])
+ 	cp(out,tmp,remove_destination=true);
     @compat SeisProcessHeaders(out,tmp,[UpdateHeader],[Dict(:itmin=>1,:itmax=>nt)])
     filename_h_tmp = join([DATAPATH tmp "@headers@"])    
     filename_h_out = join([DATAPATH out "@headers@"])    
-    cp(filename_h_tmp,filename_h_out);
+    cp(filename_h_tmp,filename_h_out,remove_destination=true);
     rm(filename_h_tmp);
 	rm(tmp);
 end
 
-function FetchHeaders(in::ASCIIString,out::ASCIIString,p::Array{Int32,1},nx;ntrace=1000)
+function FetchHeaders(filename_h_in::ASCIIString,filename_out::ASCIIString,p::Array{Int32,1},nx)
 
+	stream_h = open(filename_h_in)
 	h = Header[]
-	itrace = 1
 	for j = 1:nx
-		append!(h,SeisReadHeaders(in,group="some",itrace=p[j],ntrace=1))
-		if (length(h) == ntrace)
-			SeisWriteHeaders(out,h,itrace=itrace,update_tracenum=false)
-			itrace += ntrace
-			h = Header[]
-		end
+		append!(h,[GrabHeader(stream_h,p[j])])
 	end 
-	if (length(h) > 0) 
-		SeisWriteHeaders(out,h,itrace=itrace,update_tracenum=false)
-	end	
+	SeisWriteHeaders(filename_out,h,update_tracenum=false)
 	
 end

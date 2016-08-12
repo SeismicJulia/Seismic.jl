@@ -50,10 +50,12 @@ Thumbs.db
 *.seis@data@
 *.seis@headers@
 *.su
+*.SU
 *.rsf
 *.rsf@
 *.segy
 *.sgy
+*.SGY
 *.bin
 
 # rsf files #
@@ -65,7 +67,5 @@ Thumbs.db
 *.pdf
 *.eps
 *.tiff
-
-
 
 site/

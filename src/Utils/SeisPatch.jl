@@ -1,10 +1,8 @@
-include("Header.jl")
+include("../ReadWrite/Header.jl")
 
 """
 **SeisPatch**
-
 *Creation of overlapping 5d patches from a 5d volume*
-
 **IN**    
 * in: input filename 
 * out: prefix for output filenames
@@ -39,11 +37,8 @@ include("Header.jl")
 * ix3_WO=0
 * ix4_WL=9e9
 * ix4_WO=0
-
 **OUT**
-
 *Credits: A. Stanton, 2015*
-
 """
 
 function SeisPatch(in::ASCIIString,out::ASCIIString;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0)
@@ -126,29 +121,26 @@ function SeisPatch(in::ASCIIString,out::ASCIIString;style="sxsygxgy",min_isx=0,m
 	nx3 = max_ix3 - min_ix3 + 1
 	nx4 = max_ix4 - min_ix4 + 1
 
-	stream = open(join([in ".seish"]))
-	seek(stream, header_count["n1"])
-	nt = read(stream,Int32)
-	seek(stream, header_count["d1"])
-	dt = read(stream,Float32)
-	seek(stream, header_count["o1"])
-	ot = read(stream,Float32)
+	filename_data = ParseDataName(in)
+	filename_headers = ParseHeaderName(in)
+	extent = ReadTextHeader(in)
 
-	close(stream)
+	nt = extent.n1
+	dt = extent.d1
+	ot = extent.o1
+
 	it_WL  = it_WL  > nt  ? nt  : it_WL
 	ix1_WL = ix1_WL > nx1 ? nx1 : ix1_WL
 	ix2_WL = ix2_WL > nx2 ? nx2 : ix2_WL
 	ix3_WL = ix3_WL > nx3 ? nx3 : ix3_WL
 	ix4_WL = ix4_WL > nx4 ? nx4 : ix4_WL
 
-
 	tmax = ot + dt*nt
-	it_NW = int(floor(nt/(it_WL-it_WO)))
-	ix1_NW = int(floor(nx1/(ix1_WL-ix1_WO)))
-	ix2_NW = int(floor(nx2/(ix2_WL-ix2_WO)))
-	ix3_NW = int(floor(nx3/(ix3_WL-ix3_WO)))
-	ix4_NW = int(floor(nx4/(ix4_WL-ix4_WO)))
-
+	it_NW = Int(floor(nt/(it_WL-it_WO)))
+	ix1_NW = Int(floor(nx1/(ix1_WL-ix1_WO)))
+	ix2_NW = Int(floor(nx2/(ix2_WL-ix2_WO)))
+	ix3_NW = Int(floor(nx3/(ix3_WL-ix3_WO)))
+	ix4_NW = Int(floor(nx4/(ix4_WL-ix4_WO)))
 
 	if (ot + dt*(it_NW-1)*(it_WL-it_WO) + dt*it_WL < tmax)
 		it_NW += 1
@@ -237,5 +229,3 @@ function grab_patch(patch)
 	SeisWindow(patch.in,patch.name,key=patch.key,minval=minval,maxval=maxval)
 
 end
-
-
