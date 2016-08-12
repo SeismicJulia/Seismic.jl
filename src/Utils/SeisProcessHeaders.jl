@@ -30,5 +30,4 @@ function SeisProcessHeaders(in,out,functions,parameters;group="some",key=[],ntra
 			itrace_out += num_traces_out
 		end
 	end
-
 end

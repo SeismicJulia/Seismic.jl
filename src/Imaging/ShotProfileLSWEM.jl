@@ -9,7 +9,8 @@ function ShotProfileLSWEM(m,m0,d,param=Dict())
 	param["tmute"] = 0.;
 	param["vmute"] = 999999.;
 	if (precon == true)
-		param["operators"] = [ApplyDataWeights SeisMute ShotProfileWEM SmoothStructure SmoothGathers]
+		param["operators"] = [ApplyDataWeights SeisMute ShotProfileWEM
+                                      SeisSmoothStructure SeisSmoothGathers]
 	else
 		param["operators"] = [ApplyDataWeights SeisMute ShotProfileWEM]
 	end

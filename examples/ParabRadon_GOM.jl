@@ -9,7 +9,7 @@ download("http://seismic.physics.ualberta.ca/data/gom_cdp_nmo.su",
          "gom_cdp_nmo.su")
 
 # 2- Convert SU to internal SeismicJulia format
-SegyToSeis("gom_cdp_nmo.su", "gom_cdp_nmo", format="su", input_type="ieee",
+SegyToSeis("gom_cdp_nmo.su", "gom_cdp_nmo.seis", format="su", input_type="ieee",
            swap_bytes=true)
 
 # 3- Read data d and trace headers h

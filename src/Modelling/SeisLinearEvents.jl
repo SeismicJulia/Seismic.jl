@@ -103,7 +103,7 @@ function SeisLinearEvents(; ot=0.0, dt=0.004, nt=500, ox1=0.0, dx1=10.0,
 	end 
     d = ifft(D, 1)
     d = real(d[1:nt, :, :, :, :])
-    d = SeisBandPass(d, dt=dt, fa=1, fb=5, fc=1/dt/2-10, fd=1/dt/2)
+    d = SeisBandPass(d,dt=dt,fa=1,fb=5,fc=1/dt/2 - 10,fd=1/dt/2)
     extent = Extent(convert(Int32, nt), convert(Int32, nx1),
                     convert(Int32, nx2), convert(Int32, nx3),
                     convert(Int32, nx4), convert(Float32, ot),

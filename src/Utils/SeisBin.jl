@@ -1,4 +1,4 @@
-include("Header.jl")
+include("../ReadWrite/Header.jl")
 
 """
 **SeisBin**

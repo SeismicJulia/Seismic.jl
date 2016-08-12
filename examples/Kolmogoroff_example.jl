@@ -2,7 +2,7 @@ using PyPlot, Seismic
 
 dt = 0.002
 w = Ricker(dt=dt)
-wmin = Kolmogoroff(w)
+wmin = SeisKolmogoroff(w)
 
 nw = length(w)
 t = dt*collect(0:1:nw-1)

@@ -1,4 +1,4 @@
-include("Header.jl")
+include("../ReadWrite/Header.jl")
 
 function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,ntrace=1000000)
 	@compat SeisProcessHeaders(in,out,[WindowHeaders],[Dict(:key=>key,:minval=>minval,:maxval=>maxval)],group="some",key=key,ntrace=ntrace,update_tracenum=false)

@@ -51,3 +51,17 @@ function pad_first_axis(a,N1)
 	end
 	return b
 end
+
+function SeisBandPass(d,h::Array{Header,1};dt=0.001,fa=0,fb=0,fc=60,fd=80)
+
+	out = SeisBandPass(d;dt=h[1].d1,fa=fa,fb=fb,fc=fc,fd=fd)
+	return out,h
+
+end
+
+function SeisBandPass(in::ASCIIString,out::ASCIIString;fa=0,fb=0,fc=60,fd=80)
+
+	@compat parameters = Dict(:fa=>fa,:fb=>fb,:fc=>fc,:fd=>fd)
+	SeisProcess(in,out,[SeisBandPass],[parameters];group="some")
+
+end

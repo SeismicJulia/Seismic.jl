@@ -1,0 +1,20 @@
+export Header,
+SegyToSeis,
+SeisToSegy,
+SeisCopy,
+SeisHeaderInfo,
+SeisRead,
+SeisReadHeaders,
+SeisRemove,
+SeisWrite,
+SeisWriteHeaders
+include("Header.jl")
+include("SegyToSeis.jl")
+include("SeisToSegy.jl")
+include("SeisCopy.jl")
+include("SeisHeaderInfo.jl")
+include("SeisRead.jl")
+include("SeisReadHeaders.jl")
+include("SeisRemove.jl")
+include("SeisWrite.jl")
+include("SeisWriteHeaders.jl")
