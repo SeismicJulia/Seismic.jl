@@ -15,8 +15,7 @@ julia> wmin = SeisKolmogoroff(w)
 julia> plot(w); plot(wmin)
 ```
 
-**Reference**
-
+# Reference
 * Claerbout, Jon F., 1976, Fundamentals of geophysical data processing.
 McGraw-Hill Inc.
 """

@@ -17,8 +17,8 @@ amplitude, or `db=true` if the signal-to-noise ratio is measure in dB.
 julia> d, extent = SeisHypEvents(); dnoisy = SeisAddNoise(d, 2); 
 MeasureSNR(d, dnoisy)
 ```
-
 """
+
 function MeasureSNR{Ts<:Real, Tn<:Real, N}(signal::Array{Ts, N},
                                            noisy::Array{Tn, N}; db::Bool=false)
 
