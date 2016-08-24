@@ -22,4 +22,5 @@ function PadFirstAxis{T<:Real, N}(a::Array{T,N}, N1::Int)
     N1 > n1 || error("N1 must be greater than size(a,1)")
     b = zeros(T,N1,dims[2:end]...) 
     b[1:dims[1],:] = a	
+    return b
 end
