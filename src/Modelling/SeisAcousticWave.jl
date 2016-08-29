@@ -388,7 +388,7 @@ function MultiStepForward(pos::Array{Int64,2}, src::Source, fidMtx::FidMtx; tmax
        Nz = nz + 2*ext
     elseif iflag == 2
        zupper = 0
-       Nz = nx +   ext
+       Nz = nz +   ext
     end
     Nx = nx + 2*ext
     dt = fidMtx.dt
@@ -461,8 +461,8 @@ finite difference modeling of acoustic wave field, generate a common shot gather
 # Output
 * `shot :: ShotGather`: composite type for common shot gather
 """
-function SeisAcousticWave(fidMtx::FidMtx, pos::Array{Int64,2}, isz::Int64, isx::Int64, f0::Float64, dt::Float64; tmax=1.0)
+function SeisAcousticWave(fidMtx::FidMtx, pos::Array{Int64,2}, isz::Int64, isx::Int64, f0::Float64, dt::Float64; tmax=1.0, print_flag=false, interval=100)
     src  = InitSource(isz, isx, f0, dt)
-    shot = MultiStepForward(pos, src, fidMtx, tmax=tmax)
+    shot = MultiStepForward(pos, src, fidMtx, tmax=tmax, print_flag=print_flag, interval=interval)
     return shot
 end
