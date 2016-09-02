@@ -14,5 +14,5 @@ fidMtx = AcousticSetup(vp, dz, dx, dt, f0, iflag=2);
 # source location
 isx = 251; isz = 1;
 shot = SeisAcousticWave(fidMtx, pos, isz, isx, f0, dt, tmax=1.0, print_flag=true, interval=500)
-SeisPlot(shot.d, name="ShotGather.pdf")
-SeisPlot(vp, name = "vp.pdf")
+SeisPlot(shot.d)
+SeisPlot(vp)

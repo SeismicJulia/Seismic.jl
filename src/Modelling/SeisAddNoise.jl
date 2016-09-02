@@ -17,7 +17,7 @@ snr is given in dB.
 
 # Examples
 ```julia
-julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn); 
+julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn);
 MeasureSNR(w, wn)
 
 julia> d, extent = SeisHypEvents(); dn = SeisAddNoise(d, 1.0, db=true, L=9);
@@ -25,7 +25,7 @@ SeisPlot([d dn], extent); MeasureSNR(d, dn, db=true)
 ```
 """
 
-function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false, 
+function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false,
                                   pdf::ASCIIString="gaussian", L::Int=1)
 
     noise = GenNoise(size(d), pdf, L=L)
@@ -40,7 +40,7 @@ function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false,
 
 end
 
-# Generate the noise 
+# Generate the noise
 function GenNoise(dims::Tuple, pdf::ASCIIString; L::Int=1)
     N = length(dims)
     n1 = dims[1]

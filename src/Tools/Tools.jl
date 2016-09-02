@@ -1,5 +1,6 @@
 export CalculateSampling,
-Convmtx,
+convMtx,
+conv1,
 DotTest,
 InnerProduct,
 Integrate,
