@@ -4,7 +4,6 @@
 Create a Hamming window.
 
 # Arguments
-
 * `n::Int`: number of samples
 
 # Example
