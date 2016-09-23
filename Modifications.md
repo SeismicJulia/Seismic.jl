@@ -21,12 +21,17 @@ New files must be placed in the proper location. Source files are organized in t
 * API/c
 * Imaging
 * Modelling
+* Operators
 * Plotting
 * Processing
+* ReadWrite
 * Solvers
+* Tools
 * Utils
+* Wavelets
+* Windows
 
-Tests (see below) must me placed into /test directory, examples into /examples directory and IJulia examples must be placed in examples/IJulia.
+Tests (see below) must me placed into /test directory and a line should be added in runtests.jl, while examples must be placed into /examples directory and IJulia examples must be placed in examples/IJulia.
 
 ## Naming conventions
 

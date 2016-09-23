@@ -5,9 +5,9 @@ Gain a group of traces.
 
 # Arguments
 * `d::Array{Real,2}`: two dimensional data.
-* `dt::Real`: sampling interval in secs.
 
 # Keyword arguments
+* `dt::Real=0.002`: sampling interval in secs.
 * `kind::ASCIIString="time"`: if kind="time", gain = t.^a . * exp(-bt);
                               if kind="agc", automatic gain control is applied.
 * `param::Vector{Real}=[2.0,0.0]`: if kind="time", param = [a,b];
@@ -20,16 +20,17 @@ Gain a group of traces.
 
 # Example
 ```julia
-julia> d, dt = SeisHypEvents(); 
-       dout = SeisGain(d, dt, kind="agc", param=[0.05], norm=0); 
-       SeisPlot([d dout]);
+julia> d, extent = SeisHypEvents(); 
+       dout = SeisGain(d, kind="agc", param=[0.05]); 
+       SeisPlot([d dout], extent);
 ```
 
 Credits: Juan I. Sabbione, Aaron Staton, Mauricio D. Sacchi, 2016
 
 """
-function SeisGain(d::Array{Real, 2}, dt::Real; kind::ASCIIString="time",
-                  param::Vector{Real}=[2.0,0.0], norm::Int=0)
+function SeisGain{Td<:Real,Tp<:Real
+                  }(d::Array{Td,2}; dt::Real=0.004, kind::ASCIIString="time",
+                    param::Vector{Tp}=[2.0,0.0], norm::Int=0)
     
     nt = size(d,1)
     nx = size(d[:,:],2)
