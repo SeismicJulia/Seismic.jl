@@ -32,4 +32,6 @@ will produce this figure:
 ![plot1](http://seismic.physics.ualberta.ca/figures/616_79_PR.png)
 
 ## For developers: contributing to the package
-If you want to fork the repository and contribute to Seismic.jl, please read [Modifications.md](https://github.com/SeismicJulia/Seismic.jl/blob/master/Modifications.md) and follow the guidelines.
+If you want to fork the repository and contribute to Seismic.jl: 
+* Follow [This tutorial](http://seismic.physics.ualberta.ca/docs/develop_SeismicJulia.pdf) that explains the basics of how to do it.; and
+* Follow the general guidelines described here: [Modifications.md](https://github.com/SeismicJulia/Seismic.jl/blob/master/Modifications.md).
