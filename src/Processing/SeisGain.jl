@@ -29,7 +29,7 @@ Credits: Juan I. Sabbione, Aaron Staton, Mauricio D. Sacchi, 2016
 
 """
 function SeisGain{Td<:Real,Tp<:Real
-                  }(d::Array{Td,2}; dt::Real=0.004; kind::ASCIIString="time",
+                  }(d::Array{Td,2}; dt::Real=0.004, kind::ASCIIString="time",
                     param::Vector{Tp}=[2.0,0.0], norm::Int=0)
     
     nt = size(d,1)
