@@ -1,4 +1,4 @@
-include("Header.jl")
+#include("Header.jl")
 
 function SeisReadHeaders(filename;group="all",key=[],itrace=1,ntrace=100)
 
@@ -14,7 +14,7 @@ function SeisReadHeaders(filename;group="all",key=[],itrace=1,ntrace=100)
 		for j=itrace:itrace+nx-1
 			h1 = GrabHeader(stream_h,j)
 			for ikey=1:length(key)
-				curr[ikey] = getfield(h1,symbol(key[ikey]))
+				curr[ikey] = getfield(h1,Symbol(key[ikey]))
 			end
 			if curr != prev && j > itrace
 				nx = j - itrace

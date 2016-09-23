@@ -36,7 +36,7 @@
 
 """
 
-function ShotProfileWEM(m::ASCIIString,d::ASCIIString,adj=true;pspi=true,nref=5,damping=1000.,vel="vel",angx="angx",angy="angy",wav="wav",sz=0.,gz=0.,nangx=1,oangx=0,dangx=1,nangy=1,oangy=0,dangy=1,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
+function ShotProfileWEM(m::String,d::String,adj=true;pspi=true,nref=5,damping=1000.,vel="vel",angx="angx",angy="angy",wav="wav",sz=0.,gz=0.,nangx=1,oangx=0,dangx=1,nangy=1,oangy=0,dangy=1,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
 	
 	nshot = length(sx)	
 	v,h,e = SeisRead(vel)

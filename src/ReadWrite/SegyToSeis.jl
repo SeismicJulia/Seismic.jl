@@ -1,5 +1,5 @@
-include("SegyStruct.jl")
-include("Header.jl")
+#include("SegyStruct.jl")
+#include("Header.jl")
 
 """
 **SegyToSeis**

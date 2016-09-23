@@ -46,7 +46,7 @@ function SeisNMO(in,h::Array{Header,1};tnmo=0.,vnmo=1500.,max_stretch=1000)
 	
 end
 
-function SeisNMO(in::ASCIIString,out::ASCIIString;tnmo=0.,vnmo=1500.,max_stretch=1000)
+function SeisNMO(in::String,out::String;tnmo=0.,vnmo=1500.,max_stretch=1000)
 
 	@compat parameters = Dict(:tnmo=>tnmo,:vnmo=>vnmo,:max_stretch=>max_stretch)
 	SeisProcess(in,out,[SeisNMO],[parameters],key=["imx"])

@@ -9,7 +9,7 @@ function stacktraces(d,h;normalize=true)
 	return val, h_out
 end
 
-function SeisStack(in::ASCIIString,out::ASCIIString;key=["imx" "imy"],normalize=true)
+function SeisStack(in::String,out::String;key=["imx" "imy"],normalize=true)
 
 	@compat parameters = Dict(:normalize=>true)
 	SeisProcess(in,out,[stacktraces],[parameters],key=key)

@@ -9,6 +9,7 @@ SeisRemove,
 SeisWrite,
 SeisWriteHeaders
 include("Header.jl")
+include("SegyStruct.jl")
 include("SegyToSeis.jl")
 include("SeisToSegy.jl")
 include("SeisCopy.jl")

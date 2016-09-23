@@ -1,4 +1,4 @@
-function SeisSmoothStructure(m::ASCIIString,d::ASCIIString,param)
+function SeisSmoothStructure(m::String,d::String,param)
 
 	adj = get(param,"adj",false)
 	param["f"] = [smooth_structure]

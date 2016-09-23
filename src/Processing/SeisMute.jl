@@ -31,7 +31,7 @@ function SeisMute(in,h::Array{Header,1};offset=[0],tmute=0.,vmute=1500.,taper=0.
 	return out,h
 end
 
-function SeisMute(m::ASCIIString,d::ASCIIString,adj;tmute=0.,vmute=1500.,taper=0.1)
+function SeisMute(m::String,d::String,adj;tmute=0.,vmute=1500.,taper=0.1)
 
 	@compat parameters = Dict(:tmute=>tmute,:vmute=>vmute,:taper=>taper)
 	if (adj==true)

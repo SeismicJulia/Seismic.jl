@@ -1,4 +1,4 @@
-include("../ReadWrite/Header.jl")
+#include("../ReadWrite/Header.jl")
 
 function SeisWindowHeaders(in,out;key=[],minval=[],maxval=[],tmin=0,tmax=99999,ntrace=1000000)
 	@compat SeisProcessHeaders(in,out,[WindowHeaders],[Dict(:key=>key,:minval=>minval,:maxval=>maxval)],group="some",key=key,ntrace=ntrace,update_tracenum=false)
@@ -29,7 +29,7 @@ function WindowHeaders(h_in;key=[],minval=[],maxval=[])
 	minval = convert(Array{Float32,1},vec(minval))
 	maxval = convert(Array{Float32,1},vec(maxval))
 	nx = length(h_in)
-	key2 = ASCIIString[]
+	key2 = String[]
 	minval2 = Float32[]
 	maxval2 = Float32[]
 	for ikey=1:length(key)
@@ -43,14 +43,14 @@ function WindowHeaders(h_in;key=[],minval=[],maxval=[])
 	return RejectHeaders(h_in,key2,minval2,maxval2,length(key2),length(h_in))
 end
 
-function RejectHeaders(h_in::Array{Header,1},key::Array{ASCIIString,1},minval::Array{Float32,1},maxval::Array{Float32,1},nkeys,nx)
+function RejectHeaders(h_in::Array{Header,1},key::Array{String,1},minval::Array{Float32,1},maxval::Array{Float32,1},nkeys,nx)
 	h_out = Header[]	
 	keep = true
 	key_val = 0f0
 	for j=1:nx
 		keep = true
 		for ikey=1:nkeys
-			key_val = convert(Float32,getfield(h_in[j],symbol(key[ikey])))
+			key_val = convert(Float32,getfield(h_in[j],Symbol(key[ikey])))
 			if (key_val < minval[ikey] || key_val > maxval[ikey])
 				keep = false
 			end

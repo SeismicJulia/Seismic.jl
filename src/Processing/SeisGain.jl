@@ -8,7 +8,7 @@ Gain a group of traces.
 * `dt::Real`: sampling interval in secs.
 
 # Keyword arguments
-* `kind::ASCIIString="time"`: if kind="time", gain = t.^a . * exp(-bt);
+* `kind::String="time"`: if kind="time", gain = t.^a . * exp(-bt);
                               if kind="agc", automatic gain control is applied.
 * `param::Vector{Real}=[2.0,0.0]`: if kind="time", param = [a,b];
                                    if kind="agc", param = [agc_gate]
@@ -28,7 +28,7 @@ julia> d, dt = SeisHypEvents();
 Credits: Juan I. Sabbione, Aaron Staton, Mauricio D. Sacchi, 2016
 
 """
-function SeisGain(d::Array{Real, 2}, dt::Real; kind::ASCIIString="time",
+function SeisGain(d::Array{Real, 2}, dt::Real; kind::String="time",
                   param::Vector{Real}=[2.0,0.0], norm::Int=0)
     
     nt = size(d,1)

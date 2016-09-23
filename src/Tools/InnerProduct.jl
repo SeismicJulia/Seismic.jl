@@ -4,7 +4,7 @@ function InnerProduct(in1,in2)
 	
 end
 
-function InnerProduct(in1::ASCIIString,in2::ASCIIString;ntrace=10000)
+function InnerProduct(in1::String,in2::String;ntrace=10000)
 	# Inner Product of two vectors with same length
 	
 	#	ip = 0.0
@@ -27,7 +27,7 @@ function InnerProduct(in1::ASCIIString,in2::ASCIIString;ntrace=10000)
 	
 end
 
-function InnerProduct(in1::Array{ASCIIString,1},in2::Array{ASCIIString,1};ntrace=10000)
+function InnerProduct(in1::Array{String,1},in2::Array{String,1};ntrace=10000)
 
 		ip = 0.0
 		for j = 1 : length(in1)

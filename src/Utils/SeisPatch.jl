@@ -1,4 +1,4 @@
-include("../ReadWrite/Header.jl")
+#include("../ReadWrite/Header.jl")
 
 """
 **SeisPatch**
@@ -41,7 +41,7 @@ include("../ReadWrite/Header.jl")
 *Credits: A. Stanton, 2015*
 """
 
-function SeisPatch(in::ASCIIString,out::ASCIIString;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0)
+function SeisPatch(in::String,out::String;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0)
 
 	if (style == "sxsygxgy")
 		key = ["t","isx","isy","igx","igy"]
@@ -160,7 +160,7 @@ function SeisPatch(in::ASCIIString,out::ASCIIString;style="sxsygxgy",min_isx=0,m
 
 	NW=it_NW*ix1_NW*ix2_NW*ix3_NW*ix4_NW
 	patch_list = Patch[]
-	patch_names = ASCIIString[]
+	patch_names = String[]
 	for it_W = 1 : it_NW
 		mint = ot + dt*(it_W-1)*(it_WL-it_WO)
 		maxt = mint + dt*(it_WL - 1)

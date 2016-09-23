@@ -33,7 +33,7 @@
 
 """
 
-function ComputeAngles(angx::ASCIIString,angy::ASCIIString,dip_flag=false,vel="vel",wav="wav",sz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
+function ComputeAngles(angx::String,angy::String,dip_flag=false,vel="vel",wav="wav",sz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
 
 	nshot = length(sx)	
 	if (dip_flag=="y")

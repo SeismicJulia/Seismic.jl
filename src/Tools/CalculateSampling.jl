@@ -25,7 +25,7 @@ function CalculateSampling(in,h;cutoff=1e-10)
 	return wd,h;
 end
 
-function CalculateSampling(in::ASCIIString,wd::ASCIIString;cutoff=1e-10)
+function CalculateSampling(in::String,wd::String;cutoff=1e-10)
 	# calculate sampling operator (1's for live traces, 0's for missing traces)
 
 	@compat parameters = Dict(:cutoff=>cutoff)

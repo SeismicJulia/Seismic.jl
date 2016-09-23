@@ -11,7 +11,7 @@
 *Credits: AS, 2015*
 
 """
-function SeisRemove(filename::ASCIIString)
+function SeisRemove(filename::String)
 
 	filename_data = ParseDataName(filename)
 	filename_headers = ParseHeaderName(filename)	
@@ -23,7 +23,7 @@ function SeisRemove(filename::ASCIIString)
 
 end
 
-function SeisRemove(filename::Array{ASCIIString,1})
+function SeisRemove(filename::Array{String,1})
 
 	for j = 1 : length(filename)
 		SeisRemove(filename[j])

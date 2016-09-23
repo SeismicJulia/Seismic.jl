@@ -1,4 +1,4 @@
-include("Header.jl")
+#include("Header.jl")
 
 function SeisWriteHeaders(filename,h;itrace=1,update_tracenum=true)
 
