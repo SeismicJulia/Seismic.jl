@@ -28,8 +28,8 @@ julia> d, dt = SeisHypEvents();
 Credits: Juan I. Sabbione, Aaron Staton, Mauricio D. Sacchi, 2016
 
 """
-function SeisGain(d::Array{Real, 2}, dt::Real; kind::ASCIIString="time",
-                  param::Vector{Real}=[2.0,0.0], norm::Int=0)
+function SeisGain{T<:Real}(d::Array{T, 2}, dt::Real; kind::ASCIIString="time",
+                           param::Vector{Real}=[2.0,0.0], norm::Int=0)
     
     nt = size(d,1)
     nx = size(d[:,:],2)
