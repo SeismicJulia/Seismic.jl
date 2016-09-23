@@ -33,5 +33,5 @@ will produce this figure:
 
 ## For developers: contributing to the package
 If you want to fork the repository and contribute to Seismic.jl: 
-* Follow [This tutorial](http://seismic.physics.ualberta.ca/docs/develop_SeismicJulia.pdf) that explains the basics of how to do it.; and
+* Follow [this tutorial](http://seismic.physics.ualberta.ca/docs/develop_SeismicJulia.pdf) that explains the basics of how to do it.; and
 * Follow the general guidelines described here: [Modifications.md](https://github.com/SeismicJulia/Seismic.jl/blob/master/Modifications.md).
