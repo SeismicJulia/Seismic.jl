@@ -56,7 +56,7 @@ function SeisGain{Td<:Real,Tp<:Real
         for k = 1:nx
             aux =  d[:,k]
             e = aux.^2
-            rms = sqrt(conv(e,h)[L+1:nt+L])
+            rms = sqrt(abs(conv(e,h)[L+1:nt+L]))
             epsi = 1.e-10*maximum(rms)
             op = rms./(rms.^2+epsi)
             dout[:,k] = d[:,k].*op
