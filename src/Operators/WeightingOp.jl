@@ -4,7 +4,7 @@ function WeightingOp(in,adj;w=1)
 
 end
 
-function WeightingOp(m::ASCIIString,d::ASCIIString,adj;w="NULL")
+function WeightingOp(m::String,d::String,adj;w="NULL")
 
 	if (adj==true)
 		d1,h1,e1 = SeisRead(d)
@@ -18,7 +18,7 @@ function WeightingOp(m::ASCIIString,d::ASCIIString,adj;w="NULL")
 
 end
 
-function WeightingOp(m::Array{ASCIIString,1},d::Array{ASCIIString,1},adj;w="NULL")
+function WeightingOp(m::Array{String,1},d::Array{String,1},adj;w="NULL")
 
 	if !(isdefined(w,2))
 		for j = 1 : length(m)

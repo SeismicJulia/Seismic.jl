@@ -1,4 +1,4 @@
-function SeisProcess(in::ASCIIString,out::ASCIIString,operators,parameters;key=[])	
+function SeisProcess(in::String,out::String,operators,parameters;key=[])	
 	# Run processing flows that read and write from disk
 	#
 	# f is a function that has the following syntax: d2,h2 = f(d1,h1,param), where 
@@ -17,14 +17,14 @@ function SeisProcess(in::ASCIIString,out::ASCIIString,operators,parameters;key=[
 	itrace = 1
 	h1 = GrabHeader(stream_h,1)
 	for ikey = 1 : length(key)
-		curr[ikey] = getfield(h1,symbol(key[ikey]))
+		curr[ikey] = getfield(h1,Symbol(key[ikey]))
 	end
 	prev = 1*curr
 	L = []
 	for j = 1 : nx
 		h1 = GrabHeader(stream_h,j)
 		for ikey = 1 : length(key)
-			curr[ikey] = getfield(h1,symbol(key[ikey]))
+			curr[ikey] = getfield(h1,Symbol(key[ikey]))
 		end
 		if curr != prev
 			push!(L,j - itrace)
@@ -54,7 +54,7 @@ function SeisProcess(in::ASCIIString,out::ASCIIString,operators,parameters;key=[
 
 end
 
-function SeisProcess(in::Array{ASCIIString,1},out::Array{ASCIIString,1},operators,parameters;key=[])
+function SeisProcess(in::Array{String,1},out::Array{String,1},operators,parameters;key=[])
  	
 	for j = 1 : length(in)
 		SeisProcess(in[j],out[j],parameters;key=key)
@@ -62,7 +62,7 @@ function SeisProcess(in::Array{ASCIIString,1},out::Array{ASCIIString,1},operator
 
 end
 
-function SeisProcess(in1::ASCIIString,in2::ASCIIString,out::ASCIIString,operators,parameters;key=[])
+function SeisProcess(in1::String,in2::String,out::String,operators,parameters;key=[])
 	# Run processing flows that read 2 inputs and write 1 output
 	#
 	# f is a function that has the following syntax: d3,h3 = f(d1,d2,h1,h2,param), where 
@@ -81,14 +81,14 @@ function SeisProcess(in1::ASCIIString,in2::ASCIIString,out::ASCIIString,operator
 	itrace = 1
 	h1 = GrabHeader(stream_h,1)
 	for ikey = 1 : length(key)
-		curr[ikey] = getfield(h1,symbol(key[ikey]))
+		curr[ikey] = getfield(h1,Symbol(key[ikey]))
 	end
 	prev = 1*curr
 	L = []
 	for j = 1 : nx
 		h1 = GrabHeader(stream_h,j)
 		for ikey = 1 : length(key)
-			curr[ikey] = getfield(h1,symbol(key[ikey]))
+			curr[ikey] = getfield(h1,Symbol(key[ikey]))
 		end
 		if curr != prev
 			push!(L,j - itrace)

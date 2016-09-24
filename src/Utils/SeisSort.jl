@@ -1,4 +1,4 @@
-include("../ReadWrite/Header.jl")
+#include("../ReadWrite/Header.jl")
 
 """
 **SeisSort**
@@ -28,12 +28,12 @@ function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=100000)
 	minval = Array(Float32,length(key))
 
 	for ikey=1:length(key)
-		minval[ikey] = getfield(h1,symbol(key[ikey]))
+		minval[ikey] = getfield(h1,Symbol(key[ikey]))
 	end
 	for j=2:nx
 		h1 = GrabHeader(stream_h,j)
 		for ikey=1:length(key)
-			key_val = abs(getfield(h1,symbol(key[ikey])))
+			key_val = abs(getfield(h1,Symbol(key[ikey])))
 			if (key_val < minval[ikey])
 				minval[ikey] = key_val
 			end
@@ -44,7 +44,7 @@ function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=100000)
 	for j=1:nx
 		h1 = GrabHeader(stream_h,j)
 		for ikey=1:length(key)
-			mykey[j] += (getfield(h1,symbol(key[ikey])) + minval[ikey] + 1)*(10^(6*(length(key)-ikey)))
+			mykey[j] += (getfield(h1,Symbol(key[ikey])) + minval[ikey] + 1)*(10^(6*(length(key)-ikey)))
 		end
 	end
 	close(stream_h)
@@ -74,7 +74,7 @@ function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=100000)
 	rm(tmp);
 end
 
-function FetchHeaders(filename_h_in::ASCIIString,filename_out::ASCIIString,p::Array{Int32,1},nx)
+function FetchHeaders(filename_h_in::String,filename_out::String,p::Array{Int32,1},nx)
 
 	stream_h = open(filename_h_in)
 	h = Header[]

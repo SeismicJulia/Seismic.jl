@@ -12,7 +12,7 @@
 *Credits: AS, 2015*
 
 """
-function SeisCopy(in::ASCIIString,out::ASCIIString)
+function SeisCopy(in::String,out::String)
 	
 	filename_data_in = ParseDataName(in)
 	filename_headers_in = ParseHeaderName(in)	
@@ -32,7 +32,7 @@ function SeisCopy(in::ASCIIString,out::ASCIIString)
 
 end
 
-function SeisCopy(in::Array{ASCIIString,1},out::Array{ASCIIString,1})
+function SeisCopy(in::Array{String,1},out::Array{String,1})
 
 	for j = 1 : length(in)
 		SeisCopy(in[j],out[j])

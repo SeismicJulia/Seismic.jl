@@ -1,9 +1,13 @@
-# temporary files #
+# Temporary files #
 ###################
 *.jl~
 *.c~
 *.seis~
 *.txt~
+
+# Text files #
+###################
+*.txt
 
 # Compiled source #
 ###################

@@ -11,4 +11,3 @@ dmwni = SeisMWNI(ddec,dt=0.004,fmax=100,Niter_external=10,Niter_internal=3)
 quality_factor = 10*log10(norm(d[:],2)/norm(dmwni[:]-d[:],2))
 println("Quality factor = ",quality_factor)
 @test quality_factor > 5
-

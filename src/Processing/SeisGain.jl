@@ -8,8 +8,8 @@ Gain a group of traces.
 
 # Keyword arguments
 * `dt::Real=0.002`: sampling interval in secs.
-* `kind::ASCIIString="time"`: if kind="time", gain = t.^a . * exp(-bt);
-                              if kind="agc", automatic gain control is applied.
+* `kind::String="time"`: if kind="time", gain = t.^a . * exp(-bt);
+                         if kind="agc", automatic gain control is applied.
 * `param::Vector{Real}=[2.0,0.0]`: if kind="time", param = [a,b];
                                    if kind="agc", param = [agc_gate]
 * `norm::Int=0`: `norm=0` no normalization; `norm=1` normalize each trace by
@@ -29,7 +29,7 @@ Credits: Juan I. Sabbione, Aaron Staton, Mauricio D. Sacchi, 2016
 
 """
 function SeisGain{Td<:Real,Tp<:Real
-                  }(d::Array{Td,2}; dt::Real=0.004, kind::ASCIIString="time",
+                  }(d::Array{Td,2}; dt::Real=0.004, kind::String="time",
                     param::Vector{Tp}=[2.0,0.0], norm::Int=0)
     
     nt = size(d,1)

@@ -24,7 +24,7 @@ function SeisDiff(in,h::Array{Header,1};pow=-2,rot=0)
 
 end
 
-function SeisDiff(in::ASCIIString,out::ASCIIString;pow=-2,rot=0)
+function SeisDiff(in::String,out::String;pow=-2,rot=0)
 
 	@compat parameters = Dict(:pow=>pow,:rot=>rot)
 	SeisProcess(in,out,[SeisDiff],[parameters])

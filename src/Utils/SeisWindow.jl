@@ -1,4 +1,4 @@
-include("../ReadWrite/Header.jl")
+#include("../ReadWrite/Header.jl")
 
 """
 **SeisWindow**
@@ -14,7 +14,7 @@ include("../ReadWrite/Header.jl")
 *Credits: AS, 2015*
 """
 
-function SeisWindow(in::ASCIIString,out::ASCIIString;key=[],minval=[],maxval=[])
+function SeisWindow(in::String,out::String;key=[],minval=[],maxval=[])
     DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
 	extent = ReadTextHeader(in)
 	tmin = extent.o1
@@ -44,7 +44,7 @@ function SeisWindow(in::ASCIIString,out::ASCIIString;key=[],minval=[],maxval=[])
 	#rm(tmp);
 end
 
-function FetchTraces(in::ASCIIString,out::ASCIIString;ntrace=500,itmin=round(Int,1),itmax=round(Int,9999999999))
+function FetchTraces(in::String,out::String;ntrace=500,itmin=round(Int,1),itmax=round(Int,9999999999))
 
 	NX = GetNumTraces(out)
 	itrace = round(Int,1)

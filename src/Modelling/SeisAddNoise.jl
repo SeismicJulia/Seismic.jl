@@ -11,7 +11,7 @@ data `d`. Noise can be band limited using kewyord `L`.
 # Keyword arguments
 * `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=false` if
 snr is given in dB.
-* `pdf::ASCIIString="gaussian"`: random noise probability distribution:
+* `pdf::String="gaussian"`: random noise probability distribution:
 `"gaussian"` or `"uniform"`.
 * `L::Int=1`: averaging operator length to band-limit the random noise.
 
@@ -26,7 +26,7 @@ SeisPlot([d dn], extent); MeasureSNR(d, dn, db=true)
 """
 
 function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false, 
-                                  pdf::ASCIIString="gaussian", L::Int=1)
+                                  pdf::String="gaussian", L::Int=1)
 
     noise = GenNoise(size(d), pdf, L=L)
     if db==false
@@ -41,7 +41,7 @@ function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false,
 end
 
 # Generate the noise 
-function GenNoise(dims::Tuple, pdf::ASCIIString; L::Int=1)
+function GenNoise(dims::Tuple, pdf::String; L::Int=1)
     N = length(dims)
     n1 = dims[1]
     N == 1 ? nx = 1 : nx = *(dims[2:end]...)

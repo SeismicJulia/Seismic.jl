@@ -16,7 +16,7 @@ W1 = abs(fft(wpad))
 W1 = W1/maximum(W1)
 
 # Ormsby
-w2 = Ormsby(dt=dt, f=[5.0,10.0,30.0,55.0])
+w2 = Ormsby(dt=dt, f=[5.0, 10.0, 30.0, 55.0])
 nw = length(w2)
 t2 = dt*collect(0:1:nw-1)
 nf = 8*nextpow2(nw)

@@ -11,7 +11,7 @@ function GetShots(in)
 	nsx = 1
 	h1 = GrabHeader(stream,1)
 	for ikey=1:length(key)
-		curr[ikey] = getfield(h1,symbol(key[ikey]))
+		curr[ikey] = getfield(h1,Symbol(key[ikey]))
 	end
 	prev = copy(curr)
 	sx = push!(sx,h1.sx)
@@ -19,7 +19,7 @@ function GetShots(in)
 	for j=2:ntraces
 		h1 = GrabHeader(stream,j)
 		for ikey=1:length(key)
-			curr[ikey] = getfield(h1,symbol(key[ikey]))
+			curr[ikey] = getfield(h1,Symbol(key[ikey]))
 		end
 		if curr != prev
 			nx = j - itrace

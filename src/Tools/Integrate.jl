@@ -7,9 +7,10 @@ function Integrate(nx, xx, yy, adj)
 	    xx[i] += t;
 	end
     else
-	for i = 1 : nx
+	for i = 1:nx
 	    t += xx[i]
 	    yy[i] += t;
 	end
     end
+    
 end

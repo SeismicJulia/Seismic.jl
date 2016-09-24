@@ -1,4 +1,4 @@
-include("Header.jl")
+#include("Header.jl")
 
 function SeisHeaderInfo(filename;ntrace=100000)
 	#

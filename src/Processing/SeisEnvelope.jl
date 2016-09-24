@@ -13,7 +13,7 @@ function SeisEnvelope(A,h::Array{Header,1})
 	return A,h
 end
 
-function SeisEnvelope(in::ASCIIString,out::ASCIIString)
+function SeisEnvelope(in::String,out::String)
 	@compat parameters = Dict()
 	SeisProcess(in,out,[SeisEnvelope],[parameters];group="some",ntrace=100000)
 end

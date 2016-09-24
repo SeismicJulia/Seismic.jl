@@ -1,4 +1,4 @@
-function SeisSmoothGathers(m::ASCIIString,d::ASCIIString,adj;Nsmooth=3,Nrepeat=1)
+function SeisSmoothGathers(m::String,d::String,adj;Nsmooth=3,Nrepeat=1)
 
 	if (adj==false)
 		m1,h,ext = SeisRead(m)
