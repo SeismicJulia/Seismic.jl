@@ -32,6 +32,11 @@ will produce this figure:
 ![plot1](http://seismic.physics.ualberta.ca/figures/616_79_PR.png)
 
 ## For developers: contributing to the package
-If you want to fork the repository and contribute to Seismic.jl: 
-* [This tutorial](http://seismic.physics.ualberta.ca/docs/develop_SeismicJulia.pdf) provides the basics steps you need to follow in order to fork the main repository, change the source code in your forked repository, commit the changes, and make pull requests using GitHub.
-* For contributions to the package, please follow the general guidelines given here: [Modifications.md](https://github.com/SeismicJulia/Seismic.jl/blob/master/Modifications.md).
+If you want to fork the repository and contribute to Seismic.jl:
+* New at GitHub? These [basic commands](http://seismic.physics.ualberta.ca/docs/git_basic_commands.pdf) 
+and this [dictionary](http://seismic.physics.ualberta.ca/docs/git_dictionary.pdf) might help.
+* This [tutorial](http://seismic.physics.ualberta.ca/docs/develop_SeismicJulia.pdf) provides the basics 
+steps you need to follow in order to fork the main repository, change the source code in your forked 
+repository, commit the changes, and make pull requests using GitHub.
+* For contributions to the package, please follow the general guidelines given here: 
+[Modifications.md](https://github.com/SeismicJulia/Seismic.jl/blob/master/Modifications.md).
