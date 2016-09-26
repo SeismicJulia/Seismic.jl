@@ -1,5 +1,3 @@
-#include("../ReadWrite/Header.jl")
-
 """
 **SeisUnPatch**
 *Creation of overlapping 5d patches from a 5d volume*

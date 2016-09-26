@@ -1,5 +1,3 @@
-#include("Header.jl")
-
 function SeisReadHeaders(filename;group="all",key=[],itrace=1,ntrace=100)
 
 	filename_h = ParseHeaderName(filename)
