@@ -1,6 +1,3 @@
-#include("SegyStruct.jl")
-#include("Header.jl")
-
 """
 **SegyToSeis**
 

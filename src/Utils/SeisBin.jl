@@ -1,5 +1,3 @@
-#include("../ReadWrite/Header.jl")
-
 """
 **SeisBin**
 

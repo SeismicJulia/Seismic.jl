@@ -1,5 +1,3 @@
-#include("Header.jl")
-
 """
 **SeisRead**
 *Read seismic data in seis format. The format is comprised of three elements:*

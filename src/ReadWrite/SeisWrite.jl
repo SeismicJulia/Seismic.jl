@@ -1,5 +1,3 @@
-#include("Header.jl")
-
 """
 **SeisWrite**
 

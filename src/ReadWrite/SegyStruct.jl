@@ -1,5 +1,3 @@
-#include("Header.jl")
-
 type fileHeader
 	jobid  :: Int32
 	linnum :: Int32

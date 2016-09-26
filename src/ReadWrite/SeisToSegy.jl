@@ -1,6 +1,3 @@
-#include("SegyStruct.jl")
-#include("Header.jl")
-
 function SeisToSegy(in,out;su=true)
 
 	if (su==true)
