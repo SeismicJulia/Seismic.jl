@@ -51,8 +51,9 @@ Thumbs.db
 # seismic files #
 ######################
 *.seis
-*.seis@data@
-*.seis@headers@
+*@data@
+*@headers@
+616_79_PR_b*
 *.su
 *.SU
 *.rsf
