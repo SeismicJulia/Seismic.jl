@@ -9,14 +9,14 @@ data `d`. Noise can be band limited using kewyord `L`.
 * `snr::Real`: signal-to-noise ratio.
 
 # Keyword arguments
-* `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=false` if
+* `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=false` if 
 snr is given in dB.
 * `pdf::String="gaussian"`: random noise probability distribution:
 `"gaussian"` or `"uniform"`.
 * `L::Int=1`: averaging operator length to band-limit the random noise.
 
 # Examples
-```julia
+```jldoctest
 julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn); 
 MeasureSNR(w, wn)
 
