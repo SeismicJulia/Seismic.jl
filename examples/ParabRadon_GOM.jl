@@ -1,4 +1,4 @@
-# Multiple supresion using the parabolic Radon transform. Real data example.
+# Multiple supression using the parabolic Radon transform. Real data example.
 
 using PyPlot, Seismic
 
