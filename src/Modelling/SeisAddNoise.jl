@@ -23,6 +23,7 @@ MeasureSNR(w, wn)
 julia> d, extent = SeisHypEvents(); dn = SeisAddNoise(d, 1.0, db=true, L=9);
 SeisPlot([d dn], extent); MeasureSNR(d, dn, db=true)
 ```
+Credits: Juan I. Sabbione, 2016
 """
 
 function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false, 
@@ -30,9 +31,9 @@ function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false,
 
     noise = GenNoise(size(d), pdf, L=L)
     if db==false
-        noise = noise/norm(noise) * norm(d)/snr
+        noise = noise/vecnorm(noise) * vecnorm(d)/snr
     elseif db==true
-        noise = noise/norm(noise) * norm(d)/10.0^(0.05*snr)
+        noise = noise/vecnorm(noise) * vecnorm(d)/10.0^(0.05*snr)
     end
     noisy = d + noise
     assert(abs(MeasureSNR(d, noisy, db=db) - snr) < 1e10*eps(AbstractFloat(snr)))

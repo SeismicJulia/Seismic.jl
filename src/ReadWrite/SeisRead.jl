@@ -22,7 +22,7 @@ function SeisRead(filename;group="all",key=["imx","imy"],itrace=1,ntrace=10000)
     filename_data = ParseDataName(filename)
     filename_headers = ParseHeaderName(filename)
     extent = ReadTextHeader(filename)
-    println(filename_data)
+    #println(filename_data)
     stream_d = open(filename_data)
     dtype = ParseDataFormat(filename)
     dtype = dtype == "native_float" ? Float32 : Complex{Float32}

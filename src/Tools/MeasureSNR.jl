@@ -23,9 +23,9 @@ function MeasureSNR{Ts<:Real, Tn<:Real, N}(signal::Array{Ts, N},
                                            noisy::Array{Tn, N}; db::Bool=false)
 
     if db==false
-        snr = norm(signal)/norm(signal-noisy)
+        snr = vecnorm(signal)/vecnorm(signal-noisy)
     elseif db==true
-        snr = 20*log10(norm(signal)/norm(signal-noisy))
+        snr = 20*log10(vecnorm(signal)/vecnorm(signal-noisy))
     end
     return snr
 
