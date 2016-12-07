@@ -9,20 +9,21 @@ data `d`. Noise can be band limited using kewyord `L`.
 * `snr::Real`: signal-to-noise ratio.
 
 # Keyword arguments
-* `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=false` if
+* `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=false` if 
 snr is given in dB.
 * `pdf::String="gaussian"`: random noise probability distribution:
 `"gaussian"` or `"uniform"`.
 * `L::Int=1`: averaging operator length to band-limit the random noise.
 
 # Examples
-```julia
+```jldoctest
 julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn); 
 MeasureSNR(w, wn)
 
 julia> d, extent = SeisHypEvents(); dn = SeisAddNoise(d, 1.0, db=true, L=9);
 SeisPlot([d dn], extent); MeasureSNR(d, dn, db=true)
 ```
+Credits: Juan I. Sabbione, 2016
 """
 
 function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false, 
@@ -30,9 +31,9 @@ function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false,
 
     noise = GenNoise(size(d), pdf, L=L)
     if db==false
-        noise = noise/norm(noise) * norm(d)/snr
+        noise = noise/vecnorm(noise) * vecnorm(d)/snr
     elseif db==true
-        noise = noise/norm(noise) * norm(d)/10.0^(0.05*snr)
+        noise = noise/vecnorm(noise) * vecnorm(d)/10.0^(0.05*snr)
     end
     noisy = d + noise
     assert(abs(MeasureSNR(d, noisy, db=db) - snr) < 1e10*eps(AbstractFloat(snr)))
