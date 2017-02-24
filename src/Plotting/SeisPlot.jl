@@ -19,6 +19,7 @@ plot or `"Amplitude"` for amplitude spectrum plot.
 * `aspect="auto"`: color image aspect ratio.
 * `interpolation="Hanning"`: interpolation method for colormapping data.
 * `fmax=100`: maximum frequency for `"FK"` or `"Amplitude"` plot.
+* `line_width=1.0`: line width for wiggles
 * `wiggle_fill_color="k"`: color for filling the positive wiggles.
 * `wiggle_line_color="k"`: color for wiggles' lines.
 * `wiggle_trace_increment=1`: increment for wiggle traces.
@@ -56,13 +57,14 @@ Credits: Aaron Stanton, 2015
 function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
                            cmap="PuOr", pclip=98, vmin="NULL", vmax="NULL",
                            aspect="auto", interpolation="Hanning", fmax=100,
-                           wiggle_fill_color="k", wiggle_line_color="k",
-                           wiggle_trace_increment=1, xcur=1.2, scal="NULL",
-                           title=" ", titlesize=16, xlabel=" ", xunits=" ",
-                           ylabel=" ", yunits=" ", labelsize=14, ox=0, dx=1,
-                           oy=0, dy=1, xticks="NULL", yticks="NULL",
-                           xticklabels="NULL", yticklabels="NULL", ticksize=11,
-                           fignum="NULL", wbox=6, hbox=6, dpi=100, name="NULL")
+                           line_width=1.0, wiggle_fill_color="k",
+                           wiggle_line_color="k", wiggle_trace_increment=1,
+                           xcur=1.2, scal="NULL", title=" ", titlesize=16,
+                           xlabel=" ", xunits=" ", ylabel=" ", yunits=" ",
+                           labelsize=14, ox=0, dx=1, oy=0, dy=1,
+                           xticks="NULL", yticks="NULL", xticklabels="NULL",
+                           yticklabels="NULL", ticksize=11, fignum="NULL",
+                           wbox=6, hbox=6, dpi=100, name="NULL")
     if (vmin=="NULL" || vmax=="NULL")
         if (pclip<=100)
 	    a = -quantile(abs(d[:]), (pclip/100))
@@ -103,8 +105,8 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 		x_vert = Float64[]
 		y_vert = Float64[]
 		sc = x[k] * ones(size(d, 1))
-    s  = d[:,k]*alpha + sc
-		im = plt.plot( s, y, wiggle_line_color)
+                s  = d[:,k]*alpha + sc
+		im = plt.plot( s, y, lw=1.0, wiggle_line_color)
 		if (style != "overlay")
 		    plt.fill_betweenx(y, sc, s, where=s.>sc, facecolor=wiggle_line_color)
 		end
