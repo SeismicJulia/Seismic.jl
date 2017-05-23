@@ -16,7 +16,7 @@ snr is given in dB.
 * `L::Int=1`: averaging operator length to band-limit the random noise.
 
 # Examples
-```jldoctest
+```
 julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn); 
 MeasureSNR(w, wn)
 

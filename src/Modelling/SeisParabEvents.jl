@@ -70,7 +70,7 @@ function SeisParabEvents(; ot=0.0, dt=0.004, nt=500, ox1=0.0, dx1=10.0,
                               + p1[ie]*(x1[ix1]/xref)^2
                               + p2[ie]*(x2[ix2]/xref)^2
                               + p3[ie]*(x3[ix3]/xref)^2
-                              + p4[ie]*(x3[ix4]/xref)^2 - t_delay)
+                              + p4[ie]*(x4[ix4]/xref)^2 - t_delay)
              D[iw, ix1,ix2,ix3,ix4] += W[iw]*amp[ie]*exp(-im*phase)
              D[nf-iw+2,ix1,ix2,ix3,ix4]  = conj(D[iw,ix1,ix2,ix3,ix4])
          end
