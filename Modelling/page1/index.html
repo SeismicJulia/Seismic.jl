@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="SAIG group">
+  
+  <title>Modelling - Seismic.jl</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  <link href="../../assets/Documenter.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Modelling";
+    var mkdocs_page_input_path = "Modelling/page1.md";
+    var mkdocs_page_url = "/Modelling/page1/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="../../assets/mathjaxhelper.js"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Seismic.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Introduction</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Imaging/page1/">Imaging</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Modelling</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#generating-synthetic-data-set">Generating Synthetic data set</a></li>
+                
+                    <li><a class="toctree-l4" href="#seislinearevents">SeisLinearEvents</a></li>
+                
+                    <li><a class="toctree-l4" href="#seisaddnoise">SeisAddNoise</a></li>
+                
+                    <li><a class="toctree-l4" href="#seisparabevents">SeisParabEvents</a></li>
+                
+                    <li><a class="toctree-l4" href="#seishypevents">SeisHypEvents</a></li>
+                
+                    <li><a class="toctree-l4" href="#seisaddnoise_1">SeisAddNoise</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Operators/page1/">Operators</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Plotting/page1/">Plotting</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Solvers/page1/">Solvers</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Tools/page1/">Tools</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Utils/page1/">Utils</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Wavelets/page1/">Wavelets</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Windows/page1/">Windows</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Seismic.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Modelling</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Generating-Synthetic-data-set-1'></a></p>
+<h1 id="generating-synthetic-data-set">Generating Synthetic data set</h1>
+<p>Seismic.jl provides various ways to generate synthetic data set, like multi-dimensional linear, parabola, hyperbola events and finite-difference solver for acoustic wave equation (Currently only 2D is supported)</p>
+<p><a id='SeisLinearEvents-1'></a></p>
+<h2 id="seislinearevents">SeisLinearEvents</h2>
+<p><a id='Seismic.SeisLinearEvents' href='#Seismic.SeisLinearEvents'>#</a>
+<strong><code>Seismic.SeisLinearEvents</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisLinearEvents(; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Generate five dimensional data <code>d</code> consisting of linear events.</p>
+<p><strong>Arguments</strong></p>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>ot=0.0</code>: first sample for the time axis in secs.</li>
+<li><code>dt=0.004</code>: sampling interval in secs.</li>
+<li><code>nt=500</code>: number of time samples.</li>
+<li><code>ox1=0.0</code>: first sample for the first spatial dimension in meters.</li>
+<li><code>dx1=10.0</code>: sample interval for the first spatial dimension in meters.</li>
+<li><code>nx1=100</code>: number of samples for the first spatial dimension.</li>
+<li><code>ox2=0.0</code>: first sample for the second spatial dimension in meters.</li>
+<li><code>dx2=10.0</code>: sample interval for the second spatial dimension in meters.</li>
+<li><code>nx2=1</code>: number of samples for the second spatial dimension.</li>
+<li><code>ox3=0.0</code>: second sample for the third spatial dimension in meters.</li>
+<li><code>dx3=10.0</code>: sample interval for the third spatial dimension in meters.</li>
+<li><code>nx3=1</code>: number of samples for the third spatial dimension.</li>
+<li><code>ox4=0.0</code>: third sample for the fourth spatial dimension in meters.</li>
+<li><code>dx4=10.0</code>: sample interval for the fourth spatial dimension in meters.</li>
+<li><code>nx4=1</code>:number of samples for the fourth spatial dimension.</li>
+<li><code>tau=[1.0, 1.6]</code>: intercept traveltimes for each event.</li>
+<li>`p1=[0.0000,-0.0001]</li>
+<li>`p2=[0.0003, 0.0002]</li>
+<li>`p3=[-0.0001,-0.0001]</li>
+<li>`p4=[0.0001,-0.0000]</li>
+<li><code>amp=[1.0,-1.0]</code>: amplitudes for each linear event.</li>
+<li><code>wavelet="ricker"</code>: wavelet used to model the linear events.</li>
+<li><code>f0=[20.0]</code>: central frequency of wavelet for each linear event.</li>
+</ul>
+<p><strong>Example</strong></p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span><span class="n">extent</span> <span class="o">=</span> <span class="n">SeisLinearEvents</span><span class="p">();</span> <span class="n">SeisPlot</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Credits: Aaron Stanton, 2015</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisLinearEvents.jl#L1-L40' class='documenter-source'>source</a><br></p>
+<p><a id='SeisAddNoise-1'></a></p>
+<h2 id="seisaddnoise">SeisAddNoise</h2>
+<p><a id='Seismic.SeisAddNoise' href='#Seismic.SeisAddNoise'>#</a>
+<strong><code>Seismic.SeisAddNoise</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisAddNoise(d, snr; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Add noise at a given signal-to-noise ratio level <code>snr</code> to an N-dimensional input data <code>d</code>. Noise can be band limited using kewyord <code>L</code>.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>d::Array{Real, N}</code>: N-dimensional data.</li>
+<li><code>snr::Real</code>: signal-to-noise ratio.</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>db::Bool=false</code>: <code>db=false</code> if <code>snr</code> is given by amplitude, <code>db=true</code> if</li>
+</ul>
+<p>snr is given in dB.</p>
+<ul>
+<li><code>pdf::String="gaussian"</code>: random noise probability distribution:</li>
+</ul>
+<p><code>"gaussian"</code> or <code>"uniform"</code>.</p>
+<ul>
+<li><code>L::Int=1</code>: averaging operator length to band-limit the random noise.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Ricker</span><span class="p">();</span> <span class="n">wn</span> <span class="o">=</span> <span class="n">SeisAddNoise</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">);</span> <span class="n">plot</span><span class="p">(</span><span class="n">wn</span><span class="p">);</span> 
+<span class="n">MeasureSNR</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">wn</span><span class="p">)</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">SeisHypEvents</span><span class="p">();</span> <span class="n">dn</span> <span class="o">=</span> <span class="n">SeisAddNoise</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="mi">9</span><span class="p">);</span>
+<span class="n">SeisPlot</span><span class="p">([</span><span class="n">d</span> <span class="n">dn</span><span class="p">],</span> <span class="n">extent</span><span class="p">);</span> <span class="n">MeasureSNR</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">dn</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Credits: Juan I. Sabbione, 2016</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisAddNoise.jl#L1-L27' class='documenter-source'>source</a><br></p>
+<p><a id='SeisParabEvents-1'></a></p>
+<h2 id="seisparabevents">SeisParabEvents</h2>
+<p><a id='Seismic.SeisParabEvents' href='#Seismic.SeisParabEvents'>#</a>
+<strong><code>Seismic.SeisParabEvents</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisParabEvents(; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Generate five dimensional data <code>d</code> consisting of parabolic events.</p>
+<p><strong>Arguments</strong></p>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>ot=0.0</code>: first sample for the time axis in secs.</li>
+<li><code>dt=0.004</code>: sampling interval in secs.</li>
+<li><code>nt=500</code>: number of time samples.</li>
+<li><code>ox1=0.0</code>: first sample for the first spatial dimension in meters.</li>
+<li><code>dx1=10.0</code>: sample interval for the first spatial dimension in meters.</li>
+<li><code>nx1=100</code>: number of samples for the first spatial dimension.</li>
+<li><code>ox2=0.0</code>: first sample for the second spatial dimension in meters.</li>
+<li><code>dx2=10.0</code>: sample interval for the second spatial dimension in meters.</li>
+<li><code>nx2=1</code>: number of samples for the second spatial dimension.</li>
+<li><code>ox3=0.0</code>: second sample for the third spatial dimension in meters.</li>
+<li><code>dx3=10.0</code>: sample interval for the third spatial dimension in meters.</li>
+<li><code>nx3=1</code>: number of samples for the third spatial dimension.</li>
+<li><code>ox4=0.0</code>: third sample for the fourth spatial dimension in meters.</li>
+<li><code>dx4=10.0</code>: sample interval for the fourth spatial dimension in meters.</li>
+<li><code>nx4=1</code>:number of samples for the fourth spatial dimension.</li>
+<li><code>tau=[1.0, 1.6]</code>: intercept traveltimes for each event.</li>
+<li>`p1=[0.0000,-0.0001]</li>
+<li>`p2=[0.0003, 0.0002]</li>
+<li>`p3=[-0.0001,-0.0001]</li>
+<li>`p4=[0.0001,-0.0000]</li>
+<li><code>amp=[1.0,-1.0]</code>: amplitudes for each parabolic event.</li>
+<li><code>wavelet="ricker"</code>: wavelet used to model the parabolicr events.</li>
+<li><code>f0=[20.0]</code>: central frequency of wavelet for each parabolic event.</li>
+</ul>
+<p><strong>Example</strong></p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">SeisParabEvents</span><span class="p">();</span> <span class="n">SeisPlot</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Credits: Mauricio D Sacchi, 2015</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisParabEvents.jl#L1-L40' class='documenter-source'>source</a><br></p>
+<p><a id='SeisHypEvents-1'></a></p>
+<h2 id="seishypevents">SeisHypEvents</h2>
+<p><a id='Seismic.SeisHypEvents' href='#Seismic.SeisHypEvents'>#</a>
+<strong><code>Seismic.SeisHypEvents</code></strong> &mdash; <em>Function</em>.</p>
+<p>SeisHypEvents(; <keyword arguments>)</p>
+<p>Generate two dimensional data <code>d</code> consisting of hyperbolic events.</p>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>ot::Real=0.0</code>: first sample for the time axis in secs.</li>
+<li><code>dt::Real=0.004</code>: sampling interval in secs.</li>
+<li><code>nt::Int=301</code>: number of time samples.</li>
+<li><code>ox::Real=-1000.0</code>: first sample for spatial dimension in meters.</li>
+<li><code>dx::Real=20.0</code>: sample interval for the spatial dimension in meters.</li>
+<li><code>nx::Int=101</code>: number of samples for the spatial dimension.</li>
+<li><code>tau::Vector{Real}=[0.2, 0.6, 0.9]</code>: intercept traveltimes for each event.</li>
+<li><code>vel::Vector{Real}=[1500.0, 2000.0, 3000.0]</code>: rms velocities in m/s</li>
+<li><code>apex::Vector{Real}=[0.0, 0.0, 0.0]</code>: apex-shifts in meters.</li>
+<li><code>amp::Vector{Real}=[1.0, -1.0, 1.0]</code>: amplitudes for each event.</li>
+<li><code>wavelet::String="ricker"</code>: wavelet used to model the events.</li>
+<li><code>f0::Vector{Real}=[20.0]</code>: central frequency of wavelet for each event.</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li><code>d::Array{Real, 2}</code>: two dimensional data consisting of hyperbolic events.</li>
+<li><code>extent::Extent</code>: extent of the data <code>d</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">SeisHypEvents</span><span class="p">();</span> <span class="n">SeisPlot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">extent</span><span class="p">);</span>
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">SeisHypEvents</span><span class="p">(</span><span class="n">apex</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="o">-</span><span class="mi">300</span><span class="p">],</span> <span class="n">f0</span><span class="o">=</span><span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">15</span><span class="p">]);</span>
+<span class="n">SeisPlot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">extent</span><span class="p">);</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisHypEvents.jl#L1-L30' class='documenter-source'>source</a><br></p>
+<p><a id='SeisAddNoise-2'></a></p>
+<h2 id="seisaddnoise_1">SeisAddNoise</h2>
+<p><a id='Seismic.SeisAcousticWave' href='#Seismic.SeisAcousticWave'>#</a>
+<strong><code>Seismic.SeisAcousticWave</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>shot = SeisAcousticWave(fidMtx, pos, isz, isx, f0, dt, tmax=2.0)
+</pre></div>
+
+
+<p>finite difference modeling of acoustic wave field, generate a common shot gather</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>fidMtx :: FidMtx</code>        : composite type of sparse matrix</li>
+<li><code>pos    :: Array{Int64,2}</code>: index of receivers, first column is the vertical index, second column contains horizontal index.</li>
+<li><code>isz    :: Int64</code>         : vertical index of source</li>
+<li><code>isz    :: Int64</code>         : horizontal index of source</li>
+<li><code>f0     :: Float64</code>       : dominant frequency of Ricker wavelet</li>
+<li><code>dt     :: Float64</code>       : size of time step</li>
+</ul>
+<p><strong>keywords Arguments</strong></p>
+<ul>
+<li><code>tmax=1.0</code> : length of simulation</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li><code>shot :: ShotGather</code>: composite type for common shot gather</li>
+</ul>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisAcousticWave.jl#L445-L463' class='documenter-source'>source</a><br></p>
+<p><a id='Example-1'></a></p>
+<h3 id="example">Example</h3>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">Seismic</span><span class="p">,</span><span class="n">PyPlot</span>
+<span class="n">SeisPlot</span><span class="p">(</span><span class="n">randn</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+</pre></div>
+
+
+<p><img alt="" src="../pic.svg" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../Operators/page1/" class="btn btn-neutral float-right" title="Operators">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../Imaging/page1/" class="btn btn-neutral" title="Imaging"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../../Imaging/page1/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../Operators/page1/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

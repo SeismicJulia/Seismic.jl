@@ -1,0 +1,194 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Seismic.jl\n\n\nSeismic signal analysis and imaging\n\n\n\n\n\n\nOverview\n\n\nSeismic.jl provides tools to \nprocess\n, \nimage\n, and \nplot\n reflection seismic data in the Julia language.\n\n\n\n\nConvert data to a simple format\n\n\nData and headers are stored separately as \nfilename.seisd\n and \nfilename.seish\n for simplicity. Functions are available to convert from popular formats such as SEGY, SU and RSF.\n\n\n\n\nManipulate data\n\n\nContains functions for geometry calculation, sorting, windowing, patching/un-patching, and processing keyed on header word.\n\n\n\n\nPlot publication quality figures\n\n\nProduce color and wiggle plots using PyPlot.jl\n\n\n\n\n\n\nInstallation\n\n\nTo install Seismic.jl type:\n\n\nPkg.add(\nSeismic\n)\n\n\n\n\n\n\n\nIndex\n\n\n\n\nSeismic.Berlage\n\n\nSeismic.Ormsby\n\n\nSeismic.Ricker\n\n\nSeismic.SeisAcousticWave\n\n\nSeismic.SeisAddNoise\n\n\nSeismic.SeisHypEvents\n\n\nSeismic.SeisLinearEvents\n\n\nSeismic.SeisParabEvents", 
+            "title": "Introduction"
+        }, 
+        {
+            "location": "/#seismicjl", 
+            "text": "Seismic signal analysis and imaging", 
+            "title": "Seismic.jl"
+        }, 
+        {
+            "location": "/#overview", 
+            "text": "Seismic.jl provides tools to  process ,  image , and  plot  reflection seismic data in the Julia language.", 
+            "title": "Overview"
+        }, 
+        {
+            "location": "/#convert-data-to-a-simple-format", 
+            "text": "Data and headers are stored separately as  filename.seisd  and  filename.seish  for simplicity. Functions are available to convert from popular formats such as SEGY, SU and RSF.", 
+            "title": "Convert data to a simple format"
+        }, 
+        {
+            "location": "/#manipulate-data", 
+            "text": "Contains functions for geometry calculation, sorting, windowing, patching/un-patching, and processing keyed on header word.", 
+            "title": "Manipulate data"
+        }, 
+        {
+            "location": "/#plot-publication-quality-figures", 
+            "text": "Produce color and wiggle plots using PyPlot.jl", 
+            "title": "Plot publication quality figures"
+        }, 
+        {
+            "location": "/#installation", 
+            "text": "To install Seismic.jl type:  Pkg.add( Seismic )", 
+            "title": "Installation"
+        }, 
+        {
+            "location": "/#index", 
+            "text": "Seismic.Berlage  Seismic.Ormsby  Seismic.Ricker  Seismic.SeisAcousticWave  Seismic.SeisAddNoise  Seismic.SeisHypEvents  Seismic.SeisLinearEvents  Seismic.SeisParabEvents", 
+            "title": "Index"
+        }, 
+        {
+            "location": "/Imaging/page1/", 
+            "text": "Imaging", 
+            "title": "Imaging"
+        }, 
+        {
+            "location": "/Imaging/page1/#imaging", 
+            "text": "", 
+            "title": "Imaging"
+        }, 
+        {
+            "location": "/Modelling/page1/", 
+            "text": "Generating Synthetic data set\n\n\nSeismic.jl provides various ways to generate synthetic data set, like multi-dimensional linear, parabola, hyperbola events and finite-difference solver for acoustic wave equation (Currently only 2D is supported)\n\n\n\n\nSeisLinearEvents\n\n\n#\n\n\nSeismic.SeisLinearEvents\n \n \nFunction\n.\n\n\nSeisLinearEvents(; \nkeyword arguments\n)\n\n\n\n\n\nGenerate five dimensional data \nd\n consisting of linear events.\n\n\nArguments\n\n\nKeyword arguments\n\n\n\n\not=0.0\n: first sample for the time axis in secs.\n\n\ndt=0.004\n: sampling interval in secs.\n\n\nnt=500\n: number of time samples.\n\n\nox1=0.0\n: first sample for the first spatial dimension in meters.\n\n\ndx1=10.0\n: sample interval for the first spatial dimension in meters.\n\n\nnx1=100\n: number of samples for the first spatial dimension.\n\n\nox2=0.0\n: first sample for the second spatial dimension in meters.\n\n\ndx2=10.0\n: sample interval for the second spatial dimension in meters.\n\n\nnx2=1\n: number of samples for the second spatial dimension.\n\n\nox3=0.0\n: second sample for the third spatial dimension in meters.\n\n\ndx3=10.0\n: sample interval for the third spatial dimension in meters.\n\n\nnx3=1\n: number of samples for the third spatial dimension.\n\n\nox4=0.0\n: third sample for the fourth spatial dimension in meters.\n\n\ndx4=10.0\n: sample interval for the fourth spatial dimension in meters.\n\n\nnx4=1\n:number of samples for the fourth spatial dimension.\n\n\ntau=[1.0, 1.6]\n: intercept traveltimes for each event.\n\n\n`p1=[0.0000,-0.0001]\n\n\n`p2=[0.0003, 0.0002]\n\n\n`p3=[-0.0001,-0.0001]\n\n\n`p4=[0.0001,-0.0000]\n\n\namp=[1.0,-1.0]\n: amplitudes for each linear event.\n\n\nwavelet=\"ricker\"\n: wavelet used to model the linear events.\n\n\nf0=[20.0]\n: central frequency of wavelet for each linear event.\n\n\n\n\nExample\n\n\njulia\n \nd\n,\nextent\n \n=\n \nSeisLinearEvents\n();\n \nSeisPlot\n(\nd\n);\n\n\n\n\n\n\nCredits: Aaron Stanton, 2015\n\n\nsource\n\n\n\n\nSeisAddNoise\n\n\n#\n\n\nSeismic.SeisAddNoise\n \n \nFunction\n.\n\n\nSeisAddNoise(d, snr; \nkeyword arguments\n)\n\n\n\n\n\nAdd noise at a given signal-to-noise ratio level \nsnr\n to an N-dimensional input data \nd\n. Noise can be band limited using kewyord \nL\n.\n\n\nArguments\n\n\n\n\nd::Array{Real, N}\n: N-dimensional data.\n\n\nsnr::Real\n: signal-to-noise ratio.\n\n\n\n\nKeyword arguments\n\n\n\n\ndb::Bool=false\n: \ndb=false\n if \nsnr\n is given by amplitude, \ndb=true\n if\n\n\n\n\nsnr is given in dB.\n\n\n\n\npdf::String=\"gaussian\"\n: random noise probability distribution:\n\n\n\n\n\"gaussian\"\n or \n\"uniform\"\n.\n\n\n\n\nL::Int=1\n: averaging operator length to band-limit the random noise.\n\n\n\n\nExamples\n\n\njulia\n \nw\n \n=\n \nRicker\n();\n \nwn\n \n=\n \nSeisAddNoise\n(\nw\n,\n \n2\n);\n \nplot\n(\nw\n);\n \nplot\n(\nwn\n);\n \n\nMeasureSNR\n(\nw\n,\n \nwn\n)\n\n\n\njulia\n \nd\n,\n \nextent\n \n=\n \nSeisHypEvents\n();\n \ndn\n \n=\n \nSeisAddNoise\n(\nd\n,\n \n1.0\n,\n \ndb\n=\ntrue\n,\n \nL\n=\n9\n);\n\n\nSeisPlot\n([\nd\n \ndn\n],\n \nextent\n);\n \nMeasureSNR\n(\nd\n,\n \ndn\n,\n \ndb\n=\ntrue\n)\n\n\n\n\n\n\nCredits: Juan I. Sabbione, 2016\n\n\nsource\n\n\n\n\nSeisParabEvents\n\n\n#\n\n\nSeismic.SeisParabEvents\n \n \nFunction\n.\n\n\nSeisParabEvents(; \nkeyword arguments\n)\n\n\n\n\n\nGenerate five dimensional data \nd\n consisting of parabolic events.\n\n\nArguments\n\n\nKeyword arguments\n\n\n\n\not=0.0\n: first sample for the time axis in secs.\n\n\ndt=0.004\n: sampling interval in secs.\n\n\nnt=500\n: number of time samples.\n\n\nox1=0.0\n: first sample for the first spatial dimension in meters.\n\n\ndx1=10.0\n: sample interval for the first spatial dimension in meters.\n\n\nnx1=100\n: number of samples for the first spatial dimension.\n\n\nox2=0.0\n: first sample for the second spatial dimension in meters.\n\n\ndx2=10.0\n: sample interval for the second spatial dimension in meters.\n\n\nnx2=1\n: number of samples for the second spatial dimension.\n\n\nox3=0.0\n: second sample for the third spatial dimension in meters.\n\n\ndx3=10.0\n: sample interval for the third spatial dimension in meters.\n\n\nnx3=1\n: number of samples for the third spatial dimension.\n\n\nox4=0.0\n: third sample for the fourth spatial dimension in meters.\n\n\ndx4=10.0\n: sample interval for the fourth spatial dimension in meters.\n\n\nnx4=1\n:number of samples for the fourth spatial dimension.\n\n\ntau=[1.0, 1.6]\n: intercept traveltimes for each event.\n\n\n`p1=[0.0000,-0.0001]\n\n\n`p2=[0.0003, 0.0002]\n\n\n`p3=[-0.0001,-0.0001]\n\n\n`p4=[0.0001,-0.0000]\n\n\namp=[1.0,-1.0]\n: amplitudes for each parabolic event.\n\n\nwavelet=\"ricker\"\n: wavelet used to model the parabolicr events.\n\n\nf0=[20.0]\n: central frequency of wavelet for each parabolic event.\n\n\n\n\nExample\n\n\njulia\n \nd\n,\n \nextent\n \n=\n \nSeisParabEvents\n();\n \nSeisPlot\n(\nd\n);\n\n\n\n\n\n\nCredits: Mauricio D Sacchi, 2015\n\n\nsource\n\n\n\n\nSeisHypEvents\n\n\n#\n\n\nSeismic.SeisHypEvents\n \n \nFunction\n.\n\n\nSeisHypEvents(; \n)\n\n\nGenerate two dimensional data \nd\n consisting of hyperbolic events.\n\n\nKeyword arguments\n\n\n\n\not::Real=0.0\n: first sample for the time axis in secs.\n\n\ndt::Real=0.004\n: sampling interval in secs.\n\n\nnt::Int=301\n: number of time samples.\n\n\nox::Real=-1000.0\n: first sample for spatial dimension in meters.\n\n\ndx::Real=20.0\n: sample interval for the spatial dimension in meters.\n\n\nnx::Int=101\n: number of samples for the spatial dimension.\n\n\ntau::Vector{Real}=[0.2, 0.6, 0.9]\n: intercept traveltimes for each event.\n\n\nvel::Vector{Real}=[1500.0, 2000.0, 3000.0]\n: rms velocities in m/s\n\n\napex::Vector{Real}=[0.0, 0.0, 0.0]\n: apex-shifts in meters.\n\n\namp::Vector{Real}=[1.0, -1.0, 1.0]\n: amplitudes for each event.\n\n\nwavelet::String=\"ricker\"\n: wavelet used to model the events.\n\n\nf0::Vector{Real}=[20.0]\n: central frequency of wavelet for each event.\n\n\n\n\nOutput\n\n\n\n\nd::Array{Real, 2}\n: two dimensional data consisting of hyperbolic events.\n\n\nextent::Extent\n: extent of the data \nd\n.\n\n\n\n\nExamples\n\n\njulia\n \nd\n,\n \nextent\n \n=\n \nSeisHypEvents\n();\n \nSeisPlot\n(\nd\n,\n \nextent\n);\n\n\njulia\n \nd\n,\n \nextent\n \n=\n \nSeisHypEvents\n(\napex\n=\n[\n100\n,\n \n200\n,\n \n-\n300\n],\n \nf0\n=\n[\n30\n,\n \n20\n,\n \n15\n]);\n\n\nSeisPlot\n(\nd\n,\n \nextent\n);\n\n\n\n\n\n\nsource\n\n\n\n\nSeisAddNoise\n\n\n#\n\n\nSeismic.SeisAcousticWave\n \n \nFunction\n.\n\n\nshot = SeisAcousticWave(fidMtx, pos, isz, isx, f0, dt, tmax=2.0)\n\n\n\n\n\nfinite difference modeling of acoustic wave field, generate a common shot gather\n\n\nArguments\n\n\n\n\nfidMtx :: FidMtx\n        : composite type of sparse matrix\n\n\npos    :: Array{Int64,2}\n: index of receivers, first column is the vertical index, second column contains horizontal index.\n\n\nisz    :: Int64\n         : vertical index of source\n\n\nisz    :: Int64\n         : horizontal index of source\n\n\nf0     :: Float64\n       : dominant frequency of Ricker wavelet\n\n\ndt     :: Float64\n       : size of time step\n\n\n\n\nkeywords Arguments\n\n\n\n\ntmax=1.0\n : length of simulation\n\n\n\n\nOutput\n\n\n\n\nshot :: ShotGather\n: composite type for common shot gather\n\n\n\n\nsource\n\n\n\n\nExample\n\n\nusing\n \nSeismic\n,\nPyPlot\n\n\nSeisPlot\n(\nrandn\n(\n20\n,\n20\n))", 
+            "title": "Modelling"
+        }, 
+        {
+            "location": "/Modelling/page1/#generating-synthetic-data-set", 
+            "text": "Seismic.jl provides various ways to generate synthetic data set, like multi-dimensional linear, parabola, hyperbola events and finite-difference solver for acoustic wave equation (Currently only 2D is supported)", 
+            "title": "Generating Synthetic data set"
+        }, 
+        {
+            "location": "/Modelling/page1/#seislinearevents", 
+            "text": "#  Seismic.SeisLinearEvents     Function .  SeisLinearEvents(;  keyword arguments )  Generate five dimensional data  d  consisting of linear events.  Arguments  Keyword arguments   ot=0.0 : first sample for the time axis in secs.  dt=0.004 : sampling interval in secs.  nt=500 : number of time samples.  ox1=0.0 : first sample for the first spatial dimension in meters.  dx1=10.0 : sample interval for the first spatial dimension in meters.  nx1=100 : number of samples for the first spatial dimension.  ox2=0.0 : first sample for the second spatial dimension in meters.  dx2=10.0 : sample interval for the second spatial dimension in meters.  nx2=1 : number of samples for the second spatial dimension.  ox3=0.0 : second sample for the third spatial dimension in meters.  dx3=10.0 : sample interval for the third spatial dimension in meters.  nx3=1 : number of samples for the third spatial dimension.  ox4=0.0 : third sample for the fourth spatial dimension in meters.  dx4=10.0 : sample interval for the fourth spatial dimension in meters.  nx4=1 :number of samples for the fourth spatial dimension.  tau=[1.0, 1.6] : intercept traveltimes for each event.  `p1=[0.0000,-0.0001]  `p2=[0.0003, 0.0002]  `p3=[-0.0001,-0.0001]  `p4=[0.0001,-0.0000]  amp=[1.0,-1.0] : amplitudes for each linear event.  wavelet=\"ricker\" : wavelet used to model the linear events.  f0=[20.0] : central frequency of wavelet for each linear event.   Example  julia   d , extent   =   SeisLinearEvents ();   SeisPlot ( d );   Credits: Aaron Stanton, 2015  source", 
+            "title": "SeisLinearEvents"
+        }, 
+        {
+            "location": "/Modelling/page1/#seisaddnoise", 
+            "text": "#  Seismic.SeisAddNoise     Function .  SeisAddNoise(d, snr;  keyword arguments )  Add noise at a given signal-to-noise ratio level  snr  to an N-dimensional input data  d . Noise can be band limited using kewyord  L .  Arguments   d::Array{Real, N} : N-dimensional data.  snr::Real : signal-to-noise ratio.   Keyword arguments   db::Bool=false :  db=false  if  snr  is given by amplitude,  db=true  if   snr is given in dB.   pdf::String=\"gaussian\" : random noise probability distribution:   \"gaussian\"  or  \"uniform\" .   L::Int=1 : averaging operator length to band-limit the random noise.   Examples  julia   w   =   Ricker ();   wn   =   SeisAddNoise ( w ,   2 );   plot ( w );   plot ( wn );   MeasureSNR ( w ,   wn )  julia   d ,   extent   =   SeisHypEvents ();   dn   =   SeisAddNoise ( d ,   1.0 ,   db = true ,   L = 9 );  SeisPlot ([ d   dn ],   extent );   MeasureSNR ( d ,   dn ,   db = true )   Credits: Juan I. Sabbione, 2016  source", 
+            "title": "SeisAddNoise"
+        }, 
+        {
+            "location": "/Modelling/page1/#seisparabevents", 
+            "text": "#  Seismic.SeisParabEvents     Function .  SeisParabEvents(;  keyword arguments )  Generate five dimensional data  d  consisting of parabolic events.  Arguments  Keyword arguments   ot=0.0 : first sample for the time axis in secs.  dt=0.004 : sampling interval in secs.  nt=500 : number of time samples.  ox1=0.0 : first sample for the first spatial dimension in meters.  dx1=10.0 : sample interval for the first spatial dimension in meters.  nx1=100 : number of samples for the first spatial dimension.  ox2=0.0 : first sample for the second spatial dimension in meters.  dx2=10.0 : sample interval for the second spatial dimension in meters.  nx2=1 : number of samples for the second spatial dimension.  ox3=0.0 : second sample for the third spatial dimension in meters.  dx3=10.0 : sample interval for the third spatial dimension in meters.  nx3=1 : number of samples for the third spatial dimension.  ox4=0.0 : third sample for the fourth spatial dimension in meters.  dx4=10.0 : sample interval for the fourth spatial dimension in meters.  nx4=1 :number of samples for the fourth spatial dimension.  tau=[1.0, 1.6] : intercept traveltimes for each event.  `p1=[0.0000,-0.0001]  `p2=[0.0003, 0.0002]  `p3=[-0.0001,-0.0001]  `p4=[0.0001,-0.0000]  amp=[1.0,-1.0] : amplitudes for each parabolic event.  wavelet=\"ricker\" : wavelet used to model the parabolicr events.  f0=[20.0] : central frequency of wavelet for each parabolic event.   Example  julia   d ,   extent   =   SeisParabEvents ();   SeisPlot ( d );   Credits: Mauricio D Sacchi, 2015  source", 
+            "title": "SeisParabEvents"
+        }, 
+        {
+            "location": "/Modelling/page1/#seishypevents", 
+            "text": "#  Seismic.SeisHypEvents     Function .  SeisHypEvents(;  )  Generate two dimensional data  d  consisting of hyperbolic events.  Keyword arguments   ot::Real=0.0 : first sample for the time axis in secs.  dt::Real=0.004 : sampling interval in secs.  nt::Int=301 : number of time samples.  ox::Real=-1000.0 : first sample for spatial dimension in meters.  dx::Real=20.0 : sample interval for the spatial dimension in meters.  nx::Int=101 : number of samples for the spatial dimension.  tau::Vector{Real}=[0.2, 0.6, 0.9] : intercept traveltimes for each event.  vel::Vector{Real}=[1500.0, 2000.0, 3000.0] : rms velocities in m/s  apex::Vector{Real}=[0.0, 0.0, 0.0] : apex-shifts in meters.  amp::Vector{Real}=[1.0, -1.0, 1.0] : amplitudes for each event.  wavelet::String=\"ricker\" : wavelet used to model the events.  f0::Vector{Real}=[20.0] : central frequency of wavelet for each event.   Output   d::Array{Real, 2} : two dimensional data consisting of hyperbolic events.  extent::Extent : extent of the data  d .   Examples  julia   d ,   extent   =   SeisHypEvents ();   SeisPlot ( d ,   extent );  julia   d ,   extent   =   SeisHypEvents ( apex = [ 100 ,   200 ,   - 300 ],   f0 = [ 30 ,   20 ,   15 ]);  SeisPlot ( d ,   extent );   source", 
+            "title": "SeisHypEvents"
+        }, 
+        {
+            "location": "/Modelling/page1/#seisaddnoise_1", 
+            "text": "#  Seismic.SeisAcousticWave     Function .  shot = SeisAcousticWave(fidMtx, pos, isz, isx, f0, dt, tmax=2.0)  finite difference modeling of acoustic wave field, generate a common shot gather  Arguments   fidMtx :: FidMtx         : composite type of sparse matrix  pos    :: Array{Int64,2} : index of receivers, first column is the vertical index, second column contains horizontal index.  isz    :: Int64          : vertical index of source  isz    :: Int64          : horizontal index of source  f0     :: Float64        : dominant frequency of Ricker wavelet  dt     :: Float64        : size of time step   keywords Arguments   tmax=1.0  : length of simulation   Output   shot :: ShotGather : composite type for common shot gather   source", 
+            "title": "SeisAddNoise"
+        }, 
+        {
+            "location": "/Modelling/page1/#example", 
+            "text": "using   Seismic , PyPlot  SeisPlot ( randn ( 20 , 20 ))", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/Operators/page1/", 
+            "text": "Operators", 
+            "title": "Operators"
+        }, 
+        {
+            "location": "/Operators/page1/#operators", 
+            "text": "", 
+            "title": "Operators"
+        }, 
+        {
+            "location": "/Plotting/page1/", 
+            "text": "Plotting", 
+            "title": "Plotting"
+        }, 
+        {
+            "location": "/Plotting/page1/#plotting", 
+            "text": "", 
+            "title": "Plotting"
+        }, 
+        {
+            "location": "/ReadWrite/page1/", 
+            "text": "ReadWrite\n\n\nSeismic.jl provides seismic data reading, writing and plotting. Currently, The conversions between .seis data format and .segy, .su and madagascar data format, bellow we give a simple example about converting SEGY data format to our internal data format.\n\n\n\n\nExample\n\n\nusing\n \nPyPlot\n,\n \nSeismic\n,\nCompat\n\n\ndownload\n(\nhttp://certmapper.cr.usgs.gov/nersl/NPRA/seismic/1979/616_79/PROCESSED/616_79_PR.SGY\n,\n \n616_79_PR.SGY\n);\n\n\nSegyToSeis\n(\n616_79_PR.SGY\n,\n \n616_79_PR.seis\n);\n\n\nd\n,\n \nh\n,\n \ne\n \n=\n \nSeisRead\n(\n616_79_PR.seis\n);\n\n\nSeisPlot\n(\nd\n[\n1\n:\n500\n,\n \n:],\n \ne\n,\n \ncmap\n=\nPuOr\n,\n \nwbox\n=\n9\n);\n\n\n\n\n\n\n  \n% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n\n                                 \nDload\n  \nUpload\n   \nTotal\n   \nSpent\n    \nLeft\n  \nSpeed\n\n\n  \n0\n     \n0\n    \n0\n     \n0\n    \n0\n     \n0\n      \n0\n      \n0\n \n--:--:--\n \n--:--:--\n \n--:--:--\n     \n0\n\n  \n0\n     \n0\n    \n0\n     \n0\n    \n0\n     \n0\n      \n0\n      \n0\n \n--:--:--\n \n--:--:--\n \n--:--:--\n     \n0\n\n\n  \n0\n     \n0\n    \n0\n     \n0\n    \n0\n     \n0\n      \n0\n      \n0\n \n--:--:--\n \n--:--:--\n \n--:--:--\n     \n0\n\n  \n3\n \n11.3\nM\n    \n3\n  \n416\nk\n    \n0\n     \n0\n   \n280\nk\n      \n0\n  \n0\n:\n00\n:\n41\n  \n0\n:\n00\n:\n01\n  \n0\n:\n00\n:\n40\n  \n410\nk\n\n \n55\n \n11.3\nM\n   \n55\n \n6416\nk\n    \n0\n     \n0\n  \n2650\nk\n      \n0\n  \n0\n:\n00\n:\n04\n  \n0\n:\n00\n:\n02\n  \n0\n:\n00\n:\n02\n \n3288\nk\n\n\n100\n \n11.3\nM\n  \n100\n \n11.3\nM\n    \n0\n     \n0\n  \n3984\nk\n      \n0\n  \n0\n:\n00\n:\n02\n  \n0\n:\n00\n:\n02\n \n--:--:--\n \n4750\nk\n\n\nnumber\n \nof\n \ntraces\n:\n \n1908\n\n\nnumber\n \nof\n \nsamples\n \nper\n \ntrace\n:\n \n1500\n\n\n\n\n\n\nIn above example, we first download the data from USGS's website, then convert the data from SEGY data format to our internal format, finally the data are plotted.", 
+            "title": "ReadWrite"
+        }, 
+        {
+            "location": "/ReadWrite/page1/#readwrite", 
+            "text": "Seismic.jl provides seismic data reading, writing and plotting. Currently, The conversions between .seis data format and .segy, .su and madagascar data format, bellow we give a simple example about converting SEGY data format to our internal data format.", 
+            "title": "ReadWrite"
+        }, 
+        {
+            "location": "/ReadWrite/page1/#example", 
+            "text": "using   PyPlot ,   Seismic , Compat  download ( http://certmapper.cr.usgs.gov/nersl/NPRA/seismic/1979/616_79/PROCESSED/616_79_PR.SGY ,   616_79_PR.SGY );  SegyToSeis ( 616_79_PR.SGY ,   616_79_PR.seis );  d ,   h ,   e   =   SeisRead ( 616_79_PR.seis );  SeisPlot ( d [ 1 : 500 ,   :],   e ,   cmap = PuOr ,   wbox = 9 );      % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current \n                                  Dload    Upload     Total     Spent      Left    Speed \n\n   0       0      0       0      0       0        0        0   --:--:--   --:--:--   --:--:--       0 \n   0       0      0       0      0       0        0        0   --:--:--   --:--:--   --:--:--       0 \n\n   0       0      0       0      0       0        0        0   --:--:--   --:--:--   --:--:--       0 \n   3   11.3 M      3    416 k      0       0     280 k        0    0 : 00 : 41    0 : 00 : 01    0 : 00 : 40    410 k \n  55   11.3 M     55   6416 k      0       0    2650 k        0    0 : 00 : 04    0 : 00 : 02    0 : 00 : 02   3288 k  100   11.3 M    100   11.3 M      0       0    3984 k        0    0 : 00 : 02    0 : 00 : 02   --:--:--   4750 k  number   of   traces :   1908  number   of   samples   per   trace :   1500   In above example, we first download the data from USGS's website, then convert the data from SEGY data format to our internal format, finally the data are plotted.", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/Solvers/page1/", 
+            "text": "Solvers", 
+            "title": "Solvers"
+        }, 
+        {
+            "location": "/Solvers/page1/#solvers", 
+            "text": "", 
+            "title": "Solvers"
+        }, 
+        {
+            "location": "/Tools/page1/", 
+            "text": "Tools", 
+            "title": "Tools"
+        }, 
+        {
+            "location": "/Tools/page1/#tools", 
+            "text": "", 
+            "title": "Tools"
+        }, 
+        {
+            "location": "/Utils/page1/", 
+            "text": "Utils", 
+            "title": "Utils"
+        }, 
+        {
+            "location": "/Utils/page1/#utils", 
+            "text": "", 
+            "title": "Utils"
+        }, 
+        {
+            "location": "/Wavelets/page1/", 
+            "text": "Wavelets\n\n\nA collection of seismic data processing wavelet\n\n\n\n\nBerlage\n\n\n#\n\n\nSeismic.Berlage\n \n \nFunction\n.\n\n\nBerlage(; \nkeyword arguments\n)\n\n\n\n\n\nCreate a Berlage wavelet.\n\n\nArguments\n\n\nKeyword arguments\n\n\n\n\ndt::Real=0.002\n: sampling interval in secs.\n\n\nf0::Real=20.0\n: central frequency in Hz.\n\n\nm::Real=2\n: exponential parameter of Berlage wavelet.\n\n\nalpha::Real=180.0\n: alpha parameter of Berlage wavelet in rad/secs.\n\n\nphi0::Real\n: phase rotation in radians.\n\n\n\n\nExample\n\n\njulia\n \nw\n \n=\n \nBerlage\n();\n \nplot\n(\nw\n);\n\n\n\n\n\n\nReference\n\n\n\n\nAldridge, David F., 1990, The berlage wavelet: GEOPHYSICS, 55, 1508\u20131511.\n\n\n\n\nsource\n\n\n\n\nOrmsby\n\n\n#\n\n\nSeismic.Ormsby\n \n \nFunction\n.\n\n\nOrmsby(; \nkeyword arguments\n)\n\n\n\n\n\nCreate a Ormsby wavelet sampled every dt seconds with corner frequencies defined by the vector f = [f1, f2, f3, f4]. The final wavelet is multiplied by a Hamming window. \n\n\nArguments\n\n\nKeyword arguments\n\n\n\n\ndt::Real=0.002\n: sampling interval in secs.\n\n\n\n\nf::Vector{Real}=[2.0, 10.0, 40.0, 60.0]\n: corner frequencies in Hz.\n\n\n^\n\n\n1 |     \n*\n*\n*     |    *               *     |   *                 *     |  *                   *      | *                     *      \u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013-\n f        f1  f2           f3  f4\n\n\n\n\n\n\nExample\n\n\njulia\n \nw\n \n=\n \nOrmsby\n();\n \nplot\n(\nw\n);\n\n\n\n\n\n\nsource\n\n\nRicker\n\n\n#\n\n\nSeismic.Ricker\n \n \nFunction\n.\n\n\nRicker(; \nkeyword arguments\n)\n\n\n\n\n\nCreate a Ricker wavelet.\n\n\nKeyword arguments\n\n\n\n\ndt::Real=0.002\n: sampling interval in secs.\n\n\nf0::Real=20.0\n: central frequency in Hz.\n\n\n\n\nExamples\n\n\njulia\n \nw\n \n=\n \nRicker\n();\n \nplot\n(\nw\n);\n\n\njulia\n \nw\n \n=\n \nRicker\n(\ndt\n=\n0.004\n,\n \nf0\n=\n20\n);\n \nplot\n(\nw\n);\n\n\n\n\n\n\nReference\n\n\nSheriff, Robert, 2002, Encyclopedic Dictionary of Applied Geophysics, fourth ed.: Society of Exploration Geophysicists. Geophysical Reference Series No. 13.\n\n\nsource", 
+            "title": "Wavelets"
+        }, 
+        {
+            "location": "/Wavelets/page1/#wavelets", 
+            "text": "A collection of seismic data processing wavelet", 
+            "title": "Wavelets"
+        }, 
+        {
+            "location": "/Wavelets/page1/#berlage", 
+            "text": "#  Seismic.Berlage     Function .  Berlage(;  keyword arguments )  Create a Berlage wavelet.  Arguments  Keyword arguments   dt::Real=0.002 : sampling interval in secs.  f0::Real=20.0 : central frequency in Hz.  m::Real=2 : exponential parameter of Berlage wavelet.  alpha::Real=180.0 : alpha parameter of Berlage wavelet in rad/secs.  phi0::Real : phase rotation in radians.   Example  julia   w   =   Berlage ();   plot ( w );   Reference   Aldridge, David F., 1990, The berlage wavelet: GEOPHYSICS, 55, 1508\u20131511.   source", 
+            "title": "Berlage"
+        }, 
+        {
+            "location": "/Wavelets/page1/#ormsby", 
+            "text": "#  Seismic.Ormsby     Function .  Ormsby(;  keyword arguments )  Create a Ormsby wavelet sampled every dt seconds with corner frequencies defined by the vector f = [f1, f2, f3, f4]. The final wavelet is multiplied by a Hamming window.   Arguments  Keyword arguments   dt::Real=0.002 : sampling interval in secs.   f::Vector{Real}=[2.0, 10.0, 40.0, 60.0] : corner frequencies in Hz.  ^  1 |      * * *     |    *               *     |   *                 *     |  *                   *      | *                     *      \u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013\u2013-  f        f1  f2           f3  f4    Example  julia   w   =   Ormsby ();   plot ( w );   source", 
+            "title": "Ormsby"
+        }, 
+        {
+            "location": "/Wavelets/page1/#ricker", 
+            "text": "#  Seismic.Ricker     Function .  Ricker(;  keyword arguments )  Create a Ricker wavelet.  Keyword arguments   dt::Real=0.002 : sampling interval in secs.  f0::Real=20.0 : central frequency in Hz.   Examples  julia   w   =   Ricker ();   plot ( w );  julia   w   =   Ricker ( dt = 0.004 ,   f0 = 20 );   plot ( w );   Reference  Sheriff, Robert, 2002, Encyclopedic Dictionary of Applied Geophysics, fourth ed.: Society of Exploration Geophysicists. Geophysical Reference Series No. 13.  source", 
+            "title": "Ricker"
+        }, 
+        {
+            "location": "/Windows/page1/", 
+            "text": "Windows", 
+            "title": "Windows"
+        }, 
+        {
+            "location": "/Windows/page1/#windows", 
+            "text": "", 
+            "title": "Windows"
+        }
+    ]
+}

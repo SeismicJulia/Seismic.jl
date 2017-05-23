@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="SAIG group">
+  
+  <title>ReadWrite - Seismic.jl</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  <link href="../../assets/Documenter.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "ReadWrite";
+    var mkdocs_page_input_path = "ReadWrite/page1.md";
+    var mkdocs_page_url = "/ReadWrite/page1/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="../../assets/mathjaxhelper.js"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Seismic.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Introduction</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Imaging/page1/">Imaging</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Modelling/page1/">Modelling</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Operators/page1/">Operators</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Plotting/page1/">Plotting</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">ReadWrite</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#readwrite">ReadWrite</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Solvers/page1/">Solvers</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Tools/page1/">Tools</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Utils/page1/">Utils</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Wavelets/page1/">Wavelets</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../Windows/page1/">Windows</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Seismic.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>ReadWrite</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='ReadWrite-1'></a></p>
+<h1 id="readwrite">ReadWrite</h1>
+<p>Seismic.jl provides seismic data reading, writing and plotting. Currently, The conversions between .seis data format and .segy, .su and madagascar data format, bellow we give a simple example about converting SEGY data format to our internal data format.</p>
+<p><a id='Example-1'></a></p>
+<h2 id="example">Example</h2>
+<div class="codehilite"><pre><span></span><span class="k">using</span> <span class="n">PyPlot</span><span class="p">,</span> <span class="n">Seismic</span><span class="p">,</span><span class="n">Compat</span>
+<span class="n">download</span><span class="p">(</span><span class="s">&quot;http://certmapper.cr.usgs.gov/nersl/NPRA/seismic/1979/616_79/PROCESSED/616_79_PR.SGY&quot;</span><span class="p">,</span> <span class="s">&quot;616_79_PR.SGY&quot;</span><span class="p">);</span>
+<span class="n">SegyToSeis</span><span class="p">(</span><span class="s">&quot;616_79_PR.SGY&quot;</span><span class="p">,</span> <span class="s">&quot;616_79_PR.seis&quot;</span><span class="p">);</span>
+<span class="n">d</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">SeisRead</span><span class="p">(</span><span class="s">&quot;616_79_PR.seis&quot;</span><span class="p">);</span>
+<span class="n">SeisPlot</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span> <span class="p">:],</span> <span class="n">e</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">&quot;PuOr&quot;</span><span class="p">,</span> <span class="n">wbox</span><span class="o">=</span><span class="mi">9</span><span class="p">);</span>
+</pre></div>
+
+
+<div class="codehilite"><pre><span></span>  <span class="c1">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span>
+                                 <span class="nv">Dload</span>  <span class="nv">Upload</span>   <span class="nv">Total</span>   <span class="nv">Spent</span>    <span class="nv">Left</span>  <span class="nv">Speed</span>
+
+  <span class="mi">0</span>     <span class="mi">0</span>    <span class="mi">0</span>     <span class="mi">0</span>    <span class="mi">0</span>     <span class="mi">0</span>      <span class="mi">0</span>      <span class="mi">0</span> <span class="s s-Atom">--:--:--</span> <span class="s s-Atom">--:--:--</span> <span class="s s-Atom">--:--:--</span>     <span class="mi">0</span>
+  <span class="mi">0</span>     <span class="mi">0</span>    <span class="mi">0</span>     <span class="mi">0</span>    <span class="mi">0</span>     <span class="mi">0</span>      <span class="mi">0</span>      <span class="mi">0</span> <span class="s s-Atom">--:--:--</span> <span class="s s-Atom">--:--:--</span> <span class="s s-Atom">--:--:--</span>     <span class="mi">0</span>
+
+  <span class="mi">0</span>     <span class="mi">0</span>    <span class="mi">0</span>     <span class="mi">0</span>    <span class="mi">0</span>     <span class="mi">0</span>      <span class="mi">0</span>      <span class="mi">0</span> <span class="s s-Atom">--:--:--</span> <span class="s s-Atom">--:--:--</span> <span class="s s-Atom">--:--:--</span>     <span class="mi">0</span>
+  <span class="mi">3</span> <span class="mf">11.3</span><span class="nv">M</span>    <span class="mi">3</span>  <span class="mi">416</span><span class="s s-Atom">k</span>    <span class="mi">0</span>     <span class="mi">0</span>   <span class="mi">280</span><span class="s s-Atom">k</span>      <span class="mi">0</span>  <span class="mi">0</span><span class="s s-Atom">:</span><span class="mi">00</span><span class="s s-Atom">:</span><span class="mi">41</span>  <span class="mi">0</span><span class="s s-Atom">:</span><span class="mi">00</span><span class="s s-Atom">:</span><span class="mi">01</span>  <span class="mi">0</span><span class="s s-Atom">:</span><span class="mi">00</span><span class="s s-Atom">:</span><span class="mi">40</span>  <span class="mi">410</span><span class="s s-Atom">k</span>
+ <span class="mi">55</span> <span class="mf">11.3</span><span class="nv">M</span>   <span class="mi">55</span> <span class="mi">6416</span><span class="s s-Atom">k</span>    <span class="mi">0</span>     <span class="mi">0</span>  <span class="mi">2650</span><span class="s s-Atom">k</span>      <span class="mi">0</span>  <span class="mi">0</span><span class="s s-Atom">:</span><span class="mi">00</span><span class="s s-Atom">:</span><span class="mi">04</span>  <span class="mi">0</span><span class="s s-Atom">:</span><span class="mi">00</span><span class="s s-Atom">:</span><span class="mi">02</span>  <span class="mi">0</span><span class="s s-Atom">:</span><span class="mi">00</span><span class="s s-Atom">:</span><span class="mi">02</span> <span class="mi">3288</span><span class="s s-Atom">k</span>
+<span class="mi">100</span> <span class="mf">11.3</span><span class="nv">M</span>  <span class="mi">100</span> <span class="mf">11.3</span><span class="nv">M</span>    <span class="mi">0</span>     <span class="mi">0</span>  <span class="mi">3984</span><span class="s s-Atom">k</span>      <span class="mi">0</span>  <span class="mi">0</span><span class="s s-Atom">:</span><span class="mi">00</span><span class="s s-Atom">:</span><span class="mi">02</span>  <span class="mi">0</span><span class="s s-Atom">:</span><span class="mi">00</span><span class="s s-Atom">:</span><span class="mi">02</span> <span class="s s-Atom">--:--:--</span> <span class="mi">4750</span><span class="s s-Atom">k</span>
+<span class="s s-Atom">number</span> <span class="s s-Atom">of</span> <span class="nn">traces</span><span class="p">:</span> <span class="mi">1908</span>
+<span class="s s-Atom">number</span> <span class="s s-Atom">of</span> <span class="s s-Atom">samples</span> <span class="s s-Atom">per</span> <span class="nn">trace</span><span class="p">:</span> <span class="mi">1500</span>
+</pre></div>
+
+
+<p>In above example, we first download the data from USGS's website, then convert the data from SEGY data format to our internal format, finally the data are plotted. <img alt="" src="../usgs.svg" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../Solvers/page1/" class="btn btn-neutral float-right" title="Solvers">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../Plotting/page1/" class="btn btn-neutral" title="Plotting"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../../Plotting/page1/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../Solvers/page1/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
