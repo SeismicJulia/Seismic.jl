@@ -1,14 +1,14 @@
 """
 **SeisWindow**
 *Window a seis file using header words.*
-**IN**   
+**IN**
 * in
 * out
 * key=[]
 * minval=[]
 * maxval=[]
 * note that windowing along the time axis is achieved by using the key "t".
-**OUT**  
+**OUT**
 *Credits: AS, 2015*
 """
 
@@ -21,24 +21,29 @@ function SeisWindow(in::String,out::String;key=[],minval=[],maxval=[])
 	if key[ikey] == "t"
 	    tmin = minval[ikey]
 	    tmax = maxval[ikey]
+	    println("tmin= ",tmin," tmax= ",tmax)
 	end
     end
+
+#itmin is the sample at which tmin is saved
     itmin = convert(Int32,round((tmin - extent.o1)/extent.d1) + 1)
     if (itmin < 1)
-	itmin = 1
+	     itmin = 1
     end
-    itmax = convert(Int32,round((tmax - extent.o1)/extent.d1) + 1)  
+    itmax = convert(Int32,round((tmax - extent.o1)/extent.d1))# + 1)
     if (itmax) > extent.n1
-	itmax = extent.n1
+	     itmax = extent.n1
     end
+println("itmin= ",itmin," itmax= ",itmax)
+
     SeisWindowHeaders(in, out; key=key, minval=minval, maxval=maxval, tmin=tmin,
                       tmax=tmax)
     FetchTraces(in,out;itmin=itmin,itmax=itmax)
     tmp = join(["tmp_SeisWindow_",string(round(Int,rand()*100000))])
     @compat SeisProcessHeaders(out, tmp, [UpdateHeader],
                                [Dict(:itmin=>itmin,:itmax=>itmax)])
-    filename_h_tmp = join([DATAPATH tmp "@headers@"])	
-    filename_h_out = join([DATAPATH out "@headers@"])	
+    filename_h_tmp = join([DATAPATH tmp "@headers@"])
+    filename_h_out = join([DATAPATH out "@headers@"])
     cp(filename_h_tmp,filename_h_out,remove_destination=true);
     rm(filename_h_tmp);
     #rm(tmp);
@@ -47,6 +52,7 @@ end
 function FetchTraces(in::String, out::String; ntrace=500, itmin=round(Int,1),
                      itmax=round(Int,9999999999))
     NX = GetNumTraces(out)
+	println("NX in FetchTraces= ",NX)
     itrace = round(Int,1)
     filename_data_in = ParseDataName(in)
     DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
@@ -55,6 +61,7 @@ function FetchTraces(in::String, out::String; ntrace=500, itmin=round(Int,1),
     stream_out  = open(filename_data_out,"w")
     extent = ReadTextHeader(in)
     nt = extent.n1
+
     if itmin < 1
 	itmin = round(Int,1)
     end
@@ -70,12 +77,13 @@ function FetchTraces(in::String, out::String; ntrace=500, itmin=round(Int,1),
 	h = SeisReadHeaders(out,group="some",itrace=itrace,ntrace=ntrace)
 	d = zeros(Float32,itmax-itmin+1,ntrace)
 	SeekTraces!(d,stream_in,h,itmin,itmax,nt,round(Int,ntrace))
+
 	write(stream_out,d)
 	close(stream_out)
 	itrace += ntrace
     end
     close(stream_in)
-end	
+end
 
 function SeekTraces!{T}(d::AbstractArray{T,2}, stream_in::IOStream,
                         h::Array{Header,1},itmin,itmax,nt,ntrace)
@@ -85,7 +93,7 @@ function SeekTraces!{T}(d::AbstractArray{T,2}, stream_in::IOStream,
 	seek(stream_in,position)
 	d1 = read(stream_in,Float32,nt)
 	for it = itmin : itmax
-	    d[it - itmin + 1,ix] = d1[it]	
+	    d[it - itmin + 1,ix] = d1[it]
 	end
     end
     nothing

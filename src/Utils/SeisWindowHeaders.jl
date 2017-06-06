@@ -7,13 +7,13 @@ function SeisWindowHeaders(in, out; key=[], minval=[], maxval=[], tmin=0,
                                update_tracenum=false)
     DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
     filename_d_out = join([DATAPATH out "@data@"])
-    filename_h_out = join([DATAPATH out "@headers@"])	
+    filename_h_out = join([DATAPATH out "@headers@"])
     @compat nhead = length(fieldnames(Header))
     stream_h = open(filename_h_out)
     nx = round(Int,filesize(stream_h)/(nhead*4))
     h = GrabHeader(stream_h,1)
     close(stream_h)
-    nt = convert(Int64,round((tmax - tmin)/h.d1)) + 1
+    nt = convert(Int64,round((tmax - tmin)/h.d1)) #+ 1
     if nt > h.n1
 	nt = h.n1
     end
@@ -23,7 +23,7 @@ function SeisWindowHeaders(in, out; key=[], minval=[], maxval=[], tmin=0,
                     convert(Float32,0), convert(Float32,h.d1),
                     convert(Float32,1), convert(Float32,1), convert(Float32,1),
                     convert(Float32,1), "Time", "Trace Number", "", "", "", "s",
-                    "index", "", "", "", "")	
+                    "index", "", "", "", "")
     WriteTextHeader(out,extent,"native_float",4,filename_d_out,filename_h_out)
 
 end
@@ -50,13 +50,15 @@ end
 function RejectHeaders(h_in::Array{Header,1}, key::Array{String,1},
                        minval::Array{Float32,1}, maxval::Array{Float32,1},
                        nkeys, nx)
-    h_out = Header[]	
+    h_out = Header[]
     keep = true
     key_val = 0f0
     for j=1:nx
 	keep = true
 	for ikey=1:nkeys
+	#println("In RejectHeaders, ikey= ",ikey," field= ",getfield(h_in[j],Symbol(key[ikey]))," ",minval[ikey]," ",maxval[ikey])
 	    key_val = convert(Float32,getfield(h_in[j],Symbol(key[ikey])))
+
 	    if (key_val < minval[ikey] || key_val > maxval[ikey])
 		keep = false
 	    end
@@ -64,6 +66,6 @@ function RejectHeaders(h_in::Array{Header,1}, key::Array{String,1},
 	if (keep==true)
 	    h_out = push!(h_out,h_in[j])
 	end
-    end 	
+    end
     return h_out
 end

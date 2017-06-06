@@ -4,7 +4,7 @@ Seismic signal analysis and imaging
 
 ---
 
-## Overview
+## Overview 
 
 Seismic.jl provides tools to **process**, **image**, and **plot** reflection seismic data in the Julia language.
 

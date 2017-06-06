@@ -43,7 +43,7 @@ julia> w = Berlage(); plot(w);
   * Aldridge, David F., 1990, The berlage wavelet: GEOPHYSICS, 55, 1508–1511.
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Wavelets/Berlage.jl#L1-L24' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Wavelets/Berlage.jl#L1-L24' class='documenter-source'>source</a><br>
 
 
 <a id='Ormsby-1'></a>
@@ -81,7 +81,7 @@ julia> w = Ormsby(); plot(w);
 ```
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Wavelets/Ormsby.jl#L1-L28' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Wavelets/Ormsby.jl#L1-L28' class='documenter-source'>source</a><br>
 
 
 ##Ricker
@@ -114,5 +114,5 @@ julia> w = Ricker(dt=0.004, f0=20); plot(w);
 Sheriff, Robert, 2002, Encyclopedic Dictionary of Applied Geophysics, fourth ed.: Society of Exploration Geophysicists. Geophysical Reference Series No. 13.
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Wavelets/Ricker.jl#L1-L19' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Wavelets/Ricker.jl#L1-L19' class='documenter-source'>source</a><br>
 

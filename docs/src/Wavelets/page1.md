@@ -12,7 +12,7 @@ Seismic.Berlage
 Seismic.Ormsby
 ```
 
-##Ricker
+## Ricker
 ```@docs
 Seismic.Ricker
 ```

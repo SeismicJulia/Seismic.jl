@@ -3,7 +3,7 @@
 
 *Update headers with Geometry information beginning with shot and receiver coordinates (calculation of midpoints, absolute and vector offsets, azimuth, coordinate rotation, and binning of headers values)*
 
-**IN**    
+**IN**
 * in: input filename (the .seish file is updated)
 * ang=90 inline direction measured in degrees CC from East
 * gamma=1 (vp/vs ratio for PS Asymptotic Conversion Point gathers (use gamma=1 for PP data))
@@ -30,34 +30,39 @@
 
 **OUT**
 
-*Credits: A. Stanton, 2015*
+*Credits: A. Stanton, F.Carozzi,2017*
 
 """
 
 function SeisGeometry(in; ang=90, gamma=1, osx=0, osy=0, ogx=0, ogy=0, omx=0,
                       omy=0, ohx=0, ohy=0, oh=0, oaz=0, dsx=1, dsy=1, dgx=1,
                       dgy=1, dmx=1, dmy=1, dhx=1, dhy=1, dh=1, daz=1)
-    
+
+
+
     rad2deg = 180/pi
     deg2rad = pi/180
     gammainv = 1/gamma
-    if (ang > 90) 
+    if (ang > 90)
 	ang2=-deg2rad*(ang-90)
-    else 
+    else
 	ang2=deg2rad*(90-ang)
     end
-    
+
     filename = ParseHeaderName(in)
     stream = open(filename,"r+")
     nhead = 27
     @compat nx = round(Int,filesize(stream)/(4*length(fieldnames(Header))))
+
+    naz=convert(Int32,360/daz)
+
     for j=1:nx
 	h = GrabHeader(stream,j)
 	h.hx = h.gx - h.sx
 	h.hy = h.gy - h.sy
 	h.h = sqrt((h.hx^2) + (h.hy^2))
 	h.az = rad2deg*atan2((h.gy-h.sy),(h.gx-h.sx))
-	if (h.az < 0) 
+	if (h.az < 0)
 	    h.az += 360.0
 	end
 	h.mx = h.sx + h.hx/(1 + gammainv);
@@ -79,9 +84,19 @@ function SeisGeometry(in; ang=90, gamma=1, osx=0, osy=0, ogx=0, ogy=0, omx=0,
 	h.ihx = convert(Int32,round((hx_rot-ohx)/dhx))
 	h.ihy = convert(Int32,round((hy_rot-ohy)/dhy))
 	h.ih = convert(Int32,round((h.h-oh)/dh))
-	h.iaz = convert(Int32,round((h.az-oaz)/daz))
+
+
+	#if ((h.az-oaz)/daz>=(naz-1))
+	#h.az=h.az-(naz-1)*daz
+	#end
+
+	h.iaz = convert(Int32,round((h.az-oaz)/daz))<naz?convert(Int32,round((h.az-oaz)/daz)):0
+#	if(h.iaz==naz)
+#	h.iaz=0
+	#println(h.iaz)
+	#end
 	PutHeader(stream,h,j)
-    end
-    close(stream)
-    
+  end
+  close(stream)
+
 end

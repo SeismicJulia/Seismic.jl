@@ -59,7 +59,7 @@ julia> d,extent = SeisLinearEvents(); SeisPlot(d);
 Credits: Aaron Stanton, 2015
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisLinearEvents.jl#L1-L40' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisLinearEvents.jl#L1-L40' class='documenter-source'>source</a><br>
 
 
 <a id='SeisAddNoise-1'></a>
@@ -107,7 +107,7 @@ SeisPlot([d dn], extent); MeasureSNR(d, dn, db=true)
 Credits: Juan I. Sabbione, 2016
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisAddNoise.jl#L1-L27' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisAddNoise.jl#L1-L27' class='documenter-source'>source</a><br>
 
 
 <a id='SeisParabEvents-1'></a>
@@ -162,7 +162,7 @@ julia> d, extent = SeisParabEvents(); SeisPlot(d);
 Credits: Mauricio D Sacchi, 2015
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisParabEvents.jl#L1-L40' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisParabEvents.jl#L1-L40' class='documenter-source'>source</a><br>
 
 
 <a id='SeisHypEvents-1'></a>
@@ -207,7 +207,7 @@ SeisPlot(d, extent);
 ```
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisHypEvents.jl#L1-L30' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisHypEvents.jl#L1-L30' class='documenter-source'>source</a><br>
 
 
 <a id='SeisAddNoise-2'></a>
@@ -243,7 +243,7 @@ finite difference modeling of acoustic wave field, generate a common shot gather
   * `shot :: ShotGather`: composite type for common shot gather
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/1a25a1bbf48a024485d09f38056cfe737119f381/src/Modelling/SeisAcousticWave.jl#L445-L463' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisAcousticWave.jl#L445-L463' class='documenter-source'>source</a><br>
 
 
 <a id='Example-1'></a>

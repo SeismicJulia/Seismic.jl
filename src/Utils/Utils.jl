@@ -1,16 +1,20 @@
-export SeisBin,
-SeisGeometry,
+export SeisGeometry,
 SeisPatch,
+SeisWindowPatch,
+SeisWindowHeadersPatch,
 SeisPatchProcess,
 SeisProcess,
 SeisProcessHeaders,
 SeisSort,
 SeisUnPatch,
 SeisWindow,
-SeisWindowHeaders
-include("SeisBin.jl")
+SeisWindowHeaders,
+SeisBinData,
+SeisBinHeaders
 include("SeisGeometry.jl")
 include("SeisPatch.jl")
+include("SeisWindowPatch.jl")
+include("SeisWindowHeadersPatch.jl")
 include("SeisUnPatch.jl")
 include("SeisPatchProcess.jl")
 include("SeisProcess.jl")
@@ -18,3 +22,5 @@ include("SeisProcessHeaders.jl")
 include("SeisSort.jl")
 include("SeisWindow.jl")
 include("SeisWindowHeaders.jl")
+include("SeisBinData.jl")
+include("SeisBinHeaders.jl")
