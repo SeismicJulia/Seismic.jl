@@ -9,8 +9,8 @@ function MatrixMultiplyOp(in,adj;matrix=1)
 	return out
 end
 
-function MatrixMultiplyOp(in,h::Array{Header,1};adj=false,matrix=1)
-	
+function MatrixMultiplyOp(in,h::Array{Header,1},e;adj=false,matrix=1)
+
 	if (adj)
 		out = zeros(Float32,size(matrix,2),size(in,2))
 	else

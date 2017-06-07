@@ -39,7 +39,7 @@
 *Credits: A. Stanton, F. Carozzi, 2017*
 """
 
-function SeisPatch(in::String, out::String; style="sxsygxgy", min_isx=0,
+function SeisPatch(in::AbstractString, out::AbstractString; style="sxsygxgy", min_isx=0,
                    max_isx=0, min_isy=0, max_isy=0, min_igx=0, max_igx=0,
                    min_igy=0, max_igy=0, min_imx=0, max_imx=0, min_imy=0,
                    max_imy=0, min_ihx=0, max_ihx=0, min_ihy=0, max_ihy=0,

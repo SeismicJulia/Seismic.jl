@@ -14,7 +14,7 @@ function SeisSmooth2(A,h::Array{Header,1};L1=7,L2=7)
     return A,h
 end
 
-function SeisSmooth2(in::String,out::String;key=["iaz";"iang"],L1=7,L2=7,Nrepeat=1)
+function SeisSmooth2(in::AbstractString,out::AbstractString;key=["iaz";"iang"],L1=7,L2=7,Nrepeat=1)
     d, h, ext = SeisRead(in)
     nang = size(d,3)
     for iang = 1 : nang
@@ -23,7 +23,7 @@ function SeisSmooth2(in::String,out::String;key=["iaz";"iang"],L1=7,L2=7,Nrepeat
 	d[:,1,iang,1,:] = A
     end
     SeisWrite(out,d,h,ext)
-    
+
     #@compat parameters = Dict(:L1=>L1,:L2=>L2)
     #SeisProcess(in,out,[SeisSmooth2],[parameters];group="gather",key=key)
 end

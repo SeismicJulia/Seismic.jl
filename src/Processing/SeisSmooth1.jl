@@ -13,7 +13,7 @@ function SeisSmooth1(A,h::Array{Header,1};L=7)
 	return A,h
 end
 
-function SeisSmooth1(in::String,out::String;L=7)
+function SeisSmooth1(in::AbstractString,out::AbstractString;L=7)
 	@compat parameters = Dict(:L=>L)
 	SeisProcess(in,out,[SeisSmooth1],[parameters];group="some",ntrace=100000)
 end
