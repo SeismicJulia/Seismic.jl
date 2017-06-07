@@ -12,7 +12,7 @@
 *Credits: AS, 2015*
 """
 
-function SeisWindow(in::String,out::String;key=[],minval=[],maxval=[])
+function SeisWindow(in::AbstractString,out::AbstractString;key=[],minval=[],maxval=[])
     DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
     extent = ReadTextHeader(in)
     tmin = extent.o1
@@ -49,7 +49,7 @@ println("itmin= ",itmin," itmax= ",itmax)
     #rm(tmp);
 end
 
-function FetchTraces(in::String, out::String; ntrace=500, itmin=round(Int,1),
+function FetchTraces(in::AbstractString, out::AbstractString; ntrace=500, itmin=round(Int,1),
                      itmax=round(Int,9999999999))
     NX = GetNumTraces(out)
 	println("NX in FetchTraces= ",NX)

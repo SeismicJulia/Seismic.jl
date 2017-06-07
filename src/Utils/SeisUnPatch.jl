@@ -39,7 +39,7 @@
 *Credits: A. Stanton, F Carozzi, 2017*
 """
 
-function SeisUnPatch(patch_names::Array{String,1},out::String;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0,nt=0,ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1)
+function SeisUnPatch(patch_names::Array{AbstractString,1},out::AbstractString;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0,nt=0,ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1)
 
 
     if (style == "sxsygxgy")

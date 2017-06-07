@@ -6,9 +6,9 @@ function SeisBandPass(d;dt=0.001,fa=0,fb=0,fc=60,fd=80)
 	df = 1/nf/dt
 	nw = round(Int,nf/2) + 1
 
-	if(fd*dt*nf < nw) 
+	if(fd*dt*nf < nw)
 		iw_max = round(Int,floor(fd*dt*nf))
-	else 
+	else
 		iw_max = round(Int,floor(0.5/dt))
 	end
 
@@ -33,10 +33,10 @@ function SeisBandPass(d;dt=0.001,fa=0,fb=0,fc=60,fd=80)
 	end
 	m[iw_max:end,:] = 0.
 
-	# symmetries    
+	# symmetries
 	for iw=nw+1:nf
 		m[iw,:] = conj(m[nf-iw+2,:])
-	end 
+	end
 	d = real(bfft(m,1)/sqrt(size(m,1)))
 
 	return d[1:nt,1:nx];
@@ -59,7 +59,7 @@ function SeisBandPass(d,h::Array{Header,1};dt=0.001,fa=0,fb=0,fc=60,fd=80)
 
 end
 
-function SeisBandPass(in::String,out::String;fa=0,fb=0,fc=60,fd=80)
+function SeisBandPass(in::AbstractString,out::AbstractString;fa=0,fb=0,fc=60,fd=80)
 
 	@compat parameters = Dict(:fa=>fa,:fb=>fb,:fc=>fc,:fd=>fd)
 	SeisProcess(in,out,[SeisBandPass],[parameters];group="some")

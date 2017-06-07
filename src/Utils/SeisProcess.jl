@@ -1,4 +1,4 @@
-function SeisProcess(in::String,out::String,operators,parameters;key=[])
+function SeisProcess(in::AbstractString,out::AbstractString,operators,parameters;key=[])
     # Run processing flows that read and write from disk
     #
     # f is a function that has the following syntax: d2,h2 = f(d1,h1,param),
@@ -53,7 +53,7 @@ function SeisProcess(in::String,out::String,operators,parameters;key=[])
 
 end
 
-function SeisProcess(in::Array{String,1}, out::Array{String,1}, operators,
+function SeisProcess(in::Array{AbstractString,1}, out::Array{AbstractString,1}, operators,
                      parameters;key=[])
 
     for j = 1 : length(in)
@@ -62,7 +62,7 @@ function SeisProcess(in::Array{String,1}, out::Array{String,1}, operators,
 
 end
 
-function SeisProcess(in1::String, in2::String, out::String, operators,
+function SeisProcess(in1::AbstractString, in2::AbstractString, out::AbstractString, operators,
                      parameters; key=[])
     # Run processing flows that read 2 inputs and write 1 output
     #

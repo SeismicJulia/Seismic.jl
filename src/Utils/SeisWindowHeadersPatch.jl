@@ -96,7 +96,7 @@ function WindowHeadersPatch(h_in;key=[],minval=[],maxval=[])
 
 end
 
-function RejectHeadersPatch(h_in::Array{Header,1}, key::Array{String,1},
+function RejectHeadersPatch(h_in::Array{Header,1}, key::Array{AbstractString,1},
                        minval::Array{Float32,1}, maxval::Array{Float32,1},
                        nkeys, nx)
     h_out = Header[]
