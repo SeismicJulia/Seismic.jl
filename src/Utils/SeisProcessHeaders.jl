@@ -2,7 +2,7 @@ function SeisProcessHeaders(in, out, functions, parameters;
                             group="some", key=[], ntrace=1000000,
                             update_tracenum=true)
 
-println("when ",in,"key>>",key)
+
     if (group=="all")
 	h1 = SeisReadHeaders(in,group=group,key=key,itrace=1,ntrace=ntrace)
 	for ifunc = 1 : length(functions)

@@ -1,14 +1,19 @@
 """
-**SeisWindow**
-*Window a seis file using header words.*
-**IN**
-* in
-* out
-* key=[]
-* minval=[]
-* maxval=[]
-* note that windowing along the time axis is achieved by using the key "t".
-**OUT**
+    SeisWindow(in,out;<keyword arguments>)
+
+Window a seis file using header words.
+
+# Arguments
+* `in::AbstractString`: filename of input
+* `out::AbstractString`: filename of output
+
+# Keyword arguments
+* `key`
+* `minval`
+* `maxval`
+
+note that windowing along the time axis is achieved by using the key "t".
+
 *Credits: AS, 2015*
 """
 

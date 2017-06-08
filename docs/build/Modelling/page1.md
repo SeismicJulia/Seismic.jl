@@ -1,7 +1,7 @@
 
-<a id='Generating-Synthetic-data-set-1'></a>
+<a id='Modelling-1'></a>
 
-# Generating Synthetic data set
+# Modelling
 
 
 Seismic.jl provides various ways to generate synthetic data set, like multi-dimensional linear, parabola, hyperbola events and finite-difference solver for acoustic wave equation (Currently only 2D is supported)
@@ -42,10 +42,10 @@ Generate five dimensional data `d` consisting of linear events.
   * `dx4=10.0`: sample interval for the fourth spatial dimension in meters.
   * `nx4=1`:number of samples for the fourth spatial dimension.
   * `tau=[1.0, 1.6]`: intercept traveltimes for each event.
-  * `p1=[0.0000,-0.0001]
-  * `p2=[0.0003, 0.0002]
-  * `p3=[-0.0001,-0.0001]
-  * `p4=[0.0001,-0.0000]
+  * `p1=[0.0000,-0.0001]`
+  * `p2=[0.0003, 0.0002]`
+  * `p3=[-0.0001,-0.0001]`
+  * `p4=[0.0001,-0.0000]`
   * `amp=[1.0,-1.0]`: amplitudes for each linear event.
   * `wavelet="ricker"`: wavelet used to model the linear events.
   * `f0=[20.0]`: central frequency of wavelet for each linear event.
@@ -59,7 +59,7 @@ julia> d,extent = SeisLinearEvents(); SeisPlot(d);
 Credits: Aaron Stanton, 2015
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisLinearEvents.jl#L1-L40' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisLinearEvents.jl#L1-L40' class='documenter-source'>source</a><br>
 
 
 <a id='SeisAddNoise-1'></a>
@@ -107,7 +107,7 @@ SeisPlot([d dn], extent); MeasureSNR(d, dn, db=true)
 Credits: Juan I. Sabbione, 2016
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisAddNoise.jl#L1-L27' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisAddNoise.jl#L1-L27' class='documenter-source'>source</a><br>
 
 
 <a id='SeisParabEvents-1'></a>
@@ -162,7 +162,7 @@ julia> d, extent = SeisParabEvents(); SeisPlot(d);
 Credits: Mauricio D Sacchi, 2015
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisParabEvents.jl#L1-L40' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisParabEvents.jl#L1-L40' class='documenter-source'>source</a><br>
 
 
 <a id='SeisHypEvents-1'></a>
@@ -207,7 +207,7 @@ SeisPlot(d, extent);
 ```
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisHypEvents.jl#L1-L30' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisHypEvents.jl#L1-L30' class='documenter-source'>source</a><br>
 
 
 <a id='SeisAddNoise-2'></a>
@@ -243,7 +243,7 @@ finite difference modeling of acoustic wave field, generate a common shot gather
   * `shot :: ShotGather`: composite type for common shot gather
 
 
-<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Modelling/SeisAcousticWave.jl#L445-L463' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisAcousticWave.jl#L445-L463' class='documenter-source'>source</a><br>
 
 
 <a id='Example-1'></a>
