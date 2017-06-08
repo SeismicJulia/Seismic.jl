@@ -10,9 +10,9 @@ Seismic signal analysis and imaging
 ---
 
 
-<a id='Overview-que-esto-1'></a>
+<a id='Overview-1'></a>
 
-## Overview que esto
+## Overview
 
 
 Seismic.jl provides tools to **process**, **image**, and **plot** reflection seismic data in the Julia language.
@@ -67,7 +67,16 @@ Pkg.add("Seismic")
 - [`Seismic.Ricker`](Wavelets/page1.md#Seismic.Ricker)
 - [`Seismic.SeisAcousticWave`](Modelling/page1.md#Seismic.SeisAcousticWave)
 - [`Seismic.SeisAddNoise`](Modelling/page1.md#Seismic.SeisAddNoise)
+- [`Seismic.SeisBinData`](Utils/page1.md#Seismic.SeisBinData)
+- [`Seismic.SeisBinHeaders`](Utils/page1.md#Seismic.SeisBinHeaders)
+- [`Seismic.SeisGeometry`](Utils/page1.md#Seismic.SeisGeometry)
 - [`Seismic.SeisHypEvents`](Modelling/page1.md#Seismic.SeisHypEvents)
 - [`Seismic.SeisLinearEvents`](Modelling/page1.md#Seismic.SeisLinearEvents)
 - [`Seismic.SeisParabEvents`](Modelling/page1.md#Seismic.SeisParabEvents)
+- [`Seismic.SeisPatch`](Utils/page1.md#Seismic.SeisPatch)
+- [`Seismic.SeisPlot`](Plotting/page1.md#Seismic.SeisPlot)
+- [`Seismic.SeisPlotCoordinates`](Plotting/page1.md#Seismic.SeisPlotCoordinates)
+- [`Seismic.SeisSort`](Utils/page1.md#Seismic.SeisSort)
+- [`Seismic.SeisUnPatch`](Utils/page1.md#Seismic.SeisUnPatch)
+- [`Seismic.SeisWindow`](Utils/page1.md#Seismic.SeisWindow)
 

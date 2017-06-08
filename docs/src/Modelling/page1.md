@@ -1,4 +1,4 @@
-# Generating Synthetic data set
+# Modelling
 Seismic.jl provides various ways to generate synthetic data set, like multi-dimensional linear, parabola, hyperbola events and finite-difference solver for acoustic wave equation (Currently only 2D is supported)
 
 
