@@ -32,7 +32,7 @@ function SeisPatch(in::AbstractString, out::AbstractString; style="sxsygxgy", mi
                    ix1_WL=9e9, ix1_WO=0, ix2_WL=9e9, ix2_WO=0, ix3_WL=9e9,
                    ix3_WO=0, ix4_WL=9e9, ix4_WO=0)
 
-#modifique el n1=nhy,n2=nhx,n3=mhy,n4=mhx en SeisBin por lo cual ahora deberia tb estar al reves. Modifico solamente mxmyhxhy
+
 
 if (style == "sxsygxgy")
   key = ["t","isx","isy","igx","igy"]
@@ -133,7 +133,7 @@ end
   ix2_WL = ix2_WL > nx2 ? nx2 : ix2_WL
   ix3_WL = ix3_WL > nx3 ? nx3 : ix3_WL
   ix4_WL = ix4_WL > nx4 ? nx4 : ix4_WL
-# println(it_WL," ",ix1_WL," ",ix2_WL," ",ix3_WL," ",ix4_WL)
+
   tmax = ot + dt*nt
   it_NW = Int(floor(nt/(it_WL-it_WO)))
   ix1_NW = Int(floor(nx1/(ix1_WL-ix1_WO)))
@@ -168,7 +168,7 @@ NW=it_NW*ix1_NW*ix2_NW*ix3_NW*ix4_NW
 println("Number of patches=",NW)
 
 patch_list = Patch[]
-patch_names = String[]
+patch_names = AbstractString[]
 for it_W = 1 : it_NW
 	mint = ot + dt*(it_W-1)*(it_WL-it_WO)
 	maxt = mint + dt*(it_WL - 1)
@@ -207,7 +207,6 @@ for it_W = 1 : it_NW
 			             patch_names = push!(patch_names,patch_name)
 				           npatch += 1
 				           push!(patch_list, Patch(in, patch_name, key, mint, maxt,minx1, maxx1, minx2, maxx2,minx3, maxx3, minx4, maxx4))
-#			             SeisWindowPatch(in,patch_name,key=key,minval=minval,maxval=maxval)
 
 		          end
 		      end

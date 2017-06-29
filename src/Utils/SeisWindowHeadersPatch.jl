@@ -36,7 +36,7 @@ function SeisWindowHeadersPatch(in, out; key=[], minval=[], maxval=[], tmin=0,
 
     stream_h = open(filename_h_out)
     nx = round(Int,filesize(stream_h)/(nhead*4))
-	#println("nx= ",nx," ",filesize(stream_h), " ",(nhead*4))
+
     h = GrabHeader(stream_h,1)
     close(stream_h)
 
@@ -81,7 +81,7 @@ function WindowHeadersPatch(h_in;key=[],minval=[],maxval=[])
     minval = convert(Array{Float32,1},vec(minval))
     maxval = convert(Array{Float32,1},vec(maxval))
     nx = length(h_in)
-    key2 = String[]
+    key2 = AbstractString[]
     minval2 = Float32[]
     maxval2 = Float32[]
     for ikey=1:length(key)
@@ -105,7 +105,7 @@ function RejectHeadersPatch(h_in::Array{Header,1}, key::Array{AbstractString,1},
     for j=1:nx
 	     keep = true
 	     for ikey=1:nkeys
-	#println("In RejectHeaders, ikey= ",ikey," field= ",getfield(h_in[j],Symbol(key[ikey]))," ",minval[ikey]," ",maxval[ikey])
+
 	       key_val = convert(Float32,getfield(h_in[j],Symbol(key[ikey])))
 
 	        if (key_val < minval[ikey] || key_val > maxval[ikey])

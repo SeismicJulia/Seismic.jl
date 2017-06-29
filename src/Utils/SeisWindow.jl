@@ -35,7 +35,7 @@ function SeisWindow(in::AbstractString,out::AbstractString;key=[],minval=[],maxv
     if (itmin < 1)
 	     itmin = 1
     end
-    itmax = convert(Int32,round((tmax - extent.o1)/extent.d1))# + 1)
+    itmax = convert(Int32,round((tmax - extent.o1)/extent.d1))
     if (itmax) > extent.n1
 	     itmax = extent.n1
     end
@@ -51,7 +51,7 @@ println("itmin= ",itmin," itmax= ",itmax)
     filename_h_out = join([DATAPATH out "@headers@"])
     cp(filename_h_tmp,filename_h_out,remove_destination=true);
     rm(filename_h_tmp);
-    #rm(tmp);
+
 end
 
 function FetchTraces(in::AbstractString, out::AbstractString; ntrace=500, itmin=round(Int,1),

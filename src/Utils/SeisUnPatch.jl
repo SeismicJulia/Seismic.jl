@@ -167,7 +167,7 @@ function SeisUnPatch(patch_names::Array{AbstractString,1},out::AbstractString;st
 
     dt = extent.d1
     ot = extent.o1
-    d = zeros(Float32,nt,1) #nt esta fijo para asegurarte que todo tenga la misma long y no hacer lios.
+    d = zeros(Float32,nt,1) 
     h = Array(Header,1)
     h[1] = InitSeisHeader()
 
@@ -370,7 +370,6 @@ println("creating headers")
 	end
     end
 
-    #println("Comienzo a poblar de info",j-1)
 
     DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
     out_d = join([DATAPATH out "@data@"])
@@ -427,14 +426,12 @@ println("creating headers")
 		        tapti,taptf,tapx1i,tapx1f,tapx2i,tapx2f,tapx3i,tapx3f,tapx4i,tapx4f)
 
 	for j = 1 : nx_patch
-#	println("j= ",j)," npatch= ",nx_patch)
+
 	    h = h_patch[j]
 	    if (style=="sxsygxgy")
         itrace = (h.igy - min_igy)*nx3*nx2*nx1 + (h.igx - min_igx)*nx2*nx1 + (h.isy - min_isy)*nx1 + h.isx - min_isx + 1
-		    #  itrace = (h.isx - min_isx)*nx2*nx3*nx4 + (h.isy - min_isy)*nx3*nx4 + (h.igx - min_igx)*nx4 + h.igy - min_igy + 1
 	    elseif (style=="mxmyhxhy")
           itrace = (h.ihy - min_ihy)*nx3*nx2*nx1 + (h.ihx - min_ihx)*nx2*nx1 + (h.imy - min_imy)*nx1 + h.imx - min_imx + 1
-#		itrace = (h.imx - min_imx)*nx2*nx3*nx4 + (h.imy - min_imy)*nx3*nx4 + (h.ihx - min_ihx)*nx4 + h.ihy - min_ihy + 1
 	    elseif (style=="mxmyhaz")
 		      itrace = (h.imx - min_imx)*nx2*nx3*nx4 + (h.imy - min_imy)*nx3*nx4 + (h.ih - min_ih)*nx4 + h.iaz - min_iaz + 1
 
@@ -456,10 +453,8 @@ println("creating headers")
 	    h.n1 = nt
 	    h.o1 = ot
 	    position_d = 4*nt*(itrace - 1)
-	 #   println("position=", position_d)
 	    seek(stream_d,position_d)
 	    d = read(stream_d,Float32,nt)
-	#println("size(d)= ",size(d)," position= ",position_d)
 	    d[min_it_patch:max_it_patch] += d_patch[:,j]
 
 
