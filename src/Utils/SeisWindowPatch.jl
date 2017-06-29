@@ -77,6 +77,7 @@ function FetchTracesPatch(in::AbstractString, out::AbstractString; ntrace=500, i
     itmax=round(Int,9999999999),key=[], minval=[], maxval=[])
 
     NX = GetNumTraces(out)
+
     itrace = round(Int,1)
     filename_data_in = ParseDataName(in)
 
@@ -96,7 +97,7 @@ function FetchTracesPatch(in::AbstractString, out::AbstractString; ntrace=500, i
       itmax = round(Int,nt)
     end
 
-    @compat nhead = length(fieldnames(Header)) #cant de cosas en header=31
+    @compat nhead = length(fieldnames(Header)) 
 
     while itrace <= NX
       if (itrace > 1)
@@ -109,11 +110,11 @@ function FetchTracesPatch(in::AbstractString, out::AbstractString; ntrace=500, i
       d = zeros(Float32,itmax-itmin+1,ntrace)
 
       SeekTracesPatch!(d,stream_in,h,itmin,itmax,nt,round(Int,ntrace))
-	#SeekTracesPatch!(d,h,out,stream_in,stream_out,itmin,itmax,nt,round(Int,ntrace);key=key,minval=minval,maxval=maxval)
+
 
     write(stream_out,d)
 
-#	write(stream_out,convert(Array{Float32,1},d[:]))
+
     close(stream_out)
     itrace += ntrace
   end
