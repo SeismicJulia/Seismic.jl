@@ -98,7 +98,7 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	    hmax = maximum(x)
             dmax = maximum(abs(d[:]))
 	    alpha = xcur*delta
-            scal=="NULL" ? alpha = alpha/maximum(abs(d[:])) : alpha=alpha*scal
+            scal=="NULL" ? alpha = alpha/maximum(abs.(d[:])) : alpha=alpha*scal
 	    for k = 1:wiggle_trace_increment:size(d, 2)
 		x_vert = Float64[]
 		y_vert = Float64[]
