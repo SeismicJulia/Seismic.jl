@@ -96,7 +96,7 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	    delta = wiggle_trace_increment*dx
 	    hmin = minimum(x)
 	    hmax = maximum(x)
-            dmax = maximum(abs(d[:]))
+            dmax = maximum(abs.(d[:]))
 	    alpha = xcur*delta
             scal=="NULL" ? alpha = alpha/maximum(abs.(d[:])) : alpha=alpha*scal
 	    for k = 1:wiggle_trace_increment:size(d, 2)
