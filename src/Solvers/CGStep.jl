@@ -8,7 +8,7 @@ function CGStep(m1,m2,h1::Array{Header,1},h2::Array{Header,1};a=1.,b=1.)
 	return a*m1 + b*m2,h1
 end
 
-function CGStep(m1::String,m2::String;a=1.,b=1.)
+function CGStep(m1::AbstractString,m2::AbstractString;a=1.,b=1.)
 	# m1 = a*m1 + b*m2	
 
 	#tmp = join(["tmp_CGStep_",string(round(Int,rand()*100000))])
@@ -21,7 +21,7 @@ function CGStep(m1::String,m2::String;a=1.,b=1.)
 	SeisWrite(m1,a*d1[:,:] + b*d2[:,:],h,ext)
 end
 
-function CGStep(m1::Array{String,1},m2::Array{String,1};a=[1. 1. 1.],b=[1. 1. 1.])
+function CGStep(m1::Array{AbstractString,1},m2::Array{AbstractString,1};a=[1. 1. 1.],b=[1. 1. 1.])
 	# m1 = a*m1 + b*m2	
 	for j = 1 : length(m1)
 		CGStep(m1[j],m2[j],a=a[j],b=b[j])

@@ -147,7 +147,7 @@ function PutHeader(stream,h,j)
     write(stream,h.trid)
 end
 
-bitstype 32 Header32Bits
+primitive type Header32Bits 32 end
 
 function BitsToHeader(h_in)
     h = InitSeisHeader()
@@ -303,17 +303,17 @@ type Extent
     d3::Float32
     d4::Float32
     d5::Float32
-    label1::String
-    label2::String
-    label3::String
-    label4::String
-    label5::String
-    unit1::String
-    unit2::String
-    unit3::String
-    unit4::String
-    unit5::String
-    title::String
+    label1::AbstractString
+    label2::AbstractString
+    label3::AbstractString
+    label4::AbstractString
+    label5::AbstractString
+    unit1::AbstractString
+    unit2::AbstractString
+    unit3::AbstractString
+    unit4::AbstractString
+    unit5::AbstractString
+    title::AbstractString
 end
 
 function ReadTextHeader(filename)

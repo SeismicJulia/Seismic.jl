@@ -59,9 +59,17 @@ function SeisBandPass(d,h::Array{Header,1};dt=0.001,fa=0,fb=0,fc=60,fd=80)
 
 end
 
-function SeisBandPass(in::AbstractString,out::AbstractString;fa=0,fb=0,fc=60,fd=80)
+function SeisBandPass(d,h::Array{Header,1},ext;dt=0.001,fa=0,fb=0,fc=60,fd=80)
+
+	out = SeisBandPass(d;dt=h[1].d1,fa=fa,fb=fb,fc=fc,fd=fd)
+	return out,h,ext
+
+end
+
+
+function SeisBandPass(in::String,out::String;fa=0,fb=0,fc=60,fd=80)
 
 	@compat parameters = Dict(:fa=>fa,:fb=>fb,:fc=>fc,:fd=>fd)
-	SeisProcess(in,out,[SeisBandPass],[parameters];group="some")
+	SeisProcess(in,out,[SeisBandPass],[parameters])
 
 end

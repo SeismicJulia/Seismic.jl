@@ -1,4 +1,4 @@
-function differentiate_traces(d;dt=0.001,pow=-2,rot=0)
+function SeisDiff(d;dt=0.001,pow=-2,rot=0)
 
 	nt = size(d,1)
 	D = fft(d,1)

@@ -1,11 +1,11 @@
 """
-      SeisPatch(in::AbstractString,out::AbstractString;<keyword arguments>)
+      SeisPatch(in::String,out::String;<keyword arguments>)
 
 Creates overlapping 5d patches from a 5d volume
 
 # Arguments
-* `in::AbstractString`: input filename (data should have grid information in headers)
-* `out::AbstractString`: prefix for output filenames
+* `in::String`: input filename (data should have grid information in headers)
+* `out::String`: prefix for output filenames
 
 # Keyword arguments
 * `style="sxsygxgy"`: bin style. Options: "mxmyhxhy","mxmyhaz","sxsyhxhy","gxgyhxhy","sxsyhaz","gxgyhaz"
@@ -24,7 +24,7 @@ Creates overlapping 5d patches from a 5d volume
 *Credits: A. Stanton, F. Carozzi, 2017*
 """
 
-function SeisPatch(in::AbstractString, out::AbstractString; style="sxsygxgy", min_isx=0,
+function SeisPatch(in::String, out::String; style="sxsygxgy", min_isx=0,
                    max_isx=0, min_isy=0, max_isy=0, min_igx=0, max_igx=0,
                    min_igy=0, max_igy=0, min_imx=0, max_imx=0, min_imy=0,
                    max_imy=0, min_ihx=0, max_ihx=0, min_ihy=0, max_ihy=0,
@@ -141,7 +141,7 @@ end
   ix3_NW = Int(floor(nx3/(ix3_WL-ix3_WO)))
   ix4_NW = Int(floor(nx4/(ix4_WL-ix4_WO)))
 
-println("Patches in each dimension ",it_NW," ",ix1_NW," ",ix2_NW," ",ix3_NW," ",ix4_NW)
+
 
 
 if (ot + dt*(it_NW-1)*(it_WL-it_WO) + dt*it_WL < tmax)
@@ -160,6 +160,7 @@ if (min_ix4 + (ix4_NW-1)*(ix4_WL-ix4_WO) + ix4_WL < max_ix4)
 	ix4_NW += 1
 end
 
+println("Patches in each dimension ",it_NW," ",ix1_NW," ",ix2_NW," ",ix3_NW," ",ix4_NW)
 
 #split cube into multipatches
 npatch=0
@@ -168,13 +169,17 @@ NW=it_NW*ix1_NW*ix2_NW*ix3_NW*ix4_NW
 println("Number of patches=",NW)
 
 patch_list = Patch[]
-patch_names = AbstractString[]
+patch_names = String[]
+nmbr = 1
 for it_W = 1 : it_NW
 	mint = ot + dt*(it_W-1)*(it_WL-it_WO)
+
 	maxt = mint + dt*(it_WL - 1)
-  if (maxt >= tmax)
+
+ 	if (maxt >= tmax)
 	    maxt = tmax
 	end
+
 	for ix1_W = 1 : ix1_NW
 	    minx1 = min_ix1 + (ix1_W-1)*(ix1_WL-ix1_WO)
 	    maxx1 = minx1 + ix1_WL - 1
@@ -199,14 +204,16 @@ for it_W = 1 : it_NW
 			             if (maxx4 >= max_ix4)
 			                  maxx4 = max_ix4
 			             end
-			             patch_name = join([out "_" it_W "_" ix1_W "_" ix2_W "_" ix3_W "_" ix4_W])
-
+                         patch_name = join([out "_" nmbr])
 			             minval=[mint minx1 minx2 minx3 minx4]
 			             maxval=[maxt maxx1 maxx2 maxx3 maxx4]
 
 			             patch_names = push!(patch_names,patch_name)
-				           npatch += 1
-				           push!(patch_list, Patch(in, patch_name, key, mint, maxt,minx1, maxx1, minx2, maxx2,minx3, maxx3, minx4, maxx4))
+				         npatch += 1
+                   		 nmbr +=1
+						 it_nt=it_WL
+
+				         push!(patch_list, Patch(in, patch_name, key, mint, maxt,minx1, maxx1, minx2, maxx2,minx3, maxx3, minx4, maxx4,it_nt))
 
 		          end
 		      end
@@ -234,11 +241,13 @@ type Patch
      maxx3
      minx4
      maxx4
+     it_nt
+
 end
 
 #*******************************************************************************
 function grab_patch(patch)
 	 minval=[patch.mint patch.minx1 patch.minx2 patch.minx3 patch.minx4]
 	 maxval=[patch.maxt patch.maxx1 patch.maxx2 patch.maxx3 patch.maxx4]
-	 SeisWindowPatch(patch.in,patch.name,key=patch.key,minval=minval,maxval=maxval)
+	 SeisWindowPatch(patch.in,patch.name,key=patch.key,minval=minval,maxval=maxval,it_nt=patch.it_nt)
 end

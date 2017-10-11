@@ -77,7 +77,7 @@ function SeisSort(in, out;key=["imx","imy"],rev=false,ntrace=100000)
     rm(tmp);
 end
 
-function FetchHeaders(filename_h_in::AbstractString, filename_out::AbstractString,
+function FetchHeaders(filename_h_in::String, filename_out::String,
                       p::Array{Int32,1}, nx)
     stream_h = open(filename_h_in)
     h = Header[]

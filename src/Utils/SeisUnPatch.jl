@@ -4,8 +4,8 @@
 Reconstruct a 5D data volume from a set of 5D data patches.
 
 # Arguments
-* `in::Array{AbstractString,1}`: array containing filename of patches
-* `out::AbstractString`: filename for reconstructed volume
+* `in::Array{String,1}`: array containing filename of patches
+* `out::String`: filename for reconstructed volume
 
 # Keyword arguments
 * `style="sxsygxgy"`: bin style. Options: "mxmyhxhy","mxmyhaz","sxsyhxhy","gxgyhxhy","sxsyhaz","gxgyhaz"
@@ -33,7 +33,7 @@ In file `out`, the 5D reconstructed volume is created.
 *Credits: A. Stanton, F Carozzi, 2017*
 """
 
-function SeisUnPatch(patch_names::Array{AbstractString,1},out::AbstractString;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0,nt=0,ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1)
+function SeisUnPatch(patch_names::Array{String,1},out::String;style="sxsygxgy",min_isx=0,max_isx=0,min_isy=0,max_isy=0,min_igx=0,max_igx=0,min_igy=0,max_igy=0,min_imx=0,max_imx=0,min_imy=0,max_imy=0,min_ihx=0,max_ihx=0,min_ihy=0,max_ihy=0,min_ih=0,max_ih=0,min_iaz=0,max_iaz=0,it_WL=9e9,it_WO=0,ix1_WL=9e9,ix1_WO=0,ix2_WL=9e9,ix2_WO=0,ix3_WL=9e9,ix3_WO=0,ix4_WL=9e9,ix4_WO=0,nt=0,ang=90,gamma=1,osx=0,osy=0,ogx=0,ogy=0,omx=0,omy=0,ohx=0,ohy=0,oh=0,oaz=0,dsx=1,dsy=1,dgx=1,dgy=1,dmx=1,dmy=1,dhx=1,dhy=1,dh=1,daz=1)
 
 
     if (style == "sxsygxgy")
@@ -167,8 +167,8 @@ function SeisUnPatch(patch_names::Array{AbstractString,1},out::AbstractString;st
 
     dt = extent.d1
     ot = extent.o1
-    d = zeros(Float32,nt,1) 
-    h = Array(Header,1)
+    d = zeros(Float32,nt,1)
+    h = Array{Header}(1)
     h[1] = InitSeisHeader()
 
     extent = Seismic.Extent(nt, max_ix1-min_ix1+1, max_ix2-min_ix2+1,
@@ -177,11 +177,13 @@ function SeisUnPatch(patch_names::Array{AbstractString,1},out::AbstractString;st
                             "", "", "")
 println("creating headers")
    j = 1
-    for ix4 = 1 : nx4
-	     for ix3 = 1 : nx3
-	        for ix2 = 1 : nx2
-		          for ix1 = 1 : nx1
-		              h[1].tracenum = convert(typeof(h[1].tracenum),j)
+
+     for ix1 = 1 : nx1
+       for ix2 = 1 : nx2
+         for ix3 = 1 : nx3
+           for ix4 = 1 : nx4
+
+              h[1].tracenum = convert(typeof(h[1].tracenum),j)
 
         h[1].o1 = convert(typeof(h[1].o1),ot)
 		    h[1].n1 = convert(typeof(h[1].n1),nt)
@@ -433,17 +435,17 @@ println("creating headers")
 	    elseif (style=="mxmyhxhy")
           itrace = (h.ihy - min_ihy)*nx3*nx2*nx1 + (h.ihx - min_ihx)*nx2*nx1 + (h.imy - min_imy)*nx1 + h.imx - min_imx + 1
 	    elseif (style=="mxmyhaz")
-		      itrace = (h.imx - min_imx)*nx2*nx3*nx4 + (h.imy - min_imy)*nx3*nx4 + (h.ih - min_ih)*nx4 + h.iaz - min_iaz + 1
-
+		      # itrace = (h.imx - min_imx)*nx2*nx3*nx4 + (h.imy - min_imy)*nx3*nx4 + (h.ih - min_ih)*nx4 + h.iaz - min_iaz + 1
+          itrace=(h.iaz-min_iaz)*nx3*nx2*nx1 + (h.ih - min_ih)*nx2*nx1 + (h.imy - min_imy)*nx1 + h.imx - min_imx+1
 	    elseif (style=="sxsyhxhy")
-		      itrace = (h.isx - min_isx)*nx2*nx3*nx4 + (h.isy - min_isy)*nx3*nx4 + (h.ihx - min_ihx)*nx4 + h.ihy - min_ihy + 1
+          itrace =(h.ihy-min_ihy)*nx3*nx2*nx1 + (h.ihx - min_ihx)*nx2*nx1 + (h.isy - min_isy)*nx1 + h.isx - min_isx+1
 	    elseif (style=="gxgyhxhy")
-		      itrace = (h.igx - min_igx)*nx2*nx3*nx4 + (h.igy - min_igy)*nx3*nx4 + (h.ihx - min_ihx)*nx4 + h.ihy - min_ihy + 1
+        itrace =(h.ihy-min_ihy)*nx3*nx2*nx1 + (h.ihx - min_ihx)*nx2*nx1 + (h.igy - min_igy)*nx1 + h.igx - min_igx+1
 	    elseif (style=="sxsyhaz")
-		      itrace = (h.isx - min_isx)*nx2*nx3*nx4 + (h.isy - min_isy)*nx3*nx4 + (h.ih - min_ih)*nx4 + h.iaz - min_iaz + 1
+        itrace =(h.iaz-min_iaz)*nx3*nx2*nx1 + (h.ih - min_ih)*nx2*nx1 + (h.isy - min_isy)*nx1 + h.isx - min_isx+1
 	    elseif (style=="gxgyhaz")
-		      itrace = (h.igx - min_igx)*nx2*nx3*nx4 + (h.igy - min_igy)*nx3*nx4 + (h.ih - min_ih)*nx4 + h.iaz - min_iaz + 1
-	    end
+        itrace =(h.iaz-min_iaz)*nx3*nx2*nx1 + (h.ih - min_ih)*nx2*nx1 + (h.igy - min_igy)*nx1 + h.igx - min_igx+1
+      end
 
       if j==1
         println(min_it_patch," ",max_it_patch," ",nt," ",nx_patch," ",ipatch," ",size(d_patch))
@@ -470,65 +472,89 @@ end
 
 function Taper(d,nt,nx1,nx2,nx3,nx4,tapti,taptf,tapx1i,tapx1f,tapx2i,tapx2f,tapx3i,tapx3f,tapx4i,tapx4f)
     tx1=1; tx2=1; tx3=1; tx4=1
-stream1=open("salida.txt","a")
-stream2=open("salida2.txt","a")
+
 
     for ix1 = 1 : nx1
-	     if (ix1>=1   && ix1<=tapx1i)
+
+		if (ix1>=1   && ix1<=tapx1i)
 	        tx1 = 1.0/(tapx1i-1)*(ix1-1)
+
 	     end
+
 	     if (ix1>tapx1i && ix1<=nx1-tapx1f)
 	        tx1 = 1
 	     end
 	     if (ix1>nx1-tapx1f && ix1<=nx1)
 	        tx1 = 1-1.0/(tapx1f-1)*(ix1-1-nx1+tapx1f)
-	     end
+
+	      end
+
 	     for ix2 = 1 : nx2
 	        if (ix2>=1   && ix2<=tapx2i)
 		          tx2 = 1.0/(tapx2i-1)*(ix2-1)
+
 	        end
+
 	        if (ix2>tapx2i && ix2<=nx2-tapx2f)
 		          tx2 = 1
 	        end
 	        if (ix2>nx2-tapx2f && ix2<=nx2)
-		          tx2 = 1-1.0/(tapx2f-1)*(ix2-1-nx2+tapx2f)
-	        end
+		       tx2 = 1-1.0/(tapx2f-1)*(ix2-1-nx2+tapx2f)
+
+		end
+
+
 	        for ix3 = 1 : nx3
 		          if (ix3>=1   && ix3<=tapx3i)
 		              tx3 = 1.0/(tapx3i-1)*(ix3-1)
+
 		          end
+
 		          if (ix3>tapx3i && ix3<=nx3-tapx3f)
 		              tx3 = 1
 		          end
 		          if (ix3>nx3-tapx3f && ix3<=nx3)
 		              tx3 = 1-1.0/(tapx3f-1)*(ix3-1-nx3+tapx3f)
-              end
-		          for ix4 = 1 : nx4
-		              if (ix4>=1   && ix4<=tapx4i)
-			                 tx4 = 1.0/(tapx4i-1)*(ix4-1)
-		              end
-		              if (ix4>tapx4i && ix4<=nx4-tapx4f)
-			                 tx4 = 1
-		              end
-		              if (ix4>nx4-tapx4f && ix4<=nx4)
-                      tx4 = 1-1.0/(tapx4f-1)*(ix4-1-nx4+tapx4f)
-		              end
-		    ix = (ix4-1)*nx2*nx3*nx1 + (ix3-1)*nx1*nx2 + (ix2-1)*nx1 + ix1
-		    for it = 1 : nt
-			       if (it>=1 && it<=tapti)
-			            tt = 1.0/(tapti-1)*(it-1)
-			       end
-			       if (it>tapti && it<=nt-taptf)
-			          tt = 1
+
+             end
+
+
+		            for ix4 = 1 : nx4
+		                if (ix4>=1   && ix4<=tapx4i)
+			                   tx4 = 1.0/(tapx4i-1)*(ix4-1)
+
+		                end
+
+
+		                if (ix4>tapx4i && ix4<=nx4-tapx4f)
+			                   tx4 = 1
+		                end
+		                if (ix4>nx4-tapx4f && ix4<=nx4)
+                        		tx4 = 1-1.0/(tapx4f-1)*(ix4-1-nx4+tapx4f)
+
 			      end
-			      if (it>nt-taptf && it<=nt)
-			          tt = 1-1.0/(taptf-1)*(it-1-nt+taptf)
-			      end
-			         d[it,ix] = tt*tx1*tx2*tx3*tx4*d[it,ix]
-		    end
-		end
-	 end
-	end
- end
+
+
+		                ix = (ix4-1)*nx2*nx3*nx1 + (ix3-1)*nx1*nx2 + (ix2-1)*nx1 + ix1
+		                for it = 1 : nt
+			                   if (it>=1 && it<=tapti)
+
+			                        tt = 1.0/(tapti-1)*(it-1)
+			                   end
+
+			                   if (it>tapti && it<=nt-taptf)
+			                        tt = 1
+			                   end
+			                   if (it>nt-taptf && it<=nt)
+			                        tt = 1-1.0/(taptf-1)*(it-1-nt+taptf)
+
+			                   end
+
+			      d[it,ix] = tt*tx1*tx2*tx3*tx4*d[it,ix]
+		          end
+		     end
+	       end
+	  end
+      end
  return d
 end

@@ -21,7 +21,7 @@ function LinearOperator(in,operators,parameters;adj=true)
 
 end
 
-function LinearOperator(m::String,d::String,operators,parameters;adj=true)
+function LinearOperator(m::AbstractString,d::AbstractString,operators,parameters;adj=true)
 
     rand_string = string(round(Int,rand()*100000))
     tmp_m = join(["tmp_CG_m_",rand_string])
@@ -50,7 +50,7 @@ function LinearOperator(m::String,d::String,operators,parameters;adj=true)
 
 end
 
-function LinearOperator(m::Array{String,1},d::Array{String,1},operators,parameters;adj=true)
+function LinearOperator(m::Array{AbstractString,1},d::Array{AbstractString,1},operators,parameters;adj=true)
 
     rand_string = string(round(Int,rand()*100000))
     tmp_m = [join(["tmp_CG_m1_",rand_string]);join(["tmp_CG_m2_",rand_string])]

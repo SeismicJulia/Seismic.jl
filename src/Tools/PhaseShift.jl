@@ -2,7 +2,7 @@ function PhaseShift(x,angle)
 
 	nx = length(x)
 	nf = 2*nx
-	nw = int(nf/2) + 1
+	nw = Int(nf/2) + 1
 	X = fft([x;zeros(typeof(x[1]),nf-nx)])
 	for iw=1:nw
 		X[iw] *= exp(-1im*angle)

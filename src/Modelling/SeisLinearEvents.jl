@@ -28,8 +28,7 @@ Generate five dimensional data `d` consisting of linear events.
 * `p3=[-0.0001,-0.0001]`
 * `p4=[0.0001,-0.0000]`
 * `amp=[1.0,-1.0]`: amplitudes for each linear event.
-* `wavelet="ricker"`: wavelet used to model the linear events.
-* `f0=[20.0]`: central frequency of wavelet for each linear event.
+* `f0=20.0`: central frequency of wavelet for each linear event.
 
 # Example
 ```julia

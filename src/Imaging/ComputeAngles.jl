@@ -33,7 +33,7 @@
 
 """
 
-function ComputeAngles(angx::String,angy::String,dip_flag=false,vel="vel",wav="wav",sz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
+function ComputeAngles(angx::AbstractString,angy::AbstractString,dip_flag=false,vel="vel",wav="wav",sz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
 
 	nshot = length(sx)	
 	if (dip_flag=="y")
@@ -135,7 +135,7 @@ function compute_angles(shot)
 	join(["ohy=",shot.ohy]),  join(["dhy=",shot.dhy]),  join(["nhy=",shot.nhy]),   
 	join(["fmin=",shot.fmin]),  join(["fmax=",shot.fmax]), 
 	join(["pade_flag=",shot.pade_flag]),  join(["dip_flag=",shot.dip_flag]),  join(["verbose=",shot.verbose]) ] 
-	a = ccall((:main, "compute_angles"), Int32, (Int32, Ptr{Ptr{Uint8}}), length(argv), argv)                    
+	a = ccall((:main, "compute_angles"), Int32, (Int32, Ptr{Ptr{UInt8}}), length(argv), argv)                    
 	return(a)
 
 end

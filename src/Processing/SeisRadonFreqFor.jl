@@ -40,7 +40,7 @@ function SeisRadonFreqFor{Tm<:Real, Th<:Real, Tp<:Real
                             flow::Real=0.0, fhigh::Real=125.0)
     if order=="parab"
         I = 2
-        href == 0 && (href = maximum(abs(h)))
+        href == 0 && (href = maximum(abs.(h)))
     elseif order=="linear"
         I = 1
         href = 1.0
@@ -67,7 +67,7 @@ function SeisRadonFreqFor{Tm<:Real, Th<:Real, Tp<:Real
             end
         end
         D[iw, :] = L*M[iw,:]
-    end 
+    end
     for iw = round(Int, nw/2)+2:nw
         D[iw, :] = conj(D[nw-iw+2, :])
     end
