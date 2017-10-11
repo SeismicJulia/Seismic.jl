@@ -12,7 +12,7 @@
 *Credits: AS, FC, 2017*
 """
 
-function SeisWindowPatch(in::String,out::String;key=[],minval=[],maxval=[],it_nt=9e9)
+function SeisWindowPatch(in::AbstractString,out::AbstractString;key=[],minval=[],maxval=[],it_nt=9e9)
   println("processing patch ",out)
   DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
   extent = ReadTextHeader(in)
@@ -75,7 +75,7 @@ end
 
 ########################################################################################
 #####################################################################################
-function FetchTracesPatch(in::String, out::String; ntrace=500, itmin=round(Int,1),
+function FetchTracesPatch(in::AbstractString, out::AbstractString; ntrace=500, itmin=round(Int,1),
     itmax=round(Int,9999999999),key=[], minval=[], maxval=[])
 
     NX = GetNumTraces(out)
@@ -99,7 +99,7 @@ function FetchTracesPatch(in::String, out::String; ntrace=500, itmin=round(Int,1
       itmax = round(Int,nt)
     end
 
-    @compat nhead = length(fieldnames(Header)) 
+    @compat nhead = length(fieldnames(Header))
 
     while itrace <= NX
       if (itrace > 1)

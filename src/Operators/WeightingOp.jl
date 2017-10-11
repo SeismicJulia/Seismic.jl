@@ -1,6 +1,6 @@
 function WeightingOp(in,adj;w=1)
-	
-	return in.*w	
+
+	return in.*w
 
 end
 
@@ -23,10 +23,10 @@ function WeightingOp(m::Array{AbstractString,1},d::Array{AbstractString,1},adj;w
 	if !(isdefined(w,2))
 		for j = 1 : length(m)
 			WeightingOp(m[j],d[j],adj,w=w)
-		end     
+		end
 	else
 		for j = 1 : length(m)
 			WeightingOp(m[j],d[j],adj,w=w[j])
-		end     
+		end
 	end
-end                                                                                                                     
+end

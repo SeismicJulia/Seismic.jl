@@ -52,7 +52,7 @@ function SeisWindowHeadersPatch(in, out; key=[], minval=[], maxval=[], tmin=0,
 
     minval = convert(Array{Float32,1},vec(minval))
     maxval = convert(Array{Float32,1},vec(maxval))
-    key2 = String[]
+    key2 = AbstractString[]
     minval2 = Float32[]
     maxval2 = Float32[]
     for ikey=1:length(key)
@@ -86,7 +86,7 @@ function WindowHeadersPatch(h_in;key=[],minval=[],maxval=[])
     minval = convert(Array{Float32,1},vec(minval))
     maxval = convert(Array{Float32,1},vec(maxval))
     nx = length(h_in)
-    key2 = String[]
+    key2 = AbstractString[]
     minval2 = Float32[]
     maxval2 = Float32[]
     for ikey=1:length(key)
@@ -101,7 +101,7 @@ function WindowHeadersPatch(h_in;key=[],minval=[],maxval=[])
 
 end
 
-function RejectHeadersPatch(h_in::Array{Header,1}, key::Array{String,1},
+function RejectHeadersPatch(h_in::Array{Header,1}, key::Array{AbstractString,1},
                        minval::Array{Float32,1}, maxval::Array{Float32,1},
                        nkeys, nx)
     h_out = Header[]

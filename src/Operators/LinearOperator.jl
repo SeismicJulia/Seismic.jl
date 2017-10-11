@@ -17,7 +17,7 @@ function LinearOperator(in,operators,parameters;adj=true)
 			m = copy(d)
 		end
 		return d
-	end	
+	end
 
 end
 
@@ -46,7 +46,7 @@ function LinearOperator(m::AbstractString,d::AbstractString,operators,parameters
         SeisCopy(tmp_d,d)
         SeisRemove(tmp_m)
         SeisRemove(tmp_d)
-    end    
+    end
 
 end
 
@@ -65,7 +65,7 @@ function LinearOperator(m::Array{AbstractString,1},d::Array{AbstractString,1},op
             else
                 for k = 1 : length(m)
                     op(tmp_m[k],tmp_d[k],true;parameters[j]...)
-                end    
+                end
                 SeisCopy(tmp_m,tmp_d)
             end
         end
@@ -82,13 +82,13 @@ function LinearOperator(m::Array{AbstractString,1},d::Array{AbstractString,1},op
             else
                 for k = 1 : length(m)
                     op(tmp_m[k],tmp_d[k],false;parameters[j]...)
-                end    
+                end
                 SeisCopy(tmp_d,tmp_m)
             end
-        end    
+        end
         SeisCopy(tmp_d,d)
         SeisRemove(tmp_m)
         SeisRemove(tmp_d)
-    end    
+    end
 
 end

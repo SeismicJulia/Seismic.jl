@@ -4,8 +4,8 @@
 Window a seis file using header words.
 
 # Arguments
-* `in::String`: filename of input
-* `out::String`: filename of output
+* `in::AbstractString`: filename of input
+* `out::AbstractString`: filename of output
 
 # Keyword arguments
 * `key`
@@ -17,7 +17,7 @@ note that windowing along the time axis is achieved by using the key "t".
 *Credits: AS, 2015*
 """
 
-function SeisWindow(in::String,out::String;key=[],minval=[],maxval=[])
+function SeisWindow(in::AbstractString,out::AbstractString;key=[],minval=[],maxval=[])
     DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
     extent = ReadTextHeader(in)
     tmin = extent.o1
@@ -54,7 +54,7 @@ println("itmin= ",itmin," itmax= ",itmax)
 
 end
 
-function FetchTraces(in::String, out::String; ntrace=500, itmin=round(Int,1),
+function FetchTraces(in::AbstractString, out::AbstractString; ntrace=500, itmin=round(Int,1),
                      itmax=round(Int,9999999999))
     NX = GetNumTraces(out)
 	println("NX in FetchTraces= ",NX)

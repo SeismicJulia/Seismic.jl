@@ -3,14 +3,14 @@
 
 *Compute angles for shot gathers. These angles can be used for mapping migrated shots into angle gathers during shot profile migration.*
 
-**IN**   
+**IN**
 
 
 * angx = "angx" : filename for incidence angles in the x direction for each shot
 * angy = "angy" : filename for incidence angles in the y direction for each shot
 * dip_flag = false : flag to subtract reflector dip from the computed angles to make them with reference to reflector normal
 * vel = "vel" : seis file containing the velocity (should have same x and z dimensions as the desired image)
-* wav = "wav" : seis file containing the source wavelet (in time domain) 
+* wav = "wav" : seis file containing the source wavelet (in time domain)
 * sz = 0. : source depth (Dev: read this from source wavelet file for variable source depth)
 * nhx = 101 : number of offset bins
 * ohx = 1000. : min offset (surface offset in the data)
@@ -27,7 +27,7 @@
 * sx = [0.] : array of source X positions (meters)
 * sy = [0.] : array of source Y positions (meters)
 
-**OUT**  
+**OUT**
 
 *Credits: AS, 2015*
 
@@ -35,11 +35,11 @@
 
 function ComputeAngles(angx::AbstractString,angy::AbstractString,dip_flag=false,vel="vel",wav="wav",sz=0.,nhx=100,ohx=0,dhx=10,nhy=1,ohy=0,dhy=10,pade_flag=false,fmin=0,fmax=80,padt=2,padx=2,verbose=false,sx=[0],sy=[0])
 
-	nshot = length(sx)	
+	nshot = length(sx)
 	if (dip_flag=="y")
 		dipx,h = SeisRead(dipx_name)
 		dipy,h = SeisRead(dipy_name)
-	end	
+	end
 
 	v,h = SeisRead(vel)
 	min_imx = h[1].imx
@@ -81,7 +81,7 @@ function ComputeAngles(angx::AbstractString,angy::AbstractString,dip_flag=false,
 		shot_list[ishot].omp = omp
 		shot_list[ishot].pade_flag = pade_flag
 		shot_list[ishot].dip_flag = (dip_flag == true) ? "y" : "n"
-		shot_list[ishot].verbose = (verbose == true) ? "y" : "n"	
+		shot_list[ishot].verbose = (verbose == true) ? "y" : "n"
 	end
 
 	a = pmap(compute_angles,shot_list)
@@ -129,14 +129,13 @@ function compute_angles(shot)
 		error("Couldn't find shared library compute_angles.so, make sure it is installed and check LD_LIBRARY_PATH environmental variable.")
 	end
 	argv = ["0",
-	join(["angx=",shot.angx]), join(["angy=",shot.angy]), join(["vel=",shot.vel]), join(["dipx=",shot.dipx]), join(["dipy=",shot.dipy]), join(["wav=",shot.wav]),  
+	join(["angx=",shot.angx]), join(["angy=",shot.angy]), join(["vel=",shot.vel]), join(["dipx=",shot.dipx]), join(["dipy=",shot.dipy]), join(["wav=",shot.wav]),
 	join(["sx=",shot.sx]), join(["sy=",shot.sy]),  join(["sz=",shot.sz]),
-	join(["ohx=",shot.ohx]),  join(["dhx=",shot.dhx]),  join(["nhx=",shot.nhx]), 
-	join(["ohy=",shot.ohy]),  join(["dhy=",shot.dhy]),  join(["nhy=",shot.nhy]),   
-	join(["fmin=",shot.fmin]),  join(["fmax=",shot.fmax]), 
-	join(["pade_flag=",shot.pade_flag]),  join(["dip_flag=",shot.dip_flag]),  join(["verbose=",shot.verbose]) ] 
-	a = ccall((:main, "compute_angles"), Int32, (Int32, Ptr{Ptr{UInt8}}), length(argv), argv)                    
+	join(["ohx=",shot.ohx]),  join(["dhx=",shot.dhx]),  join(["nhx=",shot.nhx]),
+	join(["ohy=",shot.ohy]),  join(["dhy=",shot.dhy]),  join(["nhy=",shot.nhy]),
+	join(["fmin=",shot.fmin]),  join(["fmax=",shot.fmax]),
+	join(["pade_flag=",shot.pade_flag]),  join(["dip_flag=",shot.dip_flag]),  join(["verbose=",shot.verbose]) ]
+	a = ccall((:main, "compute_angles"), Int32, (Int32, Ptr{Ptr{UInt8}}), length(argv), argv)
 	return(a)
 
 end
-

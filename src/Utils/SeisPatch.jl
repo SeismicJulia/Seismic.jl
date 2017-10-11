@@ -1,11 +1,11 @@
 """
-      SeisPatch(in::String,out::String;<keyword arguments>)
+      SeisPatch(in::AbstractString,out::AbstractString;<keyword arguments>)
 
 Creates overlapping 5d patches from a 5d volume
 
 # Arguments
-* `in::String`: input filename (data should have grid information in headers)
-* `out::String`: prefix for output filenames
+* `in::AbstractString`: input filename (data should have grid information in headers)
+* `out::AbstractString`: prefix for output filenames
 
 # Keyword arguments
 * `style="sxsygxgy"`: bin style. Options: "mxmyhxhy","mxmyhaz","sxsyhxhy","gxgyhxhy","sxsyhaz","gxgyhaz"
@@ -19,12 +19,12 @@ Creates overlapping 5d patches from a 5d volume
 * `ix2_WL=9e9`,`ix2_WO=0`,`ix3_WL=9e9`,`ix3_WO=0`,`ix4_WL=9e9`,`ix4_WO=0`
 
 # Output
-`filename,npatch`: String Array with the file name of the data patches, number of patches created
+`filename,npatch`: AbstractString Array with the file name of the data patches, number of patches created
 
 *Credits: A. Stanton, F. Carozzi, 2017*
 """
 
-function SeisPatch(in::String, out::String; style="sxsygxgy", min_isx=0,
+function SeisPatch(in::AbstractString, out::AbstractString; style="sxsygxgy", min_isx=0,
                    max_isx=0, min_isy=0, max_isy=0, min_igx=0, max_igx=0,
                    min_igy=0, max_igy=0, min_imx=0, max_imx=0, min_imy=0,
                    max_imy=0, min_ihx=0, max_ihx=0, min_ihy=0, max_ihy=0,
@@ -169,7 +169,7 @@ NW=it_NW*ix1_NW*ix2_NW*ix3_NW*ix4_NW
 println("Number of patches=",NW)
 
 patch_list = Patch[]
-patch_names = String[]
+patch_names = AbstractString[]
 nmbr = 1
 for it_W = 1 : it_NW
 	mint = ot + dt*(it_W-1)*(it_WL-it_WO)
