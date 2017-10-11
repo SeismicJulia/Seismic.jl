@@ -2,7 +2,7 @@ function SeisNMO(in;dt=0.001,offset=1000.,tnmo=0.,vnmo=1500.,max_stretch=1000)
 
 	nt,nx = size(in)
 	if length(offset) < size(in,2)
-		offset = offset[1]*ones(in,2)
+		offset = offset[1]*ones(in[1,:])
 	end
 	# interpolate tau,v pairs to match sampling of input data
 	if (length(vnmo) == 1)

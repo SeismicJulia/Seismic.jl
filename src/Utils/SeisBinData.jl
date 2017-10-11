@@ -28,7 +28,7 @@ Input arguments should be consistent with SeisBinHeaders input arguments.
 # Output
 In file `out`, the binned data is created.
 
-*Credits: Aaron Stanton, Fernanda Carozzi, 2017*
+*Credits: Aaron Stanton, 2017*
 
 """
 

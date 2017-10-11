@@ -29,7 +29,7 @@ Keyword arguments should be consistent with SeisGeometry keyword arguments.
 # Output
 In file `out`, binned headers are created.
 
-*Credits: Aaron Stanton, F Carozzi,2017*
+*Credits: Aaron Stanton,2017*
 
 """
 
@@ -124,6 +124,8 @@ else
 	error("style not recognized.")
 end
 
+
+
 nx_out = nx1*nx2*nx3*nx4
 stream_in = open(ParseHeaderName(in))
 
@@ -131,7 +133,8 @@ stream_in = open(ParseHeaderName(in))
 
 seek(stream_in, header_count["n1"])
 nt = read(stream_in,Int32)
-println(nt)
+println("nt= ",nt)
+println("The final binned cube will have an approximate size of ", round(nx1*nx2*nx3*nx4*nt*4*1e-9,3)," Gb")
 seek(stream_in, header_count["o1"])
 o1 = read(stream_in,Float32)
 seek(stream_in, header_count["d1"])
@@ -153,7 +156,7 @@ filename_h = join([DATAPATH out "@headers@"])
 WriteTextHeader(out,extent,"native_float", 4,filename_d,filename_h)
 
 
-h = Array(Header,1)
+h = Array{Header}(1)
 h[1] = InitSeisHeader()
 stream_out = open(filename_h,"a+")
 
@@ -211,6 +214,7 @@ if (style=="sxsygxgy")
    end
 
    h_in=SeisReadHeaders(in)
+   hout = SeisReadHeaders(out)
 
    for k = 1 : nx_in
 
@@ -244,7 +248,7 @@ if (style=="sxsygxgy")
        for ix3 = 1 : nx3
        	  for ix2 = 1 : nx2
 		for ix1 = 1 : nx1
-		
+
 			h[1].tracenum = convert(typeof(h[1].tracenum),j)
 			h[1].o1 = convert(typeof(h[1].o1),o1)
 			h[1].n1 = convert(typeof(h[1].n1),nt)
@@ -380,6 +384,7 @@ elseif (style=="mxmyhaz")
 
  h_in=SeisReadHeaders(in)
  hout = SeisReadHeaders(out)
+
 
  for k = 1 : nx_in
 	itrace = (h_in[k].iaz - min_iaz)*nx3*nx2*nx1 + (h_in[k].ih - min_ih)*nx2*nx1 + (h_in[k].imy - min_imy)*nx1 + h_in[k].imx - min_imx + 1

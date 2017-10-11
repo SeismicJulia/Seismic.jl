@@ -1,4 +1,4 @@
-function TriangleFilter(nr, m1, n12, uu, vv)
+function TriangleFilter(nr, n12, uu, vv)
 
     pp = zeros(Float32,n12+nr-1)
     qq = zeros(Float32,n12+nr+nr-2)
@@ -20,5 +20,5 @@ function TriangleFilter(nr, m1, n12, uu, vv)
     for i = 1 : n12
 	vv[i] = tt[i]
     end
-    
+
 end

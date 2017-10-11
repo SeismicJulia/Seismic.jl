@@ -65,9 +65,9 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
                            fignum="NULL", wbox=6, hbox=6, dpi=100, name="NULL")
     if (vmin=="NULL" || vmax=="NULL")
         if (pclip<=100)
-	    a = -quantile(abs(d[:]), (pclip/100))
+	    a = -quantile(abs.(d[:]), (pclip/100))
 	else
-	    a = -quantile(abs(d[:]), 1)*pclip/100
+	    a = -quantile(abs.(d[:]), 1)*pclip/100
 	end
 	b = -a
     else
@@ -96,9 +96,9 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	    delta = wiggle_trace_increment*dx
 	    hmin = minimum(x)
 	    hmax = maximum(x)
-            dmax = maximum(abs(d[:]))
+            dmax = maximum(abs.(d[:]))
 	    alpha = xcur*delta
-            scal=="NULL" ? alpha = alpha/maximum(abs(d[:])) : alpha=alpha*scal
+            scal=="NULL" ? alpha = alpha/maximum(abs.(d[:])) : alpha=alpha*scal
 	    for k = 1:wiggle_trace_increment:size(d, 2)
 		x_vert = Float64[]
 		y_vert = Float64[]

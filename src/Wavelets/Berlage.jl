@@ -28,7 +28,7 @@ function Berlage(; dt::Real=0.002, f0::Real=20.0, m::Real=2, alpha::Real=180.0,
 
     nw = floor(Int, 2.2/(f0*dt))
     t = dt*collect(0:1:nw-1)
-    w = (t.^m).*exp(-alpha*t).*cos(2*pi*f0*t + phi0);
+    w = (t.^m).*exp.(-alpha*t).*cos.(2*pi*f0*t + phi0);
     w = w/maximum(w)
-    
+
 end

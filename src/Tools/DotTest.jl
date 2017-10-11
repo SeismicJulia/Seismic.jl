@@ -8,10 +8,10 @@ function DotTest(m_rand,d_rand,operators,parameters)
 	println("<d_rand,d_fwd> = ",inner1)
 	println("<m_rand,m_adj> = ",inner2)
 	return inner1,inner2
-	
+
 end
 
-function DotTest(m_rand::String,d_rand::String,operators,parameters)
+function DotTest(m_rand::AbstractString,d_rand::AbstractString,operators,parameters)
 	# Dot product test for a vector of linear operators
 
 	rand_string = string(round(Int,rand()*100000))
@@ -29,10 +29,10 @@ function DotTest(m_rand::String,d_rand::String,operators,parameters)
 
 end
 
-function DotTest(m_rand::Array{String,1},d_rand::Array{String,1},operators,parameters)
+function DotTest(m_rand::Array{AbstractString,1},d_rand::Array{AbstractString,1},operators,parameters)
 	# Dot product test for a vector of linear operators
 	# for 3 component data
-	
+
 	rand_string = string(round(Int,rand()*100000))
 	m1_adj = join(["tmp_DotTest_m1_adj_",rand_string])
 	m2_adj = join(["tmp_DotTest_m2_adj_",rand_string])
