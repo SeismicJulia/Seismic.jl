@@ -5,8 +5,8 @@
 
 **IN**
 
-* filename_in
-* filename_out
+* `filename_in::AbstractString`
+* `filename_out::AbstractString`
 * format="segy" (or "su")
 * swap_bytes=true (flag to swap bytes)
 * input_type="ibm" (or "ieee")
@@ -17,7 +17,7 @@
 
 """
 
-function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=true,input_type="ibm")
+function SegyToSeis(filename_in::AbstractString,filename_out::AbstractString;format="segy",swap_bytes=true,input_type="ibm")
 
 	if (format=="su")
 		file_hsize = 0

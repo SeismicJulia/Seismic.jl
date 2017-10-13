@@ -1,3 +1,19 @@
+"""
+**SeisReadHeaders**
+*Read seismic headers in seis format (binary file). 
+
+**
+**IN**   
+* filename
+* group="all" ("some" or "gather")
+* key=["imx","imy"]
+* itrace=1
+* ntrace=10000
+**OUT**  
+* h: headers as 1d array 
+*Credits: AS, 2015*
+"""
+
 function SeisReadHeaders(filename;group="all",key=[],itrace=1,ntrace=100)
 
 	filename_h = ParseHeaderName(filename)

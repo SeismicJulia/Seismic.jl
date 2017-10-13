@@ -1,3 +1,20 @@
+"""
+    SeisEnvelope(d)
+
+Calculate the envelope attribute of an input trace
+
+# Arguments
+* `d`: Input data. 
+
+# Output
+* `out`: Envelope of input data
+
+# Example
+```julia
+julia> d = SeisLinearEvents(d); SeisPlot(d)
+julia> out = SeisEnvelope(d); SeisPlot(d_dec)
+"""
+
 function SeisEnvelope(d)
 
 	D = fft(d,1)

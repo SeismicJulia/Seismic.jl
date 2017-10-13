@@ -1,4 +1,18 @@
-function SeisHeaderInfo(filename;ntrace=100000)
+"""
+    SeisHeaderInfo(filename; <keyword arguments>)
+
+compute header statistic
+
+# Arguments
+* `filename::AbstractString`: name of file to analyze (without @headers@)
+
+
+# Keyword arguments
+* `ntrace=100000`: Number of traces to analyze
+
+"""
+
+function SeisHeaderInfo(filename::AbstractString;ntrace=100000)
 	#
 	#   print Seis header information
 	#

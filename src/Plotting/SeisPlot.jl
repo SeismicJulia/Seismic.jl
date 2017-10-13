@@ -126,14 +126,14 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	    fmax = FMAX
 	end
 	nf = convert(Int32, floor((size(d[:, :], 1)/2)*fmax/FMAX))
-	D = abs(fftshift(fft(d[:, :])))
+	D = abs.(fftshift(fft(d[:, :])))
 	D = D[round(Int,end/2):round(Int,end/2)+nf, :]
 	if (vmin=="NULL" || vmax=="NULL")
 	    a = 0.
 	    if (pclip<=100)
-		b = quantile(abs(D[:]), (pclip/100))
+		b = quantile(abs.(D[:]), (pclip/100))
 	    else
-		b = quantile(abs(D[:]), 1)*pclip/100
+		b = quantile(abs.(D[:]), 1)*pclip/100
 	    end
 	end
 	im = plt.imshow(D, cmap=cmap, vmin=a, vmax=b, extent=[kmin,kmax,fmax,0],
@@ -150,7 +150,7 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	    fmax = FMAX
 	end
 	nf = convert(Int32, floor((size(d[:, :], 1)/2)*fmax/FMAX))
-	y = fftshift(sum(abs(fft(d[:, :], 1)), 2))/nx
+	y = fftshift(sum(abs.(fft(d[:, :], 1)), 2))/nx
 	y = y[round(Int,end/2):round(Int, end/2)+nf]
 	norm = maximum(y[:])
 	if (norm > 0.)
