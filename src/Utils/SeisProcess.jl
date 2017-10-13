@@ -1,13 +1,14 @@
 function SeisProcess(in::AbstractString,out::AbstractString,operators,parameters;key=[])
     # Run processing flows that read and write from disk
     #
-    # f is a function that has the following syntax: d2,h2 = f(d1,h1,param),
+    # f is a function that has the following syntax: d2,h2 = f(d1,h1,e1,param),
     # where
     # param is list of keyword arguments for the function.
     # note that f can be a vector of functions. They will be executed
     # sequentially on the same group of traces.
     #
     # get list of gather lengths
+
     ext = ReadTextHeader(in)
     nx = ext.n2*ext.n3*ext.n4*ext.n5
     filename_headers = ParseHeaderName(in)
@@ -38,6 +39,7 @@ function SeisProcess(in::AbstractString,out::AbstractString,operators,parameters
     itrace_out = 1
     for igather = 1 : length(L)
 	d1,h1,e1 = SeisRead(in, group="some",itrace=itrace_in,ntrace=L[igather])
+
 	num_traces_in = size(d1,2)
 	for j = 1 : length(operators)
 	    op = operators[j]

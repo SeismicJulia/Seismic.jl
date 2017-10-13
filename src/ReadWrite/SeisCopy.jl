@@ -4,8 +4,8 @@
 *Copy a seis file*
 
 **IN**
-* in: input filename
-* out: output filename
+* `in::AbstractString`: input filename
+* `out::AbstractString`: output filename
 
 **OUT**
 

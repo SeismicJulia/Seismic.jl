@@ -1,5 +1,5 @@
 function SeisWindowHeadersPatch(in, out; key=[], minval=[], maxval=[], tmin=0,
-                           tmax=99999, ntrace=1000000)
+                           tmax=99999, ntrace=1000000,it_nt=9e9)
 
 
 
@@ -41,13 +41,18 @@ function SeisWindowHeadersPatch(in, out; key=[], minval=[], maxval=[], tmin=0,
     close(stream_h)
 
     nt = convert(Int64,round((tmax - tmin)/h.d1)) + 1
+
+
     if nt > h.n1
 	     nt = h.n1
+    end
+    if nt<it_nt
+	nt = nt-1
     end
 
     minval = convert(Array{Float32,1},vec(minval))
     maxval = convert(Array{Float32,1},vec(maxval))
-    key2 = String[]
+    key2 = AbstractString[]
     minval2 = Float32[]
     maxval2 = Float32[]
     for ikey=1:length(key)

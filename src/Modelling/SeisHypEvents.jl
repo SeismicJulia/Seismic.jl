@@ -14,7 +14,7 @@ Generate two dimensional data `d` consisting of hyperbolic events.
 * `vel::Vector{Real}=[1500.0, 2000.0, 3000.0]`: rms velocities in m/s
 * `apex::Vector{Real}=[0.0, 0.0, 0.0]`: apex-shifts in meters.
 * `amp::Vector{Real}=[1.0, -1.0, 1.0]`: amplitudes for each event.
-* `wavelet::String="ricker"`: wavelet used to model the events.
+* `wavelet::AbstractString="ricker"`: wavelet used to model the events.
 * `f0::Vector{Real}=[20.0]`: central frequency of wavelet for each event.
 
 # Output
@@ -36,7 +36,7 @@ function SeisHypEvents{T1<:Real, T2<:Real, T3<:Real, T4<:Real, T5<:Real
                         vel::Vector{T2}=[1500.0, 2000.0, 3000.0],
                         apex::Vector{T3}=[0.0, 0.0, 0.0],
                         amp::Vector{T4}=[1.0, -1.0, 1.0],
-                        wavelet::String="ricker",
+                        wavelet::AbstractString="ricker",
                         f0::Vector{T5}=[20.0])
 
     x = ox + collect(0:1:nx-1)*dx
@@ -55,18 +55,18 @@ function SeisHypEvents{T1<:Real, T2<:Real, T3<:Real, T4<:Real, T5<:Real
             wav = cat(1, wav, zeros(nf-nwav))
             Wav = fft(wav)
             delay = dt*(floor(Int, nwav/2))
-            shift = sqrt(tau[ievent]^2 + ((x-apex[ievent])/vel[ievent]).^2)'
+            shift = sqrt.(tau[ievent]^2 + ((x-apex[ievent])/vel[ievent]).^2)'
         else
             error("Other wavelets apart from Ricker not implemented yet")
         end
         for iw = 1:nw
             w = (iw - 1)*dw
-            D[iw:iw, :] += amp[ievent]*Wav[iw]*exp(-1im*w*(shift-delay))
+            D[iw:iw, :] += amp[ievent]*Wav[iw]*exp.(-1im*w*(shift-delay))
         end
     end
     for iw = nw+1:nf
         D[iw, :] = conj(D[nf-iw+2, :])
-    end 
+    end
     d = ifft(D, 1)
     d = real(d[1:nt, :])
     extent = Extent(Int32(nt), Int32(nx), Int32(1), Int32(1), Int32(1),

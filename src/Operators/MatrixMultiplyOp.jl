@@ -28,7 +28,7 @@ function MatrixMultiplyOp(in,h::Array{Header,1},e;adj=false,matrix=1)
 	return out,h
 end
 
-function MatrixMultiplyOp(m::String,d::String,adj;matrix=1)
+function MatrixMultiplyOp(m::AbstractString,d::AbstractString,adj;matrix=1)
 
 	@compat parameters = Dict(:adj=>adj,:matrix=>matrix)
 	if (adj==true)

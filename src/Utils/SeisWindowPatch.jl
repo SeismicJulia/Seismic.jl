@@ -12,7 +12,7 @@
 *Credits: AS, FC, 2017*
 """
 
-function SeisWindowPatch(in::AbstractString,out::AbstractString;key=[],minval=[],maxval=[])
+function SeisWindowPatch(in::AbstractString,out::AbstractString;key=[],minval=[],maxval=[],it_nt=9e9)
   println("processing patch ",out)
   DATAPATH = get(ENV,"DATAPATH",join([pwd(),"/"]))
   extent = ReadTextHeader(in)
@@ -27,6 +27,7 @@ function SeisWindowPatch(in::AbstractString,out::AbstractString;key=[],minval=[]
 
   #itmin is the sample at which tmin is saved
   itmin = convert(Int32,round((tmin - extent.o1)/extent.d1) + 1)
+
   if (itmin < 1)
 	   itmin = 1
   end
@@ -35,8 +36,9 @@ function SeisWindowPatch(in::AbstractString,out::AbstractString;key=[],minval=[]
 	   itmax = extent.n1
   end
 
+
   SeisWindowHeadersPatch(in, out; key=key, minval=minval, maxval=maxval, tmin=tmin,
-                      tmax=tmax)
+                      tmax=tmax,it_nt=it_nt)
   FetchTracesPatch(in,out;itmin=itmin,itmax=itmax ,key=key, minval=minval, maxval=maxval)
   tmp = join(["tmp_SeisWindow_",string(round(Int,rand()*100000))])
 
@@ -97,7 +99,7 @@ function FetchTracesPatch(in::AbstractString, out::AbstractString; ntrace=500, i
       itmax = round(Int,nt)
     end
 
-    @compat nhead = length(fieldnames(Header)) 
+    @compat nhead = length(fieldnames(Header))
 
     while itrace <= NX
       if (itrace > 1)

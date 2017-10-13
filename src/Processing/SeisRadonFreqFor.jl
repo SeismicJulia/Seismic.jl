@@ -10,7 +10,7 @@ number of intercept times and `np` the number of curvatures or ray parameters.
 * `nt::Int`: number of time samples in the data domain.
 
 # Keyword arguments
-* `order::String="parab"`: `"parab"` for parabolic transform, `"linear"`
+* `order::AbstractString="parab"`: `"parab"` for parabolic transform, `"linear"`
 for linear transform.
 * `dt::Real=0.004`: sampling interval in seconds.
 * `h::Vector{Real}=collect(0.0:20.0:1000.0)`: offset vector; `h[1:nh]`.
@@ -33,14 +33,14 @@ offset space reconstruction: Geophysics, 60, 1169-1177.
 """
 
 function SeisRadonFreqFor{Tm<:Real, Th<:Real, Tp<:Real
-                          }(m::Array{Tm,2}, nt::Int; order::String="parab",
+                          }(m::Array{Tm,2}, nt::Int; order::AbstractString="parab",
                             dt::Real=0.004, href::Real=0.0,
                             h::Vector{Th}=collect(0.0:20.0:1000.0),
                             p::Vector{Tp}=collect(-0.05:0.01:2.2),
                             flow::Real=0.0, fhigh::Real=125.0)
     if order=="parab"
         I = 2
-        href == 0 && (href = maximum(abs(h)))
+        href == 0 && (href = maximum(abs.(h)))
     elseif order=="linear"
         I = 1
         href = 1.0
@@ -67,7 +67,7 @@ function SeisRadonFreqFor{Tm<:Real, Th<:Real, Tp<:Real
             end
         end
         D[iw, :] = L*M[iw,:]
-    end 
+    end
     for iw = round(Int, nw/2)+2:nw
         D[iw, :] = conj(D[nw-iw+2, :])
     end

@@ -9,15 +9,15 @@ data `d`. Noise can be band limited using kewyord `L`.
 * `snr::Real`: signal-to-noise ratio.
 
 # Keyword arguments
-* `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=true` if 
+* `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=true` if
 snr is given in dB.
-* `pdf::String="gaussian"`: random noise probability distribution:
+* `pdf::AbstractString="gaussian"`: random noise probability distribution:
 `"gaussian"` or `"uniform"`.
 * `L::Int=1`: averaging operator length to band-limit the random noise.
 
 # Examples
 ```
-julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn); 
+julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn);
 MeasureSNR(w, wn)
 
 julia> d, extent = SeisHypEvents(); dn = SeisAddNoise(d, 1.0, db=true, L=9);
@@ -26,8 +26,8 @@ SeisPlot([d dn], extent); MeasureSNR(d, dn, db=true)
 Credits: Juan I. Sabbione, 2016
 """
 
-function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false, 
-                                  pdf::String="gaussian", L::Int=1)
+function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false,
+                                  pdf::AbstractString="gaussian", L::Int=1)
 
     noise = GenNoise(size(d), pdf, L=L)
     if db==false
@@ -41,8 +41,8 @@ function SeisAddNoise{T<:Real, N}(d::Array{T, N}, snr::Real; db::Bool=false,
 
 end
 
-# Generate the noise 
-function GenNoise(dims::Tuple, pdf::String; L::Int=1)
+# Generate the noise
+function GenNoise(dims::Tuple, pdf::AbstractString; L::Int=1)
     N = length(dims)
     n1 = dims[1]
     N == 1 ? nx = 1 : nx = *(dims[2:end]...)

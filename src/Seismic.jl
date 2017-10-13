@@ -1,5 +1,5 @@
 module Seismic
-    using Grid,Requires,Compat
+    using Interpolations,Requires,Compat
     include("ReadWrite/ReadWrite.jl")
     include("Utils/Utils.jl")
     include("Processing/Processing.jl")
