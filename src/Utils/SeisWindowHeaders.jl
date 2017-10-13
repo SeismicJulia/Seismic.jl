@@ -56,7 +56,7 @@ function RejectHeaders(h_in::Array{Header,1}, key::Array{AbstractString,1},
     for j=1:nx
 	keep = true
 	for ikey=1:nkeys
-	
+
 	    key_val = convert(Float32,getfield(h_in[j],Symbol(key[ikey])))
 
 	    if (key_val < minval[ikey] || key_val > maxval[ikey])
@@ -64,7 +64,7 @@ function RejectHeaders(h_in::Array{Header,1}, key::Array{AbstractString,1},
 	    end
 	end
 	if (keep==true)
-	
+
 	    h_out = push!(h_out,h_in[j])
 	end
     end

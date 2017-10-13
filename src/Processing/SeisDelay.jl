@@ -1,3 +1,25 @@
+"""
+    SeisDelay(d ; <keyword arguments>)
+
+Apply a time delay to a 2D array input. 
+
+# Arguments
+* `d`: Input 2D data array in tx domain.
+
+# Keyword arguments
+* `delay=0.1`: time delay in seconds.
+* `dt=0.001`: time sampling 
+
+
+# Output
+* `d2`: Delayed data in time domain
+
+# Example
+```julia
+julia> d = SeisLinearEvents(d); SeisPlot(d);
+julia> d2 = SeisDelay(d;dt=0.004); SeisPlot(d);
+"""
+
 function SeisDelay(d; delay=0.1, dt=0.001)
 	
     nt = size(d,1)

@@ -1,3 +1,25 @@
+"""
+    SeisDecimate(d ; <keyword arguments>)
+
+Decimate a multidimensional array input. Input and output have the same dimension
+
+# Arguments
+* `d`: Input data. Between 2D and 5D
+
+# Keyword arguments
+* `mode=random`: Data is decimated randomly. Otherwise it is regularly decimated.
+* `perc=50`: percentage of traces to be decimated from original array
+* `incx1=1,incx2=1,incx3=1,incx4=1`: traces to decimate in case of regular decimation
+
+# Output
+* `out`: Decimated data. 
+
+# Example
+```julia
+julia> d = SeisLinearEvents(d); SeisPlot(d)
+julia> d_dec = SeisDecimate(d); SeisPlot(d_dec)
+"""
+
 function SeisDecimate(in;mode="random",perc=50,incx1=1,incx2=1,incx3=1,incx4=1)
     
     if (mode=="random") # decimate data randomly

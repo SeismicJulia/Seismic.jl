@@ -1,7 +1,7 @@
 """
     SeisGeometry(in;<keyword arguments>)
 
-Update headers with geometry information.
+Update headers with geometry information. Offsets and azimuths are calculated from source and receivers coordinates. 
 
 # Arguments
 * `in`: input filename
@@ -22,7 +22,8 @@ the .seish file is updated with the following information:
 * hx,hy,h,az,mx,my : calculated offset, azimuth and midpoint
 * isx,isy,igx,igy,imx,imy,ihx,ihy,ih,iaz: calculated grid nodes for source and receiver position and midpoint, offset and azimuth.
 
-*Credits: A. Stanton, F.Carozzi,2017*
+
+*Credits: A. Stanton, 2017*
 
 """
 

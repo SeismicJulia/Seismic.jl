@@ -17,11 +17,11 @@ function LinearOperator(in,operators,parameters;adj=true)
 			m = copy(d)
 		end
 		return d
-	end	
+	end
 
 end
 
-function LinearOperator(m::String,d::String,operators,parameters;adj=true)
+function LinearOperator(m::AbstractString,d::AbstractString,operators,parameters;adj=true)
 
     rand_string = string(round(Int,rand()*100000))
     tmp_m = join(["tmp_CG_m_",rand_string])
@@ -46,11 +46,11 @@ function LinearOperator(m::String,d::String,operators,parameters;adj=true)
         SeisCopy(tmp_d,d)
         SeisRemove(tmp_m)
         SeisRemove(tmp_d)
-    end    
+    end
 
 end
 
-function LinearOperator(m::Array{String,1},d::Array{String,1},operators,parameters;adj=true)
+function LinearOperator(m::Array{AbstractString,1},d::Array{AbstractString,1},operators,parameters;adj=true)
 
     rand_string = string(round(Int,rand()*100000))
     tmp_m = [join(["tmp_CG_m1_",rand_string]);join(["tmp_CG_m2_",rand_string])]
@@ -65,7 +65,7 @@ function LinearOperator(m::Array{String,1},d::Array{String,1},operators,paramete
             else
                 for k = 1 : length(m)
                     op(tmp_m[k],tmp_d[k],true;parameters[j]...)
-                end    
+                end
                 SeisCopy(tmp_m,tmp_d)
             end
         end
@@ -82,13 +82,13 @@ function LinearOperator(m::Array{String,1},d::Array{String,1},operators,paramete
             else
                 for k = 1 : length(m)
                     op(tmp_m[k],tmp_d[k],false;parameters[j]...)
-                end    
+                end
                 SeisCopy(tmp_d,tmp_m)
             end
-        end    
+        end
         SeisCopy(tmp_d,d)
         SeisRemove(tmp_m)
         SeisRemove(tmp_d)
-    end    
+    end
 
 end
