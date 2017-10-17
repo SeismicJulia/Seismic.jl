@@ -10,6 +10,7 @@ markdown_extensions:
   - extra
   - tables
   - fenced_code
+  - mdx_math
 
 extra_css:
   - assets/Documenter.css
@@ -28,8 +29,7 @@ pages:
 - Imaging:   Imaging/page1.md
 - Modelling: Modelling/page1.md
 - Operators: Operators/page1.md
-- Plotting:  Plotting/page1.md
-- Processing: Processing/page1.md
+- Plotting:  Plotting/page1.md 
 - ReadWrite: ReadWrite/page1.md
 - Solvers:   Solvers/page1.md
 - Tools:     Tools/page1.md

@@ -11,10 +11,10 @@
 
 This module provides tools to read, write, process, and plot 3D reflection 
 seismic data. 
-[//]: # (The documentation can be found [here](http://seismic.physics.ualberta.ca).)
+(The documentation can be found [here](http://seismic.physics.ualberta.ca) and [here](http://seismicjulia.github.io/Seismic.jl))
 
 ## Installation
-To use this package you must first install [the Julia programming language](http://julialang.org). Once you have Julia you can download and install the Seismic package by typing ```Pkg.add("Seismic")``` on the Julia command line.
+To use this package you must first install [the Julia programming language](http://julialang.org). Once you have Julia you can download and install the Seismic package by typing ```Pkg.add("Seismic")``` on the Julia command line and then run ```Pkg.checkout("Seismic")``` to stay updated to the last version in this repository. 
 
 ## Basic usage
 Once you have installed the package you can type `using Seismic` to start using

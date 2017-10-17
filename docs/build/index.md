@@ -4,7 +4,7 @@
 # Seismic.jl
 
 
-Seismic signal analysis and imaging
+Seismic data processing, imaging and plotting
 
 
 ---
@@ -23,7 +23,7 @@ Seismic.jl provides tools to **process**, **image**, and **plot** reflection sei
 ### _Convert data to a simple format_
 
 
-Data and headers are stored separately as _filename.seisd_ and _filename.seish_ for simplicity. Functions are available to convert from popular formats such as SEGY, SU and RSF.
+Data and headers are stored separately as _filename@data@_ and _filename@headers@_ for  simplicity. Functions are available to convert from popular formats such as SEGY, SU and RSF.
 
 
 <a id='_Manipulate-data_-1'></a>
@@ -58,25 +58,55 @@ Pkg.add("Seismic")
 ```
 
 
-<a id='Index-1'></a>
+```no-highlight
+Pkg.checkout("Seismic")
+```
 
-## Index
 
-- [`Seismic.Berlage`](Wavelets/page1.md#Seismic.Berlage)
-- [`Seismic.Ormsby`](Wavelets/page1.md#Seismic.Ormsby)
-- [`Seismic.Ricker`](Wavelets/page1.md#Seismic.Ricker)
-- [`Seismic.SeisAcousticWave`](Modelling/page1.md#Seismic.SeisAcousticWave)
-- [`Seismic.SeisAddNoise`](Modelling/page1.md#Seismic.SeisAddNoise)
-- [`Seismic.SeisBinData`](Utils/page1.md#Seismic.SeisBinData)
-- [`Seismic.SeisBinHeaders`](Utils/page1.md#Seismic.SeisBinHeaders)
-- [`Seismic.SeisGeometry`](Utils/page1.md#Seismic.SeisGeometry)
-- [`Seismic.SeisHypEvents`](Modelling/page1.md#Seismic.SeisHypEvents)
-- [`Seismic.SeisLinearEvents`](Modelling/page1.md#Seismic.SeisLinearEvents)
-- [`Seismic.SeisParabEvents`](Modelling/page1.md#Seismic.SeisParabEvents)
-- [`Seismic.SeisPatch`](Utils/page1.md#Seismic.SeisPatch)
-- [`Seismic.SeisPlot`](Plotting/page1.md#Seismic.SeisPlot)
-- [`Seismic.SeisPlotCoordinates`](Plotting/page1.md#Seismic.SeisPlotCoordinates)
-- [`Seismic.SeisSort`](Utils/page1.md#Seismic.SeisSort)
-- [`Seismic.SeisUnPatch`](Utils/page1.md#Seismic.SeisUnPatch)
-- [`Seismic.SeisWindow`](Utils/page1.md#Seismic.SeisWindow)
+---
+
+
+<a id='Getting-started-1'></a>
+
+## Getting started
+
+
+To start using the functions simply type `using Seismic`. Below is a simple demonstration of the plotting functionality: 
+
+
+```no-highlight
+using PyPlot,Seismic
+
+param = Dict(:nt=>500, :nx1=>500, :tau=>[0.4, 1.0], :p1=>[-.00003, 0.00008], :amp=>[1., -0.5], :f0=>20.0)
+
+d,ext = SeisLinearEvents(;param...)
+
+plotpar = Dict(:style=>"overlay",
+           :wiggle_trace_increment=>10,
+           :xcur=>0.8,
+           :aspect=>"auto",
+           :xlabel=>"X",:xunits=>"meters",:ox=>0,:dx=>10,
+           :ylabel=>"Time",:yunits=>"seconds",:oy=>0,:dy=>0.004,
+           :wbox=>8,:hbox=>5,
+           :cmap=>"seismic");
+
+plotpar[:style]="color"; plotpar[:title]="color"; plotpar[:name]="plot1"; 
+SeisPlot(d;plotpar...);
+plotpar[:style]="wiggles"; plotpar[:title]="wiggles"; plotpar[:name]="plot2"; 
+SeisPlot(d;plotpar...);
+plotpar[:style]="overlay"; plotpar[:title]="overlay"; plotpar[:name]="plot3"; 
+SeisPlot(d;plotpar...);
+```
+
+
+will produce these three `.eps` files:
+
+
+![plot1](http://www.ualberta.ca/~kstanton/files/plot1.png "color")
+
+
+![plot2](http://www.ualberta.ca/~kstanton/files/plot2.png "wiggles")
+
+
+![plot3](http://www.ualberta.ca/~kstanton/files/plot3.png "overlay")
 

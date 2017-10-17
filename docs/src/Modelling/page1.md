@@ -8,18 +8,11 @@ Seismic.jl provides various ways to generate synthetic data set, like multi-dime
 Seismic.SeisLinearEvents
 ```
 
-## SeisAddNoise
-
-```@docs
-Seismic.SeisAddNoise
-```
-
 ## SeisParabEvents
 
 ```@docs
 Seismic.SeisParabEvents
 ```
-
 
 ## SeisHypEvents
 
@@ -27,18 +20,17 @@ Seismic.SeisParabEvents
 Seismic.SeisHypEvents
 ```
 
-
 ## SeisAddNoise
+
+```@docs
+Seismic.SeisAddNoise
+```
+
+
+## SeisAcousticWave
 
 ```@docs
 Seismic.SeisAcousticWave 
 ```
 
-### Example
 
-```@example
-using Seismic,PyPlot
-SeisPlot(randn(20,20))
-savefig("pic.svg"); nothing # hide
-```
- ![](pic.svg)
