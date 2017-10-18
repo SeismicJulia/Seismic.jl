@@ -20,7 +20,7 @@ Seismic.jl provides tools to work with real data sets like binning, patching, un
 SeisGeometry(in;<keyword arguments>)
 ```
 
-Update headers with geometry information.
+Update headers with geometry information. Offsets and azimuths are calculated from source and receivers coordinates. 
 
 **Arguments**
 
@@ -44,10 +44,10 @@ the .seish file is updated with the following information:
   * hx,hy,h,az,mx,my : calculated offset, azimuth and midpoint
   * isx,isy,igx,igy,imx,imy,ihx,ihy,ih,iaz: calculated grid nodes for source and receiver position and midpoint, offset and azimuth.
 
-*Credits: A. Stanton, F.Carozzi,2017*
+*Credits: A. Stanton, 2017*
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Utils/SeisGeometry.jl#L1-L27' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisGeometry.jl#L1-L28' class='documenter-source'>source</a><br>
 
 
 ##SeisBinHeaders
@@ -92,10 +92,10 @@ Keyword arguments should be consistent with SeisGeometry keyword arguments.
 
 In file `out`, binned headers are created.
 
-*Credits: Aaron Stanton, F Carozzi,2017*
+*Credits: Aaron Stanton,2017*
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Utils/SeisBinHeaders.jl#L1-L34' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisBinHeaders.jl#L1-L34' class='documenter-source'>source</a><br>
 
 
 ##SeisBinData
@@ -113,8 +113,8 @@ Sequentially bin seismic data using already binned trace headers (SeisBinHeaders
 
 **Arguments**
 
-  * `in`: filename of input, irregularly sampled data
-  * `out`: filename of output, regularly sampled data
+  * `in::AbstractString`: filename of input, irregularly sampled data
+  * `out::AbstractString`: filename of output, regularly sampled data
 
 **Keyword arguments**
 
@@ -138,10 +138,10 @@ Sequentially bin seismic data using already binned trace headers (SeisBinHeaders
 
 In file `out`, the binned data is created.
 
-*Credits: Aaron Stanton, Fernanda Carozzi, 2017*
+*Credits: Aaron Stanton, 2017*
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Utils/SeisBinData.jl#L1-L33' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisBinData.jl#L1-L33' class='documenter-source'>source</a><br>
 
 
 ##SeisPatch
@@ -176,12 +176,12 @@ Creates overlapping 5d patches from a 5d volume
 
 **Output**
 
-`filename,npatch`: String Array with the file name of the data patches, number of patches created
+`filename,npatch`: AbstractString Array with the file name of the data patches, number of patches created
 
 *Credits: A. Stanton, F. Carozzi, 2017*
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Utils/SeisPatch.jl#L1-L25' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisPatch.jl#L1-L25' class='documenter-source'>source</a><br>
 
 
 ##SeisUnPatch
@@ -230,7 +230,7 @@ In file `out`, the 5D reconstructed volume is created.
 *Credits: A. Stanton, F Carozzi, 2017*
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Utils/SeisUnPatch.jl#L1-L34' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisUnPatch.jl#L1-L34' class='documenter-source'>source</a><br>
 
 
 ##SeisSort
@@ -264,7 +264,7 @@ file `out` is created with data sorted.
 *Credits: AS, 2015*
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Utils/SeisSort.jl#L1-L19' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisSort.jl#L1-L19' class='documenter-source'>source</a><br>
 
 
 ##SeisWindow
@@ -296,5 +296,5 @@ note that windowing along the time axis is achieved by using the key "t".
 *Credits: AS, 2015*
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Utils/SeisWindow.jl#L1-L18' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisWindow.jl#L1-L18' class='documenter-source'>source</a><br>
 

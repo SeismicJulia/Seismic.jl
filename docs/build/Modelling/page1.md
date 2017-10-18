@@ -47,8 +47,7 @@ Generate five dimensional data `d` consisting of linear events.
   * `p3=[-0.0001,-0.0001]`
   * `p4=[0.0001,-0.0000]`
   * `amp=[1.0,-1.0]`: amplitudes for each linear event.
-  * `wavelet="ricker"`: wavelet used to model the linear events.
-  * `f0=[20.0]`: central frequency of wavelet for each linear event.
+  * `f0=20.0`: central frequency of wavelet for each linear event.
 
 **Example**
 
@@ -59,55 +58,7 @@ julia> d,extent = SeisLinearEvents(); SeisPlot(d);
 Credits: Aaron Stanton, 2015
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisLinearEvents.jl#L1-L40' class='documenter-source'>source</a><br>
-
-
-<a id='SeisAddNoise-1'></a>
-
-## SeisAddNoise
-
-<a id='Seismic.SeisAddNoise' href='#Seismic.SeisAddNoise'>#</a>
-**`Seismic.SeisAddNoise`** &mdash; *Function*.
-
-
-
-```
-SeisAddNoise(d, snr; <keyword arguments>)
-```
-
-Add noise at a given signal-to-noise ratio level `snr` to an N-dimensional input data `d`. Noise can be band limited using kewyord `L`.
-
-**Arguments**
-
-  * `d::Array{Real, N}`: N-dimensional data.
-  * `snr::Real`: signal-to-noise ratio.
-
-**Keyword arguments**
-
-  * `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=true` if
-
-snr is given in dB.
-
-  * `pdf::String="gaussian"`: random noise probability distribution:
-
-`"gaussian"` or `"uniform"`.
-
-  * `L::Int=1`: averaging operator length to band-limit the random noise.
-
-**Examples**
-
-```
-julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn); 
-MeasureSNR(w, wn)
-
-julia> d, extent = SeisHypEvents(); dn = SeisAddNoise(d, 1.0, db=true, L=9);
-SeisPlot([d dn], extent); MeasureSNR(d, dn, db=true)
-```
-
-Credits: Juan I. Sabbione, 2016
-
-
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisAddNoise.jl#L1-L27' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Modelling/SeisLinearEvents.jl#L1-L39' class='documenter-source'>source</a><br>
 
 
 <a id='SeisParabEvents-1'></a>
@@ -162,7 +113,7 @@ julia> d, extent = SeisParabEvents(); SeisPlot(d);
 Credits: Mauricio D Sacchi, 2015
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisParabEvents.jl#L1-L40' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Modelling/SeisParabEvents.jl#L1-L40' class='documenter-source'>source</a><br>
 
 
 <a id='SeisHypEvents-1'></a>
@@ -190,7 +141,7 @@ Generate two dimensional data `d` consisting of hyperbolic events.
   * `vel::Vector{Real}=[1500.0, 2000.0, 3000.0]`: rms velocities in m/s
   * `apex::Vector{Real}=[0.0, 0.0, 0.0]`: apex-shifts in meters.
   * `amp::Vector{Real}=[1.0, -1.0, 1.0]`: amplitudes for each event.
-  * `wavelet::String="ricker"`: wavelet used to model the events.
+  * `wavelet::AbstractString="ricker"`: wavelet used to model the events.
   * `f0::Vector{Real}=[20.0]`: central frequency of wavelet for each event.
 
 **Output**
@@ -207,12 +158,60 @@ SeisPlot(d, extent);
 ```
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisHypEvents.jl#L1-L30' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Modelling/SeisHypEvents.jl#L1-L30' class='documenter-source'>source</a><br>
 
 
-<a id='SeisAddNoise-2'></a>
+<a id='SeisAddNoise-1'></a>
 
 ## SeisAddNoise
+
+<a id='Seismic.SeisAddNoise' href='#Seismic.SeisAddNoise'>#</a>
+**`Seismic.SeisAddNoise`** &mdash; *Function*.
+
+
+
+```
+SeisAddNoise(d, snr; <keyword arguments>)
+```
+
+Add noise at a given signal-to-noise ratio level `snr` to an N-dimensional input data `d`. Noise can be band limited using kewyord `L`.
+
+**Arguments**
+
+  * `d::Array{Real, N}`: N-dimensional data.
+  * `snr::Real`: signal-to-noise ratio.
+
+**Keyword arguments**
+
+  * `db::Bool=false`: `db=false` if `snr` is given by amplitude, `db=true` if
+
+snr is given in dB.
+
+  * `pdf::AbstractString="gaussian"`: random noise probability distribution:
+
+`"gaussian"` or `"uniform"`.
+
+  * `L::Int=1`: averaging operator length to band-limit the random noise.
+
+**Examples**
+
+```
+julia> w = Ricker(); wn = SeisAddNoise(w, 2); plot(w); plot(wn);
+MeasureSNR(w, wn)
+
+julia> d, extent = SeisHypEvents(); dn = SeisAddNoise(d, 1.0, db=true, L=9);
+SeisPlot([d dn], extent); MeasureSNR(d, dn, db=true)
+```
+
+Credits: Juan I. Sabbione, 2016
+
+
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Modelling/SeisAddNoise.jl#L1-L27' class='documenter-source'>source</a><br>
+
+
+<a id='SeisAcousticWave-1'></a>
+
+## SeisAcousticWave
 
 <a id='Seismic.SeisAcousticWave' href='#Seismic.SeisAcousticWave'>#</a>
 **`Seismic.SeisAcousticWave`** &mdash; *Function*.
@@ -243,19 +242,5 @@ finite difference modeling of acoustic wave field, generate a common shot gather
   * `shot :: ShotGather`: composite type for common shot gather
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Modelling/SeisAcousticWave.jl#L445-L463' class='documenter-source'>source</a><br>
-
-
-<a id='Example-1'></a>
-
-### Example
-
-
-```julia
-using Seismic,PyPlot
-SeisPlot(randn(20,20))
-```
-
-
-![](pic.svg)
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Modelling/SeisAcousticWave.jl#L445-L463' class='documenter-source'>source</a><br>
 

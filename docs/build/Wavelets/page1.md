@@ -43,7 +43,7 @@ julia> w = Berlage(); plot(w);
   * Aldridge, David F., 1990, The berlage wavelet: GEOPHYSICS, 55, 1508–1511.
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Wavelets/Berlage.jl#L1-L24' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Wavelets/Berlage.jl#L1-L24' class='documenter-source'>source</a><br>
 
 
 <a id='Ormsby-1'></a>
@@ -59,7 +59,7 @@ julia> w = Berlage(); plot(w);
 Ormsby(; <keyword arguments>)
 ```
 
-Create a Ormsby wavelet sampled every dt seconds with corner frequencies defined by the vector f = [f1, f2, f3, f4]. The final wavelet is multiplied by a Hamming window. 
+Create a Ormsby wavelet sampled every dt seconds with corner frequencies defined by the vector f = [f1, f2, f3, f4]. The final wavelet is multiplied by a Hamming window.
 
 **Arguments**
 
@@ -72,7 +72,7 @@ Create a Ormsby wavelet sampled every dt seconds with corner frequencies defined
     ^
     ```
 
-    1 |     ***************     |    *               *     |   *                 *     |  *                   *      | *                     *      ––––––––––––––-> f        f1  f2           f3  f4
+    1 |     ***************     |    *               *     |   *                 *     |  *                   *     | *                     *     ––––––––––––––-> f       f1  f2           f3  f4
 
 **Example**
 
@@ -81,7 +81,7 @@ julia> w = Ormsby(); plot(w);
 ```
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Wavelets/Ormsby.jl#L1-L28' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Wavelets/Ormsby.jl#L1-L28' class='documenter-source'>source</a><br>
 
 
 <a id='Ricker-1'></a>
@@ -116,5 +116,5 @@ julia> w = Ricker(dt=0.004, f0=20); plot(w);
 Sheriff, Robert, 2002, Encyclopedic Dictionary of Applied Geophysics, fourth ed.: Society of Exploration Geophysicists. Geophysical Reference Series No. 13.
 
 
-<a target='_blank' href='https://github.com/fercarozzi/myseismicjulia/tree/c2832f8331d8b4cba573c54c2dd0183c518801d7/src/Wavelets/Ricker.jl#L1-L19' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Wavelets/Ricker.jl#L1-L19' class='documenter-source'>source</a><br>
 

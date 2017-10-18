@@ -2,10 +2,10 @@ using Documenter, Seismic
 
 makedocs(
     modules = [Seismic],
-    doctest = true)
+    doctest = false)
 
 deploydocs(
     deps   = Deps.pip("mkdocs", "python-markdown-math"),
-    repo   = "github.com/msacchi/Seismic.jl.git",
-    julia  = "0.5",
+    repo   = "https://github.com/fercarozzi/Seismic.jl.git",
+    julia  = "0.6",
     osname = "osx")
