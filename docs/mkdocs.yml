@@ -1,5 +1,5 @@
 site_name:        Seismic.jl
-repo_url:         https://github.com/fercarozzi/Seismic.jl.git
+repo_url:         https://github.com/SeismicJulia/Seismic.jl.git
 site_description: Julia package for seismic signal analysis and imaging
 site_author:      SAIG group
 theme:            readthedocs
