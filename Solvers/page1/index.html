@@ -7,20 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <meta name="author" content="SAIG group">
-  
-  <title>Solvers - Seismic.jl</title>
-  
-
   <link rel="shortcut icon" href="../../img/favicon.ico">
-
-  
+  <title>Solvers - Seismic.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="../../css/highlight.css">
   <link href="../../assets/Documenter.css" rel="stylesheet">
-
   
   <script>
     // Current page data
@@ -31,11 +25,7 @@
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
-  <script src="../../js/theme.js"></script> 
-  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-  <script src="../../assets/mathjaxhelper.js"></script>
-
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
   
 </head>
 
@@ -55,91 +45,74 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        <ul class="current">
+	<ul class="current">
+	  
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../..">Introduction</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Introduction</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Imaging/page1/">Imaging</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Imaging/page1/">Imaging</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Modelling/page1/">Modelling</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Modelling/page1/">Modelling</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Operators/page1/">Operators</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Operators/page1/">Operators</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Plotting/page1/">Plotting</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Plotting/page1/">Plotting</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Processing/page1/">Processing</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Solvers</a>
-        
-            <ul>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Solvers</a>
+    <ul class="subnav">
             
-                <li class="toctree-l3"><a href="#solvers">Solvers</a></li>
-                
-            
-            </ul>
-        
-    </li>
-<li>
+    <li class="toctree-l2"><a href="#solvers">Solvers</a></li>
+    
+
+    </ul>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Tools/page1/">Tools</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Tools/page1/">Tools</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Utils/page1/">Utils</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Utils/page1/">Utils</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Wavelets/page1/">Wavelets</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Wavelets/page1/">Wavelets</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Windows/page1/">Windows</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Windows/page1/">Windows</a>
+	    </li>
           
         </ul>
       </div>
@@ -166,9 +139,8 @@
     <li>Solvers</li>
     <li class="wy-breadcrumbs-aside">
       
-        
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github"> Edit on GitHub</a>
-        
+        <a href="https://github.com/SeismicJulia/Seismic.jl.git/edit/master/docs/Solvers/page1.md"
+          class="icon icon-github"> Edit on GitHub</a>
       
     </li>
   </ul>
@@ -208,13 +180,13 @@
       </div>
 
     </section>
-
+    
   </div>
 
-<div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/SeismicJulia/Seismic.jl.git" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../../ReadWrite/page1/" style="color: #fcfcfc;">&laquo; Previous</a></span>
@@ -224,6 +196,9 @@
       
     </span>
 </div>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../../assets/mathjaxhelper.js"></script>
 
 </body>
 </html>

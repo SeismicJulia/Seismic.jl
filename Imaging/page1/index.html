@@ -7,20 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <meta name="author" content="SAIG group">
-  
-  <title>Imaging - Seismic.jl</title>
-  
-
   <link rel="shortcut icon" href="../../img/favicon.ico">
-
-  
+  <title>Imaging - Seismic.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="../../css/highlight.css">
   <link href="../../assets/Documenter.css" rel="stylesheet">
-
   
   <script>
     // Current page data
@@ -31,11 +25,7 @@
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
-  <script src="../../js/theme.js"></script> 
-  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-  <script src="../../assets/mathjaxhelper.js"></script>
-
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
   
 </head>
 
@@ -55,91 +45,86 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        <ul class="current">
+	<ul class="current">
+	  
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../..">Introduction</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Introduction</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Imaging</a>
-        
-            <ul>
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Imaging</a>
+    <ul class="subnav">
             
-                <li class="toctree-l3"><a href="#imaging">Imaging</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l2"><a href="#imaging">Imaging</a></li>
+    
+        <ul>
         
-    </li>
-<li>
+            <li><a class="toctree-l3" href="#poststackwem">PostStackWEM</a></li>
+        
+            <li><a class="toctree-l3" href="#shotprofileewem">ShotProfileEWEM</a></li>
+        
+            <li><a class="toctree-l3" href="#shotprofilewem">ShotProfileWEM</a></li>
+        
+            <li><a class="toctree-l3" href="#computeangles">ComputeAngles</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Modelling/page1/">Modelling</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Modelling/page1/">Modelling</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Operators/page1/">Operators</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Operators/page1/">Operators</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Plotting/page1/">Plotting</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Plotting/page1/">Plotting</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Processing/page1/">Processing</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Solvers/page1/">Solvers</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Tools/page1/">Tools</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Solvers/page1/">Solvers</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Utils/page1/">Utils</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Tools/page1/">Tools</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Wavelets/page1/">Wavelets</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Utils/page1/">Utils</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Windows/page1/">Windows</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Wavelets/page1/">Wavelets</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Windows/page1/">Windows</a>
+	    </li>
           
         </ul>
       </div>
@@ -166,9 +151,8 @@
     <li>Imaging</li>
     <li class="wy-breadcrumbs-aside">
       
-        
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github"> Edit on GitHub</a>
-        
+        <a href="https://github.com/SeismicJulia/Seismic.jl.git/edit/master/docs/Imaging/page1.md"
+          class="icon icon-github"> Edit on GitHub</a>
       
     </li>
   </ul>
@@ -179,6 +163,116 @@
               
                 <p><a id='Imaging-1'></a></p>
 <h1 id="imaging">Imaging</h1>
+<p><a id='PostStackWEM-1'></a></p>
+<h2 id="poststackwem">PostStackWEM</h2>
+<div class="codehilite"><pre><span></span>Seismic.PostStackWEM
+</pre></div>
+
+
+<p><a id='ShotProfileEWEM-1'></a></p>
+<h2 id="shotprofileewem">ShotProfileEWEM</h2>
+<p><a id='Seismic.ShotProfileEWEM' href='#Seismic.ShotProfileEWEM'>#</a>
+<strong><code>Seismic.ShotProfileEWEM</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>ShotProfileEWEM</strong></p>
+<p><em>Shot Profile Elastic Wave Equation Migration and Demigration of 3D isotropic data.</em></p>
+<p><strong>IN</strong></p>
+<ul>
+<li>m : vector of filenames of image (comprised of [mpp;mps1;mps2])</li>
+<li>d : vector of filenames of data (comprised of [ux;uy;uz])</li>
+<li>adj : flag for adjoint (migration), or forward (demigration) (default=true)</li>
+<li>damping = 1000. : damping for deconvolution imaging condition</li>
+<li>vp = "vp" : seis file containing the p-wave velocity (should have same x and z dimensions as the desired image)</li>
+<li>vs = "vs" : seis file containing the s-wave velocity (should have same x and z dimensions as the desired image)</li>
+<li>angx = "angx" : seis file containing incidence angles in the x direction for each shot</li>
+<li>angy = "angy" : seis file containing incidence angles in the y direction for each shot</li>
+<li>wav = "wav" : seis file containing the source wavelet (in time domain)</li>
+<li>sz = 0. : source depth (Dev: read this from source wavelet file for variable source depth)</li>
+<li>gz = 0. : receiver depth (Dev: read this from data file for variable source depth (but then what to do in fwd op?))</li>
+<li>nangx = 1 : number of angle bins in x direction</li>
+<li>oangx = 0. : min angle in x direction (angle between source incidence angle and reflector normal in Degrees)</li>
+<li>dangx = 1. : angle increment in x direction</li>
+<li>nangy = 1 : number of angle bins in y direction</li>
+<li>oangy = 0. : min angle in y direction (angle between source incidence angle and reflector normal in Degrees)</li>
+<li>dangy = 1. : angle increment in y direction</li>
+<li>fmin = 0. : min frequency to process (Hz)</li>
+<li>fmax = 80. : max frequency to process (Hz)</li>
+<li>padt = 1 : pad factor for the time axis</li>
+<li>padx = 1 : pad factor for the spatial axes</li>
+<li>verbose = false : flag for error / debugging messages</li>
+<li>sx = [0.] : array of source X positions (meters)</li>
+<li>sy = [0.] : array of source Y positions (meters)</li>
+</ul>
+<p><strong>OUT</strong></p>
+<p><em>Credits: AS, 2015</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Imaging/ShotProfileEWEM.jl#L1-L37' class='documenter-source'>source</a><br></p>
+<p><a id='ShotProfileWEM-1'></a></p>
+<h2 id="shotprofilewem">ShotProfileWEM</h2>
+<p><a id='Seismic.ShotProfileWEM' href='#Seismic.ShotProfileWEM'>#</a>
+<strong><code>Seismic.ShotProfileWEM</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>ShotProfileWEM</strong></p>
+<p><em>Shot Profile Wave Equation Migration and Demigration of 3D isotropic data.</em></p>
+<p><strong>IN</strong></p>
+<ul>
+<li>m : filename of image</li>
+<li>d : filename of data</li>
+<li>adj : flag for adjoint (migration), or forward (demigration) (default=true)</li>
+<li>pspi : flag for Phase Shift Plus Interpolation (default=true)</li>
+<li>nref : number of reference velocities to use if pspi is selected (default=5)</li>
+<li>vel = "vel" : seis file containing the velocity (should have same x and z dimensions as the desired image)</li>
+<li>angx = "angx" : seis file containing incidence angles in the x direction for each shot</li>
+<li>angy = "angy" : seis file containing incidence angles in the y direction for each shot</li>
+<li>wav = "wav" : seis file containing the source wavelet (in time domain)</li>
+<li>sz = 0. : source depth (Dev: read this from source wavelet file for variable source depth)</li>
+<li>gz = 0. : receiver depth (Dev: read this from data file for variable source depth (but then what to do in fwd op?))</li>
+<li>nangx = 1 : number of angle bins in x direction</li>
+<li>oangx = 0. : min angle in x direction (angle between source incidence angle and reflector normal in Degrees)</li>
+<li>dangx = 1. : angle increment in x direction</li>
+<li>nangy = 1 : number of angle bins in y direction</li>
+<li>oangy = 0. : min angle in y direction (angle between source incidence angle and reflector normal in Degrees)</li>
+<li>dangy = 1. : angle increment in y direction</li>
+<li>fmin = 0. : min frequency to process (Hz)</li>
+<li>fmax = 80. : max frequency to process (Hz)</li>
+<li>padt = 2 : pad factor for the time axis</li>
+<li>padx = 2 : pad factor for the spatial axes</li>
+<li>verbose = false : flag for error / debugging messages</li>
+<li>sx = [0.] : array of source X positions (meters)</li>
+<li>sy = [0.] : array of source Y positions (meters)</li>
+</ul>
+<p><strong>OUT</strong></p>
+<p><em>Credits: AS, 2015</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Imaging/ShotProfileWEM.jl#L1-L37' class='documenter-source'>source</a><br></p>
+<p><a id='ComputeAngles-1'></a></p>
+<h2 id="computeangles">ComputeAngles</h2>
+<p><a id='Seismic.ComputeAngles' href='#Seismic.ComputeAngles'>#</a>
+<strong><code>Seismic.ComputeAngles</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>ComputeAngles</strong></p>
+<p><em>Compute angles for shot gathers. These angles can be used for mapping migrated shots into angle gathers during shot profile migration.</em></p>
+<p><strong>IN</strong></p>
+<ul>
+<li>angx = "angx" : filename for incidence angles in the x direction for each shot</li>
+<li>angy = "angy" : filename for incidence angles in the y direction for each shot</li>
+<li>dip_flag = false : flag to subtract reflector dip from the computed angles to make them with reference to reflector normal</li>
+<li>vel = "vel" : seis file containing the velocity (should have same x and z dimensions as the desired image)</li>
+<li>wav = "wav" : seis file containing the source wavelet (in time domain)</li>
+<li>sz = 0. : source depth (Dev: read this from source wavelet file for variable source depth)</li>
+<li>nhx = 101 : number of offset bins</li>
+<li>ohx = 1000. : min offset (surface offset in the data)</li>
+<li>dhx = 10. : offset increment</li>
+<li>nhy = 101 : number of offset bins</li>
+<li>ohy = 1000. : min offset (surface offset in the data)</li>
+<li>dhy = 10. : offset increment</li>
+<li>pade_flag = false : flag for Pade Fourier correction</li>
+<li>fmin = 0. : min frequency to process (Hz)</li>
+<li>fmax = 80. : max frequency to process (Hz)</li>
+<li>padt = 2 : pad factor for the time axis</li>
+<li>padx = 2 : pad factor for the spatial axes</li>
+<li>verbose = false : flag for error / debugging messages</li>
+<li>sx = [0.] : array of source X positions (meters)</li>
+<li>sy = [0.] : array of source Y positions (meters)</li>
+</ul>
+<p><strong>OUT</strong></p>
+<p><em>Credits: AS, 2015</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Imaging/ComputeAngles.jl#L1-L34' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
@@ -208,13 +302,13 @@
       </div>
 
     </section>
-
+    
   </div>
 
-<div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/SeismicJulia/Seismic.jl.git" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../.." style="color: #fcfcfc;">&laquo; Previous</a></span>
@@ -224,6 +318,9 @@
       
     </span>
 </div>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../../assets/mathjaxhelper.js"></script>
 
 </body>
 </html>

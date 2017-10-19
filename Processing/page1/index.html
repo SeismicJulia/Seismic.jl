@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="SAIG group">
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Processing - Seismic.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  <link href="../../assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Processing";
+    var mkdocs_page_input_path = "Processing/page1.md";
+    var mkdocs_page_url = "/Processing/page1/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Seismic.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Introduction</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Imaging/page1/">Imaging</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Modelling/page1/">Modelling</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Operators/page1/">Operators</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Plotting/page1/">Plotting</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Processing</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#processing">Processing</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#seisbandpass">SeisBandPass</a></li>
+        
+            <li><a class="toctree-l3" href="#seisdecimate">SeisDecimate</a></li>
+        
+            <li><a class="toctree-l3" href="#seisdelay">SeisDelay</a></li>
+        
+            <li><a class="toctree-l3" href="#seisenvelope">SeisEnvelope</a></li>
+        
+            <li><a class="toctree-l3" href="#seisfkfilter">SeisFKFilter</a></li>
+        
+            <li><a class="toctree-l3" href="#seisgain">SeisGain</a></li>
+        
+            <li><a class="toctree-l3" href="#seiskolmogoroff">SeisKolmogoroff</a></li>
+        
+            <li><a class="toctree-l3" href="#seismwni">SeisMWNI</a></li>
+        
+            <li><a class="toctree-l3" href="#seispocs">SeisPOCS</a></li>
+        
+            <li><a class="toctree-l3" href="#seisradonfreqfor">SeisRadonFreqFor</a></li>
+        
+            <li><a class="toctree-l3" href="#seisradonfreqinv">SeisRadonFreqInv</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Solvers/page1/">Solvers</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Tools/page1/">Tools</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Utils/page1/">Utils</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Wavelets/page1/">Wavelets</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Windows/page1/">Windows</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Seismic.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Processing</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/SeismicJulia/Seismic.jl.git/edit/master/docs/Processing/page1.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Processing-1'></a></p>
+<h1 id="processing">Processing</h1>
+<p><a id='SeisBandPass-1'></a></p>
+<h2 id="seisbandpass">SeisBandPass</h2>
+<p><a id='Seismic.SeisBandPass' href='#Seismic.SeisBandPass'>#</a>
+<strong><code>Seismic.SeisBandPass</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisBandPass(d ; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Apply a bandpass filter to a 2D array input. Input and output data is in tx domain. Filter is applied in fx domain.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>d</code>: Input 2D data array in tx domain.</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>dt=0.001</code>: time sampling interval.</li>
+<li><code>fa=0,fb=0,fc=60,fd=80</code>: corner frequencies in Hz.</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li><code>d</code>: Filtered 2d data arrayn in tx domain.</li>
+</ul>
+<p><strong>Example</strong></p>
+<p>```julia julia&gt; d = SeisLinearEvents(d); SeisPlot(d,plot_type="Amplitude",dy=0.004,fmax=125); julia&gt; d_filter = SeisBandPass(d;dt=0.004,fc=15,fd=35); SeisPlot(d_filter,plot_type="Amplitude",dy=0.004,fmax=125);</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisBandPass.jl#L1-L21' class='documenter-source'>source</a><br></p>
+<p><a id='SeisDecimate-1'></a></p>
+<h2 id="seisdecimate">SeisDecimate</h2>
+<p><a id='Seismic.SeisDecimate' href='#Seismic.SeisDecimate'>#</a>
+<strong><code>Seismic.SeisDecimate</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisDecimate(d ; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Decimate a multidimensional array input. Input and output have the same dimension</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>d</code>: Input data. Between 2D and 5D</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>mode=random</code>: Data is decimated randomly. Otherwise it is regularly decimated.</li>
+<li><code>perc=50</code>: percentage of traces to be decimated from original array</li>
+<li><code>incx1=1,incx2=1,incx3=1,incx4=1</code>: traces to decimate in case of regular decimation</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li><code>out</code>: Decimated data.</li>
+</ul>
+<p><strong>Example</strong></p>
+<p>```julia julia&gt; d = SeisLinearEvents(d); SeisPlot(d) julia&gt; d_dec = SeisDecimate(d); SeisPlot(d_dec)</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisDecimate.jl#L1-L21' class='documenter-source'>source</a><br></p>
+<p><a id='SeisDelay-1'></a></p>
+<h2 id="seisdelay">SeisDelay</h2>
+<p><a id='Seismic.SeisDelay' href='#Seismic.SeisDelay'>#</a>
+<strong><code>Seismic.SeisDelay</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisDelay(d ; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Apply a time delay to a 2D array input. </p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>d</code>: Input 2D data array in tx domain.</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>delay=0.1</code>: time delay in seconds.</li>
+<li><code>dt=0.001</code>: time sampling</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li><code>d2</code>: Delayed data in time domain</li>
+</ul>
+<p><strong>Example</strong></p>
+<p>```julia julia&gt; d = SeisLinearEvents(d); SeisPlot(d); julia&gt; d2 = SeisDelay(d;dt=0.004); SeisPlot(d);</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisDelay.jl#L1-L21' class='documenter-source'>source</a><br></p>
+<p><a id='SeisEnvelope-1'></a></p>
+<h2 id="seisenvelope">SeisEnvelope</h2>
+<p><a id='Seismic.SeisEnvelope' href='#Seismic.SeisEnvelope'>#</a>
+<strong><code>Seismic.SeisEnvelope</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisEnvelope(d)
+</pre></div>
+
+
+<p>Calculate the envelope attribute of an input trace</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>d</code>: Input data.</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li><code>out</code>: Envelope of input data</li>
+</ul>
+<p><strong>Example</strong></p>
+<p>```julia julia&gt; d = SeisLinearEvents(d); SeisPlot(d) julia&gt; out = SeisEnvelope(d); SeisPlot(d_dec)</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisEnvelope.jl#L1-L16' class='documenter-source'>source</a><br></p>
+<p><a id='SeisFKFilter-1'></a></p>
+<h2 id="seisfkfilter">SeisFKFilter</h2>
+<p><a id='Seismic.SeisFKFilter' href='#Seismic.SeisFKFilter'>#</a>
+<strong><code>Seismic.SeisFKFilter</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisFKFilter(d ; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Decimate a multidimensional array input. Input and output have the same dimension</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>d</code>: 2D Input data.</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>dt=0.002</code>: time sampling interval.</li>
+<li><code>dx=10</code>: space sampling interval.</li>
+<li><code>va=-2000,vb=-3000,vc=3000,vd=2000</code>: corner velocities to be filtered</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li><code>out</code>: Filtered data.</li>
+</ul>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisFKFilter.jl#L1-L18' class='documenter-source'>source</a><br></p>
+<p><a id='SeisGain-1'></a></p>
+<h2 id="seisgain">SeisGain</h2>
+<p><a id='Seismic.SeisGain' href='#Seismic.SeisGain'>#</a>
+<strong><code>Seismic.SeisGain</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisGain(d, t; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Gain a group of traces.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>d::Array{Real,2}</code>: two dimensional data.</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>dt::Real=0.002</code>: sampling interval in secs.</li>
+<li><code>kind::AbstractString="time"</code>: if kind="time", gain = t.^a . * exp(-bt);                        if kind="agc", automatic gain control is applied.</li>
+<li><code>param::Vector{Real}=[2.0,0.0]</code>: if kind="time", param = [a,b];                                  if kind="agc", param = [agc_gate]</li>
+<li><code>norm::Int=0</code>: <code>norm=0</code> no normalization; <code>norm=1</code> normalize each trace by                 amplitude; <code>norm=2</code> normalize each trace by rms value/</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li>d::Array{Real, 2}`: gained two dimensional data.</li>
+</ul>
+<p><strong>Example</strong></p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">SeisHypEvents</span><span class="p">();</span>
+       <span class="n">dout</span> <span class="o">=</span> <span class="n">SeisGain</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s">&quot;agc&quot;</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">]);</span>
+       <span class="n">SeisPlot</span><span class="p">([</span><span class="n">d</span> <span class="n">dout</span><span class="p">],</span> <span class="n">extent</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Credits: Juan I. Sabbione, Aaron Staton, Mauricio D. Sacchi, 2016</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisGain.jl#L1-L30' class='documenter-source'>source</a><br></p>
+<p><a id='SeisKolmogoroff-1'></a></p>
+<h2 id="seiskolmogoroff">SeisKolmogoroff</h2>
+<p><a id='Seismic.SeisKolmogoroff' href='#Seismic.SeisKolmogoroff'>#</a>
+<strong><code>Seismic.SeisKolmogoroff</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisKolmogoroff(w)
+</pre></div>
+
+
+<p>Kolmogoroff factorization. Transform a wavelet into its minimum phase equivalent.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>w::Real</code>: input wavelet.</li>
+</ul>
+<p><strong>Example</strong></p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Ricker</span><span class="p">()</span>
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">wmin</span> <span class="o">=</span> <span class="n">SeisKolmogoroff</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">);</span> <span class="n">plot</span><span class="p">(</span><span class="n">wmin</span><span class="p">)</span>
+</pre></div>
+
+
+<p><strong>Reference</strong></p>
+<ul>
+<li>Claerbout, Jon F., 1976, Fundamentals of geophysical data processing.</li>
+</ul>
+<p>McGraw-Hill Inc.</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisKolmogoroff.jl#L1-L21' class='documenter-source'>source</a><br></p>
+<p><a id='SeisMWNI-1'></a></p>
+<h2 id="seismwni">SeisMWNI</h2>
+<p><a id='Seismic.SeisMWNI' href='#Seismic.SeisMWNI'>#</a>
+<strong><code>Seismic.SeisMWNI</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>SeisMWNI</strong></p>
+<p><em>Minimum Weighted Norm Interpolation of seismic records.</em></p>
+<p><strong>IN</strong>   </p>
+<ul>
+<li>d_in: input data that can have up to 5 dimensions</li>
+<li>dt=0.001 sampling rate along the time axis (in seconds)</li>
+<li>fmax=99999. maximum temporal frequency to process.</li>
+<li>padt=2 padding to use for the time axis</li>
+<li>padx=1 padding to use for the spatial axes</li>
+<li>Niter_internal=10 number of internal iterations for Conjugate Gradients</li>
+<li>Niter_external=3 number of external iterations for iterative reweighting</li>
+</ul>
+<p><strong>OUT</strong>  </p>
+<ul>
+<li>d_out: interpolated data</li>
+</ul>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisMWNI.jl#L1-L19' class='documenter-source'>source</a><br></p>
+<p><a id='SeisPOCS-1'></a></p>
+<h2 id="seispocs">SeisPOCS</h2>
+<p><a id='Seismic.SeisPOCS' href='#Seismic.SeisPOCS'>#</a>
+<strong><code>Seismic.SeisPOCS</code></strong> &mdash; <em>Function</em>.</p>
+<p><strong>SeisPOCS</strong></p>
+<p><em>Projection Onto Convex Sets interpolation of seismic records.</em></p>
+<p><strong>IN</strong></p>
+<ul>
+<li>d_in: input data that can have up to 5 dimensions</li>
+<li>p=1., exponent for thresholding (1 is equivalent to soft thres. high number is equivalent to hard thresholding)</li>
+<li>alpha=1 add-back ratio for imputation step. Use 1 for noise free data, and &lt; 1 for denoising of original traces.</li>
+<li>dt=0.001 sampling rate along the time axis (in seconds)</li>
+<li>fmax=99999. maximum temporal frequency to process.</li>
+<li>padt=2 padding to use for the time axis</li>
+<li>padx=1 padding to use for the spatial axes</li>
+<li>Niter=100 number of iterations</li>
+</ul>
+<p><strong>OUT</strong></p>
+<ul>
+<li>d_out: interpolated data</li>
+</ul>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisPOCS.jl#L1-L20' class='documenter-source'>source</a><br></p>
+<p><a id='SeisRadonFreqFor-1'></a></p>
+<h2 id="seisradonfreqfor">SeisRadonFreqFor</h2>
+<p><a id='Seismic.SeisRadonFreqFor' href='#Seismic.SeisRadonFreqFor'>#</a>
+<strong><code>Seismic.SeisRadonFreqFor</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisRadonFreqFor(m, nt; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Transform a tau-p gather to a time-offset gather using a frequency domain forward parabolic or linear Radon operator.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>m::Array{T&lt;:Real,2}</code>: 2D Radon panel, <code>m[1:ntau,1:np]</code>, where <code>ntau</code> is the</li>
+</ul>
+<p>number of intercept times and <code>np</code> the number of curvatures or ray parameters.</p>
+<ul>
+<li><code>nt::Int</code>: number of time samples in the data domain.</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>order::AbstractString="parab"</code>: <code>"parab"</code> for parabolic transform, <code>"linear"</code></li>
+</ul>
+<p>for linear transform.</p>
+<ul>
+<li><code>dt::Real=0.004</code>: sampling interval in seconds.</li>
+<li><code>h::Vector{Real}=collect(0.0:20.0:1000.0)</code>: offset vector; <code>h[1:nh]</code>.</li>
+<li><code>href::Real=0.0</code>: reference offset for parabolic Radon Transform. If the</li>
+</ul>
+<p>defautl value <code>href=0.0</code> is given, <code>href</code> is set to <code>max(abs(h))</code>.</p>
+<ul>
+<li><code>p::Vector{Real}=collect(-0.05:0.01:2.2)</code>: <code>p[1:np]</code>. If <code>order="parab"</code>, <code>p</code></li>
+</ul>
+<p>is a vector of residual moveout ("curvatures") at reference offset <code>href</code> in seconds; if <code>order=linear</code>, <code>p</code> is a vector of ray parameters in s/m.</p>
+<ul>
+<li><code>flow::Real=0.0</code>: minimum frequency in the data in Hz.</li>
+<li><code>fhigh::Real=125.0</code>: maximum frequency in the data in Hz.</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li><code>d</code>: data synthetized via forward Radon modeling, <code>d[1:nt, 1:nh]</code>.</li>
+</ul>
+<p><strong>References</strong></p>
+<ul>
+<li>Hampson, D., 1986, Inverse velocity stacking for multiple elimination:</li>
+</ul>
+<p>Canadian Journal of Exploration Geophysics, 22, 44-55.</p>
+<ul>
+<li>Sacchi, M.D. and Ulrych, T.J., 1995, High-resolution velocity gathers and</li>
+</ul>
+<p>offset space reconstruction: Geophysics, 60, 1169-1177.</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisRadonFreqFor.jl#L1-L33' class='documenter-source'>source</a><br></p>
+<p><a id='SeisRadonFreqInv-1'></a></p>
+<h2 id="seisradonfreqinv">SeisRadonFreqInv</h2>
+<p><a id='Seismic.SeisRadonFreqInv' href='#Seismic.SeisRadonFreqInv'>#</a>
+<strong><code>Seismic.SeisRadonFreqInv</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisRadonFreqInv(d; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Transform a CMP Gather time-offset gather to tau-p gather using a frequency domain inverse parabolic or linear Radon operator via least-squares inversion.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>d::Array{T&lt;:Real,2}</code>: 2D data, <code>d[1:nt,1:nh]</code>, where <code>nt</code> is number of</li>
+</ul>
+<p>time samples and <code>nh</code> the number of receivers.</p>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>order::AbstractString="parab"</code>: <code>"parab"</code> for parabolic transform, <code>"linear"</code></li>
+</ul>
+<p>for linear transform.</p>
+<ul>
+<li><code>dt::Real=0.004</code>: sampling interval in seconds.</li>
+<li><code>h::Vector{Real}=collect(0.0:20.0:1000.0)</code>: offset vector <code>h[1:nh]</code>.</li>
+<li><code>href::Real=0.0</code>: reference offset for parabolic Radon Transform. If the</li>
+</ul>
+<p>defautl value <code>href=0.0</code> is given, <code>href</code> is set to <code>max(abs(h))</code>.</p>
+<ul>
+<li><code>p::Vector{Real}=collect(-0.05:0.01:2.2)</code>: <code>p[1:np]</code>. If <code>order="parab"</code>, <code>p</code></li>
+</ul>
+<p>is a vector of residual moveout ("curvatures") at reference offset <code>href</code> in seconds; if <code>order=linear</code>, <code>p</code> is a vector of ray parameters in s/m.</p>
+<ul>
+<li><code>flow::Real=0.0</code>: minimum frequency in the data in Hz.</li>
+<li><code>fhigh::Real=125.0</code>: maximum frequency in the data in Hz.</li>
+<li><code>mu::Real=0.001</code>: trade off parameter or damping for the L.S. inversion.</li>
+</ul>
+<p><strong>Output</strong></p>
+<ul>
+<li><code>m</code>: inverted Radon panel <code>m[1:ntau, 1:np]</code>.</li>
+</ul>
+<p><strong>References</strong></p>
+<ul>
+<li>Hampson, D., 1986, Inverse velocity stacking for multiple elimination:</li>
+</ul>
+<p>Canadian Journal of Exploration Geophysics, 22, 44-55.</p>
+<ul>
+<li>Sacchi, M.D. and Ulrych, T.J., 1995, High-resolution velocity gathers and</li>
+</ul>
+<p>offset space reconstruction: Geophysics, 60, 1169-1177.</p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Processing/SeisRadonFreqInv.jl#L1-L33' class='documenter-source'>source</a><br></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../ReadWrite/page1/" class="btn btn-neutral float-right" title="ReadWrite">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../Plotting/page1/" class="btn btn-neutral" title="Plotting"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/SeismicJulia/Seismic.jl.git" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../../Plotting/page1/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../ReadWrite/page1/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../../assets/mathjaxhelper.js"></script>
+
+</body>
+</html>

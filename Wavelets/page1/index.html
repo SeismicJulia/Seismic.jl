@@ -7,20 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <meta name="author" content="SAIG group">
-  
-  <title>Wavelets - Seismic.jl</title>
-  
-
   <link rel="shortcut icon" href="../../img/favicon.ico">
-
-  
+  <title>Wavelets - Seismic.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="../../css/highlight.css">
   <link href="../../assets/Documenter.css" rel="stylesheet">
-
   
   <script>
     // Current page data
@@ -31,11 +25,7 @@
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
-  <script src="../../js/theme.js"></script> 
-  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-  <script src="../../assets/mathjaxhelper.js"></script>
-
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
   
 </head>
 
@@ -55,97 +45,84 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        <ul class="current">
+	<ul class="current">
+	  
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../..">Introduction</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Introduction</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Imaging/page1/">Imaging</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Imaging/page1/">Imaging</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Modelling/page1/">Modelling</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Modelling/page1/">Modelling</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Operators/page1/">Operators</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Operators/page1/">Operators</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Plotting/page1/">Plotting</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Plotting/page1/">Plotting</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Processing/page1/">Processing</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Solvers/page1/">Solvers</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Tools/page1/">Tools</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Solvers/page1/">Solvers</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Utils/page1/">Utils</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Tools/page1/">Tools</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Wavelets</a>
-        
-            <ul>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Utils/page1/">Utils</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Wavelets</a>
+    <ul class="subnav">
             
-                <li class="toctree-l3"><a href="#wavelets">Wavelets</a></li>
-                
-                    <li><a class="toctree-l4" href="#berlage">Berlage</a></li>
-                
-                    <li><a class="toctree-l4" href="#ormsby">Ormsby</a></li>
-                
-                    <li><a class="toctree-l4" href="#ricker">Ricker</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l2"><a href="#wavelets">Wavelets</a></li>
+    
+        <ul>
         
-    </li>
-<li>
+            <li><a class="toctree-l3" href="#berlage">Berlage</a></li>
+        
+            <li><a class="toctree-l3" href="#ormsby">Ormsby</a></li>
+        
+            <li><a class="toctree-l3" href="#ricker">Ricker</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Windows/page1/">Windows</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Windows/page1/">Windows</a>
+	    </li>
           
         </ul>
       </div>
@@ -172,9 +149,8 @@
     <li>Wavelets</li>
     <li class="wy-breadcrumbs-aside">
       
-        
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github"> Edit on GitHub</a>
-        
+        <a href="https://github.com/SeismicJulia/Seismic.jl.git/edit/master/docs/Wavelets/page1.md"
+          class="icon icon-github"> Edit on GitHub</a>
       
     </li>
   </ul>
@@ -213,7 +189,7 @@
 <ul>
 <li>Aldridge, David F., 1990, The berlage wavelet: GEOPHYSICS, 55, 1508–1511.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Wavelets/Berlage.jl#L1-L24' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Wavelets/Berlage.jl#L1-L24' class='documenter-source'>source</a><br></p>
 <p><a id='Ormsby-1'></a></p>
 <h2 id="ormsby">Ormsby</h2>
 <p><a id='Seismic.Ormsby' href='#Seismic.Ormsby'>#</a>
@@ -222,7 +198,7 @@
 </pre></div>
 
 
-<p>Create a Ormsby wavelet sampled every dt seconds with corner frequencies defined by the vector f = [f1, f2, f3, f4]. The final wavelet is multiplied by a Hamming window. </p>
+<p>Create a Ormsby wavelet sampled every dt seconds with corner frequencies defined by the vector f = [f1, f2, f3, f4]. The final wavelet is multiplied by a Hamming window.</p>
 <p><strong>Arguments</strong></p>
 <p><strong>Keyword arguments</strong></p>
 <ul>
@@ -230,7 +206,7 @@
 <li>
 <p><code>f::Vector{Real}=[2.0, 10.0, 40.0, 60.0]</code>: corner frequencies in Hz.</p>
 <p><code>^</code></p>
-<p>1 |     <strong><em>*</em></strong><strong><em>*</em></strong>*     |    *               *     |   *                 *     |  *                   *      | *                     *      ––––––––––––––-&gt; f        f1  f2           f3  f4</p>
+<p>1 |     <strong><em>*</em></strong><strong><em>*</em></strong>*     |    *               *     |   *                 *     |  *                   *     | *                     *     ––––––––––––––-&gt; f       f1  f2           f3  f4</p>
 </li>
 </ul>
 <p><strong>Example</strong></p>
@@ -238,7 +214,8 @@
 </pre></div>
 
 
-<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Wavelets/Ormsby.jl#L1-L28' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Wavelets/Ormsby.jl#L1-L28' class='documenter-source'>source</a><br></p>
+<p><a id='Ricker-1'></a></p>
 <h2 id="ricker">Ricker</h2>
 <p><a id='Seismic.Ricker' href='#Seismic.Ricker'>#</a>
 <strong><code>Seismic.Ricker</code></strong> &mdash; <em>Function</em>.</p>
@@ -260,7 +237,7 @@
 
 <p><strong>Reference</strong></p>
 <p>Sheriff, Robert, 2002, Encyclopedic Dictionary of Applied Geophysics, fourth ed.: Society of Exploration Geophysicists. Geophysical Reference Series No. 13.</p>
-<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/tree/31d96b486b0a84bf4b173d002c7d5647e4ff5148/src/Wavelets/Ricker.jl#L1-L19' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Wavelets/Ricker.jl#L1-L19' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
@@ -290,13 +267,13 @@
       </div>
 
     </section>
-
+    
   </div>
 
-<div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/SeismicJulia/Seismic.jl.git" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../../Utils/page1/" style="color: #fcfcfc;">&laquo; Previous</a></span>
@@ -306,6 +283,9 @@
       
     </span>
 </div>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../../assets/mathjaxhelper.js"></script>
 
 </body>
 </html>

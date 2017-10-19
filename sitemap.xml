@@ -3,88 +3,96 @@
 
     
     <url>
-     <loc>None/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/Imaging/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/Imaging/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/Modelling/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/Modelling/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/Operators/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/Operators/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/Plotting/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/Plotting/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/ReadWrite/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/Processing/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/Solvers/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/ReadWrite/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/Tools/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/Solvers/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/Utils/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/Tools/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/Wavelets/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/Utils/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>None/Windows/page1/</loc>
-     <lastmod>2017-06-06</lastmod>
+     <loc>/Wavelets/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/Windows/page1/</loc>
+     <lastmod>2017-10-19</lastmod>
      <changefreq>daily</changefreq>
     </url>
     

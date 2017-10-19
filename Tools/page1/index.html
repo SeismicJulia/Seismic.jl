@@ -7,20 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <meta name="author" content="SAIG group">
-  
-  <title>Tools - Seismic.jl</title>
-  
-
   <link rel="shortcut icon" href="../../img/favicon.ico">
-
-  
+  <title>Tools - Seismic.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="../../css/highlight.css">
   <link href="../../assets/Documenter.css" rel="stylesheet">
-
   
   <script>
     // Current page data
@@ -31,11 +25,7 @@
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
-  <script src="../../js/theme.js"></script> 
-  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-  <script src="../../assets/mathjaxhelper.js"></script>
-
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
   
 </head>
 
@@ -55,91 +45,82 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        <ul class="current">
+	<ul class="current">
+	  
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../..">Introduction</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Introduction</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Imaging/page1/">Imaging</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Imaging/page1/">Imaging</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Modelling/page1/">Modelling</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Modelling/page1/">Modelling</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Operators/page1/">Operators</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Operators/page1/">Operators</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Plotting/page1/">Plotting</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Plotting/page1/">Plotting</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Processing/page1/">Processing</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Solvers/page1/">Solvers</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Tools</a>
-        
-            <ul>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Solvers/page1/">Solvers</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Tools</a>
+    <ul class="subnav">
             
-                <li class="toctree-l3"><a href="#tools">Tools</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l2"><a href="#tools">Tools</a></li>
+    
+        <ul>
         
-    </li>
-<li>
+            <li><a class="toctree-l3" href="#measuresnr">MeasureSNR</a></li>
+        
+            <li><a class="toctree-l3" href="#padfirstaxis">PadFirstAxis</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Utils/page1/">Utils</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Utils/page1/">Utils</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Wavelets/page1/">Wavelets</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Wavelets/page1/">Wavelets</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Windows/page1/">Windows</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Windows/page1/">Windows</a>
+	    </li>
           
         </ul>
       </div>
@@ -166,9 +147,8 @@
     <li>Tools</li>
     <li class="wy-breadcrumbs-aside">
       
-        
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github"> Edit on GitHub</a>
-        
+        <a href="https://github.com/SeismicJulia/Seismic.jl.git/edit/master/docs/Tools/page1.md"
+          class="icon icon-github"> Edit on GitHub</a>
       
     </li>
   </ul>
@@ -179,6 +159,55 @@
               
                 <p><a id='Tools-1'></a></p>
 <h1 id="tools">Tools</h1>
+<p><a id='MeasureSNR-1'></a></p>
+<h2 id="measuresnr">MeasureSNR</h2>
+<p><a id='Seismic.MeasureSNR' href='#Seismic.MeasureSNR'>#</a>
+<strong><code>Seismic.MeasureSNR</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>MeasureSNR(signal, noisy; db=false)
+</pre></div>
+
+
+<p>Measure the signal-to-noise ratio between the clean input <code>signal</code> and the contaminated input <code>noisy</code>.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>signal::Array{Real, N}</code>: N-dimensional clean signal. <code>N</code> must be &lt;= 5.</li>
+<li><code>noisy::Array{Real, N}</code>: N-dimensional noisy signal of same size as <code>signal</code>.</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>db::Bool=false</code>: <code>db=false</code> if the signal-to-noise ratio is measured by</li>
+</ul>
+<p>amplitude, or <code>db=true</code> if the signal-to-noise ratio is measure in dB.</p>
+<p><strong>Example</strong></p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span> <span class="n">extent</span> <span class="o">=</span> <span class="n">SeisHypEvents</span><span class="p">();</span> <span class="n">dnoisy</span> <span class="o">=</span> <span class="n">SeisAddNoise</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> 
+<span class="n">MeasureSNR</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">dnoisy</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Tools/MeasureSNR.jl#L1-L20' class='documenter-source'>source</a><br></p>
+<p><a id='PadFirstAxis-1'></a></p>
+<h2 id="padfirstaxis">PadFirstAxis</h2>
+<p><a id='Seismic.PadFirstAxis' href='#Seismic.PadFirstAxis'>#</a>
+<strong><code>Seismic.PadFirstAxis</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>PadFirstAxis(d, N1)
+</pre></div>
+
+
+<p>Zero-padding first axis of N-dimensional array <code>d</code>.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>d::Array{Real, N}</code>: N-dimensional data.</li>
+<li><code>N1::Int</code>: total number of samples for the first axis of the zero-padded data.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<div class="codehilite"><pre><span></span><span class="n">julia</span><span class="o">&gt;</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Ricker</span><span class="p">();</span> <span class="n">wpad</span> <span class="o">=</span> <span class="n">PadFirstAxis</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">128</span><span class="p">);</span> <span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">);</span> <span class="n">plot</span><span class="p">(</span><span class="n">wpad</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="n">julia</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">SeisHypEvents</span><span class="p">();</span> <span class="n">dpad</span> <span class="o">=</span> <span class="n">PadFirstAxis</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mi">512</span><span class="p">);</span>
+<span class="n">SeisPlot</span><span class="p">(</span><span class="n">d</span><span class="p">);</span> <span class="n">SeisPlot</span><span class="p">(</span><span class="n">dpad</span><span class="p">)</span>
+</pre></div>
+
+
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Tools/PadFirstAxis.jl#L1-L17' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
@@ -208,13 +237,13 @@
       </div>
 
     </section>
-
+    
   </div>
 
-<div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/SeismicJulia/Seismic.jl.git" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../../Solvers/page1/" style="color: #fcfcfc;">&laquo; Previous</a></span>
@@ -224,6 +253,9 @@
       
     </span>
 </div>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../../assets/mathjaxhelper.js"></script>
 
 </body>
 </html>

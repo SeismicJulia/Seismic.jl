@@ -7,20 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <meta name="author" content="SAIG group">
-  
-  <title>Utils - Seismic.jl</title>
-  
-
   <link rel="shortcut icon" href="../../img/favicon.ico">
-
-  
+  <title>Utils - Seismic.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="../../css/highlight.css">
   <link href="../../assets/Documenter.css" rel="stylesheet">
-
   
   <script>
     // Current page data
@@ -31,11 +25,7 @@
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
   <script src="../../js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
-  <script src="../../js/theme.js"></script> 
-  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-  <script src="../../assets/mathjaxhelper.js"></script>
-
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
   
 </head>
 
@@ -55,91 +45,92 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-        <ul class="current">
+	<ul class="current">
+	  
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../..">Introduction</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Introduction</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Imaging/page1/">Imaging</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Imaging/page1/">Imaging</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Modelling/page1/">Modelling</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Modelling/page1/">Modelling</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Operators/page1/">Operators</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Operators/page1/">Operators</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Plotting/page1/">Plotting</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Plotting/page1/">Plotting</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Processing/page1/">Processing</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Solvers/page1/">Solvers</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../ReadWrite/page1/">ReadWrite</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Tools/page1/">Tools</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Solvers/page1/">Solvers</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Utils</a>
-        
-            <ul>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Tools/page1/">Tools</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Utils</a>
+    <ul class="subnav">
             
-                <li class="toctree-l3"><a href="#utils">Utils</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l2"><a href="#utils">Utils</a></li>
+    
+        <ul>
         
-    </li>
-<li>
+            <li><a class="toctree-l3" href="#seisgeometry">SeisGeometry</a></li>
+        
+            <li><a class="toctree-l3" href="#seisbinheaders">SeisBinHeaders</a></li>
+        
+            <li><a class="toctree-l3" href="#seisbindata">SeisBinData</a></li>
+        
+            <li><a class="toctree-l3" href="#seispatch">SeisPatch</a></li>
+        
+            <li><a class="toctree-l3" href="#seisunpatch">SeisUnPatch</a></li>
+        
+            <li><a class="toctree-l3" href="#seissort">SeisSort</a></li>
+        
+            <li><a class="toctree-l3" href="#seiswindow">SeisWindow</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Wavelets/page1/">Wavelets</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Wavelets/page1/">Wavelets</a>
+	    </li>
           
-            <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../../Windows/page1/">Windows</a>
-        
-    </li>
-<li>
+            <li class="toctree-l1">
+		
+    <a class="" href="../../Windows/page1/">Windows</a>
+	    </li>
           
         </ul>
       </div>
@@ -166,9 +157,8 @@
     <li>Utils</li>
     <li class="wy-breadcrumbs-aside">
       
-        
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github"> Edit on GitHub</a>
-        
+        <a href="https://github.com/SeismicJulia/Seismic.jl.git/edit/master/docs/Utils/page1.md"
+          class="icon icon-github"> Edit on GitHub</a>
       
     </li>
   </ul>
@@ -179,6 +169,222 @@
               
                 <p><a id='Utils-1'></a></p>
 <h1 id="utils">Utils</h1>
+<p>Seismic.jl provides tools to work with real data sets like binning, patching, unpatching, data sorting and windowing. </p>
+<p><a id='SeisGeometry-1'></a></p>
+<h2 id="seisgeometry">SeisGeometry</h2>
+<p><a id='Seismic.SeisGeometry' href='#Seismic.SeisGeometry'>#</a>
+<strong><code>Seismic.SeisGeometry</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisGeometry(in;&lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Update headers with geometry information. Offsets and azimuths are calculated from source and receivers coordinates. </p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>in</code>: input filename</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>ang=90</code>: inline direction measured in degrees CC from East</li>
+<li><code>gamma=1</code>: vp/vs ratio for PS Asymptotic Conversion Point gathers (use gamma=1 for PP data)</li>
+<li><code>osx=0</code>,<code>osy=0</code>,<code>ogx=0</code>,<code>ogy=0</code> : origin for source and receiver coordinate system</li>
+<li><code>omx=0</code>,<code>omy=0</code>,<code>ohx=0</code>,<code>ohy=0</code>: origin for midpoint and offset coordinate system</li>
+<li><code>oaz=0</code>,<code>oh=0</code> : origin for azimuth and offset coordinate system</li>
+<li><code>dsx=1</code>,<code>dsy=1</code>,<code>dgx=1</code>,<code>dgy=1</code>: source and receiver step-size</li>
+<li><code>dmx=1</code>,<code>dmy=1</code>,<code>dhx=1</code>,<code>dhy=1</code>: midpoint and offset step-size</li>
+<li><code>dh=1</code>,<code>daz=1</code>: offset and azimuth step-size</li>
+</ul>
+<p><strong>Outputs</strong></p>
+<p>the .seish file is updated with the following information:</p>
+<ul>
+<li>hx,hy,h,az,mx,my : calculated offset, azimuth and midpoint</li>
+<li>isx,isy,igx,igy,imx,imy,ihx,ihy,ih,iaz: calculated grid nodes for source and receiver position and midpoint, offset and azimuth.</li>
+</ul>
+<p><em>Credits: A. Stanton, 2017</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisGeometry.jl#L1-L28' class='documenter-source'>source</a><br></p>
+<h2 id="seisbinheaders">SeisBinHeaders</h2>
+<p><a id='Seismic.SeisBinHeaders' href='#Seismic.SeisBinHeaders'>#</a>
+<strong><code>Seismic.SeisBinHeaders</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisBinHeaders(in,out; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Sequentially bin seismic headers using the available grid information.</p>
+<p>Keyword arguments should be consistent with SeisGeometry keyword arguments.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>in</code>: filename of input, irregularly sampled data</li>
+<li><code>out</code>: filename of output, regularly sampled data</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>style="sxsygxgy"</code>: bin style. Options: "mxmyhxhy","mxmyhaz","sxsyhxhy","gxgyhxhy","sxsyhaz","gxgyhaz"</li>
+<li><code>ang=90</code>: inline direction measured in degrees CC from East</li>
+<li><code>gamma=1</code>: vp/vs ratio for PS Asymptotic Conversion Point gathers (use gamma=1 for PP data)</li>
+<li><code>osx=0</code>,<code>osy=0</code>,<code>ogx=0</code>,<code>ogy=0</code> : origin for source and receiver coordinate system</li>
+<li><code>omx=0</code>,<code>omy=0</code>,<code>ohx=0</code>,<code>ohy=0</code>: origin for midpoint and offset coordinate system</li>
+<li><code>oaz=0</code>,<code>oh=0</code> : origin for azimuth and offset coordinate system</li>
+<li><code>dsx=1</code>,<code>dsy=1</code>,<code>dgx=1</code>,<code>dgy=1</code>: source and receiver step-size</li>
+<li><code>dmx=1</code>,<code>dmy=1</code>,<code>dhx=1</code>,<code>dhy=1</code>: midpoint and offset step-size</li>
+<li><code>dh=1</code>,<code>daz=1</code>: offset and azimuth step-size</li>
+<li><code>min_isx=0</code>,<code>max_isx=0</code>,<code>min_isy=0</code>,<code>max_isy=0</code>: grid extreme values for sources</li>
+<li><code>min_igx=0</code>,<code>max_igx=0</code>,<code>min_igy=0</code>,<code>max_igy=0</code>: grid extreme values for receivers</li>
+<li><code>min_imx=0</code>,<code>max_imx=0</code>,<code>min_imy=0</code>,<code>max_imy=0</code>: grid extreme values for midpoints</li>
+<li><code>min_ihx=0</code>,<code>max_ihx=0</code>,<code>min_ihy=0</code>,<code>max_ihy=0</code>: grid extreme values for offsets</li>
+<li><code>min_ih=0</code>,<code>max_ih=0</code>,<code>min_iaz=0</code>,<code>max_iaz=0</code>: grid extreme values for azimuth and offset</li>
+<li><code>ntrace=10000</code>: maximum number of traces processed at a time</li>
+</ul>
+<p><strong>Output</strong></p>
+<p>In file <code>out</code>, binned headers are created.</p>
+<p><em>Credits: Aaron Stanton,2017</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisBinHeaders.jl#L1-L34' class='documenter-source'>source</a><br></p>
+<h2 id="seisbindata">SeisBinData</h2>
+<p><a id='Seismic.SeisBinData' href='#Seismic.SeisBinData'>#</a>
+<strong><code>Seismic.SeisBinData</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisBinData(in,out; &lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Sequentially bin seismic data using already binned trace headers (SeisBinHeaders). Input arguments should be consistent with SeisBinHeaders input arguments.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>in::AbstractString</code>: filename of input, irregularly sampled data</li>
+<li><code>out::AbstractString</code>: filename of output, regularly sampled data</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>style="sxsygxgy"</code>: bin style. Options: "mxmyhxhy","mxmyhaz","sxsyhxhy","gxgyhxhy","sxsyhaz","gxgyhaz"</li>
+<li><code>ang=90</code>: inline direction measured in degrees CC from East</li>
+<li><code>gamma=1</code>: vp/vs ratio for PS Asymptotic Conversion Point gathers (use gamma=1 for PP data)</li>
+<li><code>osx=0</code>,<code>osy=0</code>,<code>ogx=0</code>,<code>ogy=0</code> : origin for source and receiver coordinate system</li>
+<li><code>omx=0</code>,<code>omy=0</code>,<code>ohx=0</code>,<code>ohy=0</code>: origin for midpoint and offset coordinate system</li>
+<li><code>oaz=0</code>,<code>oh=0</code> : origin for azimuth and offset coordinate system</li>
+<li><code>dsx=1</code>,<code>dsy=1</code>,<code>dgx=1</code>,<code>dgy=1</code>: source and receiver step-size</li>
+<li><code>dmx=1</code>,<code>dmy=1</code>,<code>dhx=1</code>,<code>dhy=1</code>: midpoint and offset step-size</li>
+<li><code>dh=1</code>,<code>daz=1</code>: offset and azimuth step-size</li>
+<li><code>min_isx=0</code>,<code>max_isx=0</code>,<code>min_isy=0</code>,<code>max_isy=0</code>: grid extreme values for sources</li>
+<li><code>min_igx=0</code>,<code>max_igx=0</code>,<code>min_igy=0</code>,<code>max_igy=0</code>: grid extreme values for receivers</li>
+<li><code>min_imx=0</code>,<code>max_imx=0</code>,<code>min_imy=0</code>,<code>max_imy=0</code>: grid extreme values for midpoints</li>
+<li><code>min_ihx=0</code>,<code>max_ihx=0</code>,<code>min_ihy=0</code>,<code>max_ihy=0</code>: grid extreme values for offsets</li>
+<li><code>min_ih=0</code>,<code>max_ih=0</code>,<code>min_iaz=0</code>,<code>max_iaz=0</code>: grid extreme values for azimuth and offset</li>
+<li><code>ntrace=10000</code>: maximum number of traces processed at a time</li>
+</ul>
+<p><strong>Output</strong></p>
+<p>In file <code>out</code>, the binned data is created.</p>
+<p><em>Credits: Aaron Stanton, 2017</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisBinData.jl#L1-L33' class='documenter-source'>source</a><br></p>
+<h2 id="seispatch">SeisPatch</h2>
+<p><a id='Seismic.SeisPatch' href='#Seismic.SeisPatch'>#</a>
+<strong><code>Seismic.SeisPatch</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>  <span class="nt">SeisPatch</span><span class="o">(</span><span class="nt">in</span><span class="p">::</span><span class="nd">AbstractString</span><span class="o">,</span><span class="nt">out</span><span class="p">::</span><span class="nd">AbstractString</span><span class="o">;&lt;</span><span class="nt">keyword</span> <span class="nt">arguments</span><span class="o">&gt;)</span>
+</pre></div>
+
+
+<p>Creates overlapping 5d patches from a 5d volume</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>in::AbstractString</code>: input filename (data should have grid information in headers)</li>
+<li><code>out::AbstractString</code>: prefix for output filenames</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>style="sxsygxgy"</code>: bin style. Options: "mxmyhxhy","mxmyhaz","sxsyhxhy","gxgyhxhy","sxsyhaz","gxgyhaz"</li>
+<li><code>min_isx=0</code>,<code>max_isx=0</code>,<code>min_isy=0</code>,<code>max_isy=0</code>: grid extreme values for sources</li>
+<li><code>min_igx=0</code>,<code>max_igx=0</code>,<code>min_igy=0</code>,<code>max_igy=0</code>: grid extreme values for receivers</li>
+<li><code>min_imx=0</code>,<code>max_imx=0</code>,<code>min_imy=0</code>,<code>max_imy=0</code>: grid extreme values for midpoints</li>
+<li><code>min_ihx=0</code>,<code>max_ihx=0</code>,<code>min_ihy=0</code>,<code>max_ihy=0</code>: grid extreme values for offsets</li>
+<li><code>min_ih=0</code>,<code>max_ih=0</code>,<code>min_iaz=0</code>,<code>max_iaz=0</code>: grid extreme values for azimuth and offset</li>
+<li><code>it_WL=9e9</code>,<code>it_WO=0</code> : length and overlapping samples in time patches</li>
+<li><code>ix1_WL=9e9</code>,<code>ix1_WO=0</code>:length and overlapping samples in first space dimension</li>
+<li><code>ix2_WL=9e9</code>,<code>ix2_WO=0</code>,<code>ix3_WL=9e9</code>,<code>ix3_WO=0</code>,<code>ix4_WL=9e9</code>,<code>ix4_WO=0</code></li>
+</ul>
+<p><strong>Output</strong></p>
+<p><code>filename,npatch</code>: AbstractString Array with the file name of the data patches, number of patches created</p>
+<p><em>Credits: A. Stanton, F. Carozzi, 2017</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisPatch.jl#L1-L25' class='documenter-source'>source</a><br></p>
+<h2 id="seisunpatch">SeisUnPatch</h2>
+<p><a id='Seismic.SeisUnPatch' href='#Seismic.SeisUnPatch'>#</a>
+<strong><code>Seismic.SeisUnPatch</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisUnPatch(in,out;&lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Reconstruct a 5D data volume from a set of 5D data patches.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>in::Array{AbstractString,1}</code>: array containing filename of patches</li>
+<li><code>out::AbstractString</code>: filename for reconstructed volume</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>style="sxsygxgy"</code>: bin style. Options: "mxmyhxhy","mxmyhaz","sxsyhxhy","gxgyhxhy","sxsyhaz","gxgyhaz"</li>
+<li><code>min_isx=0</code>,<code>max_isx=0</code>,<code>min_isy=0</code>,<code>max_isy=0</code>: grid extreme values for sources</li>
+<li><code>min_igx=0</code>,<code>max_igx=0</code>,<code>min_igy=0</code>,<code>max_igy=0</code>: grid extreme values for receivers</li>
+<li><code>min_imx=0</code>,<code>max_imx=0</code>,<code>min_imy=0</code>,<code>max_imy=0</code>: grid extreme values for midpoints</li>
+<li><code>min_ihx=0</code>,<code>max_ihx=0</code>,<code>min_ihy=0</code>,<code>max_ihy=0</code>: grid extreme values for offsets</li>
+<li><code>min_ih=0</code>,<code>max_ih=0</code>,<code>min_iaz=0</code>,<code>max_iaz=0</code>: grid extreme values for azimuth and offset</li>
+<li><code>it_WL=9e9</code>,<code>it_WO=0</code> : length and overlapping samples in time patches</li>
+<li><code>ix1_WL=9e9</code>,<code>ix1_WO=0</code>:length and overlapping samples in first space dimension</li>
+<li><code>ix2_WL=9e9</code>,<code>ix2_WO=0</code>,<code>ix3_WL=9e9</code>,<code>ix3_WO=0</code>,<code>ix4_WL=9e9</code>,<code>ix4_WO=0</code></li>
+<li><code>nt=0</code>: time samples of reconstructed cube</li>
+<li><code>ang=90</code>: inline direction measured in degrees CC from East</li>
+<li><code>gamma=1</code>: vp/vs ratio for PS Asymptotic Conversion Point gathers (use gamma=1 for PP data)</li>
+<li><code>osx=0</code>,<code>osy=0</code>,<code>ogx=0</code>,<code>ogy=0</code> : origin for source and receiver coordinate system</li>
+<li><code>omx=0</code>,<code>omy=0</code>,<code>ohx=0</code>,<code>ohy=0</code>: origin for midpoint and offset coordinate system</li>
+<li><code>oaz=0</code>,<code>oh=0</code> : origin for azimuth and offset coordinate system</li>
+<li><code>dsx=1</code>,<code>dsy=1</code>,<code>dgx=1</code>,<code>dgy=1</code>: source and receiver step-size</li>
+<li><code>dmx=1</code>,<code>dmy=1</code>,<code>dhx=1</code>,<code>dhy=1</code>: midpoint and offset step-size</li>
+<li><code>dh=1</code>,<code>daz=1</code>: offset and azimuth step-size</li>
+</ul>
+<p><strong>Output</strong></p>
+<p>In file <code>out</code>, the 5D reconstructed volume is created.</p>
+<p><em>Credits: A. Stanton, F Carozzi, 2017</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisUnPatch.jl#L1-L34' class='documenter-source'>source</a><br></p>
+<h2 id="seissort">SeisSort</h2>
+<p><a id='Seismic.SeisSort' href='#Seismic.SeisSort'>#</a>
+<strong><code>Seismic.SeisSort</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisSort(in, out;&lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Sort a seis file using its header words</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>in</code>: input filename &gt;&gt; a text file with information about data extent, data and header file names; a binary file containing data and a binary file containing headers.</li>
+<li><code>out</code>: output filename</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>key=["imx","imy"]</code></li>
+<li><code>rev=false</code> : sort headers in decreasing order</li>
+<li><code>ntrace=1000</code> : number of traces to read at a time</li>
+</ul>
+<p><strong>Output</strong></p>
+<p>file <code>out</code> is created with data sorted.</p>
+<p><em>Credits: AS, 2015</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisSort.jl#L1-L19' class='documenter-source'>source</a><br></p>
+<h2 id="seiswindow">SeisWindow</h2>
+<p><a id='Seismic.SeisWindow' href='#Seismic.SeisWindow'>#</a>
+<strong><code>Seismic.SeisWindow</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span>SeisWindow(in,out;&lt;keyword arguments&gt;)
+</pre></div>
+
+
+<p>Window a seis file using header words.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>in::AbstractString</code>: filename of input</li>
+<li><code>out::AbstractString</code>: filename of output</li>
+</ul>
+<p><strong>Keyword arguments</strong></p>
+<ul>
+<li><code>key</code></li>
+<li><code>minval</code></li>
+<li><code>maxval</code></li>
+</ul>
+<p>note that windowing along the time axis is achieved by using the key "t".</p>
+<p><em>Credits: AS, 2015</em></p>
+<p><a target='_blank' href='https://github.com/SeismicJulia/Seismic.jl/blob/42ef65d138b6e379b2d145cd26e18b710f1ae825/src/Utils/SeisWindow.jl#L1-L18' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
@@ -208,13 +414,13 @@
       </div>
 
     </section>
-
+    
   </div>
 
-<div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/msacchi/Seismic.jl.git" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/SeismicJulia/Seismic.jl.git" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../../Tools/page1/" style="color: #fcfcfc;">&laquo; Previous</a></span>
@@ -224,6 +430,9 @@
       
     </span>
 </div>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../../assets/mathjaxhelper.js"></script>
 
 </body>
 </html>
