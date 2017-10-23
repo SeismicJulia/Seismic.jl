@@ -47,7 +47,7 @@ function SeisPWD(in;w1=10,w2=10,dz_in=1,dx_in=1,format="angle")
 	res = wavekill(1.,pp,n1,n2,d)
 
 	if (format == "angle")
-		pp = atan.(pp*dzin/dxin)*180/pi;
+		pp = atan.(pp*dz_in/dx_in)*180/pi;
 	end
 
 
