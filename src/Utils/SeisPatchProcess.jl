@@ -53,16 +53,20 @@ end
 
 
 function MyProcess(params)
-	f=params.functions
-    d1,h1,e1 = SeisRead(params.p_file)
-    for ifunc = 1 : length(f)
-	func = f[ifunc]
 
-	d2 = func(d1;params.param_f...)
-	d1 = copy(d2)
+	f = params.functions
+	p = params.param_f
+	
+	d1,h1,e1 = SeisRead(params.p_file)
+    
+	for ifunc = 1 : length(f)
+		func = f[ifunc]
+		d2 = func(d1;p[ifunc]...)
+		d1 = copy(d2)
 	#h1 = copy(h2)
-    end
-    SeisWrite(params.p_out,d1,h1,e1)
+	end
+
+	SeisWrite(params.p_out,d1,h1,e1)
 	return(1)
     
 end
