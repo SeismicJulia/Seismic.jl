@@ -220,7 +220,8 @@ for it_W = 1 : it_NW
 	      end
 	   end
    end
-
+	
+	
    pmap(grab_patch,patch_list)
    return patch_names,npatch
 
