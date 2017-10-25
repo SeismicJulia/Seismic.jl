@@ -31,7 +31,8 @@ function SeisWrite(filename,d,h::Array{Header,1},extent::Extent;itrace=1)
     end
     write(stream_dout,convert(Array{Float32,1},d[:]))
     close(stream_dout)
-    nx = size(d[:,:],2)
+    nt=size(d,1)
+    nx = size(reshape(d,nt,:),2)
     h1 = Header32Bits[]
     for j = itrace : itrace + nx - 1
 	h[j - itrace + 1].tracenum = j 

@@ -5,7 +5,7 @@
 
 **IN**
 
-* d_in: input data that can have up to 5 dimensions
+* in: input data that can have up to 5 dimensions
 * p=1., exponent for thresholding (1 is equivalent to soft thres. high number is equivalent to hard thresholding)
 * alpha=1 add-back ratio for imputation step. Use 1 for noise free data, and < 1 for denoising of original traces.
 * dt=0.001 sampling rate along the time axis (in seconds)
