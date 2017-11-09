@@ -1,3 +1,22 @@
+"""
+    SeisFKFilter(d ; <keyword arguments>)
+
+Decimate a multidimensional array input. Input and output have the same dimension
+
+# Arguments
+* `d`: 2D Input data. 
+
+# Keyword arguments
+* `dt=0.002`: time sampling interval.
+* `dx=10`: space sampling interval.
+* `va=-2000,vb=-3000,vc=3000,vd=2000`: corner velocities to be filtered
+
+# Output
+* `out`: Filtered data. 
+
+
+"""
+
 function SeisFKFilter(d;dt=0.002,dx=10,va=-2000,vb=-3000,vc=3000,vd=2000)
 
     nt = size(d,1)

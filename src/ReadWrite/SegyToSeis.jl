@@ -3,27 +3,27 @@
 
 *Convert SEGY or SU data to seis format.*
 
-**IN**   
+**IN**
 
-* filename_in
-* filename_out
+* `filename_in::AbstractString`
+* `filename_out::AbstractString`
 * format="segy" (or "su")
 * swap_bytes=true (flag to swap bytes)
 * input_type="ibm" (or "ieee")
 
-**OUT**  
+**OUT**
 
 *Credits: AS, 2015*
 
 """
 
-function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=true,input_type="ibm")
+function SegyToSeis(filename_in::AbstractString,filename_out::AbstractString;format="segy",swap_bytes=true,input_type="ibm")
 
 	if (format=="su")
 		file_hsize = 0
 	else
 		file_hsize = 3600
-		# add commands here to read text and binary headers and write them out to 
+		# add commands here to read text and binary headers and write them out to
 		# filename_out.thead and filename_out.bhead
 		stream     = open(filename_in)
 		position = 3200
@@ -53,8 +53,8 @@ function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=true,input
 	nx = round(Int,(filesize(stream)-file_hsize)/4/total)
 	println("number of traces: ",nx)
 	println("number of samples per trace: ",nt)
-	h_segy = Array(SegyHeader,1)
-	h_seis = Array(Header,1)
+	h_segy = Array{SegyHeader}(1)
+	h_seis = Array{Header}(1)
 	seek(stream,file_hsize + segy_count["trace"])
 	h_segy[1] = GrabSegyHeader(stream,swap_bytes,nt,file_hsize,1)
 	dt = h_segy[1].dt/1000000
@@ -63,7 +63,7 @@ function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=true,input
 		   convert(Float32,dt),convert(Float32,1),convert(Float32,1),convert(Float32,1),convert(Float32,1),
 		   "Time","Trace Number","","","",
 		   "s","index","","","",
-		   "")	
+		   "")
 	for j=1:nx
 		position = file_hsize + total*(j-1)*4 + segy_count["trace"]
 		seek(stream,position)
@@ -71,7 +71,7 @@ function SegyToSeis(filename_in,filename_out;format="segy",swap_bytes=true,input
 			d = read(stream,Float32,nt)
 		else
 			d = read(stream,IBMFloat32,nt)
-		end	
+		end
 		if (swap_bytes==true && input_type == "ieee")
 			d = bswap_vector(d)
 		end
@@ -92,4 +92,3 @@ function bswap_vector(a)
 	end
 	return a
 end
-

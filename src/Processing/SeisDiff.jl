@@ -1,4 +1,4 @@
-function differentiate_traces(d;dt=0.001,pow=-2,rot=0)
+function SeisDiff(d;dt=0.001,pow=-2,rot=0)
 
 	nt = size(d,1)
 	D = fft(d,1)
@@ -24,7 +24,7 @@ function SeisDiff(in,h::Array{Header,1};pow=-2,rot=0)
 
 end
 
-function SeisDiff(in::String,out::String;pow=-2,rot=0)
+function SeisDiff(in::AbstractString,out::AbstractString;pow=-2,rot=0)
 
 	@compat parameters = Dict(:pow=>pow,:rot=>rot)
 	SeisProcess(in,out,[SeisDiff],[parameters])

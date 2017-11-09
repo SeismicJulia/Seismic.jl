@@ -67,9 +67,9 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
                            wbox=6, hbox=6, dpi=100, name="NULL")
     if (vmin=="NULL" || vmax=="NULL")
         if (pclip<=100)
-	    a = -quantile(abs(d[:]), (pclip/100))
+	    a = -quantile(abs.(d[:]), (pclip/100))
 	else
-	    a = -quantile(abs(d[:]), 1)*pclip/100
+	    a = -quantile(abs.(d[:]), 1)*pclip/100
 	end
 	b = -a
     else
@@ -98,9 +98,9 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	    delta = wiggle_trace_increment*dx
 	    hmin = minimum(x)
 	    hmax = maximum(x)
-            dmax = maximum(abs(d[:]))
+            dmax = maximum(abs.(d[:]))
 	    alpha = xcur*delta
-            scal=="NULL" ? alpha = alpha/maximum(abs(d[:])) : alpha=alpha*scal
+            scal=="NULL" ? alpha = alpha/maximum(abs.(d[:])) : alpha=alpha*scal
 	    for k = 1:wiggle_trace_increment:size(d, 2)
 		x_vert = Float64[]
 		y_vert = Float64[]
@@ -128,14 +128,14 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	    fmax = FMAX
 	end
 	nf = convert(Int32, floor((size(d[:, :], 1)/2)*fmax/FMAX))
-	D = abs(fftshift(fft(d[:, :])))
+	D = abs.(fftshift(fft(d[:, :])))
 	D = D[round(Int,end/2):round(Int,end/2)+nf, :]
 	if (vmin=="NULL" || vmax=="NULL")
 	    a = 0.
 	    if (pclip<=100)
-		b = quantile(abs(D[:]), (pclip/100))
+		b = quantile(abs.(D[:]), (pclip/100))
 	    else
-		b = quantile(abs(D[:]), 1)*pclip/100
+		b = quantile(abs.(D[:]), 1)*pclip/100
 	    end
 	end
 	im = plt.imshow(D, cmap=cmap, vmin=a, vmax=b, extent=[kmin,kmax,fmax,0],
@@ -152,7 +152,7 @@ function SeisPlot{T<:Real}(d::Array{T,2}; plot_type="TX", style="color",
 	    fmax = FMAX
 	end
 	nf = convert(Int32, floor((size(d[:, :], 1)/2)*fmax/FMAX))
-	y = fftshift(sum(abs(fft(d[:, :], 1)), 2))/nx
+	y = fftshift(sum(abs.(fft(d[:, :], 1)), 2))/nx
 	y = y[round(Int,end/2):round(Int, end/2)+nf]
 	norm = maximum(y[:])
 	if (norm > 0.)

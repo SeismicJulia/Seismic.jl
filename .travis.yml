@@ -1,9 +1,10 @@
 language: julia
 julia:
-  - 0.4
-  - 0.5
+  - 0.6
+  
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.init(); Pkg.clone(pwd())'
   - julia -e 'ENV["PYTHON"]=""; Pkg.build("PyCall"); Pkg.add("PyPlot")'
   - julia -e 'Pkg.test("Seismic"; coverage=true)'
+  

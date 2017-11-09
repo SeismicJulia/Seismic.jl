@@ -9,12 +9,14 @@
 
 [![Build Status](https://travis-ci.org/SeismicJulia/Seismic.jl.svg?branch=master)](https://travis-ci.org/SeismicJulia/Seismic.jl)
 
-This module provides tools to read, write, process, and plot 3D reflection 
+This module provides tools to read, write, and process 
 seismic data. 
-[//]: # (The documentation can be found [here](http://seismic.physics.ualberta.ca).)
+(The documentation can be found [here](http://seismicjulia.github.io/Seismic.jl)
+and [here]
+(http://seismic.physics.ualberta.ca).). At the moment, it is updated and tested against Julia 0.6
 
 ## Installation
-To use this package you must first install [the Julia programming language](http://julialang.org). Once you have Julia you can download and install the Seismic package by typing ```Pkg.add("Seismic")``` on the Julia command line.
+To use this package you must first install the [Julia](http://julialang.org/downloads/) programming language. Once you have Julia you can install the Seismic package by typing ```Pkg.add("Seismic")``` on the Julia command line and then run ```Pkg.checkout("Seismic")``` to stay updated to the last version in this repository. 
 
 ## Basic usage
 Once you have installed the package you can type `using Seismic` to start using
@@ -22,10 +24,10 @@ the functions. For example
 
 ```Julia
 using PyPlot, Seismic;
-download("http://certmapper.cr.usgs.gov/nersl/NPRA/seismic/1979/616_79/PROCESSED/616_79_PR.SGY", "616_79_PR.SGY");
-SegyToSeis("616_79_PR.SGY", "616_79_PR.seis");
-d, h, e = SeisRead("616_79_PR.seis");
-SeisPlot(d[1:500, :], e, cmap="PuOr", wbox=9);
+download("http://seismic.physics.ualberta.ca/data/gom_cdp_nmo.su","gom_cdp_nmo.su");
+SegyToSeis("gom_cdp_nmo.su","gom_cdp_nmo", format="su", input_type="ieee",swap_bytes=true);
+d, h, e = SeisRead("gom_cdp_nmo");
+SeisPlot(d[1:500, :]);
 ```
 will produce this figure:
 

@@ -587,8 +587,11 @@ end
 function MapHeaders(h_in,j,map_type)
 
 	if map_type=="SegyToSeis"
-		scalco = abs(convert(Float32,h_in[1].scalco)) < 10 ? convert(Float32,h_in[1].scalco) : sign(convert(Float32,h_in[1].scalco))*log10(abs(convert(Float32,h_in[1].scalco)))
-		scalel = abs(convert(Float32,h_in[1].scalel)) < 10 ? convert(Float32,h_in[1].scalel) : sign(convert(Float32,h_in[1].scalco))*log10(abs(convert(Float32,h_in[1].scalco)))
+		#scalco = abs(convert(Float32,h_in[1].scalco)) < 10 ? convert(Float32,h_in[1].scalco) : sign(convert(Float32,h_in[1].scalco))*log10(abs(convert(Float32,h_in[1].scalco)))
+		scalco = sign(convert(Float32,h_in[1].scalco))*log10(abs(convert(Float32,h_in[1].scalco)))
+
+		#scalel = abs(convert(Float32,h_in[1].scalel)) < 10 ? convert(Float32,h_in[1].scalel) : sign(convert(Float32,h_in[1].scalco))*log10(abs(convert(Float32,h_in[1].scalco)))
+		scalel = sign(convert(Float32,h_in[1].scalco))*log10(abs(convert(Float32,h_in[1].scalco)))
 		h_out = InitSeisHeader()
 		h_out.tracenum = convert(typeof(h_out.tracenum),j)
 		h_out.o1 = convert(typeof(h_out.o1),0)
@@ -632,7 +635,7 @@ end
 
 import Base.convert
 
-bitstype 32 IBMFloat32
+primitive type IBMFloat32 32 end
 
 ieeeOfPieces(fr::UInt32, exp::Int32, sgn::UInt32) = reinterpret(Float32, convert(UInt32,fr >>> 9) | convert(UInt32,exp << 23) | sgn) :: Float32
 import Base.convert
@@ -659,4 +662,3 @@ function convert(::Type{Float32}, ibm::IBMFloat32)
     ieeeOfPieces(clexp == exp ? fr << 1 : convert(UInt32,0), clexp, sgn)
   end
 end
-

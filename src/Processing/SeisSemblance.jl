@@ -3,25 +3,25 @@ function SeisSemblance(in,param=Dict())
 	dt = get(param,"dt",0.002)
 	dx = get(param,"dx",10)
 	nt,nx = size(in)
-	offset = get(param,"offset",[0:1:nx-1]*dx)
+	offset = get(param,"offset",collect(0:1:nx-1)*dx)
 	vmin = get(param,"vmin",1500)
 	vmax = get(param,"vmax",3500)
-	nv = get(param,"nv",500)
+	nv = get(param,"nv",nx)
 	v = linspace(vmin,vmax,nv)
-	tau = [0:4:nt-1]*dt
+	tau = collect(0:4:nt-1)*dt
 	ntau = length(tau)
 	L = get(param,"L",5)
 
 	S = zeros(ntau,nv)
 	for it = 1:ntau
-		for iv = 1:nv  
-			t = sqrt( tau[it]^2 + (offset/v[iv]).^2 )
+		for iv = 1:nv
+			t = sqrt( tau[it].^2 + (offset[iv]/v[iv]).^2 )
 			s = zeros(2*L+1,nx)
 			for ig = -L:L
 				ts = t + (ig-1)*dt
 				for ix = 1:nx
-					is = ts[ix]/dt+1
-					i1 = floor(is)
+					is = ts/dt+1
+					i1 = convert(Int64,floor(is))
 					i2 = i1 + 1
 					if (i1>=1 && i2<=nt)
 						a = is-i1
@@ -37,5 +37,5 @@ function SeisSemblance(in,param=Dict())
 	end
 	S = S/maximum(S[:])
 
-	return S,tau,v 
+	return S,tau,v
 end

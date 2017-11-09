@@ -9,7 +9,7 @@ domain inverse parabolic or linear Radon operator via least-squares inversion.
 time samples and `nh` the number of receivers.
 
 # Keyword arguments
-* `order::String="parab"`: `"parab"` for parabolic transform, `"linear"`
+* `order::AbstractString="parab"`: `"parab"` for parabolic transform, `"linear"`
 for linear transform.
 * `dt::Real=0.004`: sampling interval in seconds.
 * `h::Vector{Real}=collect(0.0:20.0:1000.0)`: offset vector `h[1:nh]`.
@@ -33,14 +33,14 @@ offset space reconstruction: Geophysics, 60, 1169-1177.
 """
 
 function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
-                          }(d::Array{Td,2}; order::String="parab",
+                          }(d::Array{Td,2}; order::AbstractString="parab",
                             dt::Real=0.004, href::Real=0.0,
                             h::Vector{Th}=collect(0.0:20.0:1000.0),
                             p::Vector{Tp}=collect(-0.05:0.01:2.2),
                             flow::Real=0.0, fhigh::Real=125.0, mu::Real=0.001)
     if order=="parab"
         I = 2
-        href == 0 && (href = maximum(abs(h)))
+        href == 0 && (href = maximum(abs.(h)))
     elseif order=="linear"
         I = 1
         href = 1.0
@@ -65,8 +65,8 @@ function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
                 phi = w*p[ip]*(h[ih]/href)^I
       	        L[ih, ip] = exp(-im*phi)
             end
-        end 
-        R = L'*L 
+        end
+        R = L'*L
         r0 = trace(R)/np
         xa = L'*D[iw, :]
         Q = mu*r0*eye(np)
@@ -79,4 +79,4 @@ function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
     m = real(ifft(M, 1))
 #    m = m[1:nt, :]
     return m
-end 
+end

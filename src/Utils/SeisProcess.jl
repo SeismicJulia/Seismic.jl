@@ -1,13 +1,14 @@
-function SeisProcess(in::String,out::String,operators,parameters;key=[])	
+function SeisProcess(in::AbstractString,out::AbstractString,operators,parameters;key=[])
     # Run processing flows that read and write from disk
     #
-    # f is a function that has the following syntax: d2,h2 = f(d1,h1,param),
-    # where 
+    # f is a function that has the following syntax: d2,h2 = f(d1,h1,e1,param),
+    # where
     # param is list of keyword arguments for the function.
     # note that f can be a vector of functions. They will be executed
     # sequentially on the same group of traces.
     #
     # get list of gather lengths
+
     ext = ReadTextHeader(in)
     nx = ext.n2*ext.n3*ext.n4*ext.n5
     filename_headers = ParseHeaderName(in)
@@ -30,18 +31,19 @@ function SeisProcess(in::String,out::String,operators,parameters;key=[])
 	    itrace = j
 	end
 	prev = 1*curr
-    end	
+    end
     push!(L,nx - itrace + 1)
     close(stream_h)
-    
+
     itrace_in = 1
     itrace_out = 1
     for igather = 1 : length(L)
 	d1,h1,e1 = SeisRead(in, group="some",itrace=itrace_in,ntrace=L[igather])
+
 	num_traces_in = size(d1,2)
 	for j = 1 : length(operators)
 	    op = operators[j]
-	    d2,h2 = op(d1,h1;parameters[j]...)
+	    d2,h2 = op(d1,h1,e1;parameters[j]...)
 	    d1 = copy(d2)
 	    h1 = copy(h2)
 	end
@@ -50,28 +52,28 @@ function SeisProcess(in::String,out::String,operators,parameters;key=[])
 	itrace_in += num_traces_in
 	itrace_out += num_traces_out
     end
-    
+
 end
 
-function SeisProcess(in::Array{String,1}, out::Array{String,1}, operators,
+function SeisProcess(in::Array{AbstractString,1}, out::Array{AbstractString,1}, operators,
                      parameters;key=[])
-    
+
     for j = 1 : length(in)
-	SeisProcess(in[j],out[j],parameters;key=key)
+	SeisProcess(in[j],out[j],operators,parameters;key=key)
     end
-    
+
 end
 
-function SeisProcess(in1::String, in2::String, out::String, operators,
+function SeisProcess(in1::AbstractString, in2::AbstractString, out::AbstractString, operators,
                      parameters; key=[])
     # Run processing flows that read 2 inputs and write 1 output
     #
     # f is a function that has the following syntax:
-    # d3,h3 = f(d1,d2,h1,h2,param), where 
+    # d3,h3 = f(d1,d2,h1,h2,param), where
     # param is list of keyword arguments for the function.
     # note that f can be a vector of functions.
     # They will be executed sequentially on the same group of traces.
-    
+
     # get list of gather lengths
     ext = ReadTextHeader(in1)
     nx = ext.n2*ext.n3*ext.n4*ext.n5
@@ -95,10 +97,10 @@ function SeisProcess(in1::String, in2::String, out::String, operators,
 	    itrace = j
 	end
 	prev = 1*curr
-    end	
+    end
     push!(L,nx - itrace + 1)
     close(stream_h)
-    
+
     itrace_in = 1
     itrace_out = 1
     for igather = 1 : length(L)
@@ -111,10 +113,10 @@ function SeisProcess(in1::String, in2::String, out::String, operators,
 	    d1 = copy(d3)
 	    h1 = copy(h3)
 	end
-	num_traces_out = size(d1,2)	
+	num_traces_out = size(d1,2)
 	SeisWrite(out,d1,h1,e1,itrace=itrace_out)
 	itrace_in += num_traces_in
 	itrace_out += num_traces_out
     end
-    
+
 end

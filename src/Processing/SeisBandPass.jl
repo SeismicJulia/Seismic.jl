@@ -1,3 +1,25 @@
+"""
+    SeisBandPass(d ; <keyword arguments>)
+
+Apply a bandpass filter to a 2D array input. Input and output data is in tx domain. Filter is applied in fx domain.
+
+# Arguments
+* `d`: Input 2D data array in tx domain.
+
+# Keyword arguments
+* `dt=0.001`: time sampling interval.
+* `fa=0,fb=0,fc=60,fd=80`: corner frequencies in Hz. 
+
+
+# Output
+* `d`: Filtered 2d data arrayn in tx domain.
+
+# Example
+```julia
+julia> d = SeisLinearEvents(d); SeisPlot(d,plot_type="Amplitude",dy=0.004,fmax=125);
+julia> d_filter = SeisBandPass(d;dt=0.004,fc=15,fd=35); SeisPlot(d_filter,plot_type="Amplitude",dy=0.004,fmax=125);
+"""
+
 function SeisBandPass(d;dt=0.001,fa=0,fb=0,fc=60,fd=80)
 
 	nt = size(d,1)
@@ -6,9 +28,9 @@ function SeisBandPass(d;dt=0.001,fa=0,fb=0,fc=60,fd=80)
 	df = 1/nf/dt
 	nw = round(Int,nf/2) + 1
 
-	if(fd*dt*nf < nw) 
+	if(fd*dt*nf < nw)
 		iw_max = round(Int,floor(fd*dt*nf))
-	else 
+	else
 		iw_max = round(Int,floor(0.5/dt))
 	end
 
@@ -33,10 +55,10 @@ function SeisBandPass(d;dt=0.001,fa=0,fb=0,fc=60,fd=80)
 	end
 	m[iw_max:end,:] = 0.
 
-	# symmetries    
+	# symmetries
 	for iw=nw+1:nf
 		m[iw,:] = conj(m[nf-iw+2,:])
-	end 
+	end
 	d = real(bfft(m,1)/sqrt(size(m,1)))
 
 	return d[1:nt,1:nx];
@@ -59,9 +81,17 @@ function SeisBandPass(d,h::Array{Header,1};dt=0.001,fa=0,fb=0,fc=60,fd=80)
 
 end
 
-function SeisBandPass(in::String,out::String;fa=0,fb=0,fc=60,fd=80)
+function SeisBandPass(d,h::Array{Header,1},ext;dt=0.001,fa=0,fb=0,fc=60,fd=80)
+
+	out = SeisBandPass(d;dt=h[1].d1,fa=fa,fb=fb,fc=fc,fd=fd)
+	return out,h,ext
+
+end
+
+
+function SeisBandPass(in::AbstractString,out::AbstractString;fa=0,fb=0,fc=60,fd=80)
 
 	@compat parameters = Dict(:fa=>fa,:fb=>fb,:fc=>fc,:fd=>fd)
-	SeisProcess(in,out,[SeisBandPass],[parameters];group="some")
+	SeisProcess(in,out,[SeisBandPass],[parameters])
 
 end

@@ -1,4 +1,4 @@
-function SeisSmoothGathers(m::String,d::String,adj;Nsmooth=3,Nrepeat=1)
+function SeisSmoothGathers(m::AbstractString,d::AbstractString,adj;Nsmooth=3,Nrepeat=1)
 
 	if (adj==false)
 		m1,h,ext = SeisRead(m)
@@ -19,7 +19,7 @@ function SeisSmoothGathers(m::String,d::String,adj;Nsmooth=3,Nrepeat=1)
 		end
 		SeisWrite(m,d1,h,ext)
 	end
-	
+
 end
 
 function smooth_angles(A;Nsmooth=3,Nrepeat=1)

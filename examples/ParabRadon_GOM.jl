@@ -1,7 +1,6 @@
-# Multiple supresion using the parabolic Radon transform. Real data example.
+# Multiple supression using the parabolic Radon transform. Real data example.
 
 using PyPlot, Seismic
-
 close("all")
 
 # 1- Download data set from web site (1 NMO-corrected CMP gather from the GOM)

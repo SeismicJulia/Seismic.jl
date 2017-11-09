@@ -1,4 +1,4 @@
-function SeisSmoothStructure(m::String,d::String,param)
+function SeisSmoothStructure(m::AbstractString,d::AbstractString,param)
 
 	adj = get(param,"adj",false)
 	param["f"] = [smooth_structure]
@@ -9,11 +9,11 @@ function SeisSmoothStructure(m::String,d::String,param)
 	if (adj==false)
 		SeisSort(m,tmp1,key=["iaz","iang","imy","imx"]);
 		SeisProcess(tmp1,tmp2,param)
-		SeisSort(tmp2,d,key=["imx","imy","iang","iaz"]);	
+		SeisSort(tmp2,d,key=["imx","imy","iang","iaz"]);
 	else
 		SeisSort(d,tmp1,key=["iaz","iang","imy","imx"]);
 		SeisProcess(tmp1,tmp2,param)
-		SeisSort(tmp2,m,key=["imx","imy","iang","iaz"]);	
+		SeisSort(tmp2,m,key=["imx","imy","iang","iaz"]);
 	end
 	SeisRemove(tmp1)
 	SeisRemove(tmp2)
@@ -31,7 +31,7 @@ function smooth_structure(d,h,param)
 	nx = size(d,2)
 	nz = size(d,1)
 	WL = int(Nsmooth2/2)
-	d2 = copy(d)	
+	d2 = copy(d)
 	smootharray!(d,d2,dip,dip2,nx,nz,Nsmooth2,WL)
 
 	return d2,h;

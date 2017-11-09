@@ -3,9 +3,9 @@
 
 *Projection Onto Convex Sets interpolation of seismic records.*
 
-**IN**   
+**IN**
 
-* d_in: input data that can have up to 5 dimensions
+* in: input data that can have up to 5 dimensions
 * p=1., exponent for thresholding (1 is equivalent to soft thres. high number is equivalent to hard thresholding)
 * alpha=1 add-back ratio for imputation step. Use 1 for noise free data, and < 1 for denoising of original traces.
 * dt=0.001 sampling rate along the time axis (in seconds)
@@ -14,7 +14,7 @@
 * padx=1 padding to use for the spatial axes
 * Niter=100 number of iterations
 
-**OUT**  
+**OUT**
 
 * d_out: interpolated data
 """
@@ -33,9 +33,9 @@ function SeisPOCS(in;p=1.,dt=0.001,fmax=99999.,padt=2,padx=1,Niter=100,alpha=1)
     dw = 2.*pi/nf/dt
     nw = round(Int,nf/2) + 1
     fmax = fmax < 0.5/dt ? fmax : 0.5/dt
-    if(fmax*dt*nf < nw) 
+    if(fmax*dt*nf < nw)
 	iw_max = round(Int,floor(fmax*dt*nf))
-    else 
+    else
 	iw_max = round(Int,floor(0.5/dt))
     end
     nx1 > 1 ? nk1 = padx*nextpow2(nx1) : nk1 = 1
@@ -59,16 +59,16 @@ function SeisPOCS(in;p=1.,dt=0.001,fmax=99999.,padt=2,padx=1,Niter=100,alpha=1)
 	    y = copy(x)
 	    for iter = 1 : Niter
 		Y = fft(y)
-		amp = sort(vec(abs(Y[:])))
+		amp = sort(vec(abs.(Y[:])))
 		perc = perci + (iter-1)*((percf-perci)/Niter);
 		cutoff = amp[round(Int,floor(perc*nk)+1)];
 		for j = 1 : nk1*nk2*nk3*nk4
 		    if (abs(Y[j]) < cutoff)
 			Y[j] = 0.
 		    else
-			Y[j] = Y[j]*(1 - (cutoff/(abs(Y[j]) + 0.0000001))^p)	
+			Y[j] = Y[j]*(1 - (cutoff/(abs(Y[j]) + 0.0000001))^p)
 		    end
-		end	
+		end
 		y = ifft(Y)
 		y = alpha*x + (1-alpha*T).*y
 	    end
@@ -77,7 +77,7 @@ function SeisPOCS(in;p=1.,dt=0.001,fmax=99999.,padt=2,padx=1,Niter=100,alpha=1)
 	# symmetries
 	for iw=nw+1:nf
 	    D[iw,:,:,:,:] = conj(D[nf-iw+2,:,:,:,:])
-	end 
+	end
 	d = ifft(D,1)
 	d = real(d[1:nt,1:nx1,1:nx2,1:nx3,1:nx4])
 	return d

@@ -1,9 +1,11 @@
-function SeisPWD(in;w1=10,w2=10,dz=1,dx=1)
+function SeisPWD(in;w1=10,w2=10,dz_in=1,dx_in=1,format="angle")
 	# dip estimation by Plane Wave Destruction
 	# see http://sepwww.stanford.edu/data/media/public/sep//prof/pvi.pdf Chapter 4.
+
+	d=0
 	d = copy(in)
 	n1,n2 = size(in)
-	format = get(param,"format","angle") # output format: "angle" (in degrees wrt vertical) or "dip" (in y samples over x samples)
+	#format = get(param,"format","angle") # output format: "angle" (in degrees wrt vertical) or "dip" (in y samples over x samples)
 	pp = zeros(n1,n2); dx = wavekill(1.,pp,n1,n2,d)
 	pp =  ones(n1,n2); dt = wavekill(0.,pp,n1,n2,d)
 	dtdx = dt.*dx
@@ -20,7 +22,7 @@ function SeisPWD(in;w1=10,w2=10,dz=1,dx=1)
 		dtdx[i1,:] = triangle(w2,n2,dtdx[i1,:])
 	end
 
-	coh = sqrt((dtdx.*dtdx)./(dtdt.*dxdx))
+	coh = sqrt.((dtdx.*dtdx)./(dtdt.*dxdx))
 	pp = -dtdx./dtdt
 
 	coh = zeros(n1,n2); 
@@ -45,7 +47,7 @@ function SeisPWD(in;w1=10,w2=10,dz=1,dx=1)
 	res = wavekill(1.,pp,n1,n2,d)
 
 	if (format == "angle")
-		pp = atan(pp*dz/dx)*180/pi;
+		pp = atan.(pp*dz_in/dx_in)*180/pi;
 	end
 
 

@@ -91,11 +91,11 @@ function modExpand(par::Array{Float64,2}, ext::Int64, iflag::Int64)
     temp2 = repmat(par[:,end], 1, ext)
     par   = hcat(temp1, par, temp2)
     if iflag == 1
-       temp1 = repmat(par[1,  :], ext, 1)
-       temp2 = repmat(par[end,:], ext, 1)
+       temp1 = repmat(par[1,  :]', ext, 1)
+       temp2 = repmat(par[end,:]', ext, 1)
        par   = vcat(temp1, par, temp2)
     elseif iflag == 2
-       temp2 = repmat(par[end,:], ext, 1)
+       temp2 = repmat(par[end,:]', ext, 1)
        par   = vcat(par, temp2)
     end
     return par

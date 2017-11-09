@@ -1,0 +1,38 @@
+site_name:        Seismic.jl
+repo_url:         https://github.com/SeismicJulia/Seismic.jl.git
+site_description: Julia package for seismic signal analysis and imaging
+site_author:      SAIG group
+theme:            readthedocs
+
+
+markdown_extensions:
+  - codehilite
+  - extra
+  - tables
+  - fenced_code
+
+extra_css:
+  - assets/Documenter.css
+
+
+extra_javascript:
+  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
+  - assets/mathjaxhelper.js
+
+
+docs_dir: 'build'
+
+
+pages:
+- Introduction: index.md
+- Imaging:   Imaging/page1.md
+- Modelling: Modelling/page1.md
+- Operators: Operators/page1.md
+- Plotting:  Plotting/page1.md
+- Processing: Processing/page1.md
+- ReadWrite: ReadWrite/page1.md
+- Solvers:   Solvers/page1.md
+- Tools:     Tools/page1.md
+- Utils:     Utils/page1.md
+- Wavelets:  Wavelets/page1.md
+- Windows:   Windows/page1.md

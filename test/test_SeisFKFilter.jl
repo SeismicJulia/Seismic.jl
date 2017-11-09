@@ -1,10 +1,11 @@
 using Seismic, PyCall
-@pyimport matplotlib.pyplot as plt
+@pyimport matplotlib.pyplot as pl
 
+#Generate seismic data
 
 nt = 256; 
 nx = convert(Int64,128);
-h = Array(Header,nx);
+h = Array{Header}(nx);
 for ix = 1:nx
   h[ix] = Seismic.InitSeisHeader();
   h[ix].tracenum = ix;
@@ -17,59 +18,64 @@ for ix = 1:nx
 end
 
 dt=0.004;
-dx=25;
+dx=5;
 f_niquest=Int(floor(1/dt))
-param=["dt"=>dt, "dx"=>dx]
 
-data=rand(nt,nx)
+Tmax=(nt-1)*dt
 
-f1 = plt.figure(1)
-plt.imshow(data[1:nt,:],cmap="PuOr",aspect="auto",vmin=-1,vmax=1)
-println("1")
-plt.title("data before fk filter")
-println("1")
-plt.xlabel("X (m)")
-println("1")
-plt.ylabel("T (s)")
-println("1")
-plt.show()
-println("1")
+data,ext=SeisLinearEvents(nt=nt,dt=dt,nx1=nx,dx1=dx,tau=[Tmax/4., Tmax/3])#,p1=[0.0001])
 
-
+#Transform to FK domain
 m=fft(data,1)/sqrt(size(data,1));
 m=fft(m,2)/sqrt(size(data,2))
 m=fftshift(m)
 
 m=m[Int(floor(f_niquest/2)):f_niquest,:]
 
-println("2")
-
-f11 = plt.figure(11)
-plt.imshow(abs(m),cmap="PuOr",aspect="auto",vmin=-1,vmax=1)
-plt.title("fk spectrum before filter")
-plt.xlabel("K (1/m)")
-plt.ylabel("W (1/s)")
-plt.show()
-
-println("3")
-
 # apply FK filter
-data_fk,fk_spec,h = SeisFKFilter(data,h,param)
+data_fk= SeisFKFilter(data;dt=dt,dx=dx,va=-1500,vb=-2500,vc=2500,vd=1500)
 
-println("4")
+#Transform back to TX domain.
 
-f2 = plt.figure(2)
-plt.imshow(data_fk[1:nt,:],cmap="PuOr",aspect="auto",vmin=-1,vmax=1)
-plt.title("data after fk filter")
-plt.xlabel("X (m)")
-plt.ylabel("T (s)")
-plt.show()
+m=fft(data_fk,1)/sqrt(size(data_fk,1));
+m=fft(m,2)/sqrt(size(data_fk,2))
+m=fftshift(m)
 
-println("5")
+m=m[Int(floor(f_niquest/2)):f_niquest,:]
 
-f21 = plt.figure(21)
-plt.imshow(fk_spec,cmap="PuOr",aspect="auto",vmin=-1,vmax=1)
-plt.title("fk spectrum after filter")
-plt.xlabel("K (1/m)")
-plt.ylabel("W (1/s)")
-plt.show()
+#>>>>>>>>>>>>>>>Plot<<<<<<<<<<<<<<<<
+
+f1 = pl.figure(1)
+pl.imshow(data[1:nt,:],cmap="PuOr",aspect="auto",vmin=-1,vmax=1)
+pl.title("data before fk filter")
+pl.xlabel("X (m)")
+pl.ylabel("T (s)")
+pl.show()
+
+
+
+f2 = pl.figure(2)
+pl.imshow(abs.(m),cmap="PuOr",aspect="auto",vmin=-1,vmax=1)
+pl.title("fk spectrum before filter")
+pl.xlabel("K (1/m)")
+pl.ylabel("W (1/s)")
+pl.show()
+
+
+f3 = pl.figure(3)
+pl.imshow(data_fk[1:nt,:],cmap="PuOr",aspect="auto",vmin=-1,vmax=1)
+pl.title("data after fk filter")
+pl.xlabel("X (m)")
+pl.ylabel("T (s)")
+pl.show()
+
+
+
+f4 = pl.figure(4)
+pl.imshow(abs.(m),cmap="PuOr",aspect="auto",vmin=-1,vmax=1)
+pl.title("fk spectrum after filter")
+pl.xlabel("K (1/m)")
+pl.ylabel("W (1/s)")
+pl.show()
+
+pl.show()

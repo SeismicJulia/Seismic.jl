@@ -80,7 +80,7 @@ function GrabHeader(stream,j)
     h.tracenum = read(stream,typeof(h.tracenum))
     h.o1    = read(stream,typeof(h.o1))
     h.n1    = read(stream,typeof(h.n1))
-    h.d1    = read(stream,typeof(h.d1)) 
+    h.d1    = read(stream,typeof(h.d1))
     h.sx    = read(stream,typeof(h.sx))
     h.sy    = read(stream,typeof(h.sy))
     h.gx    = read(stream,typeof(h.gx))
@@ -117,7 +117,7 @@ function PutHeader(stream,h,j)
     write(stream,h.tracenum)
     write(stream,h.o1)
     write(stream,h.n1)
-    write(stream,h.d1) 
+    write(stream,h.d1)
     write(stream,h.sx)
     write(stream,h.sy)
     write(stream,h.gx)
@@ -147,14 +147,14 @@ function PutHeader(stream,h,j)
     write(stream,h.trid)
 end
 
-bitstype 32 Header32Bits
+primitive type Header32Bits 32 end
 
 function BitsToHeader(h_in)
     h = InitSeisHeader()
     h.tracenum = reinterpret(typeof(h.tracenum),h_in[1])
     h.o1 = reinterpret(typeof(h.o1),h_in[2])
     h.n1 = reinterpret(typeof(h.n1),h_in[3])
-    h.d1 = reinterpret(typeof(h.d1),h_in[4]) 
+    h.d1 = reinterpret(typeof(h.d1),h_in[4])
     h.sx = reinterpret(typeof(h.sx),h_in[5])
     h.sy = reinterpret(typeof(h.sy),h_in[6])
     h.gx = reinterpret(typeof(h.gx),h_in[7])
@@ -221,41 +221,41 @@ function HeaderToBits(h);
 end
 
 function GetNumTraces(in)
-    
+
     filename_h = ParseHeaderName(in)
     @compat nhead = length(fieldnames(Header))
     stream_h = open(filename_h)
     nx = round(Int,filesize(stream_h)/(nhead*4))
     close(stream_h)
     return nx
-    
-end        
 
-function ParseHeaderName(filename::String)
-    
+end
+
+function ParseHeaderName(filename::AbstractString)
+
     f = open(filename,"r")
     fstring = readstring(f)
     close(f)
     ini = rsearchindex(fstring, "\theaders=")
     ini == 0 ? headers = "NULL" : headers = fstring[search(fstring, r"\theaders=.*", ini)][11:end-1]
-    return headers	
-    
-end	
+    return headers
 
-function ParseDataName(filename::String)
-    
+end
+
+function ParseDataName(filename::AbstractString)
+
     f = open(filename,"r")
     fstring = readstring(f)
     close(f)
     ini = rsearchindex(fstring, "\tin=")
     ini == 0 ? in = "NULL" : in = fstring[search(fstring, r"\tin=.*", ini)][6:end-1]
-    
+
     return in
-    
+
 end
 
-function ParseDataFormat(filename::String)
-    
+function ParseDataFormat(filename::AbstractString)
+
     f = open(filename,"r")
     fstring = readstring(f)
     close(f)
@@ -265,7 +265,7 @@ function ParseDataFormat(filename::String)
 
 end
 
-function ParseDataESize(filename::String)
+function ParseDataESize(filename::AbstractString)
 
     f = open(filename,"r")
     fstring = readstring(f)
@@ -276,15 +276,15 @@ function ParseDataESize(filename::String)
 
 end
 
-function ExtractHeader(h::Array{Header,1},key::String)
-	
+function ExtractHeader(h::Array{Header,1},key::AbstractString)
+
     keytype = eval(parse("typeof(Seismic.InitSeisHeader().$(key))"))
     out = keytype[]
     for ix = 1 : length(h)
 	push!(out,getfield(h[ix],Symbol(key)))
     end
     return out
-	
+
 end
 
 type Extent
@@ -303,17 +303,17 @@ type Extent
     d3::Float32
     d4::Float32
     d5::Float32
-    label1::String
-    label2::String
-    label3::String
-    label4::String
-    label5::String
-    unit1::String
-    unit2::String
-    unit3::String
-    unit4::String
-    unit5::String
-    title::String
+    label1::AbstractString
+    label2::AbstractString
+    label3::AbstractString
+    label4::AbstractString
+    label5::AbstractString
+    unit1::AbstractString
+    unit2::AbstractString
+    unit3::AbstractString
+    unit4::AbstractString
+    unit5::AbstractString
+    title::AbstractString
 end
 
 function ReadTextHeader(filename)
@@ -378,13 +378,13 @@ function ReadTextHeader(filename)
 		    convert(Float32,d1),convert(Float32,d2),convert(Float32,d3),convert(Float32,d4),convert(Float32,d5),
 		    label1,label2,label3,label4,label5,
 		    unit1,unit2,unit3,unit4,unit5,
-		    title)	
+		    title)
     return extent
 end
 
 function WriteTextHeader(filename,extent,format,esize,filename_d,filename_h)
     # write the text header
-    stream = open(filename, "w")	
+    stream = open(filename, "w")
     write(stream,join(["	n1=",extent.n1,"\n"]))
     write(stream,join(["	n2=",extent.n2,"\n"]))
     write(stream,join(["	n3=",extent.n3,"\n"]))

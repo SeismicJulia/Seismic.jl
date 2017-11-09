@@ -1,10 +1,10 @@
 function WeightingOp(in,adj;w=1)
-	
-	return in.*w	
+
+	return in.*w
 
 end
 
-function WeightingOp(m::String,d::String,adj;w="NULL")
+function WeightingOp(m::AbstractString,d::AbstractString,adj;w="NULL")
 
 	if (adj==true)
 		d1,h1,e1 = SeisRead(d)
@@ -18,15 +18,15 @@ function WeightingOp(m::String,d::String,adj;w="NULL")
 
 end
 
-function WeightingOp(m::Array{String,1},d::Array{String,1},adj;w="NULL")
+function WeightingOp(m::Array{AbstractString,1},d::Array{AbstractString,1},adj;w="NULL")
 
 	if !(isdefined(w,2))
 		for j = 1 : length(m)
 			WeightingOp(m[j],d[j],adj,w=w)
-		end     
+		end
 	else
 		for j = 1 : length(m)
 			WeightingOp(m[j],d[j],adj,w=w[j])
-		end     
+		end
 	end
-end                                                                                                                     
+end

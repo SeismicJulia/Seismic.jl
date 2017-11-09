@@ -1,5 +1,5 @@
 function ConjugateGradients(d,operators,parameters;Niter=10,mu=0,tol=1.0e-15)
-    # Conjugate Gradients following Algorithm 2 from Scales, 1987. 
+    # Conjugate Gradients following Algorithm 2 from Scales, 1987.
     # The user provides an array of linear operators. Ensure linear operator(s) pass the dot product.
 
     cost = Float64[]
@@ -13,11 +13,11 @@ function ConjugateGradients(d,operators,parameters;Niter=10,mu=0,tol=1.0e-15)
     push!(cost,1.0)
     for iter = 1 : Niter
 	t = LinearOperator(s,operators,parameters,adj=false)
-	delta = InnerProduct(t,t) + mu*InnerProduct(s,s)		
-	if delta <= tol 
+	delta = InnerProduct(t,t) + mu*InnerProduct(s,s)
+	if delta <= tol
 #	    println("delta reached tolerance, ending at iteration ",iter)
 	    break;
-	end		
+	end
 	alpha = gamma/delta
 	m = m + alpha*s
 	r = r - alpha*t
@@ -34,14 +34,14 @@ function ConjugateGradients(d,operators,parameters;Niter=10,mu=0,tol=1.0e-15)
 	    break;
 	end
     end
-    
+
     return m, cost
 end
 
-function ConjugateGradients(m::String,d::String,operators,parameters,cost_file::String;Niter=10,mu=0,tol=1.0e-15)
-    # Conjugate Gradients following Algorithm 2 from Scales, 1987. 
+function ConjugateGradients(m::AbstractString,d::AbstractString,operators,parameters,cost_file::AbstractString;Niter=10,mu=0,tol=1.0e-15)
+    # Conjugate Gradients following Algorithm 2 from Scales, 1987.
     # The user provides an array of linear operators. Ensure linear operator(s) pass the dot product.
-    
+
     cost = Float64[]
     rand_string = string(round(Int,rand()*100000))
     g = join(["tmp_CG_g_",rand_string])
@@ -63,11 +63,11 @@ function ConjugateGradients(m::String,d::String,operators,parameters,cost_file::
     fp = open(cost_file,"a")
     write(fp,join([string(cost[1]),"\n"]))
     close(fp)
-    for iter = 1 : Niter	
+    for iter = 1 : Niter
 	LinearOperator(s,t,operators,parameters,adj=false)
-	delta = InnerProduct(t,t) + mu*InnerProduct(s,s)		
+	delta = InnerProduct(t,t) + mu*InnerProduct(s,s)
 	alpha = gamma/delta
-	CGStep(m,s,a=1.0,b=alpha)  
+	CGStep(m,s,a=1.0,b=alpha)
 	CGStep(r,t,a=1.0,b=-alpha)
 	LinearOperator(g,r,operators,parameters,adj=true)
 	CGStep(g,m,a=1.0,b=-mu)
@@ -89,13 +89,13 @@ function ConjugateGradients(m::String,d::String,operators,parameters,cost_file::
     SeisRemove(s)
     SeisRemove(r)
     SeisRemove(t)
-    
+
 end
 
-function ConjugateGradients(m::Array{String,1},d::Array{String,1},operators,parameters,cost_file::String;Niter=10,mu=[0.0;0.0],tol=1.0e-15)
-    # Conjugate Gradients following Algorithm 2 from Scales, 1987. 
+function ConjugateGradients(m::Array{AbstractString,1},d::Array{AbstractString,1},operators,parameters,cost_file::AbstractString;Niter=10,mu=[0.0;0.0],tol=1.0e-15)
+    # Conjugate Gradients following Algorithm 2 from Scales, 1987.
     # The user provides an array of linear operators. Ensure linear operator(s) pass the dot product.
-    
+
     cost = Float64[]
     rand_string = string(round(Int,rand()*100000))
     g = [join(["tmp_CG_g1_",rand_string]);join(["tmp_CG_g2_",rand_string])]
@@ -117,11 +117,11 @@ function ConjugateGradients(m::Array{String,1},d::Array{String,1},operators,para
     fp = open(cost_file,"a")
     write(fp,join([string(cost[1]),"\n"]))
     close(fp)
-    for iter = 1 : Niter	
+    for iter = 1 : Niter
 	LinearOperator(s,t,operators,parameters,adj=false)
-	delta = InnerProduct(t,t) + mu[1]*InnerProduct(s[1],s[1]) + mu[2]*InnerProduct(s[2],s[2])	
+	delta = InnerProduct(t,t) + mu[1]*InnerProduct(s[1],s[1]) + mu[2]*InnerProduct(s[2],s[2])
 	alpha = gamma/delta
-	CGStep(m,s,a=[1.0;1.0],b=[alpha;alpha]) 
+	CGStep(m,s,a=[1.0;1.0],b=[alpha;alpha])
 	CGStep(r,t,a=[1.0;1.0],b=[-alpha;-alpha])
 	LinearOperator(g,r,operators,parameters,adj=true)
 	CGStep(g,m,a=[1.0;1.0],b=[-mu[1];-mu[2]])
@@ -143,5 +143,5 @@ function ConjugateGradients(m::Array{String,1},d::Array{String,1},operators,para
     SeisRemove(s);
     SeisRemove(r);
     SeisRemove(t);
-    
+
 end
