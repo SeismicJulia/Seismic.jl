@@ -23,11 +23,13 @@ Once you have installed the package you can type `using Seismic` to start using
 the functions. For example
 
 ```Julia
-using PyPlot, Seismic;
-download("http://seismic.physics.ualberta.ca/data/gom_cdp_nmo.su","gom_cdp_nmo.su");
-SegyToSeis("gom_cdp_nmo.su","gom_cdp_nmo", format="su", input_type="ieee",swap_bytes=true);
-d, h, e = SeisRead("gom_cdp_nmo");
-SeisPlot(d[1:500, :]);
+using PyPlot, Seismic
+run(`mkdir -p data`)
+download("http://seismic.physics.ualberta.ca/data/616_79_PR.SGY", "data/616_79_PR.SGY")
+SegyToSeis("data/616_79_PR.SGY", "data/616_79_PR.seis")
+SeisWindow("data/616_79_PR.seis", "data/616_79_PR_2s.seis", key= ["t"], minval=[0.0], maxval=[2.0])
+d, head, extent = SeisRead("data/616_79_PR_2s.seis")
+SeisPlot(d, extent, cmap="PuOr", wbox=9)
 ```
 will produce this figure:
 
