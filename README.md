@@ -29,6 +29,7 @@ download("http://seismic.physics.ualberta.ca/data/616_79_PR.SGY", "data/616_79_P
 SegyToSeis("data/616_79_PR.SGY", "data/616_79_PR.seis")
 SeisWindow("data/616_79_PR.seis", "data/616_79_PR_2s.seis", key= ["t"], minval=[0.0], maxval=[2.0])
 d, head, extent = SeisRead("data/616_79_PR_2s.seis")
+extent.title = "Seismic.jl plot example"
 SeisPlot(d, extent, cmap="PuOr", wbox=9)
 ```
 will produce this figure:
