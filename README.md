@@ -34,7 +34,7 @@ SeisPlot(d, extent, cmap="PuOr", wbox=9)
 ```
 will produce this figure:
 
-![plot1](http://seismic.physics.ualberta.ca/figures/616_79_PR.png)
+![plot1](http://seismic.physics.ualberta.ca/figures/616_79_PR2.png)
 
 ## For developers: contributing to the package
 If you want to fork the repository and contribute to Seismic.jl:
