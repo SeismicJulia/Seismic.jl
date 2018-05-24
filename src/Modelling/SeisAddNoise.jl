@@ -56,7 +56,7 @@ function GenNoise(dims::Tuple, pdf::AbstractString; L::Int=1)
         error("pdf must be gussian or uniform")
     end
     for j = 1:nx
-        conv(noise[:,j], hamm)[L2+1:n1+L2]
+     noise[:,j] = conv(noise[:,j], hamm)[L2+1:n1+L2]
     end
     reshape(noise, dims...)
 end
