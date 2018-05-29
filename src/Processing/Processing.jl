@@ -19,7 +19,8 @@ SeisSmooth1,
 SeisSmooth2,
 SeisSmoothGathers,
 SeisSmoothStructure,
-SeisStack
+SeisStack,
+SeisSincInerp1D
 include("SeisBandPass.jl")
 include("SeisDecimate.jl")
 include("SeisDelay.jl")
@@ -42,3 +43,4 @@ include("SeisSmooth2.jl")
 include("SeisSmoothGathers.jl")
 include("SeisSmoothStructure.jl")
 include("SeisStack.jl")
+include("SeisSincInterp1D.jl")
