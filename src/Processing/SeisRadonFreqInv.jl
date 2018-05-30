@@ -1,7 +1,9 @@
 """
-    SeisRadonFreqInv(d; <keyword arguments>)
+```
+SeisRadonFreqInv(d; <keyword arguments>)
+```
 
-Transform a CMP Gather time-offset gather to tau-p gather using a frequency
+Transform a Gather from time-offset gather to tau-p gather using a frequency
 domain inverse parabolic or linear Radon operator via least-squares inversion.
 
 # Arguments
@@ -77,6 +79,6 @@ function SeisRadonFreqInv{Td<:Real, Th<:Real, Tp<:Real
         M[iw, :] = conj(M[nw-iw+2, :])
     end
     m = real(ifft(M, 1))
-#    m = m[1:nt, :]
+    m = m[1:nt, :]
     return m
 end

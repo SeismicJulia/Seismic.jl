@@ -5,7 +5,10 @@ function SeisPWD(in;w1=10,w2=10,dz_in=1,dx_in=1,format="angle")
 	d=0
 	d = copy(in)
 	n1,n2 = size(in)
-	#format = get(param,"format","angle") # output format: "angle" (in degrees wrt vertical) or "dip" (in y samples over x samples)
+
+
+#format = get(param,"format","angle") # output format: "angle" (in degrees wrt vertical) or "dip" (in y samples over x samples)
+
 	pp = zeros(n1,n2); dx = wavekill(1.,pp,n1,n2,d)
 	pp =  ones(n1,n2); dt = wavekill(0.,pp,n1,n2,d)
 	dtdx = dt.*dx

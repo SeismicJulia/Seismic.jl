@@ -1,18 +1,21 @@
 """
-    SeisEnvelope(d)
+```
+SeisEnvelope(d)
+```
 
-Calculate the envelope attribute of an input trace
+Calculate the envelope attribute of  a group of input traces
 
 # Arguments
-* `d`: Input data. 
+* `d`: Input data. A 2D array where the first dimension is time.
 
-# Output
-* `out`: Envelope of input data
+# Examples
+```
+julia> dtsec = 0.002; w = Ricker(dt=dtsec); 
+julia> e = SeisEnvelope(w); t=dtsec*collect(0:1:length(w)-1);plot(t,w,t,e,"-r");xlabel("Time [s]")
 
-# Example
-```julia
-julia> d = SeisLinearEvents(d); SeisPlot(d)
-julia> out = SeisEnvelope(d); SeisPlot(d_dec)
+julia> d,extent = SeisLinearEvents(); SeisPlot(d,extent,style="wiggles")
+julia> out = SeisEnvelope(d); SeisPlot(out,extent,style="wiggles")
+```
 """
 
 function SeisEnvelope(d)

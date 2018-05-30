@@ -51,7 +51,7 @@ function SeisRadonFreqFor{Tm<:Real, Th<:Real, Tp<:Real
     np = length(p)
     np == size(m, 2) || error("lenght(p) must be equal to size(m, 2)")
     nh = length(h)
-    nw = nextpow2(ntau)
+    nw = 2*nextpow2(ntau)
     m = cat(1, m, zeros(Tm, nw-ntau, np))
     M = fft(m, 1)
     iw_low = round(Int, flow*dt*nw+1)
