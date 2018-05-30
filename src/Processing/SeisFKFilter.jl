@@ -1,19 +1,23 @@
 """
-    SeisFKFilter(d ; <keyword arguments>)
+```
+SeisFKFilter(d ; <keyword arguments>)
+```
 
-Decimate a multidimensional array input. Input and output have the same dimension
+Apply FX filter to a gather 
 
 # Arguments
-* `d`: 2D Input data. 
+* `d`: 2D Input data, first dimension is time.  
 
 # Keyword arguments
 * `dt=0.002`: time sampling interval.
 * `dx=10`: space sampling interval.
 * `va=-2000,vb=-3000,vc=3000,vd=2000`: corner velocities to be filtered
 
-# Output
-* `out`: Filtered data. 
-
+```
+This one does not work, revamp asap
+and add working example.
+Fan function needs to be clearly explain and output
+```
 
 """
 

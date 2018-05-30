@@ -1,10 +1,12 @@
 """
-    SeisBandPass(d ; <keyword arguments>)
+```
+SeisBandPass(d ; <keyword arguments>)
+```
 
-Apply a bandpass filter to a 2D array input. Input and output data is in tx domain. Filter is applied in fx domain.
+Apply a bandpass filter to seismic data. Input and output data is in tx domain. Filter is applied in fx domain.
 
 # Arguments
-* `d`: Input 2D data array in tx domain.
+* `d`: Input 2D data array in tx domain. Time is first dimension. 
 
 # Keyword arguments
 * `dt=0.001`: time sampling interval.
@@ -12,12 +14,17 @@ Apply a bandpass filter to a 2D array input. Input and output data is in tx doma
 
 
 # Output
-* `d`: Filtered 2d data arrayn in tx domain.
+* `d`: Filtered 2d data array in tx domain.
 
-# Example
-```julia
-julia> d = SeisLinearEvents(d); SeisPlot(d,plot_type="Amplitude",dy=0.004,fmax=125);
-julia> d_filter = SeisBandPass(d;dt=0.004,fc=15,fd=35); SeisPlot(d_filter,plot_type="Amplitude",dy=0.004,fmax=125);
+# Examples
+```
+julia> d,e = SeisLinearEvents(); SeisPlot(d,plot_type="Amplitude",dy=0.004,fmax=125);
+julia> d_filter = SeisBandPass(d;dt=0.004,fa=2,fb=8,fc=12,fd=20); SeisPlot(d_filter,plot_type="Amplitude",dy=0.004,fmax=125);
+julia> SeisPlot([d d_filter],e,title="Data and Filtered data")
+
+
+
+```
 """
 
 function SeisBandPass(d;dt=0.001,fa=0,fb=0,fc=60,fd=80)

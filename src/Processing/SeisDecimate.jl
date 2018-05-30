@@ -1,10 +1,12 @@
 """
-    SeisDecimate(d ; <keyword arguments>)
+```
+SeisDecimate(d ; <keyword arguments>)
+```
 
-Decimate a multidimensional array input. Input and output have the same dimension
+Decimate a multidimensional array of data. Input and output have the same dimensions.
 
 # Arguments
-* `d`: Input data. Between 2D and 5D
+* `d`: Input data in the form of  2D, or 3D,4D,5D tensors. The first dimension is time. 
 
 # Keyword arguments
 * `mode=random`: Data is decimated randomly. Otherwise it is regularly decimated.
@@ -15,9 +17,10 @@ Decimate a multidimensional array input. Input and output have the same dimensio
 * `out`: Decimated data. 
 
 # Example
-```julia
+```
 julia> d = SeisLinearEvents(d); SeisPlot(d)
 julia> d_dec = SeisDecimate(d); SeisPlot(d_dec)
+```
 """
 
 function SeisDecimate(in;mode="random",perc=50,incx1=1,incx2=1,incx3=1,incx4=1)

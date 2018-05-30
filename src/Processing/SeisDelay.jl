@@ -1,13 +1,15 @@
 """
-    SeisDelay(d ; <keyword arguments>)
+```
+SeisDelay(d ; <keyword arguments>)
+```
 
-Apply a time delay to a 2D array input. 
+Apply a time delay to 2D data 
 
 # Arguments
-* `d`: Input 2D data array in tx domain.
+* `d`: Input 2D data array in tx domain. First dimension is time.
 
 # Keyword arguments
-* `delay=0.1`: time delay in seconds.
+* `delay=0.1`: desired time delay in seconds.
 * `dt=0.001`: time sampling 
 
 
@@ -15,9 +17,10 @@ Apply a time delay to a 2D array input.
 * `d2`: Delayed data in time domain
 
 # Example
-```julia
-julia> d = SeisLinearEvents(d); SeisPlot(d);
+```
+julia> d,extent = SeisLinearEvents(d); SeisPlot(d);
 julia> d2 = SeisDelay(d;dt=0.004); SeisPlot(d);
+```
 """
 
 function SeisDelay(d; delay=0.1, dt=0.001)
@@ -31,7 +34,7 @@ function SeisDelay(d; delay=0.1, dt=0.001)
 	w = (iw-1)*dw
 	D[iw,:] = D[iw,:]*exp(-1im*w*delay)
     end
-    # symmetries
+    # honor symmetries
     for iw=nw+1:nf
 	D[iw,:] = conj(D[nf-iw+2,:])
     end 
