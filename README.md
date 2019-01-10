@@ -11,9 +11,8 @@
 
 This module provides tools to read, write, and process 
 seismic data. 
-(The documentation can be found [here](http://seismicjulia.github.io/Seismic.jl)
-and [here]
-(http://seismic.physics.ualberta.ca).). At the moment, it is updated and tested against Julia 0.6
+The documentation can be found [here](http://seismicjulia.github.io/Seismic.jl)
+and [here](http://seismic.physics.ualberta.ca). At the moment, it is updated and tested against Julia 0.6.
 
 ## Installation
 To use this package you must first install the [Julia](http://julialang.org/downloads/) programming language. Once you have Julia you can install the Seismic package by typing ```Pkg.add("Seismic")``` on the Julia command line and then run ```Pkg.checkout("Seismic")``` to stay updated to the last version in this repository. 
