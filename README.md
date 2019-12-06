@@ -9,6 +9,15 @@
 
 [![Build Status](https://travis-ci.org/SeismicJulia/Seismic.jl.svg?branch=master)](https://travis-ci.org/SeismicJulia/Seismic.jl)
 
+**NOTICE:**
+
+**With the update to julia version 1.0 and the new Pkg system, this package is inactive. 
+You can still download and use this package,
+but consider instead using the new packages with updated modules**
+---
+
+
+
 This module provides tools to read, write, and process 
 seismic data. 
 The documentation can be found [here](http://seismicjulia.github.io/Seismic.jl)
